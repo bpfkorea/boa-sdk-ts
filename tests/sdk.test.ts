@@ -1,6 +1,0 @@
-describe ('SDK', () =>
-{
-    it ('nothing', () =>
-    {
-    });
-  });
