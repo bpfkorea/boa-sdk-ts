@@ -11,11 +11,15 @@
 
 *******************************************************************************/
 
+import { Hash, hash } from '../src/modules/data/Hash';
+import { BOAClient } from '../src/modules/net/BOAClient';
+
 import * as assert from 'assert';
 import express from "express";
 import axios from "axios";
 import * as http from "http";
 import URI from "urijs";
+import randomBytes from 'randombytes';
 
 /**
  * sample JSON
@@ -183,5 +187,63 @@ describe ('BOA SDK', () =>
             assert.ok(!error, error);
             doneIt();
         });
+    });
+});
+
+describe ('BOA SDK', () =>
+{
+    /**
+     * See_Also: https://github.com/bpfkorea/agora/blob/
+     * 93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/consensus/validation/PreImage.d#L79-L106
+     */
+    it ('test for validity of pre-image', (doneIt: () => void) =>
+    {
+        let sdk = new BOAClient();
+
+        let pre_images: Hash[] = [];
+        pre_images.push(hash(randomBytes(Hash.Width)));
+        for (let idx = 0; idx < 20; idx++)
+        {
+            pre_images.push(hash(pre_images[idx].data))
+        }
+        pre_images = pre_images.reverse();
+
+        let original_image = pre_images[0];
+        let original_image_height = 1;
+
+        // valid pre-image
+        let new_image = pre_images[10];
+        let new_image_height = 11;
+        let res = sdk.isValidPreimage(original_image, original_image_height, new_image, new_image_height);
+        assert.ok(res.result);
+
+        // invalid pre-image with wrong height number
+        new_image = pre_images[10];
+        new_image_height = 0;
+        res = sdk.isValidPreimage(original_image, original_image_height, new_image, new_image_height);
+        assert.ok(!res.result);
+        assert.strictEqual(res.message, "The height of new pre-image is smaller than that of original one.");
+
+        // invalid pre-image with wrong hash value
+        new_image = pre_images[10];
+        new_image_height = 10;
+        res = sdk.isValidPreimage(original_image, original_image_height, new_image, new_image_height);
+        assert.ok(!res.result);
+        assert.strictEqual(res.message, "The pre-image has a invalid hash value.");
+
+        // invalid (original_image_height is NaN and new_image_height is NaN)
+        new_image = pre_images[10];
+        new_image_height = 11;
+        res = sdk.isValidPreimage(original_image, NaN, new_image, new_image_height);
+        assert.ok(!res.result);
+        assert.strictEqual(res.message, "The original pre-image height is not valid.");
+
+        // invalid (original_image_height is NaN and new_image_height is NaN)
+        new_image = pre_images[10];
+        res = sdk.isValidPreimage(original_image, original_image_height, new_image, NaN);
+        assert.ok(!res.result);
+        assert.strictEqual(res.message, "The new pre-image height is not valid.");
+
+        doneIt();
     });
 });
