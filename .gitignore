@@ -87,3 +87,6 @@ dist
 
 # visual studio code
 .vscode
+
+# webstorm
+.idea
