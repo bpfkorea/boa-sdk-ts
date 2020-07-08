@@ -62,7 +62,7 @@ let sample_validators =
  */
 function LocalNetworkTest(port: string, test: (onDone: () => void) => void)
 {
-    let server: http.Server
+    let server: http.Server;
     const test_app = express();
 
     // http://localhost/validators
@@ -77,16 +77,16 @@ function LocalNetworkTest(port: string, test: (onDone: () => void) => void)
             return;
         }
 
-        let enrolled_heigh: number = 0;
-        if (Number.isNaN(height)) height = enrolled_heigh;
+        let enrolled_height: number = 0;
+        if (Number.isNaN(height)) height = enrolled_height;
 
         sample_validators.forEach((elem: any) =>
         {
-            elem.preimage.distance = height - enrolled_heigh;
+            elem.preimage.distance = height - enrolled_height;
         });
 
         res.status(200).send(JSON.stringify(sample_validators));
-    })
+    });
 
     // http://localhost/validator
     test_app.get("/validator/:address",
@@ -101,21 +101,21 @@ function LocalNetworkTest(port: string, test: (onDone: () => void) => void)
             return;
         }
 
-        let enrolled_heigh: number = 0;
-        if (Number.isNaN(height)) height = enrolled_heigh;
+        let enrolled_height: number = 0;
+        if (Number.isNaN(height)) height = enrolled_height;
 
         let done = sample_validators.some((elem: any) =>
         {
             if (elem.address == address)
             {
-                elem.preimage.distance = height - enrolled_heigh;
+                elem.preimage.distance = height - enrolled_height;
                 res.status(200).send(JSON.stringify([elem]));
                 return true;
             }
         });
 
         if (!done) res.status(204).send();
-    })
+    });
 
     // http://localhost/stop
     test_app.get("/stop",
@@ -123,7 +123,7 @@ function LocalNetworkTest(port: string, test: (onDone: () => void) => void)
     {
         res.send("The test server is stopped.");
         server.close();
-    })
+    });
 
     // Start to listen
     server = test_app.listen(port, () =>
@@ -132,9 +132,9 @@ function LocalNetworkTest(port: string, test: (onDone: () => void) => void)
         test(async () =>
         {
             let uri = URI("http://localhost/stop");
-            uri.port(port)
+            uri.port(port);
             const client = axios.create();
-            let response = await client.get(uri.toString())
+            await client.get(uri.toString());
         });
     });
 };
@@ -184,4 +184,4 @@ describe ('BOA SDK', () =>
             doneIt();
         });
     });
-  });
+});
