@@ -145,7 +145,7 @@ describe ('BOA SDK', () =>
 
     before('Start Server', (doneIt: () => void) =>
     {
-        LocalNetworkTest (port, async (done: () => void) =>
+        LocalNetworkTest (port, (done: () => void) =>
         {
             doneServer = done;
             doneIt();
