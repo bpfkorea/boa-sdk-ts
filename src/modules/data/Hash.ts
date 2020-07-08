@@ -31,7 +31,7 @@ export class Hash
 
     /**
      * Constructor
-     * @param hex Hex string of hash
+     * @param bin Raw hash
      */
     constructor (bin?: Buffer)
     {
@@ -91,7 +91,7 @@ export function hashMulti (source1: Buffer, source2: Buffer): Hash
 
 /**
  * Makes a UTXOKey
- * @param hex Hash of transaction
+ * @param h Hash of transaction
  * @param index Index of the output
  * @returns Instance of Hash
  * See_Also https://github.com/bpfkorea/agora/blob/v0.x.x/source/agora/consensus/data/UTXOSetValue.d#L50-L53

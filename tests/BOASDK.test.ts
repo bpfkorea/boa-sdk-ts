@@ -57,6 +57,7 @@ let sample_validators =
  * This allows data transfer and reception testing with the server.
  * When this is executed, the local web server is run,
  * the test codes are performed, and the web server is shut down.
+ * @param port Http server port for test
  * @param test This is the function has unittest code
  */
 function LocalNetworkTest(port: string, test: (onDone: () => void) => void)
