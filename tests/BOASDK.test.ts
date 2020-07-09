@@ -13,6 +13,7 @@
 
 import { Hash, hash } from '../src/modules/data/Hash';
 import { BOAClient } from '../src/modules/net/BOAClient';
+import { Validator } from '../src/modules/data/Validator';
 
 import * as assert from 'assert';
 import express from "express";
@@ -188,17 +189,211 @@ describe ('BOA SDK', () =>
             doneIt();
         });
     });
-});
 
-describe ('BOA SDK', () =>
-{
+    it ('Test a function of the BOA SDK - `getAllValidators`', (doneIt: () => void) =>
+    {
+        // Set URL
+        let uri = URI("http://localhost").port(port);
+
+        // Create BOA SDK
+        let sdk = new BOAClient(uri.toString());
+
+        // Query
+        sdk.getAllValidators(10)
+        .then((validators: Array<Validator>) =>
+        {
+            // On Success
+            assert.strictEqual(validators.length, 3);
+            assert.strictEqual(validators[0].address, "GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN");
+            assert.strictEqual(validators[0].preimage.distance, 10);
+
+            // end of this test
+            doneIt();
+        })
+        .catch(err =>
+        {
+            // On Error
+            assert.ok(!err, err);
+
+            // end of this test
+            doneIt();
+        });
+    });
+
+    it ('Test a function of the BOA SDK - `getAllValidator`', (doneIt: () => void) =>
+    {
+        // Set URL
+        let uri = URI("http://localhost").port(port);
+
+        // Create BOA SDK
+        let sdk = new BOAClient(uri.toString());
+
+        // Query
+        sdk.getValidator("GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", 10)
+        .then((validators: Array<Validator>) =>
+        {
+            // On Success
+            assert.strictEqual(validators.length, 1);
+            assert.strictEqual(validators[0].address, "GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN");
+            assert.strictEqual(validators[0].preimage.distance, 10);
+
+            // end of this test
+            doneIt();
+        })
+        .catch(err =>
+        {
+            // On Error
+            assert.ok(!err, err);
+
+            // end of this test
+            doneIt();
+        });
+    });
+
+    it ('Test a function of the BOA SDK using async, await - `getAllValidators`', async () =>
+    {
+        // Set URL
+        let uri = URI("http://localhost").port(port);
+
+        // Create BOA SDK
+        let sdk = new BOAClient(uri.toString());
+
+        // Query
+        try
+        {
+            let validators = await sdk.getAllValidators(10);
+            // On Success
+            assert.strictEqual(validators.length, 3);
+            assert.strictEqual(validators[0].address, "GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN");
+            assert.strictEqual(validators[0].preimage.distance, 10);
+        }
+        catch (err)
+        {
+            // On Error
+            assert.ok(!err, err);
+        }
+    });
+
+    it ('Test a function of the BOA SDK using async, await - `getAllValidator`', async () =>
+    {
+        // Set URL
+        let uri = URI("http://localhost").port(port);
+
+        // Create BOA SDK
+        let sdk = new BOAClient(uri.toString());
+
+        // Query
+        try
+        {
+            let validators = await sdk.getValidator("GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", 10);
+
+            // On Success
+            assert.strictEqual(validators.length, 1);
+            assert.strictEqual(validators[0].address, "GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN");
+            assert.strictEqual(validators[0].preimage.distance, 10);
+        }
+        catch (err)
+        {
+            // On Error
+            assert.ok(!err, err);
+        }
+    });
+
+    it ('When none of the data exists as a result of the inquiry.', (doneIt: () => void) =>
+    {
+        // Set URL
+        let uri = URI("http://localhost").port(port);
+
+        // Create BOA SDK
+        let sdk = new BOAClient(uri.toString());
+
+        // Query
+        sdk.getValidator("GX3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", 10)
+            .then((validators: Array<Validator>) =>
+            {
+                // On Success
+                assert.strictEqual(validators.length, 0);
+
+                // end of this test
+                doneIt();
+            })
+            .catch(err =>
+            {
+                // On Error
+                assert.fail(err);
+
+                // end of this test
+                doneIt();
+            });
+    });
+
+    it ('When an error occurs with the wrong input parameter (height is -10).', (doneIt: () => void) =>
+    {
+        // Set URL
+        let uri = URI("http://localhost").port(port);
+
+        // Create BOA SDK
+        let sdk = new BOAClient(uri.toString());
+
+        // Query
+        sdk.getValidator("GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", -10)
+            .then((validators: Array<Validator>) =>
+            {
+                // On Success
+                assert.ok(false, "A different case occurred than expected.")
+
+                // end of this test
+                doneIt();
+            })
+            .catch(err =>
+            {
+                // On Error
+                assert.strictEqual(err.message, "Bad Request, The Height value is not valid.");
+
+                // end of this test
+                doneIt();
+            });
+    });
+
+    it ('Can not connect to the server by entering the wrong URL', (doneIt: () => void) =>
+    {
+        // Set URL
+        let uri = URI("http://localhost").port("6000");
+
+        // Create BOA SDK
+        let sdk = new BOAClient(uri.toString());
+
+        // Query
+        sdk.getValidator("GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", 10)
+            .then((validators: Array<Validator>) =>
+            {
+                // On Success
+                assert.ok(false, "A different case occurred than expected.")
+
+                // end of this test
+                doneIt();
+            })
+            .catch(err =>
+            {
+                // On Error
+                assert.strictEqual(err.message, "connect ECONNREFUSED 127.0.0.1:6000");
+
+                // end of this test
+                doneIt();
+            });
+    });
+
     /**
      * See_Also: https://github.com/bpfkorea/agora/blob/
      * 93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/consensus/validation/PreImage.d#L79-L106
      */
     it ('test for validity of pre-image', (doneIt: () => void) =>
     {
-        let sdk = new BOAClient();
+        // Set URL
+        let uri = URI("http://localhost").port(port);
+
+        // Create BOA SDK
+        let sdk = new BOAClient(uri.toString());
 
         let pre_images: Hash[] = [];
         pre_images.push(hash(randomBytes(Hash.Width)));

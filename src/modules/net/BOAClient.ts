@@ -15,6 +15,11 @@
 *******************************************************************************/
 
 import { Hash, hash } from '../data/Hash';
+import { Validator } from '../data/Validator';
+
+import Request from './Request';
+import uri from 'urijs';
+import { AxiosResponse, AxiosError } from 'axios';
 
 /**
  * Define the BOA Client of TypeScript.
@@ -24,6 +29,120 @@ import { Hash, hash } from '../data/Hash';
  */
 export class BOAClient
 {
+    /**
+     * The Stoa server URL
+     */
+    public readonly server_url: uri;
+
+    /**
+     * Constructor
+     * @param server_url {string} The Stoa server URL
+     */
+    constructor (server_url: string)
+    {
+        this.server_url = uri(server_url);
+    }
+
+    /**
+     * Request all valid validator at the block height.
+     * If block height is not specified, it is the current height.
+     * @param height {number | undefined} The block height
+     * @returns {Promise<Array<Validator>>} Promise that resolves or
+     * rejects with response from the Stoa
+     */
+    public getAllValidators
+        (height?: number): Promise<Array<Validator>>
+    {
+        return new Promise<Array<Validator>>((resolve, reject) =>
+        {
+            let url = uri(this.server_url)
+                .directory("validators");
+
+            if (height != undefined)
+                url.addSearch("height", height);
+
+            Request.get(url.toString())
+            .then((response: AxiosResponse) =>
+            {
+                let validators: Array<Validator> = new Array<Validator>();
+                if (response.status == 200)
+                {
+                    response.data.forEach((elem: any) => 
+                    {
+                        let validator = new Validator();
+                        validator.fromJSON(elem);
+                        validators.push(validator);
+                    });
+                    resolve(validators);
+                }
+                else if (response.status == 204)
+                {
+                    resolve(validators);
+                }
+                else
+                {
+                    // It is not yet defined in Stoa.
+                    reject(new Error(response.statusText));
+                }
+            })
+            .catch((reason: any) =>
+            {
+                reject(handleNetworkError(reason));
+            });
+        });
+    }
+
+    /**
+     * Requests a valid validator for the address at the block height.
+     * If block height is not specified, it is the current height.
+     * @param address {string} The public key
+     * @param height {number | undefined} The block height
+     * @returns {Promise<Array<Validator>>} Promise that resolves or
+     * rejects with response from the Stoa
+     */
+    public getValidator
+        (address: string, height?: number): Promise<Array<Validator>>
+    {
+        return new Promise<Array<Validator>>((resolve, reject) =>
+        {
+            let url = uri(this.server_url)
+                .directory("validator")
+                .filename(address);
+
+            if (height != undefined)
+                url.addSearch("height", height);
+
+            Request.get(url.toString())
+            .then((response: AxiosResponse) =>
+            {
+               let validators: Array<Validator> = new Array<Validator>();
+               if (response.status == 200)
+               {
+                    response.data.forEach((elem: any) => 
+                    {
+                        let validator = new Validator();
+                        validator.fromJSON(elem);
+                        validators.push(validator);
+                    });
+                    resolve(validators);
+                }
+                else if (response.status == 204)
+                {
+                    resolve(validators);
+                }
+                else
+                {
+                    // It is not yet defined in Stoa.
+                    reject(new Error(response.statusText));
+                }
+            })
+            .catch((reason: any) =>
+            {
+                reject(handleNetworkError(reason));
+            });
+        });
+    }
+
     /**
      * Check the validity of a new pre-image
      * @param original_image {Hash} The original pre-image hash
@@ -79,4 +198,54 @@ export interface IsValidPreimageResponse
 {
     result: boolean;
     message: string;
+}
+
+/**
+ * Check if parameter `reason` is type `AxiosError`.
+ * @param reason{any} This is why the error occurred
+ * @returns {boolean}
+ */
+function isAxiosError (reason: any): reason is AxiosError
+{
+    return ((reason as AxiosError).isAxiosError);
+}
+
+/**
+ * Check if parameter `reason` is type `Error`.
+ * @param reason{any} This is why the error occurred
+ * @returns {boolean}
+ */
+function isError (reason: any): reason is Error
+{
+    return ((reason as Error).message != undefined);
+}
+
+/**
+ * It is a common function that handles errors that occur
+ * during network communication.
+ * @param reason{any} This is why the error occurred
+ * @returns {Error}
+ */
+function handleNetworkError (reason: any): Error
+{
+    if (isAxiosError(reason))
+    {
+        let e = reason as AxiosError;
+        if (e.response != undefined)
+        {
+            let message = "";
+            if (e.response.statusText != undefined) message = e.response.statusText + ", ";
+            if (e.response.data != undefined) message += e.response.data;
+            return new Error(message);
+        }
+    }
+
+    if (isError(reason))
+    {
+        return new Error((reason as Error).message);
+    }
+    else
+    {
+        return new Error("An unknown error has occurred.");
+    }
 }
