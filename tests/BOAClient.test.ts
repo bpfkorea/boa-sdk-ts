@@ -1,6 +1,6 @@
 /*******************************************************************************
 
-    Test data delivery of SDK using internal web server
+    Test data delivery of BOA Client using internal web server
 
     Copyright:
         Copyright (c) 2020 BOS Platform Foundation Korea
@@ -144,7 +144,7 @@ function LocalNetworkTest(port: string, test: (onDone: () => void) => void)
     });
 };
 
-describe ('BOA SDK', () =>
+describe ('BOA Client', () =>
 {
     let port: string = '5000';
     let doneServer: () => void;
@@ -190,16 +190,16 @@ describe ('BOA SDK', () =>
         });
     });
 
-    it ('Test a function of the BOA SDK - `getAllValidators`', (doneIt: () => void) =>
+    it ('Test a function of the BOA Client - `getAllValidators`', (doneIt: () => void) =>
     {
         // Set URL
         let uri = URI("http://localhost").port(port);
 
-        // Create BOA SDK
-        let sdk = new BOAClient(uri.toString());
+        // Create BOA Client
+        let boa_client = new BOAClient(uri.toString());
 
         // Query
-        sdk.getAllValidators(10)
+        boa_client.getAllValidators(10)
         .then((validators: Array<Validator>) =>
         {
             // On Success
@@ -220,16 +220,16 @@ describe ('BOA SDK', () =>
         });
     });
 
-    it ('Test a function of the BOA SDK - `getAllValidator`', (doneIt: () => void) =>
+    it ('Test a function of the BOA Client - `getAllValidator`', (doneIt: () => void) =>
     {
         // Set URL
         let uri = URI("http://localhost").port(port);
 
-        // Create BOA SDK
-        let sdk = new BOAClient(uri.toString());
+        // Create BOA Client
+        let boa_client = new BOAClient(uri.toString());
 
         // Query
-        sdk.getValidator("GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", 10)
+        boa_client.getValidator("GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", 10)
         .then((validators: Array<Validator>) =>
         {
             // On Success
@@ -250,18 +250,18 @@ describe ('BOA SDK', () =>
         });
     });
 
-    it ('Test a function of the BOA SDK using async, await - `getAllValidators`', async () =>
+    it ('Test a function of the BOA Client using async, await - `getAllValidators`', async () =>
     {
         // Set URL
         let uri = URI("http://localhost").port(port);
 
-        // Create BOA SDK
-        let sdk = new BOAClient(uri.toString());
+        // Create BOA Client
+        let boa_client = new BOAClient(uri.toString());
 
         // Query
         try
         {
-            let validators = await sdk.getAllValidators(10);
+            let validators = await boa_client.getAllValidators(10);
             // On Success
             assert.strictEqual(validators.length, 3);
             assert.strictEqual(validators[0].address, "GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN");
@@ -274,18 +274,18 @@ describe ('BOA SDK', () =>
         }
     });
 
-    it ('Test a function of the BOA SDK using async, await - `getAllValidator`', async () =>
+    it ('Test a function of the BOA Client using async, await - `getAllValidator`', async () =>
     {
         // Set URL
         let uri = URI("http://localhost").port(port);
 
-        // Create BOA SDK
-        let sdk = new BOAClient(uri.toString());
+        // Create BOA Client
+        let boa_client = new BOAClient(uri.toString());
 
         // Query
         try
         {
-            let validators = await sdk.getValidator("GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", 10);
+            let validators = await boa_client.getValidator("GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", 10);
 
             // On Success
             assert.strictEqual(validators.length, 1);
@@ -304,11 +304,11 @@ describe ('BOA SDK', () =>
         // Set URL
         let uri = URI("http://localhost").port(port);
 
-        // Create BOA SDK
-        let sdk = new BOAClient(uri.toString());
+        // Create BOA Client
+        let boa_client = new BOAClient(uri.toString());
 
         // Query
-        sdk.getValidator("GX3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", 10)
+        boa_client.getValidator("GX3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", 10)
             .then((validators: Array<Validator>) =>
             {
                 // On Success
@@ -332,11 +332,11 @@ describe ('BOA SDK', () =>
         // Set URL
         let uri = URI("http://localhost").port(port);
 
-        // Create BOA SDK
-        let sdk = new BOAClient(uri.toString());
+        // Create BOA Client
+        let boa_client = new BOAClient(uri.toString());
 
         // Query
-        sdk.getValidator("GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", -10)
+        boa_client.getValidator("GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", -10)
             .then((validators: Array<Validator>) =>
             {
                 // On Success
@@ -360,11 +360,11 @@ describe ('BOA SDK', () =>
         // Set URL
         let uri = URI("http://localhost").port("6000");
 
-        // Create BOA SDK
-        let sdk = new BOAClient(uri.toString());
+        // Create BOA Client
+        let boa_client = new BOAClient(uri.toString());
 
         // Query
-        sdk.getValidator("GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", 10)
+        boa_client.getValidator("GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", 10)
             .then((validators: Array<Validator>) =>
             {
                 // On Success
@@ -392,8 +392,8 @@ describe ('BOA SDK', () =>
         // Set URL
         let uri = URI("http://localhost").port(port);
 
-        // Create BOA SDK
-        let sdk = new BOAClient(uri.toString());
+        // Create BOA Client
+        let boa_client = new BOAClient(uri.toString());
 
         let pre_images: Hash[] = [];
         pre_images.push(hash(randomBytes(Hash.Width)));
@@ -409,33 +409,33 @@ describe ('BOA SDK', () =>
         // valid pre-image
         let new_image = pre_images[10];
         let new_image_height = 11;
-        let res = sdk.isValidPreimage(original_image, original_image_height, new_image, new_image_height);
+        let res = boa_client.isValidPreimage(original_image, original_image_height, new_image, new_image_height);
         assert.ok(res.result);
 
         // invalid pre-image with wrong height number
         new_image = pre_images[10];
         new_image_height = 0;
-        res = sdk.isValidPreimage(original_image, original_image_height, new_image, new_image_height);
+        res = boa_client.isValidPreimage(original_image, original_image_height, new_image, new_image_height);
         assert.ok(!res.result);
         assert.strictEqual(res.message, "The height of new pre-image is smaller than that of original one.");
 
         // invalid pre-image with wrong hash value
         new_image = pre_images[10];
         new_image_height = 10;
-        res = sdk.isValidPreimage(original_image, original_image_height, new_image, new_image_height);
+        res = boa_client.isValidPreimage(original_image, original_image_height, new_image, new_image_height);
         assert.ok(!res.result);
         assert.strictEqual(res.message, "The pre-image has a invalid hash value.");
 
         // invalid (original_image_height is NaN and new_image_height is NaN)
         new_image = pre_images[10];
         new_image_height = 11;
-        res = sdk.isValidPreimage(original_image, NaN, new_image, new_image_height);
+        res = boa_client.isValidPreimage(original_image, NaN, new_image, new_image_height);
         assert.ok(!res.result);
         assert.strictEqual(res.message, "The original pre-image height is not valid.");
 
         // invalid (original_image_height is NaN and new_image_height is NaN)
         new_image = pre_images[10];
-        res = sdk.isValidPreimage(original_image, original_image_height, new_image, NaN);
+        res = boa_client.isValidPreimage(original_image, original_image_height, new_image, NaN);
         assert.ok(!res.result);
         assert.strictEqual(res.message, "The new pre-image height is not valid.");
 
