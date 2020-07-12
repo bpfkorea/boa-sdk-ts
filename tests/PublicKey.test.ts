@@ -11,8 +11,7 @@
 
 *******************************************************************************/
 
-import {PublicKey} from '../src/modules/data/PublicKey';
-import {Signature} from '../src/modules/data/Signature';
+import * as boasdk from '../lib';
 import * as assert from 'assert';
 
 describe ('PublicKey', () =>
@@ -20,7 +19,7 @@ describe ('PublicKey', () =>
     it ('Extract the public key from a string then convert it back into a string and compare it.', () =>
     {
         let address = 'GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW';
-        let public_key: PublicKey = PublicKey.fromString(address);
+        let public_key = boasdk.PublicKey.fromString(address);
         assert.strictEqual(public_key.toString(), address);
     });
 
@@ -29,10 +28,10 @@ describe ('PublicKey', () =>
     it ('test for verify of signature', () =>
     {
         let address = 'GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW';
-        let signature = new Signature();
+        let signature = new boasdk.Signature();
         signature.fromString('0x01cd1b598618347c1d5df7ce25d94de41bac109699dc0c93bb01703b81' +
             'c7731503f7dc5f7f9a9375efb672c83669f5c74ba41d30e5a969d1ed06904eb3b0b6a7');
-        let public_key = PublicKey.fromString(address);
+        let public_key = boasdk.PublicKey.fromString(address);
         assert.ok(public_key.verify(signature, Buffer.from('Hello World')));
     });
 });

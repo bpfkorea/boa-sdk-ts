@@ -11,10 +11,7 @@
 
 *******************************************************************************/
 
-import { Hash, hash } from '../src/modules/data/Hash';
-import { BOAClient } from '../src/modules/net/BOAClient';
-import { Validator } from '../src/modules/data/Validator';
-
+import * as boasdk from '../lib';
 import * as assert from 'assert';
 import express from "express";
 import axios from "axios";
@@ -196,11 +193,11 @@ describe ('BOA Client', () =>
         let uri = URI("http://localhost").port(port);
 
         // Create BOA Client
-        let boa_client = new BOAClient(uri.toString());
+        let boa_client = new boasdk.BOAClient(uri.toString());
 
         // Query
         boa_client.getAllValidators(10)
-        .then((validators: Array<Validator>) =>
+        .then((validators: Array<boasdk.Validator>) =>
         {
             // On Success
             assert.strictEqual(validators.length, 3);
@@ -226,11 +223,11 @@ describe ('BOA Client', () =>
         let uri = URI("http://localhost").port(port);
 
         // Create BOA Client
-        let boa_client = new BOAClient(uri.toString());
+        let boa_client = new boasdk.BOAClient(uri.toString());
 
         // Query
         boa_client.getValidator("GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", 10)
-        .then((validators: Array<Validator>) =>
+        .then((validators: Array<boasdk.Validator>) =>
         {
             // On Success
             assert.strictEqual(validators.length, 1);
@@ -256,7 +253,7 @@ describe ('BOA Client', () =>
         let uri = URI("http://localhost").port(port);
 
         // Create BOA Client
-        let boa_client = new BOAClient(uri.toString());
+        let boa_client = new boasdk.BOAClient(uri.toString());
 
         // Query
         try
@@ -280,7 +277,7 @@ describe ('BOA Client', () =>
         let uri = URI("http://localhost").port(port);
 
         // Create BOA Client
-        let boa_client = new BOAClient(uri.toString());
+        let boa_client = new boasdk.BOAClient(uri.toString());
 
         // Query
         try
@@ -305,11 +302,11 @@ describe ('BOA Client', () =>
         let uri = URI("http://localhost").port(port);
 
         // Create BOA Client
-        let boa_client = new BOAClient(uri.toString());
+        let boa_client = new boasdk.BOAClient(uri.toString());
 
         // Query
         boa_client.getValidator("GX3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", 10)
-            .then((validators: Array<Validator>) =>
+            .then((validators: Array<boasdk.Validator>) =>
             {
                 // On Success
                 assert.strictEqual(validators.length, 0);
@@ -333,11 +330,11 @@ describe ('BOA Client', () =>
         let uri = URI("http://localhost").port(port);
 
         // Create BOA Client
-        let boa_client = new BOAClient(uri.toString());
+        let boa_client = new boasdk.BOAClient(uri.toString());
 
         // Query
         boa_client.getValidator("GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", -10)
-            .then((validators: Array<Validator>) =>
+            .then((validators: Array<boasdk.Validator>) =>
             {
                 // On Success
                 assert.ok(false, "A different case occurred than expected.")
@@ -361,11 +358,11 @@ describe ('BOA Client', () =>
         let uri = URI("http://localhost").port("6000");
 
         // Create BOA Client
-        let boa_client = new BOAClient(uri.toString());
+        let boa_client = new boasdk.BOAClient(uri.toString());
 
         // Query
         boa_client.getValidator("GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", 10)
-            .then((validators: Array<Validator>) =>
+            .then((validators: Array<boasdk.Validator>) =>
             {
                 // On Success
                 assert.ok(false, "A different case occurred than expected.")
@@ -393,13 +390,13 @@ describe ('BOA Client', () =>
         let uri = URI("http://localhost").port(port);
 
         // Create BOA Client
-        let boa_client = new BOAClient(uri.toString());
+        let boa_client = new boasdk.BOAClient(uri.toString());
 
-        let pre_images: Hash[] = [];
-        pre_images.push(hash(randomBytes(Hash.Width)));
+        let pre_images: boasdk.Hash[] = [];
+        pre_images.push(boasdk.hash(randomBytes(boasdk.Hash.Width)));
         for (let idx = 0; idx < 20; idx++)
         {
-            pre_images.push(hash(pre_images[idx].data))
+            pre_images.push(boasdk.hash(pre_images[idx].data))
         }
         pre_images = pre_images.reverse();
 

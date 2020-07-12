@@ -11,7 +11,7 @@
 
 *******************************************************************************/
 
-import * as utils from '../src/modules/utils/CRC16';
+import * as boasdk from '../lib';
 import * as assert from 'assert';
 
 describe ('CRC16', () =>
@@ -20,7 +20,7 @@ describe ('CRC16', () =>
     {
         let data = Buffer.from("123456789", "ascii");
         let expected = Buffer.from([0xC3, 0x31]);
-        const result = utils.checksum(data);
+        const result = boasdk.checksum(data);
         assert.ok(result.equals(expected));
     });
 });

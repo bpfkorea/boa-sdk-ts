@@ -12,7 +12,7 @@
 *******************************************************************************/
 
 import * as assert from 'assert';
-import { Hash, hash, hashMulti, makeUTXOKey}  from '../src/modules/data/Hash'
+import * as boasdk from '../lib';
 
 describe('Hash', () => {
     // Buffer has the same content. However, when printed with hex strings,
@@ -20,7 +20,7 @@ describe('Hash', () => {
     // This was treated to be the same as D language.
     it('Test of reading and writing hex string', () => {
         // Read from hex string
-        let h = new Hash();
+        let h = new boasdk.Hash();
         h.fromString('0x5d7f6a7a30f7ff591c8649f61eb8a35d034824ed5cd252c2c6f10cdbd223671' +
             '3dc369ef2a44b62ba113814a9d819a276ff61582874c9aee9c98efa2aa1f10d73');
 
@@ -32,7 +32,7 @@ describe('Hash', () => {
 
     it('Test of hash("abc")', () => {
         // Hash
-        let h = hash(Buffer.from("abc"));
+        let h = boasdk.hash(Buffer.from("abc"));
 
         // Check
         assert.equal(h.toString(),
@@ -43,13 +43,13 @@ describe('Hash', () => {
     // https://github.com/bpfkorea/agora/blob/v0.x.x/source/agora/common/Hash.d#L260-L265
     it('Test of multi hash', () => {
         // Source 1 : "foo"
-        let foo = hash(Buffer.from("foo"));
+        let foo = boasdk.hash(Buffer.from("foo"));
 
         // Source 2 : "bar"
-        let bar = hash(Buffer.from("bar"));
+        let bar = boasdk.hash(Buffer.from("bar"));
 
         // Hash Multi
-        let h = hashMulti(foo.data, bar.data);
+        let h = boasdk.hashMulti(foo.data, bar.data);
 
         // Check
         assert.equal(h.toString(),
@@ -58,10 +58,10 @@ describe('Hash', () => {
     });
 
     it('Test of utxo key, using makeUTXOKey', () => {
-        let tx_hash = new Hash();
+        let tx_hash = new boasdk.Hash();
         tx_hash.fromString('0x5d7f6a7a30f7ff591c8649f61eb8a35d034824ed5cd252c2c6f10cdbd223671' +
             '3dc369ef2a44b62ba113814a9d819a276ff61582874c9aee9c98efa2aa1f10d73');
-        let hash = makeUTXOKey(tx_hash, BigInt(1));
+        let hash = boasdk.makeUTXOKey(tx_hash, BigInt(1));
         assert.equal(hash,
             '0x7c95c29b184e47fbd32e58e5abd42c6e22e8bd5a7e934ab049d21df545e09c2' +
             'e33bb2b89df2e59ee01eb2519b1508284b577f66a76d42546b65a6813e592bb84');
