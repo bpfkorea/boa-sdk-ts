@@ -90,3 +90,5 @@ dist
 
 # webstorm
 .idea
+
+lib

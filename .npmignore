@@ -1,0 +1,8 @@
+.github/
+.idea/
+.vscode/
+*.iml
+*.log
+node_modules/
+tsconfig.json
+tslint.json
