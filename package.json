@@ -1,6 +1,6 @@
 {
   "name": "boa-sdk-ts",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "The TypeScript BOA SDK libary",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -29,6 +29,7 @@
     "@ctrl/ts-base32": "^1.2.1",
     "axios": "^0.19.2",
     "crc": "^3.8.0",
+    "jsbi": "^3.1.3",
     "lodash": "^4.17.19",
     "randombytes": "^2.1.0",
     "sodium-javascript": "^0.6.1",

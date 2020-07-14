@@ -13,6 +13,7 @@
 
 import * as sodium from 'sodium-javascript'
 import {readFromString, writeToString} from "../utils/buffer"
+import JSBI from 'jsbi';
 
 /**
  * The Class for creating hash
@@ -91,18 +92,24 @@ export function hashMulti (source1: Buffer, source2: Buffer): Hash
 
 /**
  * Makes a UTXOKey
- * @param h Hash of transaction
- * @param index Index of the output
+ * @param h {Hash} Hash of transaction
+ * @param index {number | string} Index of the output
  * @returns Instance of Hash
  * See_Also https://github.com/bpfkorea/agora/blob/v0.x.x/source/agora/consensus/data/UTXOSetValue.d#L50-L53
  */
-export function makeUTXOKey (h: Hash, index: bigint): Hash
+export function makeUTXOKey (h: Hash, index: number | string | object): Hash
 {
     let buf = Buffer.alloc(8);
 
     // See https://github.com/nodejs/node/blob/
     // 88fb5a5c7933022de750745e51e5dc0996a1e2c4/lib/internal/buffer.js#L573-L592
-    let lo = Number(index & BigInt(0xffffffff));
+    let lo = 
+            JSBI.toNumber(
+                JSBI.bitwiseAnd(
+                    JSBI.BigInt(index), 
+                    JSBI.BigInt(0xffffffff)
+                )
+            );
     buf[0] = lo;
     lo = lo >> 8;
     buf[1] = lo;
@@ -110,8 +117,17 @@ export function makeUTXOKey (h: Hash, index: bigint): Hash
     buf[2] = lo;
     lo = lo >> 8;
     buf[3] = lo;
-    
-    let hi = Number(index >> BigInt(32) & BigInt(0xffffffff));
+
+    let hi = 
+            JSBI.toNumber(
+                JSBI.bitwiseAnd(
+                    JSBI.signedRightShift(
+                        JSBI.BigInt(index), 
+                        JSBI.BigInt(32)
+                    ), 
+                    JSBI.BigInt(0xffffffff)
+                )
+            );
     buf[4] = hi;
     hi = hi >> 8;
     buf[5] = hi;
