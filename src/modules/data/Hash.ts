@@ -98,8 +98,27 @@ export function hashMulti (source1: Buffer, source2: Buffer): Hash
  */
 export function makeUTXOKey (h: Hash, index: bigint): Hash
 {
-    let idx = Buffer.alloc(8);
-    idx.writeBigUInt64LE(index);
+    let buf = Buffer.alloc(8);
 
-    return hashMulti(h.data, idx);
+    // See https://github.com/nodejs/node/blob/
+    // 88fb5a5c7933022de750745e51e5dc0996a1e2c4/lib/internal/buffer.js#L573-L592
+    let lo = Number(index & BigInt(0xffffffff));
+    buf[0] = lo;
+    lo = lo >> 8;
+    buf[1] = lo;
+    lo = lo >> 8;
+    buf[2] = lo;
+    lo = lo >> 8;
+    buf[3] = lo;
+    
+    let hi = Number(index >> BigInt(32) & BigInt(0xffffffff));
+    buf[4] = hi;
+    hi = hi >> 8;
+    buf[5] = hi;
+    hi = hi >> 8;
+    buf[6] = hi;
+    hi = hi >> 8;
+    buf[7] = hi;
+
+    return hashMulti(h.data, buf);
 }
