@@ -11,7 +11,7 @@
 
 *******************************************************************************/
 
-import * as sodium from 'sodium-native'
+import * as sodium from 'sodium-javascript'
 import {readFromString, writeToString} from "../utils/buffer"
 
 /**

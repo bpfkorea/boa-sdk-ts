@@ -17,7 +17,7 @@
 import * as utils from '../utils/CRC16';
 import { Signature } from './Signature';
 
-import * as sodium from 'sodium-native'
+import * as sodium from 'sodium-javascript';
 import * as assert from 'assert';
 import { base32Encode, base32Decode } from '@ctrl/ts-base32';
 
