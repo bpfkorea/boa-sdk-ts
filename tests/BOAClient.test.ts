@@ -438,4 +438,23 @@ describe ('BOA Client', () =>
 
         doneIt();
     });
+
+    it ('test for getHeightAt', (doneIt: () => void) =>
+    {
+        // Set URL
+        let uri = URI("http://localhost").port(port);
+        // Create BOA Client
+        let boa_client = new boasdk.BOAClient(uri.toString());
+        let date = new Date(Date.UTC(2020, 3, 29, 0, 0, 0));
+        assert.strictEqual(boa_client.getHeightAt(date), 17136);
+        date = new Date(Date.UTC(2019, 3, 29, 0, 0, 0));
+        assert.throws(function() { boa_client.getHeightAt(date) }, Error);
+        date = new Date(Date.UTC(2020, 0, 1, 0, 0, 0));
+        assert.strictEqual(boa_client.getHeightAt(date), 0);
+        date = new Date(Date.UTC(2020, 0, 1, 0, 9, 59));
+        assert.strictEqual(boa_client.getHeightAt(date), 0);
+        date = new Date(Date.UTC(2020, 0, 1, 0, 10, 0));
+        assert.strictEqual(boa_client.getHeightAt(date), 1);
+        doneIt();
+    });
 });
