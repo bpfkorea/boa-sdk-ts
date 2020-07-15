@@ -67,7 +67,7 @@ export class BOAClient
                 let validators: Array<Validator> = new Array<Validator>();
                 if (response.status == 200)
                 {
-                    response.data.forEach((elem: any) => 
+                    response.data.forEach((elem: any) =>
                     {
                         let validator = new Validator();
                         validator.fromJSON(elem);
@@ -118,7 +118,7 @@ export class BOAClient
                let validators: Array<Validator> = new Array<Validator>();
                if (response.status == 200)
                {
-                    response.data.forEach((elem: any) => 
+                    response.data.forEach((elem: any) =>
                     {
                         let validator = new Validator();
                         validator.fromJSON(elem);
