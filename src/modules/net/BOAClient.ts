@@ -203,7 +203,7 @@ export class BOAClient
     {
         const baseDate: Date = new Date(Date.UTC(2020, 0, 1, 0, 0, 0));
         if (when.getTime() < baseDate.getTime())
-            throw new Error("The date smaller than January 1, 2020");
+            throw new Error("Dates prior to the chain Genesis date (January 1, 2020) are not valid");
 
         const milliseconds_per_block = 600000;
         let height: number = Math.floor((when.getTime() - baseDate.getTime()) / milliseconds_per_block);
