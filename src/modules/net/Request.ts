@@ -13,11 +13,6 @@
 
 import axios from 'axios';
 
-const Request = axios.create(
-    {
-        headers: {
-            "User-Agent": "boa-sdk-ts"
-        },
-    });
+const Request = axios.create();
 
 export default Request;
