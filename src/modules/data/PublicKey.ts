@@ -102,23 +102,23 @@ enum VersionByte
      * Used for encoded stellar addresses
      * Base32-encodes to 'G...'
      */
-	AccountID = 6 << 3,
+    AccountID = 6 << 3,
 
     /**
      * Used for encoded stellar seed
      * Base32-encodes to 'S...'
      */
-	Seed = 18 << 3,
+    Seed = 18 << 3,
 
     /**
      * Used for encoded stellar hashTx signer keys.
      * Base32-encodes to 'T...'
      */
-	HashTx = 19 << 3,
+    HashTx = 19 << 3,
 
     /**
      * Used for encoded stellar hashX signer keys.
      * Base32-encodes to 'X...'
      */
-	HashX = 23 << 3,
+    HashX = 23 << 3,
 }
