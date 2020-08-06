@@ -92,3 +92,6 @@ dist
 .idea
 
 lib
+
+# Documentation build folder
+docs
