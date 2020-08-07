@@ -2,8 +2,7 @@
 
     Contains definition for the public key class,
 
-    See_Also: https://github.com/bpfkorea/agora/blob/
-    93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/common/crypto/Key.d
+    See_Also: https://github.com/bpfkorea/agora/blob/93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/common/crypto/Key.d
 
     Copyright:
         Copyright (c) 2020 BOS Platform Foundation Korea
@@ -86,8 +85,7 @@ export class PublicKey
      * @param signature {Signature} The signature of `msg` matching `this` public key.
      * @param msg {Buffer} The signed message. Should not include the signature.
      * @returns {boolean} `true` if the signature is valid
-     * See_Also: https://github.com/bpfkorea/agora/blob/93c31daa616e76011deee68a8645e1b86624ce3d
-     *  /source/agora/common/crypto/Key.d#L226-L235
+     * See_Also: https://github.com/bpfkorea/agora/blob/93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/common/crypto/Key.d#L226-L235
      */
     public verify (signature: Signature, msg: Buffer): boolean
     {

@@ -77,7 +77,7 @@ export function hash (source: Buffer): Hash
  * @param source1 Original for creating hash
  * @param source2 Original for creating hash
  * @returns Instance of Hash
- * See_Also https://github.com/bpfkorea/agora/blob/v0.x.x/source/agora/common/Hash.d#L239-L255
+ * See_Also https://github.com/bpfkorea/agora/blob/93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/common/Hash.d#L239-L255
  */
 export function hashMulti (source1: Buffer, source2: Buffer): Hash
 {
@@ -95,7 +95,7 @@ export function hashMulti (source1: Buffer, source2: Buffer): Hash
  * @param h {Hash} Hash of transaction
  * @param index {number | string} Index of the output
  * @returns Instance of Hash
- * See_Also https://github.com/bpfkorea/agora/blob/v0.x.x/source/agora/consensus/data/UTXOSetValue.d#L50-L53
+ * See_Also https://github.com/bpfkorea/agora/blob/93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/consensus/data/UTXOSetValue.d#L50-L53
  */
 export function makeUTXOKey (h: Hash, index: number | string | object): Hash
 {

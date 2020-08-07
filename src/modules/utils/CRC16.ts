@@ -31,8 +31,7 @@ import * as assert from 'assert';
  * Data returned is in little endian
  * @param data {Buffer} Input data
  * @returns {Buffer}
- * See_Also: https://github.com/bpfkorea/agora/blob/
- * 93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/common/crypto/Crc16.d#L90-L100
+ * See_Also: https://github.com/bpfkorea/agora/blob/93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/common/crypto/Crc16.d#L90-L100
  */
 export function checksum (data: Buffer): Buffer
 {
@@ -47,8 +46,7 @@ export function checksum (data: Buffer): Buffer
  * @param data {Buffer} Data to checksum
  * @param expected {Buffer} Expected checksum value
  * @returns {boolean}
- * See_Also: https://github.com/bpfkorea/agora/blob/
- * 93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/common/crypto/Crc16.d#L104-L109
+ * See_Also: https://github.com/bpfkorea/agora/blob/93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/common/crypto/Crc16.d#L104-L109
  */
 export function validate (data: Buffer, expected: Buffer): boolean
 {

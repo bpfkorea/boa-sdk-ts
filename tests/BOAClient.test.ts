@@ -381,8 +381,7 @@ describe ('BOA Client', () =>
     });
 
     /**
-     * See_Also: https://github.com/bpfkorea/agora/blob/
-     * 93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/consensus/validation/PreImage.d#L79-L106
+     * See_Also: https://github.com/bpfkorea/agora/blob/93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/consensus/validation/PreImage.d#L79-L106
      */
     it ('test for validity of pre-image', (doneIt: () => void) =>
     {
