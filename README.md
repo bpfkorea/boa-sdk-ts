@@ -28,6 +28,9 @@ boa_client.getValidator("GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235G
 });
 ```
 
+## Documentation
+[BOA-SDK for TypeScript documentation](https://bpfkorea.github.io/boa-sdk-ts)
+
 ## Testing
 ```bash
 $ git clone https://github.com/bpfkorea/boa-sdk-ts.git
