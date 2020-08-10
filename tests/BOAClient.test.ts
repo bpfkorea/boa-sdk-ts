@@ -445,15 +445,59 @@ describe ('BOA Client', () =>
         // Create BOA Client
         let boa_client = new boasdk.BOAClient(uri.toString());
         let date = new Date(Date.UTC(2020, 3, 29, 0, 0, 0));
-        assert.strictEqual(boa_client.getHeightAt(date), 17136);
+        boa_client.getHeightAt(date)
+        .then((height: number) =>
+        {
+            assert.strictEqual(height, 17136);
+        })
+        .catch(err =>
+        {
+            assert.ifError(err);
+        });
+
         date = new Date(Date.UTC(2019, 3, 29, 0, 0, 0));
-        assert.throws(function() { boa_client.getHeightAt(date) }, Error);
+        boa_client.getHeightAt(date)
+        .then(() =>
+        {
+            assert.fail("An error must occur with an invalid input value.");
+        })
+        .catch(err =>
+        {
+            assert.ok(err);
+        });
+
         date = new Date(Date.UTC(2020, 0, 1, 0, 0, 0));
-        assert.strictEqual(boa_client.getHeightAt(date), 0);
+        boa_client.getHeightAt(date)
+        .then((height: number) =>
+        {
+            assert.strictEqual(height, 0);
+        })
+        .catch(err =>
+        {
+            assert.ifError(err);
+        });
+
         date = new Date(Date.UTC(2020, 0, 1, 0, 9, 59));
-        assert.strictEqual(boa_client.getHeightAt(date), 0);
+        boa_client.getHeightAt(date)
+        .then((height: number) =>
+        {
+            assert.strictEqual(height, 0);
+        })
+        .catch(err =>
+        {
+            assert.ifError(err);
+        });
+
         date = new Date(Date.UTC(2020, 0, 1, 0, 10, 0));
-        assert.strictEqual(boa_client.getHeightAt(date), 1);
+        boa_client.getHeightAt(date)
+        .then((height: number) =>
+        {
+            assert.strictEqual(height, 1);
+        })
+        .catch(err =>
+        {
+            assert.ifError(err);
+        });
         doneIt();
     });
 });

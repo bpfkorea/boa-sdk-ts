@@ -198,15 +198,20 @@ export class BOAClient
      * @param when {Date} Unix epoch time
      * @returns height {number} (or expected height) of the designated time
      */
-    public getHeightAt(when: Date): number
+    public getHeightAt(when: Date): Promise<number>
     {
-        const baseDate: Date = new Date(Date.UTC(2020, 0, 1, 0, 0, 0));
-        if (when.getTime() < baseDate.getTime())
-            throw new Error("Dates prior to the chain Genesis date (January 1, 2020) are not valid");
-
-        const milliseconds_per_block = 600000;
-        let height: number = Math.floor((when.getTime() - baseDate.getTime()) / milliseconds_per_block);
-        return height;
+        return new Promise<number>((resolve, reject) =>
+        {
+            const baseDate: Date = new Date(Date.UTC(2020, 0, 1, 0, 0, 0));
+            if (when.getTime() < baseDate.getTime())
+            {
+                reject(new Error("Dates prior to the chain Genesis date (January 1, 2020) are not valid"));
+                return;
+            }
+            const milliseconds_per_block = 600000;
+            let height = Math.floor((when.getTime() - baseDate.getTime()) / milliseconds_per_block);
+            resolve(height);
+        });
     }
 }
 
