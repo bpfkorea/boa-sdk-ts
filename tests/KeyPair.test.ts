@@ -1,6 +1,6 @@
 /*******************************************************************************
 
-    Test for PublicKey
+    Test for KeyPair, PublicKey, SecretKey and Seed
 
     Copyright:
         Copyright (c) 2020 BOS Platform Foundation Korea
@@ -14,7 +14,7 @@
 import * as boasdk from '../lib';
 import * as assert from 'assert';
 
-describe ('PublicKey', () =>
+describe ('ED25519 Public Key', () =>
 {
     before('Wait for the package libsodium to finish loading', (doneIt: () => void) =>
     {
@@ -35,16 +35,48 @@ describe ('PublicKey', () =>
         let public_key = boasdk.PublicKey.fromString(address);
         assert.strictEqual(public_key.toString(), address);
     });
+});
 
-    // See: https://github.com/bpfkorea/agora/blob/
-    // 93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/common/crypto/Key.d#L375-L386
-    it ('test for verify of signature', () =>
+describe ('ED25519 Secret Key Seed', () =>
+{
+    it ('Extract the seed from a string then convert it back into a string and compare it.', () =>
     {
-        let address = 'GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW';
-        let signature = new boasdk.Signature();
-        signature.fromString('0x01cd1b598618347c1d5df7ce25d94de41bac109699dc0c93bb01703b81' +
-            'c7731503f7dc5f7f9a9375efb672c83669f5c74ba41d30e5a969d1ed06904eb3b0b6a7');
-        let public_key = boasdk.PublicKey.fromString(address);
-        assert.ok(public_key.verify(signature, Buffer.from('Hello World')));
+        let secret_seed = 'SBBUWIMSX5VL4KVFKY44GF6Q6R5LS2Z5B7CTAZBNCNPLS4UKFVDXC7TQ';
+        let seed = boasdk.Seed.fromString(secret_seed);
+        assert.strictEqual(seed.toString(), secret_seed);
+    });
+});
+
+describe ('KeyPair', () =>
+{
+    // See: https://github.com/bpfkorea/agora/blob/93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/common/crypto/Key.d#L375-L386
+    it ('Test of KeyPair.fromSeed, sign, verify', () =>
+    {
+        let address = `GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW`;
+        let seed = `SBBUWIMSX5VL4KVFKY44GF6Q6R5LS2Z5B7CTAZBNCNPLS4UKFVDXC7TQ`;
+
+        let kp = boasdk.KeyPair.fromSeed(boasdk.Seed.fromString(seed));
+        assert.strictEqual(kp.address.toString(), address);
+
+        let signature = kp.secret.sign(Buffer.from('Hello World'));
+        assert.ok(kp.address.verify(signature, Buffer.from('Hello World')));
+    });
+    
+    it ('Test of KeyPair.random, sign, verify, reproduce', () =>
+    {
+        let random_kp = boasdk.KeyPair.random();
+
+        let random_kp_signature = random_kp.secret.sign(Buffer.from('Hello World'));
+        assert.ok(random_kp.address.verify(random_kp_signature, Buffer.from('Hello World')));
+
+        // Test whether randomly generated key-pair are reproducible.
+        let reproduced_kp = boasdk.KeyPair.fromSeed(random_kp.seed);
+        
+        let reproduced_kp_signature = reproduced_kp.secret.sign(Buffer.from('Hello World'));
+        assert.ok(reproduced_kp.address.verify(reproduced_kp_signature, Buffer.from('Hello World')));
+
+        assert.deepStrictEqual(random_kp.secret, reproduced_kp.secret);
+        assert.deepStrictEqual(random_kp.address, reproduced_kp.address);
+        assert.deepStrictEqual(random_kp_signature, reproduced_kp_signature);
     });
 });
