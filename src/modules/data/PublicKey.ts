@@ -16,7 +16,7 @@
 import * as utils from '../utils/CRC16';
 import { Signature } from './Signature';
 
-import * as sodium from 'sodium-javascript';
+import { SodiumHelper } from "../utils/SodiumHelper";
 import * as assert from 'assert';
 import { base32Encode, base32Decode } from '@ctrl/ts-base32';
 
@@ -31,20 +31,15 @@ export class PublicKey
     public readonly data: Buffer;
 
     /**
-     * The number of byte of the public key
-     */
-    public static Width: number = sodium.crypto_sign_PUBLICKEYBYTES;
-
-    /**
      * Constructor
      * @param bin {Buffer | undefined} Raw public key
      */
     constructor (bin?: Buffer)
     {
-        this.data = Buffer.alloc(PublicKey.Width);
+        this.data = Buffer.alloc(SodiumHelper.sodium.crypto_sign_PUBLICKEYBYTES);
         if (bin != undefined)
         {
-            assert.strictEqual(bin.length, PublicKey.Width);
+            assert.strictEqual(bin.length, SodiumHelper.sodium.crypto_sign_PUBLICKEYBYTES);
             bin.copy(this.data);
         }
     }
@@ -69,7 +64,7 @@ export class PublicKey
     public static fromString (str: string): PublicKey
     {
         const decoded = Buffer.from(base32Decode(str));
-        assert.strictEqual(decoded.length, 1 + PublicKey.Width + 2);
+        assert.strictEqual(decoded.length, 1 + SodiumHelper.sodium.crypto_sign_PUBLICKEYBYTES + 2);
         assert.strictEqual(decoded[0], VersionByte.AccountID);
 
         const body = decoded.slice(0, -2);
@@ -89,7 +84,7 @@ export class PublicKey
      */
     public verify (signature: Signature, msg: Buffer): boolean
     {
-        return sodium.crypto_sign_verify_detached(signature.data, msg, this.data);
+        return SodiumHelper.sodium.crypto_sign_verify_detached(signature.data, msg, this.data);
     }
 }
 

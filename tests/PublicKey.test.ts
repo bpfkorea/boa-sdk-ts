@@ -16,6 +16,19 @@ import * as assert from 'assert';
 
 describe ('PublicKey', () =>
 {
+    before('Wait for the package libsodium to finish loading', (doneIt: () => void) =>
+    {
+        boasdk.SodiumHelper.init()
+            .then(() =>
+            {
+                doneIt();
+            })
+            .catch((err: any) =>
+            {
+                doneIt();
+            });
+    });
+
     it ('Extract the public key from a string then convert it back into a string and compare it.', () =>
     {
         let address = 'GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW';

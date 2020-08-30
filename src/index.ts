@@ -14,6 +14,7 @@
 
 export { readFromString, writeToString } from './modules/utils/buffer';
 export { checksum, validate } from './modules/utils/CRC16';
+export { SodiumHelper } from './modules/utils/SodiumHelper';
 export { Hash, hash, hashMulti, makeUTXOKey } from './modules/data/Hash';
 export { PreImage  } from './modules/data/PreImage';
 export { PublicKey } from './modules/data/PublicKey';

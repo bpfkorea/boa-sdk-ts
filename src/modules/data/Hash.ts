@@ -11,7 +11,7 @@
 
 *******************************************************************************/
 
-import * as sodium from 'sodium-javascript'
+import { SodiumHelper } from "../utils/SodiumHelper";
 import {readFromString, writeToString} from "../utils/buffer"
 import JSBI from 'jsbi';
 
@@ -67,9 +67,7 @@ export class Hash
  */
 export function hash (source: Buffer): Hash
 {
-    let temp = Buffer.alloc(Hash.Width);
-    sodium.crypto_generichash(temp, source);
-    return new Hash(temp);
+    return new Hash(Buffer.from(SodiumHelper.sodium.crypto_generichash(Hash.Width, source)));
 }
 
 /**
@@ -85,9 +83,7 @@ export function hashMulti (source1: Buffer, source2: Buffer): Hash
     source1.copy(merge);
     source2.copy(merge, source1.length);
 
-    let temp = Buffer.alloc(Hash.Width);
-    sodium.crypto_generichash(temp, merge);
-    return new Hash(temp);
+    return new Hash(Buffer.from(SodiumHelper.sodium.crypto_generichash(Hash.Width, merge)));
 }
 
 /**
