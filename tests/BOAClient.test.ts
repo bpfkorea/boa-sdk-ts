@@ -119,6 +119,16 @@ function LocalNetworkTest(port: string, test: (onDone: () => void) => void)
         if (!done) res.status(204).send();
     });
 
+    // http://localhost/client_info
+    test_app.get("/client_info",
+        (req : express.Request, res : express.Response) =>
+    {
+        res.status(200).send({
+            "X-Client-Name": req.header("X-Client-Name"),
+            "X-Client-Version": req.header("X-Client-Version"),
+        });
+    });
+
     // http://localhost/stop
     test_app.get("/stop",
         (req: express.Request, res: express.Response) =>
@@ -512,5 +522,27 @@ describe ('BOA Client', () =>
             assert.ifError(err);
         });
         doneIt();
+    });
+
+    it ('Test client name and version', (doneIt: () => void) =>
+    {
+        const version = require("../package.json").version;
+
+        let uri = URI("http://localhost")
+            .port(port)
+            .directory("client_info");
+
+        boasdk.Request.get (uri.toString())
+            .then((response: any) =>
+            {
+                assert.strictEqual(response.data["X-Client-Name"], "boa-sdk-ts");
+                assert.strictEqual(response.data["X-Client-Version"], version);
+                doneIt();
+            })
+            .catch((error: any) =>
+            {
+                assert.ok(!error, error);
+                doneIt();
+            });
     });
 });

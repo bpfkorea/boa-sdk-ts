@@ -22,6 +22,7 @@ export { Signature } from './modules/data/Signature';
 export { Validator } from './modules/data/Validator';
 
 export { BOAClient } from './modules/net/BOAClient';
+export { default as Request } from './modules/net/Request';
 
 // For BinInt
 import { default as JSBInt } from 'jsbi';
