@@ -103,10 +103,10 @@ export function makeUTXOKey (h: Hash, index: number | string | object): Hash
 
     // See https://github.com/nodejs/node/blob/
     // 88fb5a5c7933022de750745e51e5dc0996a1e2c4/lib/internal/buffer.js#L573-L592
-    let lo = 
+    let lo =
             JSBI.toNumber(
                 JSBI.bitwiseAnd(
-                    JSBI.BigInt(index), 
+                    JSBI.BigInt(index),
                     JSBI.BigInt(0xffffffff)
                 )
             );
@@ -118,13 +118,13 @@ export function makeUTXOKey (h: Hash, index: number | string | object): Hash
     lo = lo >> 8;
     buf[3] = lo;
 
-    let hi = 
+    let hi =
             JSBI.toNumber(
                 JSBI.bitwiseAnd(
                     JSBI.signedRightShift(
-                        JSBI.BigInt(index), 
+                        JSBI.BigInt(index),
                         JSBI.BigInt(32)
-                    ), 
+                    ),
                     JSBI.BigInt(0xffffffff)
                 )
             );
