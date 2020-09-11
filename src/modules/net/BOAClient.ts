@@ -17,6 +17,7 @@
 import { Hash, hash } from '../data/Hash';
 import { Request } from './Request';
 import { Validator } from '../data/Validator';
+import { VoteData } from '../data/VoteData';
 
 import { AxiosResponse, AxiosError } from 'axios';
 import uri from 'urijs';
@@ -219,6 +220,19 @@ export class BOAClient
             const milliseconds_per_block = 600000;
             let height = Math.floor((when.getTime() - baseDate.getTime()) / milliseconds_per_block);
             resolve(height);
+        });
+    }
+
+    /**
+     * Register the vote data
+     * @param data The vote data
+     * @returns Returns true if success, otherwise returns false
+     */
+    public registerVoteData (data: VoteData): Promise<boolean>
+    {
+        return new Promise<boolean>((resolve, reject) =>
+        {
+            resolve(true);
         });
     }
 }

@@ -48,9 +48,11 @@ export class Signature
      * Reads from hex string
      * @param hex {string} Hex string
      */
-    public fromString (hex: string)
+    public fromString (hex: string): Signature
     {
         utils.readFromString(hex, this.data);
+
+        return this;
     }
 
     /**
@@ -60,5 +62,25 @@ export class Signature
     public toString (): string
     {
         return utils.writeToString(this.data);
+    }
+
+    /**
+     * Creates from the hex string
+     * @param hex The hex string
+     * @returns The instance of Signature
+     */
+    public static createFromString (hex: string): Signature
+    {
+        return (new Signature()).fromString(hex);
+    }
+
+    /**
+     * Creates from Buffer
+     * @param bin The binary data of the signature
+     * @returns The instance of Signature
+     */
+    public static createFromBinary (bin: Buffer): Signature
+    {
+        return new Signature(bin);
     }
 }

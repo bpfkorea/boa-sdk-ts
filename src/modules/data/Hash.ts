@@ -45,9 +45,11 @@ export class Hash
      * Reads from hex string
      * @param hex Hex string
      */
-    public fromString (hex: string)
+    public fromString (hex: string): Hash
     {
         utils.readFromString(hex, this.data);
+
+        return this;
     }
 
     /**
@@ -57,6 +59,26 @@ export class Hash
     public toString (): string
     {
         return utils.writeToString(this.data);
+    }
+
+    /**
+     * Creates from the hex string
+     * @param hex The hex string
+     * @returns The instance of Hash
+     */
+    public static createFromString (hex: string): Hash
+    {
+        return (new Hash()).fromString(hex);
+    }
+
+    /**
+     * Creates from Buffer
+     * @param bin The binary data of the hash
+     * @returns The instance of Hash
+     */
+    public static createFromBinary (bin: Buffer): Hash
+    {
+        return new Hash(bin);
     }
 }
 

@@ -20,6 +20,8 @@ export { PreImage  } from './modules/data/PreImage';
 export { KeyPair, PublicKey, SecretKey, Seed } from './modules/data/KeyPair';
 export { Signature } from './modules/data/Signature';
 export { Validator } from './modules/data/Validator';
+export { TxInput } from './modules/data/TxInput';
+export { VoteData } from './modules/data/VoteData';
 
 export { BOAClient } from './modules/net/BOAClient';
 export { Request } from './modules/net/Request';
