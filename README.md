@@ -24,7 +24,7 @@ boa_client.getValidator("GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235G
 {
     // On Success
 })
-.catch(err =>
+.catch((err: any) =>
 {
     // On Error
 });

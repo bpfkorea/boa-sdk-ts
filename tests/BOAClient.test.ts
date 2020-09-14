@@ -203,7 +203,7 @@ describe ('BOA Client', () =>
 
             doneIt();
         })
-        .catch((error) =>
+        .catch((error: any) =>
         {
             assert.ok(!error, error);
             doneIt();
@@ -230,7 +230,7 @@ describe ('BOA Client', () =>
             // end of this test
             doneIt();
         })
-        .catch(err =>
+        .catch((err: any) =>
         {
             // On Error
             assert.ok(!err, err);
@@ -260,7 +260,7 @@ describe ('BOA Client', () =>
             // end of this test
             doneIt();
         })
-        .catch(err =>
+        .catch((err: any) =>
         {
             // On Error
             assert.ok(!err, err);
@@ -337,7 +337,7 @@ describe ('BOA Client', () =>
                 // end of this test
                 doneIt();
             })
-            .catch(err =>
+            .catch((err: any) =>
             {
                 // On Error
                 assert.fail(err);
@@ -365,7 +365,7 @@ describe ('BOA Client', () =>
                 // end of this test
                 doneIt();
             })
-            .catch(err =>
+            .catch((err: any) =>
             {
                 // On Error
                 assert.strictEqual(err.message, "Bad Request, The Height value is not valid.");
@@ -393,7 +393,7 @@ describe ('BOA Client', () =>
                 // end of this test
                 doneIt();
             })
-            .catch(err =>
+            .catch((err: any) =>
             {
                 // On Error
                 assert.strictEqual(err.message, "connect ECONNREFUSED 127.0.0.1:6000");
@@ -473,7 +473,7 @@ describe ('BOA Client', () =>
         {
             assert.strictEqual(height, 17136);
         })
-        .catch(err =>
+        .catch((err: any) =>
         {
             assert.ifError(err);
         });
@@ -484,7 +484,7 @@ describe ('BOA Client', () =>
         {
             assert.fail("An error must occur with an invalid input value.");
         })
-        .catch(err =>
+        .catch((err: any) =>
         {
             assert.ok(err);
         });
@@ -495,7 +495,7 @@ describe ('BOA Client', () =>
         {
             assert.strictEqual(height, 0);
         })
-        .catch(err =>
+        .catch((err: any) =>
         {
             assert.ifError(err);
         });
@@ -506,7 +506,7 @@ describe ('BOA Client', () =>
         {
             assert.strictEqual(height, 0);
         })
-        .catch(err =>
+        .catch((err: any) =>
         {
             assert.ifError(err);
         });
@@ -517,7 +517,7 @@ describe ('BOA Client', () =>
         {
             assert.strictEqual(height, 1);
         })
-        .catch(err =>
+        .catch((err: any) =>
         {
             assert.ifError(err);
         });
