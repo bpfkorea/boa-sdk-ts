@@ -149,7 +149,7 @@ function LocalNetworkTest(port: string, test: (onDone: () => void) => void)
             await client.get(uri.toString());
         });
     });
-};
+}
 
 describe ('BOA Client', () =>
 {
@@ -360,7 +360,7 @@ describe ('BOA Client', () =>
             .then((validators: Array<boasdk.Validator>) =>
             {
                 // On Success
-                assert.ok(false, "A different case occurred than expected.")
+                assert.ok(false, "A different case occurred than expected.");
 
                 // end of this test
                 doneIt();
@@ -388,7 +388,7 @@ describe ('BOA Client', () =>
             .then((validators: Array<boasdk.Validator>) =>
             {
                 // On Success
-                assert.ok(false, "A different case occurred than expected.")
+                assert.ok(false, "A different case occurred than expected.");
 
                 // end of this test
                 doneIt();

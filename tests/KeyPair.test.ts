@@ -61,7 +61,7 @@ describe ('KeyPair', () =>
         let signature = kp.secret.sign(Buffer.from('Hello World'));
         assert.ok(kp.address.verify(signature, Buffer.from('Hello World')));
     });
-    
+
     it ('Test of KeyPair.random, sign, verify, reproduce', () =>
     {
         let random_kp = boasdk.KeyPair.random();
@@ -71,7 +71,7 @@ describe ('KeyPair', () =>
 
         // Test whether randomly generated key-pair are reproducible.
         let reproduced_kp = boasdk.KeyPair.fromSeed(random_kp.seed);
-        
+
         let reproduced_kp_signature = reproduced_kp.secret.sign(Buffer.from('Hello World'));
         assert.ok(reproduced_kp.address.verify(reproduced_kp_signature, Buffer.from('Hello World')));
 
