@@ -11,8 +11,8 @@
 
 *******************************************************************************/
 
-import { SodiumHelper } from "../utils/SodiumHelper";
-import {readFromString, writeToString} from "../utils/buffer"
+import * as utils from '../utils';
+
 import JSBI from 'jsbi';
 
 /**
@@ -47,7 +47,7 @@ export class Hash
      */
     public fromString (hex: string)
     {
-        readFromString(hex, this.data);
+        utils.readFromString(hex, this.data);
     }
 
     /**
@@ -56,7 +56,7 @@ export class Hash
      */
     public toString (): string
     {
-        return writeToString(this.data);
+        return utils.writeToString(this.data);
     }
 }
 
@@ -67,7 +67,7 @@ export class Hash
  */
 export function hash (source: Buffer): Hash
 {
-    return new Hash(Buffer.from(SodiumHelper.sodium.crypto_generichash(Hash.Width, source)));
+    return new Hash(Buffer.from(utils.SodiumHelper.sodium.crypto_generichash(Hash.Width, source)));
 }
 
 /**
@@ -83,7 +83,7 @@ export function hashMulti (source1: Buffer, source2: Buffer): Hash
     source1.copy(merge);
     source2.copy(merge, source1.length);
 
-    return new Hash(Buffer.from(SodiumHelper.sodium.crypto_generichash(Hash.Width, merge)));
+    return new Hash(Buffer.from(utils.SodiumHelper.sodium.crypto_generichash(Hash.Width, merge)));
 }
 
 /**

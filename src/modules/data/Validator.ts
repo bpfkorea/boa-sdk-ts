@@ -13,7 +13,7 @@
 
 import { Hash }  from './Hash';
 import { PreImage, JSONPreImage } from './PreImage';
-import { validateJSON } from '../utils/json';
+import * as utils from '../utils';
 
 /**
  * Define the validator
@@ -76,7 +76,7 @@ export class Validator
      */
     public fromJSON (data: JSONValidator)
     {
-        validateJSON(this, data);
+        utils.validateJSON(this, data);
 
         this.address = data.address;
         this.enrolled_at = data.enrolled_at;

@@ -11,8 +11,9 @@
 
 *******************************************************************************/
 
-import { readFromString, writeToString } from "../utils/buffer"
-import * as assert from "assert";
+import * as utils from '../utils';
+
+import * as assert from 'assert';
 
 /**
  * Define the signature
@@ -49,7 +50,7 @@ export class Signature
      */
     public fromString (hex: string)
     {
-        readFromString(hex, this.data);
+        utils.readFromString(hex, this.data);
     }
 
     /**
@@ -58,6 +59,6 @@ export class Signature
      */
     public toString (): string
     {
-        return writeToString(this.data);
+        return utils.writeToString(this.data);
     }
 }

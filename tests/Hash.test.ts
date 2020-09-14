@@ -11,8 +11,9 @@
 
 *******************************************************************************/
 
-import * as assert from 'assert';
 import * as boasdk from '../lib';
+
+import * as assert from 'assert';
 import { default as JSBI } from 'jsbi';
 
 describe('Hash', () => {

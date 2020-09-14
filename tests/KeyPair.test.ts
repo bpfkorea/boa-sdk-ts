@@ -12,6 +12,7 @@
 *******************************************************************************/
 
 import * as boasdk from '../lib';
+
 import * as assert from 'assert';
 
 describe ('ED25519 Public Key', () =>

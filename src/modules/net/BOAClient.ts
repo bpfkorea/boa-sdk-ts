@@ -15,11 +15,11 @@
 *******************************************************************************/
 
 import { Hash, hash } from '../data/Hash';
+import { Request } from './Request';
 import { Validator } from '../data/Validator';
 
-import Request from './Request';
-import uri from 'urijs';
 import { AxiosResponse, AxiosError } from 'axios';
+import uri from 'urijs';
 
 /**
  * Define the BOA Client of TypeScript.

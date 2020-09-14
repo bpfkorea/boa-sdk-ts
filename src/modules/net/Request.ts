@@ -13,13 +13,11 @@
 
 import axios from 'axios';
 
-const version = require("../../../package.json").version;
+const version = require('../../../package.json').version;
 
-const Request = axios.create({
+export const Request = axios.create({
     headers: {
         "X-Client-Name": "boa-sdk-ts",
         "X-Client-Version": version,
     }
 });
-
-export default Request;

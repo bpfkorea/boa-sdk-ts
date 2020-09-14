@@ -12,12 +12,13 @@
 *******************************************************************************/
 
 import * as boasdk from '../lib';
+
 import * as assert from 'assert';
-import express from "express";
-import axios from "axios";
-import * as http from "http";
-import URI from "urijs";
+import axios from 'axios';
+import express from 'express';
+import * as http from 'http';
 import randomBytes from 'randombytes';
+import URI from 'urijs';
 
 /**
  * sample JSON

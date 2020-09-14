@@ -12,7 +12,7 @@
 *******************************************************************************/
 
 import { Hash }  from './Hash';
-import { validateJSON } from '../utils/json';
+import * as utils from '../utils';
 
 /**
  * Define the pre-image
@@ -53,7 +53,7 @@ export class PreImage
      */
     public fromJSON (data: JSONPreImage)
     {
-        validateJSON(this, data);
+        utils.validateJSON(this, data);
 
         this.distance = data.distance;
         this.hash.fromString(data.hash);
