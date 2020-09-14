@@ -197,9 +197,9 @@ describe ('BOA Client', () =>
         client.get (uri.toString())
         .then((response) =>
         {
-            assert.equal(response.data.length, 1);
-            assert.equal(response.data[0].address, "GBJABNUCDJCIL5YJQMB5OZ7VCFPKYLMTUXM2ZKQJACT7PXL7EVOMEKNZ");
-            assert.equal(response.data[0].preimage.distance, 10);
+            assert.strictEqual(response.data.length, 1);
+            assert.strictEqual(response.data[0].address, "GBJABNUCDJCIL5YJQMB5OZ7VCFPKYLMTUXM2ZKQJACT7PXL7EVOMEKNZ");
+            assert.strictEqual(response.data[0].preimage.distance, 10);
 
             doneIt();
         })
