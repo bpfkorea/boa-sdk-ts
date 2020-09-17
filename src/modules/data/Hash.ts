@@ -14,6 +14,7 @@
 import * as utils from '../utils';
 
 import JSBI from 'jsbi';
+import { SmartBuffer } from 'smart-buffer';
 
 /**
  * The Class for creating hash
@@ -45,9 +46,11 @@ export class Hash
      * Reads from hex string
      * @param hex Hex string
      */
-    public fromString (hex: string)
+    public fromString (hex: string): Hash
     {
         utils.readFromString(hex, this.data);
+
+        return this;
     }
 
     /**
@@ -57,6 +60,35 @@ export class Hash
     public toString (): string
     {
         return utils.writeToString(this.data);
+    }
+
+    /**
+     * Creates from the hex string
+     * @param hex The hex string
+     * @returns The instance of Hash
+     */
+    public static createFromString (hex: string): Hash
+    {
+        return (new Hash()).fromString(hex);
+    }
+
+    /**
+     * Creates from Buffer
+     * @param bin The binary data of the hash
+     * @returns The instance of Hash
+     */
+    public static createFromBinary (bin: Buffer): Hash
+    {
+        return new Hash(bin);
+    }
+
+    /**
+     * Collects data to create a hash.
+     * @param buffer The buffer where collected data is stored
+     */
+    public computeHash (buffer: SmartBuffer)
+    {
+        buffer.writeBuffer(this.data);
     }
 }
 
@@ -133,4 +165,57 @@ export function makeUTXOKey (h: Hash, index: number | string | object): Hash
     buf[7] = hi;
 
     return hashMulti(h.data, buf);
+}
+
+/**
+ * Serializes all internal objects that the instance contains in a buffer.
+ * Calculates the hash of the buffer.
+ * @param record The object to serialize for the hash for creation.
+ * The object has a method named `computeHash`.
+ * @returns The instance of the hash
+ */
+export function hashFull (record: any): Hash
+{
+    if ((record === null) || (record === undefined))
+        return new Hash();
+
+    let buffer = new SmartBuffer();
+    hashPart(record, buffer);
+    return hash(buffer.readBuffer());
+}
+
+/**
+ * Serializes all internal objects that the instance contains in the buffer.
+ * @param record The object to serialize for the hash for creation
+ * @param buffer The storage of serialized data for creating the hash
+ */
+export function hashPart (record: any, buffer: SmartBuffer)
+{
+    if ((record === null) || (record === undefined))
+        return;
+
+    // If the record has a method called `computeHash`,
+    if (typeof record["computeHash"] == "function")
+    {
+        record.computeHash(buffer);
+        return;
+    }
+
+    if (Array.isArray(record))
+    {
+        for (let elem of record)
+        {
+            hashPart(elem, buffer);
+        }
+    }
+    else
+    {
+        for (let key in record)
+        {
+            if (record.hasOwnProperty(key))
+            {
+                hashPart(record[key], buffer);
+            }
+        }
+    }
 }

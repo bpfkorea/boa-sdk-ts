@@ -18,6 +18,7 @@ import { Signature } from './Signature';
 
 import * as assert from 'assert';
 import { base32Encode, base32Decode } from '@ctrl/ts-base32';
+import { SmartBuffer } from 'smart-buffer';
 
 /**
  * The class to hold a secret key + public key + seed
@@ -146,6 +147,15 @@ export class PublicKey
     public verify (signature: Signature, msg: Buffer): boolean
     {
         return utils.SodiumHelper.sodium.crypto_sign_verify_detached(signature.data, msg, this.data);
+    }
+
+    /**
+     * Collects data to create a hash.
+     * @param buffer - The buffer where collected data is stored
+     */
+    public computeHash (buffer: SmartBuffer)
+    {
+        buffer.writeBuffer(this.data);
     }
 }
 

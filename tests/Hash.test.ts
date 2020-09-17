@@ -82,4 +82,36 @@ describe('Hash', () => {
             '0x7c95c29b184e47fbd32e58e5abd42c6e22e8bd5a7e934ab049d21df545e09c2' +
             'e33bb2b89df2e59ee01eb2519b1508284b577f66a76d42546b65a6813e592bb84');
     });
+
+    // See_Also: https://github.com/bpfkorea/agora/blob/93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/consensus/data/Transaction.d#L225-L248
+    it ('Test for hash value of transaction data', () =>
+    {
+        let payment_tx = new boasdk.Transaction(
+            boasdk.TxType.Payment,
+            [
+                new boasdk.TxInput()
+            ],
+            [
+                new boasdk.TxOutput()
+            ]
+        );
+
+        assert.strictEqual(boasdk.hashFull(payment_tx).toString(),
+            "0x9a87d86f702cd0f519efba81cf379f2a06907f34df6546f93c8619af113d0d774" +
+            "041b8e45f7975890b98890c7f5b0c062f6dae88ac1ec8d2c25dcf88b9aa01c9");
+
+        let freeze_tx = new boasdk.Transaction(
+            boasdk.TxType.Freeze,
+            [
+                new boasdk.TxInput()
+            ],
+            [
+                new boasdk.TxOutput()
+            ]
+        );
+
+        assert.strictEqual(boasdk.hashFull(freeze_tx).toString(),
+            "0x7c8f238f70318aae788487e57eb6f4793e3b0e48fbe017c1829ec269d07a76661" +
+            "5173e9a33739e916b1d40248a48add0296b2a8e51d0f8e1a87bf7acc7c4f136");
+    });
 });
