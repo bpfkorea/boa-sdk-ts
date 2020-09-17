@@ -155,6 +155,8 @@ function LocalNetworkTest(port: string, test: (onDone: () => void) => void)
 describe ('BOA Client', () =>
 {
     let port: string = '5000';
+    let agora_port: string = '2826';
+
     let doneServer: () => void;
 
     before('Start Server', (doneIt: () => void) =>
@@ -215,9 +217,10 @@ describe ('BOA Client', () =>
     {
         // Set URL
         let uri = URI("http://localhost").port(port);
+        let agora_uri = URI("http://localhost").port(agora_port);
 
         // Create BOA Client
-        let boa_client = new boasdk.BOAClient(uri.toString());
+        let boa_client = new boasdk.BOAClient(uri.toString(), agora_uri.toString());
 
         // Query
         boa_client.getAllValidators(10)
@@ -245,9 +248,10 @@ describe ('BOA Client', () =>
     {
         // Set URL
         let uri = URI("http://localhost").port(port);
+        let agora_uri = URI("http://localhost").port(agora_port);
 
         // Create BOA Client
-        let boa_client = new boasdk.BOAClient(uri.toString());
+        let boa_client = new boasdk.BOAClient(uri.toString(), agora_uri.toString());
 
         // Query
         boa_client.getValidator("GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", 10)
@@ -275,9 +279,10 @@ describe ('BOA Client', () =>
     {
         // Set URL
         let uri = URI("http://localhost").port(port);
+        let agora_uri = URI("http://localhost").port(agora_port);
 
         // Create BOA Client
-        let boa_client = new boasdk.BOAClient(uri.toString());
+        let boa_client = new boasdk.BOAClient(uri.toString(), agora_uri.toString());
 
         // Query
         try
@@ -299,9 +304,10 @@ describe ('BOA Client', () =>
     {
         // Set URL
         let uri = URI("http://localhost").port(port);
+        let agora_uri = URI("http://localhost").port(agora_port);
 
         // Create BOA Client
-        let boa_client = new boasdk.BOAClient(uri.toString());
+        let boa_client = new boasdk.BOAClient(uri.toString(), agora_uri.toString());
 
         // Query
         try
@@ -324,9 +330,10 @@ describe ('BOA Client', () =>
     {
         // Set URL
         let uri = URI("http://localhost").port(port);
+        let agora_uri = URI("http://localhost").port(agora_port);
 
         // Create BOA Client
-        let boa_client = new boasdk.BOAClient(uri.toString());
+        let boa_client = new boasdk.BOAClient(uri.toString(), agora_uri.toString());
 
         // Query
         boa_client.getValidator("GX3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", 10)
@@ -352,9 +359,10 @@ describe ('BOA Client', () =>
     {
         // Set URL
         let uri = URI("http://localhost").port(port);
+        let agora_uri = URI("http://localhost").port(agora_port);
 
         // Create BOA Client
-        let boa_client = new boasdk.BOAClient(uri.toString());
+        let boa_client = new boasdk.BOAClient(uri.toString(), agora_uri.toString());
 
         // Query
         boa_client.getValidator("GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", -10)
@@ -380,9 +388,10 @@ describe ('BOA Client', () =>
     {
         // Set URL
         let uri = URI("http://localhost").port("6000");
+        let agora_uri = URI("http://localhost").port(agora_port);
 
         // Create BOA Client
-        let boa_client = new boasdk.BOAClient(uri.toString());
+        let boa_client = new boasdk.BOAClient(uri.toString(), agora_uri.toString());
 
         // Query
         boa_client.getValidator("GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", 10)
@@ -411,9 +420,10 @@ describe ('BOA Client', () =>
     {
         // Set URL
         let uri = URI("http://localhost").port(port);
+        let agora_uri = URI("http://localhost").port(agora_port);
 
         // Create BOA Client
-        let boa_client = new boasdk.BOAClient(uri.toString());
+        let boa_client = new boasdk.BOAClient(uri.toString(), agora_uri.toString());
 
         let pre_images: boasdk.Hash[] = [];
         pre_images.push(boasdk.hash(randomBytes(boasdk.Hash.Width)));
@@ -466,8 +476,10 @@ describe ('BOA Client', () =>
     {
         // Set URL
         let uri = URI("http://localhost").port(port);
+        let agora_uri = URI("http://localhost").port(agora_port);
+
         // Create BOA Client
-        let boa_client = new boasdk.BOAClient(uri.toString());
+        let boa_client = new boasdk.BOAClient(uri.toString(), agora_uri.toString());
         let date = new Date(Date.UTC(2020, 3, 29, 0, 0, 0));
         boa_client.getHeightAt(date)
         .then((height: number) =>

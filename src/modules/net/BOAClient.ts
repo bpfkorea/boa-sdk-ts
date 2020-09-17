@@ -35,12 +35,20 @@ export class BOAClient
     public readonly server_url: uri;
 
     /**
+     * The Agora URL
+     */
+    public readonly agora_url: uri;
+
+
+    /**
      * Constructor
      * @param server_url {string} The Stoa server URL
+     * @param agora_url {string} The Agora server URL
      */
-    constructor (server_url: string)
+    constructor (server_url: string, agora_url: string)
     {
         this.server_url = uri(server_url);
+        this.agora_url = uri(agora_url);
     }
 
     /**
