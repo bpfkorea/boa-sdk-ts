@@ -558,4 +558,136 @@ describe ('BOA Client', () =>
                 doneIt();
             });
     });
+
+    it ('Test creating a vote data', () =>
+    {
+        let inputs = [
+            new boasdk.TxInput(
+                boasdk.Hash.createFromString("0x81a326afa790003c32517a2a" +
+                    "2556613004e6147edac28d576cf7bcc2daadf4bb60be1f644c2" +
+                    "29b775e7894844ec66b2d70ddf407b8196b46bc1dfe42061c74" +
+                    "97"),
+                0
+            ),
+            new boasdk.TxInput(
+                boasdk.Hash.createFromString("0xb82cb96710af2e9804c59d1f" +
+                    "1e1679f8b8b69f4c0f6cd79c8c12f365dd766c09aaa4febcc18" +
+                    "b3665d33301cb248ac7afd343ac7b98b27beaf246ad12d3b321" +
+                    "9a"),
+                0
+            ),
+            new boasdk.TxInput(
+                boasdk.Hash.createFromString("0x4028965b7408566a66e4cf8c" +
+                    "603a1cdebc7659a3e693d36d2fdcb39b196da967914f40ef496" +
+                    "6d5b4b1f4b3aae00fbd68ffe8808b070464c2a101d44f4d7b01" +
+                    "70"),
+                0
+            )
+        ];
+
+        let outputs = [
+            new boasdk.TxOutput(
+                "100000000",
+                boasdk.PublicKey.fromString("GDD5RFGBIUAFCOXQA246BOUPHCK" +
+                    "7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW")
+            )
+        ];
+
+        let keys = [
+            boasdk.Seed.fromString("SDAKFNYEIAORZKKCYRILFQKLLOCNPL5SWJ3Y" +
+                "Y5NM3ZH6GJSZGXHZEPQS"),
+            boasdk.Seed.fromString("SAXA7RLGWM5I7Q34WBKXWLDPZ3NHFHATOZG7" +
+                "UUOG5ZGZCM7J64OLTJOT"),
+            boasdk.Seed.fromString("SDWAMFTNWY6XLZ2FDGBEMBYIXJTQSSA6OKSP" +
+                "H2YVLZH7NDE3LDFC2AJR")
+        ];
+
+        let vote_tx = boasdk.Transaction.create(
+            inputs,
+            outputs,
+            keys,
+            Buffer.from("vote data")
+        );
+
+        let expected_object = {
+            type: 0,
+            inputs: [
+                {
+                    previous: '0x81a326afa790003c32517a2a2556613004e6147edac28d576cf7bcc2daadf4bb60be1f644c229b775e7894844ec66b2d70ddf407b8196b46bc1dfe42061c7497',
+                    index: 0,
+                    signature: '0x00e435ab1f3dc92e9ba1bd9b10322bf5da143e13996cae2ccb208a03c83cec254010a775bc1bfbc896b333347d69ced6da7fca486f41af9b91ee6c1a11c3f204'
+                },
+                {
+                    previous: '0xb82cb96710af2e9804c59d1f1e1679f8b8b69f4c0f6cd79c8c12f365dd766c09aaa4febcc18b3665d33301cb248ac7afd343ac7b98b27beaf246ad12d3b3219a',
+                    index: 0,
+                    signature: '0x007543e3195de306fe9fecef7f5e4ae03933985f6343f7a64e4383e0f5691eb151a95752be352c75d3d6a3aff2c3882faa4b65634594fee8c43af7a0273a02bb'
+                },
+                {
+                    previous: '0x4028965b7408566a66e4cf8c603a1cdebc7659a3e693d36d2fdcb39b196da967914f40ef4966d5b4b1f4b3aae00fbd68ffe8808b070464c2a101d44f4d7b0170',
+                    index: 0,
+                    signature: '0x0e799ffbcc388e29ad9d76ca77634c22adfab4dcea925098758506667cd764a0d897e7d48abd3dbcf830da062111c37703a900fff676d557c4ef16a6d4067ff3'
+                }
+            ],
+            outputs: [
+                {
+                    value: '0x0000000005f5e100',
+                    address: 'GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW'
+                }
+            ],
+            data: '0x617461642065746f76'
+        };
+
+        let obj = vote_tx.toObject();
+        assert.deepStrictEqual(obj, expected_object);
+
+        // Verify the signature
+        let tx_hash = boasdk.hashFull(vote_tx);
+        for (let idx = 0; idx < vote_tx.inputs.length; idx++)
+        {
+            let key_pair = boasdk.KeyPair.fromSeed(keys[idx]);
+            assert.ok(key_pair.address.verify(vote_tx.inputs[idx].signature, tx_hash.data));
+        }
+    });
+
+    it ('Test sending a vote data', async () =>
+    {
+        // Set URL
+        let uri = URI("http://localhost").port(port);
+        let agora_uri = URI("http://localhost").port(agora_port);
+
+        // Create BOA Client
+        let boa_client = new boasdk.BOAClient(uri.toString(), agora_uri.toString());
+
+        try
+        {
+            let res = await boa_client.registerVoteData(
+                [
+                    new boasdk.TxInput(
+                        boasdk.Hash.createFromString("0x81a326afa790003c32517a2a" +
+                            "2556613004e6147edac28d576cf7bcc2daadf4bb60be1f644c2" +
+                            "29b775e7894844ec66b2d70ddf407b8196b46bc1dfe42061c74" +
+                            "97"),
+                        0
+                    )
+                ],
+                [
+                    new boasdk.TxOutput(
+                        "100000000",
+                        boasdk.PublicKey.fromString("GDD5RFGBIUAFCOXQA246BOUPHCK" +
+                            "7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW")
+                    )
+                ],
+                [
+                    boasdk.Seed.fromString("SDAKFNYEIAORZKKCYRILFQKLLOCNPL5SWJ3Y" +
+                        "Y5NM3ZH6GJSZGXHZEPQS")
+                ],
+                Buffer.from("vote data")
+            );
+            assert.ok(res);
+        }
+        catch (err)
+        {
+            assert.fail(err);
+        }
+    });
 });

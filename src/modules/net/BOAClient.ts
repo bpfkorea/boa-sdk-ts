@@ -14,9 +14,10 @@
 
 *******************************************************************************/
 
-import { Hash, hash } from '../data/Hash';
+import { Hash, hash, hashFull } from '../data/Hash';
 import { Request } from './Request';
 import { Validator } from '../data/Validator';
+import { Seed, Transaction, TxInput, TxOutput } from "../..";
 
 import { AxiosResponse, AxiosError } from 'axios';
 import uri from 'urijs';
@@ -219,6 +220,55 @@ export class BOAClient
             const milliseconds_per_block = 600000;
             let height = Math.floor((when.getTime() - baseDate.getTime()) / milliseconds_per_block);
             resolve(height);
+        });
+    }
+
+    /**
+     * Register the vote data
+     * @param inputs An array of 1 or more UTXOs to be spent
+     * @param outputs An array of 1 or more output
+     * @param keys An array of length matching `inputs` which are the keys controlling the UTXOs
+     * @param data The data to store
+     * @returns Returns true if success, otherwise returns false
+     */
+    public registerVoteData (inputs: Array<TxInput>, outputs: Array<TxOutput>, keys: Array<Seed>, data: Buffer): Promise<boolean>
+    {
+        return new Promise<boolean>((resolve, reject) =>
+        {
+            try
+            {
+                let tx = Transaction.create(inputs, outputs, keys, data);
+
+                // TODO: Send a transaction to Agora
+                // ex)
+                /*
+                let url = uri(this.agora_url)
+                    .directory("put_transaction");
+
+                Request.put(url.toString(), tx.toObject())
+                    .then((response: AxiosResponse) =>
+                    {
+                        if (response.status == 200)
+                        {
+                            resolve(true);
+                        }
+                        else
+                        {
+                            // It is not yet defined in Stoa.
+                            reject(new Error(response.statusText));
+                        }
+                    })
+                    .catch((reason: any) =>
+                    {
+                        reject(handleNetworkError(reason));
+                    });
+                */
+
+                resolve(true);
+            } catch (err)
+            {
+                reject(err);
+            }
         });
     }
 }
