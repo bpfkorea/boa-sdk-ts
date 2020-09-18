@@ -13,6 +13,9 @@
 
 import axios from 'axios';
 
+/**
+ * @ignore
+ */
 const version = require('../../../package.json').version;
 
 export const Request = axios.create({

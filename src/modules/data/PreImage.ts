@@ -61,6 +61,7 @@ export class PreImage
 }
 
 /**
+ * @ignore
  * Define the pre-image in JSON
  */
 export interface JSONPreImage

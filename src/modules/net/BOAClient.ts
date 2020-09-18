@@ -280,6 +280,7 @@ export interface IsValidPreimageResponse
 }
 
 /**
+ * @ignore
  * Check if parameter `reason` is type `AxiosError`.
  * @param reason{any} This is why the error occurred
  * @returns {boolean}
@@ -290,6 +291,7 @@ function isAxiosError (reason: any): reason is AxiosError
 }
 
 /**
+ * @ignore
  * Check if parameter `reason` is type `Error`.
  * @param reason{any} This is why the error occurred
  * @returns {boolean}
@@ -300,6 +302,7 @@ function isError (reason: any): reason is Error
 }
 
 /**
+ * @ignore
  * It is a common function that handles errors that occur
  * during network communication.
  * @param reason{any} This is why the error occurred

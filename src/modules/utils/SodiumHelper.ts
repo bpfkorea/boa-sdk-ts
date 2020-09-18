@@ -13,6 +13,9 @@
 
 *******************************************************************************/
 
+/**
+ * @ignore
+ */
 const _sodium_module = require('libsodium-wrappers-sumo');
 
 /**
@@ -20,6 +23,9 @@ const _sodium_module = require('libsodium-wrappers-sumo');
  */
 export class SodiumHelper
 {
+    /**
+     * @ignore
+     */
     private static _sodium: any = null;
 
     /**

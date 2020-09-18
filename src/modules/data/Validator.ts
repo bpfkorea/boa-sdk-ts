@@ -86,6 +86,7 @@ export class Validator
 }
 
 /**
+ * @ignore
  * Define the validator in JSON
  */
 export interface JSONValidator

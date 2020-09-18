@@ -166,6 +166,7 @@ export class Transaction
 }
 
 /**
+ * @ignore
  * The interface of Transaction input for JSON
  */
 interface ITxInput
@@ -176,6 +177,7 @@ interface ITxInput
 }
 
 /**
+ * @ignore
  * The interface of Transaction input for JSON
  */
 interface ITxOutput
@@ -185,6 +187,7 @@ interface ITxOutput
 }
 
 /**
+ * @ignore
  * The interface of VoteData for JSON
  */
 interface ITransaction

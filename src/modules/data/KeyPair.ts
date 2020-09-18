@@ -254,6 +254,7 @@ export class Seed
 }
 
 /**
+ * @ignore
  * Discriminant for Stellar binary-encoded user-facing data
  */
 enum VersionByte
