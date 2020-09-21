@@ -630,7 +630,7 @@ describe ('BOA Client', () =>
             ],
             outputs: [
                 {
-                    value: '0x0000000005f5e100',
+                    value: '100000000',
                     address: 'GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW'
                 }
             ],

@@ -150,7 +150,7 @@ export class Transaction
         for (let elem of this.outputs)
             outputs.push(
                 {
-                    "value": elem.value.toString(),
+                    "value": Utils.UInt64ToString(elem.value),
                     "address": elem.address.toString(),
                 }
             );
