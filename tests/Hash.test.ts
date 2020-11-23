@@ -97,9 +97,8 @@ describe('Hash', () => {
         );
 
         assert.strictEqual(boasdk.hashFull(payment_tx).toString(),
-            "0x9a87d86f702cd0f519efba81cf379f2a06907f34df6546f93c8619af113d0d774" +
-            "041b8e45f7975890b98890c7f5b0c062f6dae88ac1ec8d2c25dcf88b9aa01c9");
-
+            "0x4bfd86004ae312d6d4f2184c20fddfbac7f764b84cce93ccf7a0388bf09671420" +
+            "168e808f729b8db055f77d22d15368df75e2b1436d50bbb91b658dc6ced8bda");
         let freeze_tx = new boasdk.Transaction(
             boasdk.TxType.Freeze,
             [
@@ -111,7 +110,7 @@ describe('Hash', () => {
         );
 
         assert.strictEqual(boasdk.hashFull(freeze_tx).toString(),
-            "0x7c8f238f70318aae788487e57eb6f4793e3b0e48fbe017c1829ec269d07a76661" +
-            "5173e9a33739e916b1d40248a48add0296b2a8e51d0f8e1a87bf7acc7c4f136");
+            "0x5f76478af036a0a57a583a2a1430a280d05bdd36df868699f8d61d860cf26d708" +
+            "d3de2dce12dbee17f9c689d5c785e3f1a659b7073d5b78b652a8cb1c9c62a61");
     });
 });

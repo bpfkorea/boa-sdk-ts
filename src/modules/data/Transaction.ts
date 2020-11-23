@@ -140,8 +140,7 @@ export class Transaction
         for (let elem of this.inputs)
             inputs.push(
                 {
-                    "previous": elem.previous.toString(),
-                    "index": elem.index,
+                    "utxo": elem.utxo.toString(),
                     "signature": elem.signature.toString()
                 }
             );
@@ -171,8 +170,7 @@ export class Transaction
  */
 interface ITxInput
 {
-    previous: string;
-    index: number;
+    utxo: string;
     signature: string;
 }
 

@@ -22,14 +22,9 @@ import { SmartBuffer } from 'smart-buffer';
 export class TxInput
 {
     /**
-     * The hash of the previous transaction containing the output to spend
+     * The hash of the UTXO to be spent
      */
-    public previous: Hash;
-
-    /**
-     * The index of the output in the previous transaction
-     */
-    public index: number;
+    public utxo: Hash;
 
     /**
      * A signature that should be verified using public key of the output in the previous transaction
@@ -38,21 +33,15 @@ export class TxInput
 
     /**
      * Constructor
-     * @param previous The hash of the previous transaction containing the output to spend
-     * @param index The index of the output in the previous transaction
+     * @param utxo The hash of the UTXO to be spent
      * @param signature A signature that should be verified using public key of the output in the previous transaction
      */
-    constructor(previous?: Hash, index?: number, signature?: Signature)
+    constructor(utxo?: Hash, signature?: Signature)
     {
-        if (previous !== undefined)
-            this.previous = new Hash(previous.data);
+        if (utxo !== undefined)
+            this.utxo = new Hash(utxo.data);
         else
-            this.previous = new Hash();
-
-        if (index !== undefined)
-            this.index = index;
-        else
-            this.index = 0;
+            this.utxo = new Hash();
 
         if (signature !== undefined)
             this.signature = new Signature(signature.data);
@@ -66,7 +55,6 @@ export class TxInput
      */
     public computeHash (buffer: SmartBuffer)
     {
-        this.previous.computeHash(buffer);
-        buffer.writeUInt32LE(this.index);
+        this.utxo.computeHash(buffer);
     }
 }

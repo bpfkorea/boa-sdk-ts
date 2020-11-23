@@ -566,22 +566,19 @@ describe ('BOA Client', () =>
                 boasdk.Hash.createFromString("0x81a326afa790003c32517a2a" +
                     "2556613004e6147edac28d576cf7bcc2daadf4bb60be1f644c2" +
                     "29b775e7894844ec66b2d70ddf407b8196b46bc1dfe42061c74" +
-                    "97"),
-                0
+                    "97")
             ),
             new boasdk.TxInput(
                 boasdk.Hash.createFromString("0xb82cb96710af2e9804c59d1f" +
                     "1e1679f8b8b69f4c0f6cd79c8c12f365dd766c09aaa4febcc18" +
                     "b3665d33301cb248ac7afd343ac7b98b27beaf246ad12d3b321" +
-                    "9a"),
-                0
+                    "9a")
             ),
             new boasdk.TxInput(
                 boasdk.Hash.createFromString("0x4028965b7408566a66e4cf8c" +
                     "603a1cdebc7659a3e693d36d2fdcb39b196da967914f40ef496" +
                     "6d5b4b1f4b3aae00fbd68ffe8808b070464c2a101d44f4d7b01" +
-                    "70"),
-                0
+                    "70")
             )
         ];
 
@@ -613,19 +610,16 @@ describe ('BOA Client', () =>
             type: 0,
             inputs: [
                 {
-                    previous: '0x81a326afa790003c32517a2a2556613004e6147edac28d576cf7bcc2daadf4bb60be1f644c229b775e7894844ec66b2d70ddf407b8196b46bc1dfe42061c7497',
-                    index: 0,
-                    signature: '0x00e435ab1f3dc92e9ba1bd9b10322bf5da143e13996cae2ccb208a03c83cec254010a775bc1bfbc896b333347d69ced6da7fca486f41af9b91ee6c1a11c3f204'
+                    utxo: '0x81a326afa790003c32517a2a2556613004e6147edac28d576cf7bcc2daadf4bb60be1f644c229b775e7894844ec66b2d70ddf407b8196b46bc1dfe42061c7497',
+                    signature: '0x00abc0dc823d8952eb28d3ab69c4387b205fedb4c69c2209010042f7ca6dabf76cef09044e2f1ddb3fab099a1e8c63701faa374be0426d4c353ce7254782ca34'
                 },
                 {
-                    previous: '0xb82cb96710af2e9804c59d1f1e1679f8b8b69f4c0f6cd79c8c12f365dd766c09aaa4febcc18b3665d33301cb248ac7afd343ac7b98b27beaf246ad12d3b3219a',
-                    index: 0,
-                    signature: '0x007543e3195de306fe9fecef7f5e4ae03933985f6343f7a64e4383e0f5691eb151a95752be352c75d3d6a3aff2c3882faa4b65634594fee8c43af7a0273a02bb'
+                    utxo: '0xb82cb96710af2e9804c59d1f1e1679f8b8b69f4c0f6cd79c8c12f365dd766c09aaa4febcc18b3665d33301cb248ac7afd343ac7b98b27beaf246ad12d3b3219a',
+                    signature: '0x02ed9cf62f551786e4e3ecdf0dad6b32c9f4b47592dbffd7adf0b7048d725c997e710cdc0596eb825aa65c8af3c437442ee8f07f6ccc4162a0f53393112c250e'
                 },
                 {
-                    previous: '0x4028965b7408566a66e4cf8c603a1cdebc7659a3e693d36d2fdcb39b196da967914f40ef4966d5b4b1f4b3aae00fbd68ffe8808b070464c2a101d44f4d7b0170',
-                    index: 0,
-                    signature: '0x0e799ffbcc388e29ad9d76ca77634c22adfab4dcea925098758506667cd764a0d897e7d48abd3dbcf830da062111c37703a900fff676d557c4ef16a6d4067ff3'
+                    utxo: '0x4028965b7408566a66e4cf8c603a1cdebc7659a3e693d36d2fdcb39b196da967914f40ef4966d5b4b1f4b3aae00fbd68ffe8808b070464c2a101d44f4d7b0170',
+                    signature: '0x048ce34cce366dade98d3d1a60b2558dc9982cd2733758212992d40391f801d0888ccdd3939a85ff21dd95174babff0e0a63567e655a7861649d9e3efa6ba10f'
                 }
             ],
             outputs: [
@@ -666,8 +660,7 @@ describe ('BOA Client', () =>
                         boasdk.Hash.createFromString("0x81a326afa790003c32517a2a" +
                             "2556613004e6147edac28d576cf7bcc2daadf4bb60be1f644c2" +
                             "29b775e7894844ec66b2d70ddf407b8196b46bc1dfe42061c74" +
-                            "97"),
-                        0
+                            "97")
                     )
                 ],
                 [
