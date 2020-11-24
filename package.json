@@ -1,7 +1,7 @@
 {
   "name": "boa-sdk-ts",
   "version": "0.0.7",
-  "description": "The TypeScript BOA SDK libary",
+  "description": "The TypeScript BOA SDK library",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
