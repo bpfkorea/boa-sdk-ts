@@ -11,6 +11,7 @@
 
 *******************************************************************************/
 
+import { DataPayload } from './DataPayload';
 import { hashFull } from "./Hash";
 import { KeyPair, Seed } from "./KeyPair";
 import { TxInput } from './TxInput';
@@ -49,37 +50,23 @@ export class Transaction
     public outputs: TxOutput[];
 
     /**
-     * The data to store
+     * The data payload to store
      */
-    public data: SmartBuffer;
+    public payload: DataPayload;
 
     /**
      * Constructor
-     * @param type The type of the transaction
-     * @param inputs The array of references to the unspent output of the previous transaction
+     * @param type    The type of the transaction
+     * @param inputs  The array of references to the unspent output of the previous transaction
      * @param outputs The array of newly created outputs
-     * @param data The data to store
+     * @param payload The data payload to store
      */
-    constructor (type?: number, inputs?: TxInput[], outputs?: TxOutput[], data?: Buffer)
+    constructor (type: number, inputs: TxInput[], outputs: TxOutput[], payload: DataPayload)
     {
-        if (type !== undefined)
-            this.type = type;
-        else
-            this.type = 0;
-
-        if (inputs !== undefined)
-            this.inputs = inputs;
-        else
-            this.inputs = [];
-
-        if (outputs !== undefined)
-            this.outputs = outputs;
-        else
-            this.outputs = [];
-
-        this.data = new SmartBuffer();
-        if (data != undefined)
-            this.data.writeBuffer(data);
+        this.type = type;
+        this.inputs = inputs;
+        this.outputs = outputs;
+        this.payload = payload;
     }
 
     /**
@@ -93,9 +80,7 @@ export class Transaction
             elem.computeHash(buffer);
         for (let elem of this.outputs)
             elem.computeHash(buffer);
-
-        this.data.readOffset = 0;
-        buffer.writeBuffer(this.data.readBuffer())
+        this.payload.computeHash(buffer);
     }
 
     /**
@@ -106,7 +91,8 @@ export class Transaction
      * @param data The data to store
      * @returns The instance of Transaction
      */
-    public static create (inputs: Array<TxInput>, outputs: Array<TxOutput>, keys: Array<Seed>, data: Buffer): Transaction
+    public static create (inputs: Array<TxInput>, outputs: Array<TxOutput>, keys: Array<Seed>,
+        payload: DataPayload): Transaction
     {
         if (inputs.length == 0)
             throw new Error ("The number of inputs is 0.");
@@ -121,7 +107,7 @@ export class Transaction
         for (let elem of keys)
             key_pairs.push(KeyPair.fromSeed(elem));
 
-        let tx = new Transaction(TxType.Payment, inputs, outputs, data);
+        let tx = new Transaction(TxType.Payment, inputs, outputs, payload);
         let tx_hash = hashFull(tx);
         for (let idx = 0; idx < tx.inputs.length; idx++)
             tx.inputs[idx].signature.data.set(key_pairs[idx].secret.sign(tx_hash.data).data)
@@ -132,7 +118,7 @@ export class Transaction
     /**
      * Gets the JSON object
      * @returns The JSON object
-     * ex) {"type": 0, "inputs": inputs, "outputs": outputs, "data": data}
+     * ex) {"type": 0, "inputs": inputs, "outputs": outputs, "payload": data}
      */
     public toObject (): ITransaction
     {
@@ -154,12 +140,11 @@ export class Transaction
                 }
             );
 
-        this.data.readOffset = 0;
         return {
             "type": this.type,
             "inputs": inputs,
             "outputs": outputs,
-            "data": Utils.writeToString(this.data.readBuffer())
+            "payload": this.payload.toString()
         }
     }
 }
@@ -193,5 +178,5 @@ interface ITransaction
     type: number;
     inputs: Array<ITxInput>;
     outputs: Array<ITxOutput>;
-    data: string;
+    payload: string;
 }

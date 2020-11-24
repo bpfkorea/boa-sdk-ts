@@ -14,6 +14,7 @@
 
 *******************************************************************************/
 
+import { DataPayload } from '../data/DataPayload';
 import { Hash, hash, hashFull } from '../data/Hash';
 import { Request } from './Request';
 import { Validator } from '../data/Validator';
@@ -231,13 +232,13 @@ export class BOAClient
      * @param data The data to store
      * @returns Returns true if success, otherwise returns false
      */
-    public saveData (inputs: Array<TxInput>, outputs: Array<TxOutput>, keys: Array<Seed>, data: Buffer): Promise<boolean>
+    public saveData (inputs: Array<TxInput>, outputs: Array<TxOutput>, keys: Array<Seed>, payload: DataPayload): Promise<boolean>
     {
         return new Promise<boolean>((resolve, reject) =>
         {
             try
             {
-                let tx = Transaction.create(inputs, outputs, keys, data);
+                let tx = Transaction.create(inputs, outputs, keys, payload);
 
                 // TODO: Send a transaction to Agora
                 // ex)

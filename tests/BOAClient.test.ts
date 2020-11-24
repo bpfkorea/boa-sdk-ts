@@ -603,7 +603,7 @@ describe ('BOA Client', () =>
             inputs,
             outputs,
             keys,
-            Buffer.from("vote data")
+            new boasdk.DataPayload(Buffer.from("vote data"))
         );
 
         let expected_object = {
@@ -628,7 +628,7 @@ describe ('BOA Client', () =>
                     address: 'GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW'
                 }
             ],
-            data: '0x617461642065746f76'
+            payload: '0x617461642065746f76'
         };
 
         let obj = vote_tx.toObject();
@@ -674,7 +674,7 @@ describe ('BOA Client', () =>
                     boasdk.Seed.fromString("SDAKFNYEIAORZKKCYRILFQKLLOCNPL5SWJ3Y" +
                         "Y5NM3ZH6GJSZGXHZEPQS")
                 ],
-                Buffer.from("vote data")
+                new boasdk.DataPayload(Buffer.from("vote data"))
             );
             assert.ok(res);
         }

@@ -93,7 +93,8 @@ describe('Hash', () => {
             ],
             [
                 new boasdk.TxOutput()
-            ]
+            ],
+                new boasdk.DataPayload('')
         );
 
         assert.strictEqual(boasdk.hashFull(payment_tx).toString(),
@@ -106,7 +107,8 @@ describe('Hash', () => {
             ],
             [
                 new boasdk.TxOutput()
-            ]
+            ],
+                new boasdk.DataPayload('')
         );
 
         assert.strictEqual(boasdk.hashFull(freeze_tx).toString(),
