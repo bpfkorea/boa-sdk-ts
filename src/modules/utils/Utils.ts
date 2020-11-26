@@ -109,4 +109,42 @@ export class Utils
         else
             return '0x' + source.toString("hex");
     }
+
+    /**
+     * Writes little endian 64-bits Big integer value to an allocated buffer
+     * See https://github.com/nodejs/node/blob/88fb5a5c7933022de750745e51e5dc0996a1e2c4/lib/internal/buffer.js#L573-L592
+     * @param buffer The allocated buffer
+     * @param value  The big integer value
+     */
+    public static writeBigIntLE (buffer: Buffer, value: bigint)
+    {
+        let lo = Number(value & BigInt(0xffffffff));
+        buffer[0] = lo;
+        lo = lo >> 8;
+        buffer[1] = lo;
+        lo = lo >> 8;
+        buffer[2] = lo;
+        lo = lo >> 8;
+        buffer[3] = lo;
+
+        let hi = Number(value >> BigInt(32) & BigInt(0xffffffff));
+        buffer[4] = hi;
+        hi = hi >> 8;
+        buffer[5] = hi;
+        hi = hi >> 8;
+        buffer[6] = hi;
+        hi = hi >> 8;
+        buffer[7] = hi;
+    }
+}
+
+declare global {
+    interface BigInt {
+        toJSON(key?: string): string;
+    }
+}
+
+// Allow JSON serialization of BigInt
+BigInt.prototype.toJSON = function(key?: string) {
+    return this.toString();
 }
