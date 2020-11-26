@@ -31,17 +31,21 @@ export class Signature
     public static Width: number = 64;
 
     /**
-     * Constructor
-     * @param bin {Buffer | undefined} Raw signature
+     * Construct a new instance of this class
+     *
+     * @param data   The string or binary representation of the Signature
+     * @param endian The byte order
      */
-    constructor (bin?: Buffer)
+    constructor (data: Buffer | string, endian: Endian = Endian.Big)
     {
-        this.data = Buffer.alloc(Signature.Width);
-        if (bin != undefined)
+        if (typeof data === 'string')
+            this.data = Utils.readFromString(data, Buffer.alloc(Signature.Width));
+        else
         {
-            assert.strictEqual(bin.length, Signature.Width);
-            bin.copy(this.data);
+            this.data = Buffer.alloc(Signature.Width);
+            this.fromBinary(data, endian);
         }
+        assert.ok(this.data.length == Signature.Width);
     }
 
     /**
@@ -65,22 +69,32 @@ export class Signature
     }
 
     /**
-     * Creates from the hex string
-     * @param hex The hex string
+     * Set binary data
+     * @param bin    The binary data of the signature
+     * @param endian The byte order
      * @returns The instance of Signature
      */
-    public static createFromString (hex: string): Signature
+    public fromBinary (bin: Buffer, endian: Endian = Endian.Big): Signature
     {
-        return (new Signature()).fromString(hex);
+        assert.strictEqual(bin.length, Signature.Width);
+
+        bin.copy(this.data);
+        if (endian === Endian.Little)
+            this.data.reverse();
+
+        return this;
     }
 
     /**
-     * Creates from Buffer
-     * @param bin The binary data of the signature
-     * @returns The instance of Signature
+     * Get binary data
+     * @param endian The byte order
+     * @returns The binary data of the signature
      */
-    public static createFromBinary (bin: Buffer): Signature
+    public toBinary (endian: Endian = Endian.Big): Buffer
     {
-        return new Signature(bin);
+        if (endian === Endian.Little)
+            return Buffer.from(this.data).reverse();
+        else
+            return this.data;
     }
 }

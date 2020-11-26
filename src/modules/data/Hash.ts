@@ -11,9 +11,10 @@
 
 *******************************************************************************/
 
-import { Utils } from '../utils/Utils';
+import { Utils, Endian } from '../utils/Utils';
 import { SodiumHelper } from '../utils/SodiumHelper';
 
+import * as assert from 'assert';
 import { SmartBuffer } from 'smart-buffer';
 
 /**
@@ -32,14 +33,21 @@ export class Hash
     public static Width: number = 64;
 
     /**
-     * Constructor
-     * @param bin Raw hash
+     * Construct a new instance of this class
+     *
+     * @param data   The string or binary representation of the hash
+     * @param endian The byte order
      */
-    constructor (bin?: Buffer)
+    constructor (data: Buffer | string, endian: Endian = Endian.Big)
     {
-        this.data = Buffer.alloc(Hash.Width);
-        if (bin != undefined)
-            bin.copy(this.data);
+        if (typeof data === 'string')
+            this.data = Utils.readFromString(data, Buffer.alloc(Hash.Width));
+        else
+        {
+            this.data = Buffer.alloc(Hash.Width);
+            this.fromBinary(data, endian);
+        }
+        assert.ok(this.data.length == Hash.Width);
     }
 
     /**
@@ -63,23 +71,33 @@ export class Hash
     }
 
     /**
-     * Creates from the hex string
-     * @param hex The hex string
+     * Set binary data
+     * @param bin The binary data of the hash
+     * @param endian The byte order
      * @returns The instance of Hash
      */
-    public static createFromString (hex: string): Hash
+    public fromBinary (bin: Buffer, endian: Endian = Endian.Big): Hash
     {
-        return (new Hash()).fromString(hex);
+        assert.strictEqual(bin.length, Hash.Width);
+
+        bin.copy(this.data);
+        if (endian === Endian.Little)
+            this.data.reverse();
+
+        return this;
     }
 
     /**
-     * Creates from Buffer
-     * @param bin The binary data of the hash
-     * @returns The instance of Hash
+     * Get binary data
+     * @param endian The byte order
+     * @returns The binary data of the hash
      */
-    public static createFromBinary (bin: Buffer): Hash
+    public toBinary (endian: Endian = Endian.Big): Buffer
     {
-        return new Hash(bin);
+        if (endian === Endian.Little)
+            return Buffer.from(this.data).reverse();
+        else
+            return this.data;
     }
 
     /**
@@ -142,7 +160,7 @@ export function makeUTXOKey (h: Hash, index: bigint): Hash
 export function hashFull (record: any): Hash
 {
     if ((record === null) || (record === undefined))
-        return new Hash();
+        return new Hash(Buffer.alloc(Hash.Width));
 
     let buffer = new SmartBuffer();
     hashPart(record, buffer);

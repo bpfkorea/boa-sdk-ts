@@ -563,39 +563,42 @@ describe ('BOA Client', () =>
     {
         let inputs = [
             new boasdk.TxInput(
-                boasdk.Hash.createFromString("0x81a326afa790003c32517a2a" +
+                new boasdk.Hash("0x81a326afa790003c32517a2a" +
                     "2556613004e6147edac28d576cf7bcc2daadf4bb60be1f644c2" +
                     "29b775e7894844ec66b2d70ddf407b8196b46bc1dfe42061c74" +
-                    "97")
+                    "97"),
+                new boasdk.Signature(Buffer.alloc(boasdk.Signature.Width))
             ),
             new boasdk.TxInput(
-                boasdk.Hash.createFromString("0xb82cb96710af2e9804c59d1f" +
+                new boasdk.Hash("0xb82cb96710af2e9804c59d1f" +
                     "1e1679f8b8b69f4c0f6cd79c8c12f365dd766c09aaa4febcc18" +
                     "b3665d33301cb248ac7afd343ac7b98b27beaf246ad12d3b321" +
-                    "9a")
+                    "9a"),
+                new boasdk.Signature(Buffer.alloc(boasdk.Signature.Width))
             ),
             new boasdk.TxInput(
-                boasdk.Hash.createFromString("0x4028965b7408566a66e4cf8c" +
+                new boasdk.Hash("0x4028965b7408566a66e4cf8c" +
                     "603a1cdebc7659a3e693d36d2fdcb39b196da967914f40ef496" +
                     "6d5b4b1f4b3aae00fbd68ffe8808b070464c2a101d44f4d7b01" +
-                    "70")
+                    "70"),
+                new boasdk.Signature(Buffer.alloc(boasdk.Signature.Width))
             )
         ];
 
         let outputs = [
             new boasdk.TxOutput(
                 BigInt("100000000"),
-                boasdk.PublicKey.fromString("GDD5RFGBIUAFCOXQA246BOUPHCK" +
+                new boasdk.PublicKey("GDD5RFGBIUAFCOXQA246BOUPHCK" +
                     "7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW")
             )
         ];
 
         let keys = [
-            boasdk.Seed.fromString("SDAKFNYEIAORZKKCYRILFQKLLOCNPL5SWJ3Y" +
+            new boasdk.Seed("SDAKFNYEIAORZKKCYRILFQKLLOCNPL5SWJ3Y" +
                 "Y5NM3ZH6GJSZGXHZEPQS"),
-            boasdk.Seed.fromString("SAXA7RLGWM5I7Q34WBKXWLDPZ3NHFHATOZG7" +
+            new boasdk.Seed("SAXA7RLGWM5I7Q34WBKXWLDPZ3NHFHATOZG7" +
                 "UUOG5ZGZCM7J64OLTJOT"),
-            boasdk.Seed.fromString("SDWAMFTNWY6XLZ2FDGBEMBYIXJTQSSA6OKSP" +
+            new boasdk.Seed("SDWAMFTNWY6XLZ2FDGBEMBYIXJTQSSA6OKSP" +
                 "H2YVLZH7NDE3LDFC2AJR")
         ];
 
@@ -657,21 +660,22 @@ describe ('BOA Client', () =>
             let res = await boa_client.saveData(
                 [
                     new boasdk.TxInput(
-                        boasdk.Hash.createFromString("0x81a326afa790003c32517a2a" +
+                        new boasdk.Hash("0x81a326afa790003c32517a2a" +
                             "2556613004e6147edac28d576cf7bcc2daadf4bb60be1f644c2" +
                             "29b775e7894844ec66b2d70ddf407b8196b46bc1dfe42061c74" +
-                            "97")
+                            "97"),
+                        new boasdk.Signature(Buffer.alloc(boasdk.Signature.Width))
                     )
                 ],
                 [
                     new boasdk.TxOutput(
                         BigInt("100000000"),
-                        boasdk.PublicKey.fromString("GDD5RFGBIUAFCOXQA246BOUPHCK" +
+                        new boasdk.PublicKey("GDD5RFGBIUAFCOXQA246BOUPHCK" +
                             "7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW")
                     )
                 ],
                 [
-                    boasdk.Seed.fromString("SDAKFNYEIAORZKKCYRILFQKLLOCNPL5SWJ3Y" +
+                    new boasdk.Seed("SDAKFNYEIAORZKKCYRILFQKLLOCNPL5SWJ3Y" +
                         "Y5NM3ZH6GJSZGXHZEPQS")
                 ],
                 new boasdk.DataPayload(Buffer.from("vote data"))

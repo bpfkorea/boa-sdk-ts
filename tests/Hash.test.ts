@@ -35,8 +35,7 @@ describe('Hash', () => {
     // This was treated to be the same as D language.
     it('Test of reading and writing hex string', () => {
         // Read from hex string
-        let h = new boasdk.Hash();
-        h.fromString('0x5d7f6a7a30f7ff591c8649f61eb8a35d034824ed5cd252c2c6f10cdbd223671' +
+        let h = new boasdk.Hash('0x5d7f6a7a30f7ff591c8649f61eb8a35d034824ed5cd252c2c6f10cdbd223671' +
             '3dc369ef2a44b62ba113814a9d819a276ff61582874c9aee9c98efa2aa1f10d73');
 
         // Check
@@ -73,8 +72,7 @@ describe('Hash', () => {
     });
 
     it('Test of utxo key, using makeUTXOKey', () => {
-        let tx_hash = new boasdk.Hash();
-        tx_hash.fromString('0x5d7f6a7a30f7ff591c8649f61eb8a35d034824ed5cd252c2c6f10cdbd223671' +
+        let tx_hash = new boasdk.Hash('0x5d7f6a7a30f7ff591c8649f61eb8a35d034824ed5cd252c2c6f10cdbd223671' +
             '3dc369ef2a44b62ba113814a9d819a276ff61582874c9aee9c98efa2aa1f10d73');
         //let hash = boasdk.makeUTXOKey(tx_hash, JSBI.BigInt(1));
         let hash = boasdk.makeUTXOKey(tx_hash, BigInt(1));
@@ -83,36 +81,37 @@ describe('Hash', () => {
             'e33bb2b89df2e59ee01eb2519b1508284b577f66a76d42546b65a6813e592bb84');
     });
 
-    // See_Also: https://github.com/bpfkorea/agora/blob/93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/consensus/data/Transaction.d#L225-L248
+    // See_Also: https://github.com/bpfkorea/agora/blob/dac8b3ea6500af68a99c0248c3ade8ab821ee9ef/source/agora/consensus/data/Transaction.d#L203-L229
     it ('Test for hash value of transaction data', () =>
     {
         let payment_tx = new boasdk.Transaction(
             boasdk.TxType.Payment,
             [
-                new boasdk.TxInput()
+                new boasdk.TxInput(new boasdk.Hash(Buffer.alloc(boasdk.Hash.Width)), BigInt(0))
             ],
             [
-                new boasdk.TxOutput()
+                new boasdk.TxOutput(BigInt(0), new boasdk.PublicKey(Buffer.alloc(boasdk.SodiumHelper.sodium.crypto_sign_PUBLICKEYBYTES)))
             ],
-                new boasdk.DataPayload('')
+            boasdk.DataPayload.init
         );
 
         assert.strictEqual(boasdk.hashFull(payment_tx).toString(),
-            "0x4bfd86004ae312d6d4f2184c20fddfbac7f764b84cce93ccf7a0388bf09671420" +
-            "168e808f729b8db055f77d22d15368df75e2b1436d50bbb91b658dc6ced8bda");
+            "0x35927f79ab7f2c8273f5dc24bb1efa5ebe3ac050fd4fd84d014b51124d0322ed" +
+            "709225b92ba28b3ee6b70144d4acafb9a5289fc48ecb4a4f273b537837c78cb0");
+
         let freeze_tx = new boasdk.Transaction(
             boasdk.TxType.Freeze,
             [
-                new boasdk.TxInput()
+                new boasdk.TxInput(new boasdk.Hash(Buffer.alloc(boasdk.Hash.Width)), BigInt(0))
             ],
             [
-                new boasdk.TxOutput()
+                new boasdk.TxOutput(BigInt(0), new boasdk.PublicKey(Buffer.alloc(boasdk.SodiumHelper.sodium.crypto_sign_PUBLICKEYBYTES)))
             ],
-                new boasdk.DataPayload('')
+            boasdk.DataPayload.init
         );
 
         assert.strictEqual(boasdk.hashFull(freeze_tx).toString(),
-            "0x5f76478af036a0a57a583a2a1430a280d05bdd36df868699f8d61d860cf26d708" +
-            "d3de2dce12dbee17f9c689d5c785e3f1a659b7073d5b78b652a8cb1c9c62a61");
+            "0x0277044f0628605485a8f8a999f9a2519231e8c59c1568ef2dac2f241ce569d8" +
+            "54e15f950e0fd3d88460309d3e0ef3fbd57b8f5af998f8bacbe391ddb9aea328");
     });
 });

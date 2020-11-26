@@ -39,7 +39,7 @@ export class PreImage
         if (h != undefined)
             this.hash = new Hash(h.data);
         else
-            this.hash = new Hash();
+            this.hash = new Hash(Buffer.alloc(Hash.Width));
 
         if (d != undefined)
             this.distance = d;

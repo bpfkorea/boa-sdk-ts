@@ -1,6 +1,6 @@
 /*******************************************************************************
 
-    The class that defines the transaction's input in a block.
+    The class that defines the transaction's inputs of a block.
 
     Copyright:
         Copyright (c) 2020 BOS Platform Foundation Korea
@@ -11,13 +11,15 @@
 
 *******************************************************************************/
 
-import { Hash } from './Hash';
+import { Hash, makeUTXOKey } from './Hash';
 import { Signature } from './Signature';
 
 import { SmartBuffer } from 'smart-buffer';
 
 /**
- * The class that defines the transaction's inputs in a block.
+ * The class that defines the transaction's inputs of a block.
+ * Convert JSON object to TypeScript's instance.
+ * An exception occurs if the required property is not present.
  */
 export class TxInput
 {
@@ -33,20 +35,22 @@ export class TxInput
 
     /**
      * Constructor
-     * @param utxo The hash of the UTXO to be spent
-     * @param signature A signature that should be verified using public key of the output in the previous transaction
+     * @param first  The hash of the UTXO or the hash of the transaction
+     * @param second The instance of Signature or output index
+     * in the previous transaction
+     * If the type of the second parameter is bigint,
+     * the first parameter is considered the hash of the transaction
+     * otherwise, the first parameter is considered the hash of the UTXO.
      */
-    constructor(utxo?: Hash, signature?: Signature)
+    constructor (first: Hash, second: Signature | bigint)
     {
-        if (utxo !== undefined)
-            this.utxo = new Hash(utxo.data);
-        else
-            this.utxo = new Hash();
-
-        if (signature !== undefined)
-            this.signature = new Signature(signature.data);
-        else
-            this.signature = new Signature();
+        if (typeof second == "bigint") {
+            this.utxo = makeUTXOKey(first, second);
+            this.signature = new Signature(Buffer.alloc(Signature.Width));
+        } else {
+            this.utxo = first;
+            this.signature = second;
+        }
     }
 
     /**

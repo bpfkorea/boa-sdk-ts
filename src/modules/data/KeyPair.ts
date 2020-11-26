@@ -63,8 +63,8 @@ export class KeyPair
     {
         let kp = SodiumHelper.sodium.crypto_sign_seed_keypair(seed.data);
         return new KeyPair(
-            new PublicKey(Buffer.from(kp.publicKey)), 
-            new SecretKey(Buffer.from(kp.privateKey)), 
+            new PublicKey(Buffer.from(kp.publicKey)),
+            new SecretKey(Buffer.from(kp.privateKey)),
             seed);
     }
 
@@ -77,8 +77,8 @@ export class KeyPair
         let kp = SodiumHelper.sodium.crypto_sign_keypair();
         let seed = new Seed(Buffer.from(SodiumHelper.sodium.crypto_sign_ed25519_sk_to_seed(kp.privateKey)));
         return new KeyPair(
-            new PublicKey(Buffer.from(kp.publicKey)), 
-            new SecretKey(Buffer.from(kp.privateKey)), 
+            new PublicKey(Buffer.from(kp.publicKey)),
+            new SecretKey(Buffer.from(kp.privateKey)),
             seed);
     }
 }
@@ -95,16 +95,28 @@ export class PublicKey
 
     /**
      * Constructor
-     * @param bin {Buffer | undefined} Raw public key
+     * @param data The string or binary representation of the public key
      */
-    constructor (bin?: Buffer)
+    constructor (data: Buffer | string)
     {
-        this.data = Buffer.alloc(SodiumHelper.sodium.crypto_sign_PUBLICKEYBYTES);
-        if (bin != undefined)
+        if (typeof data === 'string')
         {
-            assert.strictEqual(bin.length, SodiumHelper.sodium.crypto_sign_PUBLICKEYBYTES);
-            bin.copy(this.data);
+            const decoded = Buffer.from(base32Decode(data));
+            assert.strictEqual(decoded.length, 1 + SodiumHelper.sodium.crypto_sign_PUBLICKEYBYTES + 2);
+            assert.strictEqual(decoded[0], VersionByte.AccountID);
+
+            const body = decoded.slice(0, -2);
+            this.data = body.slice(1);
+
+            const checksum = decoded.slice(-2);
+            assert.ok(validate(body, checksum));
         }
+        else
+        {
+            assert.ok(data.length == SodiumHelper.sodium.crypto_sign_PUBLICKEYBYTES);
+            this.data = Buffer.from(data);
+        }
+        assert.ok(this.data.length == SodiumHelper.sodium.crypto_sign_PUBLICKEYBYTES);
     }
 
     /**
@@ -117,25 +129,6 @@ export class PublicKey
         const cs = checksum(body);
         const unencoded = Buffer.concat([body, cs]);
         return base32Encode(unencoded);
-    }
-
-    /**
-     * Create a Public key from Stellar's string representation
-     * @param str {string} address
-     * @returns {PublicKey}
-     */
-    public static fromString (str: string): PublicKey
-    {
-        const decoded = Buffer.from(base32Decode(str));
-        assert.strictEqual(decoded.length, 1 + SodiumHelper.sodium.crypto_sign_PUBLICKEYBYTES + 2);
-        assert.strictEqual(decoded[0], VersionByte.AccountID);
-
-        const body = decoded.slice(0, -2);
-        const data = body.slice(1);
-        const checksum = decoded.slice(-2);
-
-        assert.ok(validate(body, checksum));
-        return new PublicKey(data);
     }
 
     /**
@@ -172,16 +165,12 @@ export class SecretKey
 
     /**
      * Constructor
-     * @param bin {Buffer | undefined} The binary data of the secret key
+     * @param data The binary data of the secret key
      */
-    constructor (bin?: Buffer)
+    constructor (data: Buffer)
     {
-        this.data = Buffer.alloc(SodiumHelper.sodium.crypto_sign_SECRETKEYBYTES);
-        if (bin !== undefined)
-        {
-            assert.strictEqual(bin.length, SodiumHelper.sodium.crypto_sign_SECRETKEYBYTES);
-            bin.copy(this.data);
-        }
+        assert.strictEqual(data.length, SodiumHelper.sodium.crypto_sign_SECRETKEYBYTES);
+        this.data = Buffer.from(data);
     }
 
     /**
@@ -192,9 +181,7 @@ export class SecretKey
      */
     public sign (msg: Buffer): Signature
     {
-        let result = new Signature();
-        result.data.set(SodiumHelper.sodium.crypto_sign_detached(msg, this.data));
-        return result;
+        return new Signature(Buffer.from(SodiumHelper.sodium.crypto_sign_detached(msg, this.data)));
     }
 }
 
@@ -210,16 +197,29 @@ export class Seed
 
     /**
      * Constructor
-     * @param bin {Buffer | undefined} The binary data of the seed
+     * @param data The binary data of the seed
      */
-    constructor (bin?: Buffer)
+    constructor (data: Buffer | string)
     {
-        this.data = Buffer.alloc(SodiumHelper.sodium.crypto_sign_SEEDBYTES);
-        if (bin !== undefined)
+        if (typeof data === 'string')
         {
-            assert.strictEqual(bin.length, SodiumHelper.sodium.crypto_sign_SEEDBYTES);
-            bin.copy(this.data);
+            const decoded = Buffer.from(base32Decode(data));
+            assert.strictEqual(decoded.length, 1 + SodiumHelper.sodium.crypto_sign_SEEDBYTES + 2);
+            assert.strictEqual(decoded[0], VersionByte.Seed);
+
+            const body = decoded.slice(0, -2);
+            const cs = decoded.slice(-2);
+
+            assert.ok(validate(body, cs));
+
+            this.data = body.slice(1);
         }
+        else
+        {
+            assert.strictEqual(data.length, SodiumHelper.sodium.crypto_sign_SEEDBYTES);
+            this.data = Buffer.from(data);
+        }
+        assert.ok(this.data.length == SodiumHelper.sodium.crypto_sign_SEEDBYTES);
     }
 
     /**
@@ -232,25 +232,6 @@ export class Seed
         const cs = checksum(body);
         const decoded = Buffer.concat([body, cs]);
         return base32Encode(decoded);
-    }
-
-    /**
-     * Create a seed instance from string seed
-     * @param str {string} The secret key seed (ex. `SDAKFNYEIAORZKKCYRILFQKLLOCNPL5SWJ3YY5NM3ZH6GJSZGXHZEPQS`)
-     * @returns {Seed} The instance of Seed
-     */
-    public static fromString (str: string): Seed
-    {
-        const decoded = Buffer.from(base32Decode(str));
-        assert.strictEqual(decoded.length, 1 + SodiumHelper.sodium.crypto_sign_SEEDBYTES + 2);
-        assert.strictEqual(decoded[0], VersionByte.Seed);
-
-        const body = decoded.slice(0, -2);
-        const data = body.slice(1);
-        const checksum = decoded.slice(-2);
-
-        assert.ok(validate(body, checksum));
-        return new Seed(data);
     }
 }
 

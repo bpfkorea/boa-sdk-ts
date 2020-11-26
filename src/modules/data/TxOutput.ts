@@ -1,6 +1,6 @@
 /*******************************************************************************
 
-    The class that defines the transaction's output in a block.
+    The class that defines the transaction's outputs of a block.
 
     Copyright:
         Copyright (c) 2020 BOS Platform Foundation Korea
@@ -12,9 +12,9 @@
 *******************************************************************************/
 
 import { PublicKey } from './KeyPair';
+import { Utils } from "../utils/Utils";
 
 import { SmartBuffer } from 'smart-buffer';
-import { Utils } from "../utils/Utils";
 
 /**
  * The class that defines the transaction's output in a block.
@@ -36,17 +36,10 @@ export class TxOutput
      * @param value   The monetary value
      * @param address The public key
      */
-    constructor (value?: bigint, address?: PublicKey)
+    constructor (value: bigint, address: PublicKey)
     {
-        if (value !== undefined)
-            this.value = value;
-        else
-            this.value = BigInt("0");
-
-        if (address !== undefined)
-            this.address = address;
-        else
-            this.address = new PublicKey();
+        this.value = value;
+        this.address = address;
     }
 
     /**

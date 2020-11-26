@@ -33,7 +33,7 @@ describe ('ED25519 Public Key', () =>
     it ('Extract the public key from a string then convert it back into a string and compare it.', () =>
     {
         let address = 'GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW';
-        let public_key = boasdk.PublicKey.fromString(address);
+        let public_key = new boasdk.PublicKey(address);
         assert.strictEqual(public_key.toString(), address);
     });
 });
@@ -43,7 +43,7 @@ describe ('ED25519 Secret Key Seed', () =>
     it ('Extract the seed from a string then convert it back into a string and compare it.', () =>
     {
         let secret_seed = 'SBBUWIMSX5VL4KVFKY44GF6Q6R5LS2Z5B7CTAZBNCNPLS4UKFVDXC7TQ';
-        let seed = boasdk.Seed.fromString(secret_seed);
+        let seed = new boasdk.Seed(secret_seed);
         assert.strictEqual(seed.toString(), secret_seed);
     });
 });
@@ -56,7 +56,7 @@ describe ('KeyPair', () =>
         let address = `GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW`;
         let seed = `SBBUWIMSX5VL4KVFKY44GF6Q6R5LS2Z5B7CTAZBNCNPLS4UKFVDXC7TQ`;
 
-        let kp = boasdk.KeyPair.fromSeed(boasdk.Seed.fromString(seed));
+        let kp = boasdk.KeyPair.fromSeed(new boasdk.Seed(seed));
         assert.strictEqual(kp.address.toString(), address);
 
         let signature = kp.secret.sign(Buffer.from('Hello World'));
