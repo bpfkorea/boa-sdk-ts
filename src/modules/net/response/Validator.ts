@@ -11,9 +11,9 @@
 
 *******************************************************************************/
 
-import { Hash }  from './Hash';
+import { Hash }  from '../../data/Hash';
 import { PreImage, JSONPreImage } from './PreImage';
-import * as utils from '../utils';
+import { Utils } from '../../utils/Utils';
 
 /**
  * Define the validator
@@ -76,7 +76,7 @@ export class Validator
      */
     public fromJSON (data: JSONValidator)
     {
-        utils.validateJSON(this, data);
+        Utils.validateJSON(this, data);
 
         this.address = data.address;
         this.enrolled_at = data.enrolled_at;

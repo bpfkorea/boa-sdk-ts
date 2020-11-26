@@ -17,7 +17,7 @@
 import { DataPayload } from '../data/DataPayload';
 import { Hash, hash, hashFull } from '../data/Hash';
 import { Request } from './Request';
-import { Validator } from '../data/Validator';
+import { Validator } from './response/Validator';
 import { Seed, Transaction, TxInput, TxOutput } from "../..";
 
 import { AxiosResponse, AxiosError } from 'axios';

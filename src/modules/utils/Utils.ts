@@ -136,6 +136,22 @@ export class Utils
         hi = hi >> 8;
         buffer[7] = hi;
     }
+    /**
+     * This checks that the JSON data has all the properties of the class.
+     * @param obj {Object} The instance of a class
+     * @param json {any} The object of the JSON
+     */
+    public static validateJSON (obj: Object, json: any)
+    {
+        Object.getOwnPropertyNames(obj)
+            .forEach(property => {
+                if (!json.hasOwnProperty(property))
+                {
+                    throw new Error('Parse error: ' + obj.constructor.name + '.' + property);
+                }
+            });
+    }
+
 }
 
 declare global {
