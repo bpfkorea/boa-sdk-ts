@@ -11,6 +11,7 @@
 
 *******************************************************************************/
 
+import { JSONValidator } from '../utils/JSONValidator';
 import { Hash } from './Hash';
 
 /**
@@ -47,5 +48,26 @@ export class PreImageInfo
         this.enroll_key = enroll_key;
         this.hash = hash;
         this.distance = distance;
+    }
+
+    /**
+     * The reviver parameter to give to `JSON.parse`
+     *
+     * This function allows to perform any necessary conversion,
+     * as well as validation of the final object.
+     *
+     * @param key   Name of the field being parsed
+     * @param value The value associated with `key`
+     * @returns A new instance of `PreImageInfo` if `key == ""`, `value` otherwise.
+     */
+    public static reviver (key: string, value: any): any
+    {
+        if (key !== "")
+            return value;
+
+        JSONValidator.isValidOtherwiseThrow('PreImageInfo', value);
+
+        return new PreImageInfo(
+            new Hash(value.enroll_key), new Hash(value.hash), Number(value.distance));
     }
 }

@@ -14,6 +14,7 @@
 import { DataPayload } from './DataPayload';
 import { hashFull } from "./Hash";
 import { KeyPair, Seed } from "./KeyPair";
+import { JSONValidator } from '../utils/JSONValidator';
 import { TxInput } from './TxInput';
 import { TxOutput } from './TxOutput';
 
@@ -69,6 +70,30 @@ export class Transaction
     }
 
     /**
+     * The reviver parameter to give to `JSON.parse`
+     *
+     * This function allows to perform any necessary conversion,
+     * as well as validation of the final object.
+     *
+     * @param key   Name of the field being parsed
+     * @param value The value associated with `key`
+     * @returns A new instance of `Transaction` if `key == ""`, `value` otherwise.
+     */
+    public static reviver (key: string, value: any): any
+    {
+        if (key !== "")
+            return value;
+
+        JSONValidator.isValidOtherwiseThrow('Transaction', value);
+
+        return new Transaction(
+            Number(value.type),
+            value.inputs.map((elem: any) => TxInput.reviver("", elem)),
+            value.outputs.map((elem: any) => TxOutput.reviver("", elem)),
+            DataPayload.reviver("", value.payload));
+    }
+
+    /**
      * Collects data to create a hash.
      * @param buffer The buffer where collected data is stored
      */
@@ -87,7 +112,7 @@ export class Transaction
      * @param inputs An array of 1 or more UTXOs to be spent
      * @param outputs An array of 1 or more output
      * @param keys An array of length matching `inputs` which are the keys controlling the UTXOs
-     * @param data The data to store
+     * @param data The data payload to store
      * @returns The instance of Transaction
      */
     public static create (inputs: Array<TxInput>, outputs: Array<TxOutput>, keys: Array<Seed>,

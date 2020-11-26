@@ -11,6 +11,7 @@
 
  *******************************************************************************/
 
+import { JSONValidator } from "../utils/JSONValidator";
 import { Utils, Endian } from '../utils/Utils';
 
 import { SmartBuffer } from 'smart-buffer';
@@ -36,6 +37,26 @@ export class DataPayload
             this.data = Utils.readFromString(data);
         else
             this.data = this.fromBinary(data, endian).data;
+    }
+
+    /**
+     * The reviver parameter to give to `JSON.parse`
+     *
+     * This function allows to perform any necessary conversion,
+     * as well as validation of the final object.
+     *
+     * @param key   Name of the field being parsed
+     * @param value The value associated with `key`
+     * @returns A new instance of `DataPayload` if `key == ""`, `value` otherwise.
+     */
+    public static reviver (key: string, value: any): any
+    {
+        if (key !== "")
+            return value;
+
+        JSONValidator.isValidOtherwiseThrow('DataPayload', value);
+
+        return new DataPayload(value);
     }
 
     /**

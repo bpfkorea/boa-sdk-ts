@@ -11,6 +11,7 @@
 
 *******************************************************************************/
 
+import { JSONValidator } from '../utils/JSONValidator';
 import { Hash, makeUTXOKey } from './Hash';
 import { Signature } from './Signature';
 
@@ -51,6 +52,26 @@ export class TxInput
             this.utxo = first;
             this.signature = second;
         }
+    }
+
+    /**
+     * The reviver parameter to give to `JSON.parse`
+     *
+     * This function allows to perform any necessary conversion,
+     * as well as validation of the final object.
+     *
+     * @param key   Name of the field being parsed
+     * @param value The value associated with `key`
+     * @returns A new instance of `TxInputs` if `key == ""`, `value` otherwise.
+     */
+    public static reviver (key: string, value: any): any
+    {
+        if (key !== "")
+            return value;
+
+        JSONValidator.isValidOtherwiseThrow('TxInput', value);
+        return new TxInput(
+            new Hash(value.utxo), new Signature(value.signature));
     }
 
     /**

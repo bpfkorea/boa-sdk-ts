@@ -11,6 +11,7 @@
 
 *******************************************************************************/
 
+import { JSONValidator } from '../utils/JSONValidator';
 import { Hash } from './Hash';
 import { Signature } from './Signature';
 
@@ -56,6 +57,28 @@ export class Enrollment
         this.random_seed = seed;
         this.cycle_length = cycle;
         this.enroll_sig = sig;
+    }
+
+    /**
+     * The reviver parameter to give to `JSON.parse`
+     *
+     * This function allows to perform any necessary conversion,
+     * as well as validation of the final object.
+     *
+     * @param key   Name of the field being parsed
+     * @param value The value associated with `key`
+     * @returns A new instance of `Enrollment` if `key == ""`, `value` otherwise.
+     */
+    public static reviver (key: string, value: any): any
+    {
+        if (key !== "")
+            return value;
+
+        JSONValidator.isValidOtherwiseThrow('Enrollment', value);
+
+        return new Enrollment(
+            new Hash(value.utxo_key), new Hash(value.random_seed),
+            Number(value.cycle_length), new Signature(value.enroll_sig));
     }
 
     /**

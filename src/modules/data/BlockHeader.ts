@@ -13,6 +13,7 @@
 
 import { BitField } from './BitField';
 import { Enrollment } from './Enrollment';
+import { JSONValidator } from '../utils/JSONValidator';
 import { Hash } from "./Hash";
 import { Height } from './Height';
 import { Signature } from './Signature';
@@ -74,6 +75,32 @@ export class BlockHeader
         this.validators = validators;
         this.signature = signature;
         this.enrollments = enrollments;
+    }
+
+    /**
+     * The reviver parameter to give to `JSON.parse`
+     *
+     * This function allows to perform any necessary conversion,
+     * as well as validation of the final object.
+     *
+     * @param key   Name of the field being parsed
+     * @param value The value associated with `key`
+     * @returns A new instance of `BlockHeader` if `key == ""`, `value` otherwise.
+     */
+    public static reviver (key: string, value: any): any
+    {
+        if (key !== "")
+            return value;
+
+        JSONValidator.isValidOtherwiseThrow('BlockHeader', value);
+
+        return new BlockHeader(
+            new Hash(value.prev_block), new Height(value.height),
+            new Hash(value.merkle_root),
+            BitField.reviver("", value.validators),
+            new Signature(value.signature),
+            value.enrollments.map((elem: any) => Enrollment.reviver("", elem)),
+        );
     }
 
     /**

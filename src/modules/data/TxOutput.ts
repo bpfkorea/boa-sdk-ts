@@ -11,6 +11,7 @@
 
 *******************************************************************************/
 
+import { JSONValidator } from '../utils/JSONValidator';
 import { PublicKey } from './KeyPair';
 import { Utils } from "../utils/Utils";
 
@@ -40,6 +41,25 @@ export class TxOutput
     {
         this.value = value;
         this.address = address;
+    }
+
+    /**
+     * The reviver parameter to give to `JSON.parse`
+     *
+     * This function allows to perform any necessary conversion,
+     * as well as validation of the final object.
+     *
+     * @param key   Name of the field being parsed
+     * @param value The value associated with `key`
+     * @returns A new instance of `TxOutputs` if `key == ""`, `value` otherwise.
+     */
+    public static reviver (key: string, value: any): any
+    {
+        if (key !== "")
+            return value;
+
+        JSONValidator.isValidOtherwiseThrow('TxOutput', value);
+        return new TxOutput(BigInt(value.value), new PublicKey(value.address));
     }
 
     /**

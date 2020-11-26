@@ -24,10 +24,13 @@ export { Transaction, TxType } from './modules/data/Transaction';
 export { TxInput } from './modules/data/TxInput';
 export { TxOutput } from './modules/data/TxOutput';
 export { DataPayload } from './modules/data/DataPayload';
+export { PreImageInfo } from './modules/data/PreImageInfo';
 
 export { Utils, Endian } from './modules/utils/Utils';
 export { SodiumHelper } from './modules/utils/SodiumHelper';
 export { checksum, validate } from './modules/utils/CRC16';
+
+export { JSONValidator } from './modules/utils/JSONValidator';
 
 export { Validator } from './modules/net/response/Validator';
 export { PreImage  } from './modules/net/response/PreImage';
