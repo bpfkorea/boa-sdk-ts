@@ -12,16 +12,22 @@
 
 *******************************************************************************/
 
-export { checksum, validate } from './modules/utils/CRC16';
-export { DataPayload } from './modules/data/DataPayload';
-export { SodiumHelper } from './modules/utils/SodiumHelper';
+export { BitField } from './modules/data/BitField';
+export { Block } from './modules/data/Block';
+export { BlockHeader } from './modules/data/BlockHeader';
+export { Enrollment } from './modules/data/Enrollment';
 export { Hash, hash, hashMulti, makeUTXOKey, hashFull, hashPart } from './modules/data/Hash';
+export { Height } from './modules/data/Height';
 export { KeyPair, PublicKey, SecretKey, Seed } from './modules/data/KeyPair';
 export { Signature } from './modules/data/Signature';
 export { Transaction, TxType } from './modules/data/Transaction';
 export { TxInput } from './modules/data/TxInput';
 export { TxOutput } from './modules/data/TxOutput';
-export { Utils } from './modules/utils/Utils';
+export { DataPayload } from './modules/data/DataPayload';
+
+export { Utils, Endian } from './modules/utils/Utils';
+export { SodiumHelper } from './modules/utils/SodiumHelper';
+export { checksum, validate } from './modules/utils/CRC16';
 
 export { Validator } from './modules/net/response/Validator';
 export { PreImage  } from './modules/net/response/PreImage';
