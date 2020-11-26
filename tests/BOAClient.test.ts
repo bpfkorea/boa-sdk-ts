@@ -634,8 +634,9 @@ describe ('BOA Client', () =>
             payload: '0x617461642065746f76'
         };
 
-        let obj = vote_tx.toObject();
-        assert.deepStrictEqual(obj, expected_object);
+        assert.deepStrictEqual(
+            JSON.stringify(vote_tx),
+            JSON.stringify(expected_object));
 
         // Verify the signature
         let tx_hash = boasdk.hashFull(vote_tx);

@@ -108,6 +108,14 @@ export class Hash
     {
         buffer.writeBuffer(this.data);
     }
+
+    /**
+     * Converts this object to its JSON representation
+     */
+    public toJSON (key?: string): string
+    {
+        return this.toString();
+    }
 }
 
 /**
