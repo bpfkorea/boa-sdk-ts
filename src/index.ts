@@ -27,7 +27,3 @@ export { TxOutput } from './modules/data/TxOutput';
 
 export { BOAClient } from './modules/net/BOAClient';
 export { Request } from './modules/net/Request';
-
-// For BinInt
-import { default as JSBInt } from 'jsbi';
-export { JSBInt };

@@ -11,9 +11,9 @@
 
 *******************************************************************************/
 
+import { Utils } from '../utils/Utils';
 import * as utils from '../utils';
 
-import JSBI from 'jsbi';
 import { SmartBuffer } from 'smart-buffer';
 
 /**
@@ -125,45 +125,10 @@ export function hashMulti (source1: Buffer, source2: Buffer): Hash
  * @returns Instance of Hash
  * See_Also https://github.com/bpfkorea/agora/blob/93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/consensus/data/UTXOSetValue.d#L50-L53
  */
-export function makeUTXOKey (h: Hash, index: number | string | object): Hash
+export function makeUTXOKey (h: Hash, index: bigint): Hash
 {
-    let buf = Buffer.alloc(8);
-
-    // See https://github.com/nodejs/node/blob/
-    // 88fb5a5c7933022de750745e51e5dc0996a1e2c4/lib/internal/buffer.js#L573-L592
-    let lo =
-            JSBI.toNumber(
-                JSBI.bitwiseAnd(
-                    JSBI.BigInt(index),
-                    JSBI.BigInt(0xffffffff)
-                )
-            );
-    buf[0] = lo;
-    lo = lo >> 8;
-    buf[1] = lo;
-    lo = lo >> 8;
-    buf[2] = lo;
-    lo = lo >> 8;
-    buf[3] = lo;
-
-    let hi =
-            JSBI.toNumber(
-                JSBI.bitwiseAnd(
-                    JSBI.signedRightShift(
-                        JSBI.BigInt(index),
-                        JSBI.BigInt(32)
-                    ),
-                    JSBI.BigInt(0xffffffff)
-                )
-            );
-    buf[4] = hi;
-    hi = hi >> 8;
-    buf[5] = hi;
-    hi = hi >> 8;
-    buf[6] = hi;
-    hi = hi >> 8;
-    buf[7] = hi;
-
+    const buf = Buffer.allocUnsafe(8);
+    Utils.writeBigIntLE(buf, index);
     return hashMulti(h.data, buf);
 }
 
