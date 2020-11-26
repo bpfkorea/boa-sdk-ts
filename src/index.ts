@@ -12,7 +12,6 @@
 
 *******************************************************************************/
 
-export { readFromString, writeToString } from './modules/utils/buffer';
 export { checksum, validate } from './modules/utils/CRC16';
 export { DataPayload } from './modules/data/DataPayload';
 export { SodiumHelper } from './modules/utils/SodiumHelper';
@@ -22,6 +21,7 @@ export { Signature } from './modules/data/Signature';
 export { Transaction, TxType } from './modules/data/Transaction';
 export { TxInput } from './modules/data/TxInput';
 export { TxOutput } from './modules/data/TxOutput';
+export { Utils } from './modules/utils/Utils';
 
 export { Validator } from './modules/net/response/Validator';
 export { PreImage  } from './modules/net/response/PreImage';

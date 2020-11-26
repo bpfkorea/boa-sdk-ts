@@ -11,7 +11,7 @@
 
 *******************************************************************************/
 
-import * as utils from '../utils';
+import { Utils, Endian } from '../utils/Utils';
 
 import * as assert from 'assert';
 
@@ -50,7 +50,7 @@ export class Signature
      */
     public fromString (hex: string): Signature
     {
-        utils.readFromString(hex, this.data);
+        Utils.readFromString(hex, this.data);
 
         return this;
     }
@@ -61,7 +61,7 @@ export class Signature
      */
     public toString (): string
     {
-        return utils.writeToString(this.data);
+        return Utils.writeToString(this.data);
     }
 
     /**

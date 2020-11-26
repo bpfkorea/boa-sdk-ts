@@ -16,7 +16,6 @@ import { hashFull } from "./Hash";
 import { KeyPair, Seed } from "./KeyPair";
 import { TxInput } from './TxInput';
 import { TxOutput } from './TxOutput';
-import * as Utils from '../utils'
 
 import { SmartBuffer } from 'smart-buffer';
 

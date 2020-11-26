@@ -12,7 +12,7 @@
 *******************************************************************************/
 
 import { Utils } from '../utils/Utils';
-import * as utils from '../utils';
+import { SodiumHelper } from '../utils/SodiumHelper';
 
 import { SmartBuffer } from 'smart-buffer';
 
@@ -48,7 +48,7 @@ export class Hash
      */
     public fromString (hex: string): Hash
     {
-        utils.readFromString(hex, this.data);
+        Utils.readFromString(hex, this.data);
 
         return this;
     }
@@ -59,7 +59,7 @@ export class Hash
      */
     public toString (): string
     {
-        return utils.writeToString(this.data);
+        return Utils.writeToString(this.data);
     }
 
     /**
@@ -99,7 +99,7 @@ export class Hash
  */
 export function hash (source: Buffer): Hash
 {
-    return new Hash(Buffer.from(utils.SodiumHelper.sodium.crypto_generichash(Hash.Width, source)));
+    return new Hash(Buffer.from(SodiumHelper.sodium.crypto_generichash(Hash.Width, source)));
 }
 
 /**
@@ -115,7 +115,7 @@ export function hashMulti (source1: Buffer, source2: Buffer): Hash
     source1.copy(merge);
     source2.copy(merge, source1.length);
 
-    return new Hash(Buffer.from(utils.SodiumHelper.sodium.crypto_generichash(Hash.Width, merge)));
+    return new Hash(Buffer.from(SodiumHelper.sodium.crypto_generichash(Hash.Width, merge)));
 }
 
 /**
