@@ -168,17 +168,9 @@ describe ('BOA Client', () =>
         });
     });
 
-    before('Wait for the package libsodium to finish loading', (doneIt: () => void) =>
+    before('Wait for the package libsodium to finish loading', () =>
     {
-        boasdk.SodiumHelper.init()
-            .then(() =>
-            {
-                doneIt();
-            })
-            .catch((err: any) =>
-            {
-                doneIt();
-            });
+        return boasdk.SodiumHelper.init();
     });
 
     after('Stop Server', (doneIt: () => void) =>

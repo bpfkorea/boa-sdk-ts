@@ -15,19 +15,11 @@ import * as boasdk from '../lib';
 
 import * as assert from 'assert';
 
-describe('Hash', () => {
-
-    before('Wait for the package libsodium to finish loading', (doneIt: () => void) =>
+describe('Hash', () =>
+{
+    before('Wait for the package libsodium to finish loading', () =>
     {
-        boasdk.SodiumHelper.init()
-            .then(() =>
-            {
-                doneIt();
-            })
-            .catch((err: any) =>
-            {
-                doneIt();
-            });
+        return boasdk.SodiumHelper.init();
     });
 
     // Buffer has the same content. However, when printed with hex strings,

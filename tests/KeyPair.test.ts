@@ -17,17 +17,9 @@ import * as assert from 'assert';
 
 describe ('ED25519 Public Key', () =>
 {
-    before('Wait for the package libsodium to finish loading', (doneIt: () => void) =>
+    before('Wait for the package libsodium to finish loading', () =>
     {
-        boasdk.SodiumHelper.init()
-            .then(() =>
-            {
-                doneIt();
-            })
-            .catch((err: any) =>
-            {
-                doneIt();
-            });
+        return boasdk.SodiumHelper.init();
     });
 
     it ('Extract the public key from a string then convert it back into a string and compare it.', () =>
