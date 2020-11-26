@@ -9,7 +9,7 @@
     License:
         MIT License. See LICENSE for details.
 
- *******************************************************************************/
+*******************************************************************************/
 
 import { JSONValidator } from "../utils/JSONValidator";
 import { Utils, Endian } from '../utils/Utils';
@@ -81,7 +81,7 @@ export class DataPayload
 
     /**
      * Set binary data
-     * @param bin The binary data of the data payload
+     * @param bin    The binary data of the data payload
      * @param endian The byte order
      * @returns The instance of DataPayload
      */
@@ -109,7 +109,7 @@ export class DataPayload
 
     /**
      * Collects data to create a data payload.
-     * @param buffer - The buffer where collected data is stored
+     * @param buffer The buffer where collected data is stored
      */
     public computeHash (buffer: SmartBuffer)
     {

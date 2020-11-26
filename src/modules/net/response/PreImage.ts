@@ -31,8 +31,8 @@ export class PreImage
 
     /**
      * Constructor
-     * @param h {Hash | undefined} The value of the pre-image at the distance from the commitment
-     * @param d {number | undefined} The distance between this pre-image and the initial commitment
+     * @param h The value of the pre-image at the distance from the commitment
+     * @param d The distance between this pre-image and the initial commitment
      */
     constructor (h?: Hash, d?: number)
     {
@@ -49,7 +49,7 @@ export class PreImage
 
     /**
      * This import from JSON
-     * @param data {JSONPreImage} The object of the JSON
+     * @param data The object of the JSON
      */
     public fromJSON (data: JSONPreImage)
     {

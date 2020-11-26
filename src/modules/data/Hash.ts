@@ -51,19 +51,19 @@ export class Hash
     }
 
     /**
-     * Reads from hex string
-     * @param hex Hex string
+     * Reads from the hex string
+     * @param hex The hex string
+     * @returns The instance of Hash
      */
     public fromString (hex: string): Hash
     {
         Utils.readFromString(hex, this.data);
-
         return this;
     }
 
     /**
-     * Writes to hex string
-     * @returns hex string
+     * Writes to the hex string
+     * @returns The hex string
      */
     public toString (): string
     {
@@ -72,7 +72,7 @@ export class Hash
 
     /**
      * Set binary data
-     * @param bin The binary data of the hash
+     * @param bin    The binary data of the hash
      * @param endian The byte order
      * @returns The instance of Hash
      */
@@ -130,9 +130,9 @@ export function hash (source: Buffer): Hash
 
 /**
  * Creates a hash of the two buffer combined.
- * @param source1 Original for creating hash
- * @param source2 Original for creating hash
- * @returns Instance of Hash
+ * @param source1 The original for creating hash
+ * @param source2 The original for creating hash
+ * @returns The instance of Hash
  * See_Also https://github.com/bpfkorea/agora/blob/93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/common/Hash.d#L239-L255
  */
 export function hashMulti (source1: Buffer, source2: Buffer): Hash
@@ -146,9 +146,9 @@ export function hashMulti (source1: Buffer, source2: Buffer): Hash
 
 /**
  * Makes a UTXOKey
- * @param h {Hash} Hash of transaction
- * @param index {number | string} Index of the output
- * @returns Instance of Hash
+ * @param h     The instance of transaction's Hash
+ * @param index The index of the output
+ * @returns The instance of Hash
  * See_Also https://github.com/bpfkorea/agora/blob/93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/consensus/data/UTXOSetValue.d#L50-L53
  */
 export function makeUTXOKey (h: Hash, index: bigint): Hash

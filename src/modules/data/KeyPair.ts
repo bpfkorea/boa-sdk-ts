@@ -43,9 +43,9 @@ export class KeyPair
 
     /**
      * Constructor
-     * @param address {PublicKey} The instance of PublicKey
-     * @param secret {SecretKey} The instance of SecretKey
-     * @param seed {Seed} The instance of Seed
+     * @param address The instance of PublicKey
+     * @param secret  The instance of SecretKey
+     * @param seed    The instance of Seed
      */
     constructor (address: PublicKey, secret: SecretKey, seed: Seed)
     {
@@ -56,8 +56,8 @@ export class KeyPair
 
     /**
      * Create a KeyPair from a Seed
-     * @param seed {Seed} The instance of Seed
-     * @returns {KeyPair} The instance of KeyPair
+     * @param seed The instance of Seed
+     * @returns The instance of KeyPair
      */
     public static fromSeed (seed: Seed): KeyPair
     {
@@ -70,7 +70,7 @@ export class KeyPair
 
     /**
      * Generate a KeyPair with a randomly generated Seed
-     * @returns {KeyPair} The instance of KeyPair
+     * @returns The instance of KeyPair
      */
     public static random (): KeyPair
     {
@@ -121,7 +121,6 @@ export class PublicKey
 
     /**
      * Uses Stellar's representation instead of hex
-     * @returns {string}
      */
     public toString (): string
     {
@@ -133,9 +132,9 @@ export class PublicKey
 
     /**
      * Verify that a signature matches a given message
-     * @param signature {Signature} The signature of `msg` matching `this` public key.
-     * @param msg {Buffer} The signed message. Should not include the signature.
-     * @returns {boolean} `true` if the signature is valid
+     * @param signature The signature of `msg` matching `this` public key.
+     * @param msg       The signed message. Should not include the signature.
+     * @returns `true` if the signature is valid
      * See_Also: https://github.com/bpfkorea/agora/blob/93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/common/crypto/Key.d#L226-L235
      */
     public verify (signature: Signature, msg: Buffer): boolean
@@ -145,7 +144,7 @@ export class PublicKey
 
     /**
      * Collects data to create a hash.
-     * @param buffer - The buffer where collected data is stored
+     * @param buffer The buffer where collected data is stored
      */
     public computeHash (buffer: SmartBuffer)
     {
@@ -183,8 +182,8 @@ export class SecretKey
 
     /**
      * Signs a message with this private key
-     * @param {Buffer} msg The message to sign.
-     * @returns {Signature} The signature of `msg` using `this`
+     * @param msg The message to sign.
+     * @returns The signature of `msg` using `this`
      * See_Also: https://github.com/bpfkorea/agora/blob/93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/common/crypto/Key.d#L274-L282
      */
     public sign (msg: Buffer): Signature
@@ -232,7 +231,7 @@ export class Seed
 
     /**
      * Returns a secret key seed as a string
-     * @returns {string} The secret key seed
+     * @returns The secret key seed
      */
     public toString (): string
     {

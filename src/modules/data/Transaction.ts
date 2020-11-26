@@ -1,6 +1,6 @@
 /*******************************************************************************
 
-    The class that defines the transaction in a block.
+    The class that defines the transaction of a block.
 
     Copyright:
         Copyright (c) 2020 BOS Platform Foundation Korea
@@ -30,7 +30,9 @@ export enum TxType
 }
 
 /**
- * The class that defines the transaction in a block.
+ * The class that defines the transaction of a block.
+ * Convert JSON object to TypeScript's instance.
+ * An exception occurs if the required property is not present.
  */
 export class Transaction
 {
@@ -109,10 +111,10 @@ export class Transaction
 
     /**
      * Creates a new transaction
-     * @param inputs An array of 1 or more UTXOs to be spent
+     * @param inputs  An array of 1 or more UTXOs to be spent
      * @param outputs An array of 1 or more output
-     * @param keys An array of length matching `inputs` which are the keys controlling the UTXOs
-     * @param data The data payload to store
+     * @param keys    An array of length matching `inputs` which are the keys controlling the UTXOs
+     * @param payload The data payload to store
      * @returns The instance of Transaction
      */
     public static create (inputs: Array<TxInput>, outputs: Array<TxOutput>, keys: Array<Seed>,

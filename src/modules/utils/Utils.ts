@@ -138,8 +138,8 @@ export class Utils
     }
     /**
      * This checks that the JSON data has all the properties of the class.
-     * @param obj {Object} The instance of a class
-     * @param json {any} The object of the JSON
+     * @param obj  The instance of a class
+     * @param json The object of the JSON
      */
     public static validateJSON (obj: Object, json: any)
     {

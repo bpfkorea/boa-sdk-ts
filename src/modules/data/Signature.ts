@@ -49,19 +49,19 @@ export class Signature
     }
 
     /**
-     * Reads from hex string
-     * @param hex {string} Hex string
+     * Reads from the hex string
+     * @param hex The hex string
+     * @returns The instance of Signature
      */
     public fromString (hex: string): Signature
     {
         Utils.readFromString(hex, this.data);
-
         return this;
     }
 
     /**
-     * Writes to hex string
-     * @returns {string}
+     * Writes to the hex string
+     * @returns The hex string
      */
     public toString (): string
     {

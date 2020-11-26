@@ -18,7 +18,9 @@ import { Utils } from "../utils/Utils";
 import { SmartBuffer } from 'smart-buffer';
 
 /**
- * The class that defines the transaction's output in a block.
+ * The class that defines the transaction's outputs of a block.
+ * Convert JSON object to TypeScript's instance.
+ * An exception occurs if the required property is not present.
  */
 export class TxOutput
 {

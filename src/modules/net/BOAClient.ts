@@ -44,8 +44,8 @@ export class BOAClient
 
     /**
      * Constructor
-     * @param server_url {string} The Stoa server URL
-     * @param agora_url {string} The Agora server URL
+     * @param server_url The Stoa server URL
+     * @param agora_url  The Agora server URL
      */
     constructor (server_url: string, agora_url: string)
     {
@@ -56,8 +56,8 @@ export class BOAClient
     /**
      * Request all valid validator at the block height.
      * If block height is not specified, it is the current height.
-     * @param height {number | undefined} The block height
-     * @returns {Promise<Array<Validator>>} Promise that resolves or
+     * @param height The block height
+     * @returns Promise that resolves or
      * rejects with response from the Stoa
      */
     public getAllValidators
@@ -105,9 +105,9 @@ export class BOAClient
     /**
      * Requests a valid validator for the address at the block height.
      * If block height is not specified, it is the current height.
-     * @param address {string} The public key
-     * @param height {number | undefined} The block height
-     * @returns {Promise<Array<Validator>>} Promise that resolves or
+     * @param address The public key
+     * @param height  The block height
+     * @returns Promise that resolves or
      * rejects with response from the Stoa
      */
     public getValidator
@@ -155,11 +155,11 @@ export class BOAClient
 
     /**
      * Check the validity of a new pre-image
-     * @param original_image {Hash} The original pre-image hash
-     * @param original_image_height {number} The original pre-image height
-     * @param new_image {Hash} The new pre-image hash to check
-     * @param new_image_height {number} The new pre-image height
-     * @returns {IsValidPreimageResponse}
+     * @param original_image        The original pre-image hash
+     * @param original_image_height The original pre-image height
+     * @param new_image             The new pre-image hash to check
+     * @param new_image_height      The new pre-image height
+     * @returns
      * {result: true, message: "The pre-image is valid."} if the pre-image is valid,
      * otherwise the result is false and the message is the reason for invalid
      * See_Also: https://github.com/bpfkorea/agora/blob/93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/consensus/validation/PreImage.d#L50-L69
@@ -205,8 +205,8 @@ export class BOAClient
     /**
      * TODO As this might get influenced by future changes
      * Shell function to convert from time to height
-     * @param when {Date} Unix epoch time
-     * @returns height {number} (or expected height) of the designated time
+     * @param when Unix epoch time
+     * @returns height  (or expected height) of the designated time
      */
     public getHeightAt(when: Date): Promise<number>
     {
@@ -226,10 +226,10 @@ export class BOAClient
 
     /**
      * Saves the data to the blockchain
-     * @param inputs An array of 1 or more UTXOs to be spent
-     * @param outputs An array of 1 or more output
-     * @param keys An array of length matching `inputs` which are the keys controlling the UTXOs
-     * @param data The data to store
+     * @param inputs    An array of 1 or more UTXOs to be spent
+     * @param outputs   An array of 1 or more output
+     * @param keys      An array of length matching `inputs` which are the keys controlling the UTXOs
+     * @param payload   The data to store
      * @returns Returns true if success, otherwise returns false
      */
     public saveData (inputs: Array<TxInput>, outputs: Array<TxOutput>, keys: Array<Seed>, payload: DataPayload): Promise<boolean>
@@ -283,7 +283,7 @@ export interface IsValidPreimageResponse
 /**
  * @ignore
  * Check if parameter `reason` is type `AxiosError`.
- * @param reason{any} This is why the error occurred
+ * @param reason This is why the error occurred
  * @returns {boolean}
  */
 function isAxiosError (reason: any): reason is AxiosError
@@ -294,7 +294,7 @@ function isAxiosError (reason: any): reason is AxiosError
 /**
  * @ignore
  * Check if parameter `reason` is type `Error`.
- * @param reason{any} This is why the error occurred
+ * @param reason This is why the error occurred
  * @returns {boolean}
  */
 function isError (reason: any): reason is Error
@@ -306,8 +306,8 @@ function isError (reason: any): reason is Error
  * @ignore
  * It is a common function that handles errors that occur
  * during network communication.
- * @param reason{any} This is why the error occurred
- * @returns {Error}
+ * @param reason This is why the error occurred
+ * @returns The instance of Error
  */
 function handleNetworkError (reason: any): Error
 {

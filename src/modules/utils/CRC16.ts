@@ -29,8 +29,8 @@ import crc from 'crc';
 /**
  * Checksum returns the 2-byte checksum for the provided data
  * Data returned is in little endian
- * @param data {Buffer} Input data
- * @returns {Buffer}
+ * @param data Input data
+ * @returns The result of checksum
  * See_Also: https://github.com/bpfkorea/agora/blob/93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/common/crypto/Crc16.d#L90-L100
  */
 export function checksum (data: Buffer): Buffer
@@ -43,9 +43,9 @@ export function checksum (data: Buffer): Buffer
 /**
  * Validate returns an error if the provided checksum does not match
  * the calculated checksum of the provided data
- * @param data {Buffer} Data to checksum
- * @param expected {Buffer} Expected checksum value
- * @returns {boolean}
+ * @param data     Data to checksum
+ * @param expected Expected checksum value
+ * @returns The result of validation
  * See_Also: https://github.com/bpfkorea/agora/blob/93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/common/crypto/Crc16.d#L104-L109
  */
 export function validate (data: Buffer, expected: Buffer): boolean

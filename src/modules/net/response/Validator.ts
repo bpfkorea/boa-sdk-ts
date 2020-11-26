@@ -42,10 +42,10 @@ export class Validator
 
     /**
      * Constructor
-     * @param address {string | undefined} The public key that is included in the frozen UTXO.
-     * @param height {number | undefined} The block height when enrolled
-     * @param stake {Hash | undefined} The hash of frozen UTXO
-     * @param image {PreImage | undefined} The pre-image
+     * @param address The public key that is included in the frozen UTXO.
+     * @param height  The block height when enrolled
+     * @param stake   The hash of frozen UTXO
+     * @param image   The pre-image
      */
     constructor(address?: string, height?: number, stake?: Hash, image?: PreImage)
     {
@@ -72,7 +72,7 @@ export class Validator
 
     /**
      * This import from JSON
-     * @param data {JSONValidator} The object of the JSON
+     * @param data The object of the JSON
      */
     public fromJSON (data: JSONValidator)
     {
