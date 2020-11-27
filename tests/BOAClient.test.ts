@@ -732,74 +732,75 @@ describe ('BOA Client', () =>
 
     it ('Test creating a vote data', () =>
     {
-        let inputs = [
-            new boasdk.TxInput(
-                new boasdk.Hash("0x81a326afa790003c32517a2a" +
+        let utxos = [
+            {
+                utxo: new boasdk.Hash("0x81a326afa790003c32517a2a" +
                     "2556613004e6147edac28d576cf7bcc2daadf4bb60be1f644c2" +
                     "29b775e7894844ec66b2d70ddf407b8196b46bc1dfe42061c74" +
                     "97"),
-                new boasdk.Signature(Buffer.alloc(boasdk.Signature.Width))
-            ),
-            new boasdk.TxInput(
-                new boasdk.Hash("0xb82cb96710af2e9804c59d1f" +
+                amount: BigInt(100000)
+            },
+            {
+                utxo: new boasdk.Hash("0xb82cb96710af2e9804c59d1f" +
                     "1e1679f8b8b69f4c0f6cd79c8c12f365dd766c09aaa4febcc18" +
                     "b3665d33301cb248ac7afd343ac7b98b27beaf246ad12d3b321" +
                     "9a"),
-                new boasdk.Signature(Buffer.alloc(boasdk.Signature.Width))
-            ),
-            new boasdk.TxInput(
-                new boasdk.Hash("0x4028965b7408566a66e4cf8c" +
+                amount: BigInt(200000)
+            },
+            {
+                utxo: new boasdk.Hash("0x4028965b7408566a66e4cf8c" +
                     "603a1cdebc7659a3e693d36d2fdcb39b196da967914f40ef496" +
                     "6d5b4b1f4b3aae00fbd68ffe8808b070464c2a101d44f4d7b01" +
                     "70"),
-                new boasdk.Signature(Buffer.alloc(boasdk.Signature.Width))
-            )
+                amount: BigInt(300000)
+            },
         ];
 
-        let outputs = [
-            new boasdk.TxOutput(
-                BigInt("100000000"),
-                new boasdk.PublicKey("GDD5RFGBIUAFCOXQA246BOUPHCK" +
-                    "7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW")
-            )
+        let keys: Array<boasdk.KeyPair> = [
+            boasdk.KeyPair.fromSeed(new boasdk.Seed("SDAKFNYEIAORZKKCYRILFQKLLOCNPL5SWJ3YY5NM3ZH6GJSZGXHZEPQS")),
+            boasdk.KeyPair.fromSeed(new boasdk.Seed("SAXA7RLGWM5I7Q34WBKXWLDPZ3NHFHATOZG7UUOG5ZGZCM7J64OLTJOT")),
+            boasdk.KeyPair.fromSeed(new boasdk.Seed("SDWAMFTNWY6XLZ2FDGBEMBYIXJTQSSA6OKSPH2YVLZH7NDE3LDFC2AJR"))
         ];
 
-        let keys = [
-            new boasdk.Seed("SDAKFNYEIAORZKKCYRILFQKLLOCNPL5SWJ3Y" +
-                "Y5NM3ZH6GJSZGXHZEPQS"),
-            new boasdk.Seed("SAXA7RLGWM5I7Q34WBKXWLDPZ3NHFHATOZG7" +
-                "UUOG5ZGZCM7J64OLTJOT"),
-            new boasdk.Seed("SDWAMFTNWY6XLZ2FDGBEMBYIXJTQSSA6OKSP" +
-                "H2YVLZH7NDE3LDFC2AJR")
-        ];
+        let builder = new boasdk.TxBuilder(
+            boasdk.KeyPair.fromSeed(new boasdk.Seed("SDAKFNYEIAORZKKCYRILFQKLLOCNPL5SWJ3YY5NM3ZH6GJSZGXHZEPQS")));
 
-        let vote_tx = boasdk.Transaction.create(
-            inputs,
-            outputs,
-            keys,
-            new boasdk.DataPayload(Buffer.from("vote data"))
-        );
+        let vote_data = new boasdk.DataPayload("0x617461642065746f76");
+        let fee = boasdk.TxPayloadFee.getFee(vote_data.data.length);
+
+        let vote_tx =
+            builder
+                .addInput(utxos[0].utxo,utxos[0].amount, keys[0].secret)
+                .addInput(utxos[1].utxo,utxos[1].amount, keys[1].secret)
+                .addInput(utxos[2].utxo,utxos[2].amount, keys[2].secret)
+                .assignPayload(vote_data)
+                .addOutput(new boasdk.PublicKey(boasdk.TxPayloadFee.CommonsBudgetAddress), fee)
+                .sign(boasdk.TxType.Payment)
 
         let expected_object = {
             type: 0,
             inputs: [
                 {
                     utxo: '0x81a326afa790003c32517a2a2556613004e6147edac28d576cf7bcc2daadf4bb60be1f644c229b775e7894844ec66b2d70ddf407b8196b46bc1dfe42061c7497',
-                    signature: '0x00abc0dc823d8952eb28d3ab69c4387b205fedb4c69c2209010042f7ca6dabf76cef09044e2f1ddb3fab099a1e8c63701faa374be0426d4c353ce7254782ca34'
+                    signature: '0x02780c8abbc9b9e1fb1bdcd74787e968fdd53818980922543a60ffbccb4c9b67535e78293a0f5f76fff7bceefb4b5c0d5b9614f38b8e24161b1ae35408c690ef'
                 },
                 {
                     utxo: '0xb82cb96710af2e9804c59d1f1e1679f8b8b69f4c0f6cd79c8c12f365dd766c09aaa4febcc18b3665d33301cb248ac7afd343ac7b98b27beaf246ad12d3b3219a',
-                    signature: '0x02ed9cf62f551786e4e3ecdf0dad6b32c9f4b47592dbffd7adf0b7048d725c997e710cdc0596eb825aa65c8af3c437442ee8f07f6ccc4162a0f53393112c250e'
+                    signature: '0x00e851b18b0ab681f5ca5982ecc5340b6cdf5151960bf0a98af5cc647a3cba758200f35da264a8b0a6f01051fb418f37f3827a5c0971f6b4ff71c9ad888d6779'
                 },
                 {
                     utxo: '0x4028965b7408566a66e4cf8c603a1cdebc7659a3e693d36d2fdcb39b196da967914f40ef4966d5b4b1f4b3aae00fbd68ffe8808b070464c2a101d44f4d7b0170',
-                    signature: '0x048ce34cce366dade98d3d1a60b2558dc9982cd2733758212992d40391f801d0888ccdd3939a85ff21dd95174babff0e0a63567e655a7861649d9e3efa6ba10f'
+                    signature: '0x04828c97c29b41838e41a5b3327824409f6413c90c68bc926ef7cefce70d53539b29786c0fbe0519574ec089ae5814c6fd3efdafb34bea37cb082bf1b8bdd02e'
                 }
             ],
             outputs: [
                 {
-                    value: '100000000',
-                    address: 'GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW'
+                    value: '500000',
+                    address: 'GCOMMONBGUXXP4RFCYGEF74JDJVPUW2GUENGTKKJECDNO6AGO32CUWGU'
+                },
+                {
+                    value: '100000',
+                    address: 'GAVEUXU6ASJZ5VKIQ5G7W2PT5K4SJMF2V7FJLOCEV76J2UHTHCPI4IYM'
                 }
             ],
             payload: '0x617461642065746f76'
@@ -812,10 +813,7 @@ describe ('BOA Client', () =>
         // Verify the signature
         let tx_hash = boasdk.hashFull(vote_tx);
         for (let idx = 0; idx < vote_tx.inputs.length; idx++)
-        {
-            let key_pair = boasdk.KeyPair.fromSeed(keys[idx]);
-            assert.ok(key_pair.address.verify(vote_tx.inputs[idx].signature, tx_hash.data));
-        }
+            assert.ok(keys[idx].address.verify(vote_tx.inputs[idx].signature, tx_hash.data));
     });
 
     it ('Test saving a vote data', async () =>
@@ -829,29 +827,24 @@ describe ('BOA Client', () =>
 
         try
         {
-            let res = await boa_client.saveData(
-                [
-                    new boasdk.TxInput(
-                        new boasdk.Hash("0x81a326afa790003c32517a2a" +
-                            "2556613004e6147edac28d576cf7bcc2daadf4bb60be1f644c2" +
-                            "29b775e7894844ec66b2d70ddf407b8196b46bc1dfe42061c74" +
-                            "97"),
-                        new boasdk.Signature(Buffer.alloc(boasdk.Signature.Width))
-                    )
-                ],
-                [
-                    new boasdk.TxOutput(
-                        BigInt("100000000"),
-                        new boasdk.PublicKey("GDD5RFGBIUAFCOXQA246BOUPHCK" +
-                            "7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW")
-                    )
-                ],
-                [
-                    new boasdk.Seed("SDAKFNYEIAORZKKCYRILFQKLLOCNPL5SWJ3Y" +
-                        "Y5NM3ZH6GJSZGXHZEPQS")
-                ],
-                new boasdk.DataPayload(Buffer.from("vote data"))
-            );
+            let utxo = {
+                utxo: new boasdk.Hash("0x81a326afa790003c32517a2a2556613004e61" +
+                        "47edac28d576cf7bcc2daadf4bb60be1f644c229b775e789484" +
+                        "4ec66b2d70ddf407b8196b46bc1dfe42061c7497"),
+                amount : BigInt(100000000)
+            };
+            let vote_data = new boasdk.DataPayload("0x617461642065746f76");
+            let fee = boasdk.TxPayloadFee.getFee(vote_data.data.length);
+
+            let builder = new boasdk.TxBuilder(
+                boasdk.KeyPair.fromSeed(new boasdk.Seed("SDAKFNYEIAORZKKCYRILFQKLLOCNPL5SWJ3YY5NM3ZH6GJSZGXHZEPQS")));
+            let tx = builder
+                .addInput(utxo.utxo, utxo.amount)
+                .addOutput(new boasdk.PublicKey(boasdk.TxPayloadFee.CommonsBudgetAddress), fee)
+                .assignPayload(vote_data)
+                .sign(boasdk.TxType.Payment);
+
+            let res = await boa_client.sendTransaction(tx);
             assert.ok(res);
         }
         catch (err)

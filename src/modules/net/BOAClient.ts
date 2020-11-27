@@ -14,13 +14,12 @@
 
 *******************************************************************************/
 
-import { DataPayload } from '../data/DataPayload';
-import { Hash, hash, hashFull } from '../data/Hash';
+import { Hash, hash } from '../data/Hash';
 import { PublicKey } from '../data/KeyPair';
 import { Request } from './Request';
 import { UnspentTxOutput } from './response/UnspentTxOutput';
 import { Validator } from './response/Validator';
-import { Seed, Transaction, TxInput, TxOutput } from "../..";
+import { Transaction } from "../data/Transaction";
 
 import { AxiosResponse, AxiosError } from 'axios';
 import uri from 'urijs';
@@ -228,46 +227,30 @@ export class BOAClient
 
     /**
      * Saves the data to the blockchain
-     * @param inputs    An array of 1 or more UTXOs to be spent
-     * @param outputs   An array of 1 or more output
-     * @param keys      An array of length matching `inputs` which are the keys controlling the UTXOs
-     * @param payload   The data to store
+     * @param tx The instance of the Transaction
      * @returns Returns true if success, otherwise returns false
      */
-    public saveData (inputs: Array<TxInput>, outputs: Array<TxOutput>, keys: Array<Seed>, payload: DataPayload): Promise<boolean>
+    public sendTransaction (tx: Transaction): Promise<boolean>
     {
         return new Promise<boolean>((resolve, reject) =>
         {
             try
             {
-                let tx = Transaction.create(inputs, outputs, keys, payload);
-
-                // TODO: Send a transaction to Agora
-                // ex)
-                /*
                 let url = uri(this.agora_url)
-                    .directory("put_transaction");
+                    .filename("transaction");
 
-                Request.put(url.toString(), tx.toObject())
+                Request.put(url.toString(), {tx: tx})
                     .then((response: AxiosResponse) =>
                     {
                         if (response.status == 200)
-                        {
                             resolve(true);
-                        }
                         else
-                        {
-                            // It is not yet defined in Stoa.
                             reject(new Error(response.statusText));
-                        }
                     })
                     .catch((reason: any) =>
                     {
                         reject(handleNetworkError(reason));
                     });
-                */
-
-                resolve(true);
             } catch (err)
             {
                 reject(err);
