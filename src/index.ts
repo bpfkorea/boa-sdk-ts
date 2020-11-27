@@ -31,6 +31,7 @@ export { SodiumHelper } from './modules/utils/SodiumHelper';
 export { checksum, validate } from './modules/utils/CRC16';
 export { TxPayloadFee } from './modules/utils/TxPayloadFee';
 export { UTXOManager } from './modules/utils/UTXOManager';
+export { TxBuilder } from './modules/utils/TxBuilder';
 
 export { JSONValidator } from './modules/utils/JSONValidator';
 
