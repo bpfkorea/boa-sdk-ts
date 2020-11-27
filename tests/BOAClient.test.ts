@@ -654,10 +654,12 @@ describe ('BOA Client', () =>
                 // end of this test
                 doneIt();
             })
-            .catch((err: any) =>
+            .catch((err: boasdk.NetworkError) =>
             {
                 // On Error
-                assert.strictEqual(err.message, "Bad Request, The Height value is not valid.");
+                assert.strictEqual(err.status, 400);
+                assert.strictEqual(err.message, "Bad Request");
+                assert.strictEqual(err.statusMessage, "The Height value is not valid.");
 
                 // end of this test
                 doneIt();

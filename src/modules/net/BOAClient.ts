@@ -20,8 +20,9 @@ import { Request } from './Request';
 import { UnspentTxOutput } from './response/UnspentTxOutput';
 import { Validator } from './response/Validator';
 import { Transaction } from '../data/Transaction';
+import { NetworkError, NotFoundError, BadRequestError } from './error/ErrorTypes';
 
-import { AxiosResponse, AxiosError } from 'axios';
+import { AxiosResponse } from 'axios';
 import uri from 'urijs';
 
 /**
@@ -93,12 +94,12 @@ export class BOAClient
                 else
                 {
                     // It is not yet defined in Stoa.
-                    reject(new Error(response.statusText));
+                    reject(new NetworkError(response.status, response.statusText, response.data));
                 }
             })
             .catch((reason: any) =>
             {
-                reject(handleNetworkError(reason));
+                reject(this.handleNetworkError(reason));
             });
         });
     }
@@ -144,12 +145,12 @@ export class BOAClient
                 else
                 {
                     // It is not yet defined in Stoa.
-                    reject(new Error(response.statusText));
+                    reject(new NetworkError(response.status, response.statusText, response.data));
                 }
             })
             .catch((reason: any) =>
             {
-                reject(handleNetworkError(reason));
+                reject(this.handleNetworkError(reason));
             });
         });
     }
@@ -234,27 +235,21 @@ export class BOAClient
     {
         return new Promise<boolean>((resolve, reject) =>
         {
-            try
-            {
-                let url = uri(this.agora_url)
-                    .filename("transaction");
+            let url = uri(this.agora_url)
+                .filename("transaction");
 
-                Request.put(url.toString(), {tx: tx})
-                    .then((response: AxiosResponse) =>
-                    {
-                        if (response.status == 200)
-                            resolve(true);
-                        else
-                            reject(new Error(response.statusText));
-                    })
-                    .catch((reason: any) =>
-                    {
-                        reject(handleNetworkError(reason));
-                    });
-            } catch (err)
-            {
-                reject(err);
-            }
+            Request.put(url.toString(), {tx: tx})
+                .then((response: AxiosResponse) =>
+                {
+                    if (response.status == 200)
+                        resolve(true);
+                    else
+                        reject(new Error(response.statusText));
+                })
+                .catch((reason: any) =>
+                {
+                    reject(this.handleNetworkError(reason));
+                });
         });
     }
 
@@ -294,7 +289,7 @@ export class BOAClient
             })
             .catch((reason: any) =>
             {
-                reject(handleNetworkError(reason));
+                reject(this.handleNetworkError(reason));
             });
         });
     }
@@ -312,63 +307,55 @@ export class BOAClient
                 return BigInt(response.data);
             });
     }
+
+    /**
+     * @ignore
+     * It is a method that handles errors that occur during communication
+     * with a server for easy use.
+     * @param error This is why the error occurred
+     * @returns The instance of Error
+     */
+    private handleNetworkError (error: any): Error
+    {
+        if (error.response && error.response.status && error.response.statusText)
+        {
+            let statusMessage: string;
+            if (error.response.data !== undefined)
+            {
+                if (typeof error.response.data === "string")
+                    statusMessage = error.response.data;
+                else if ((typeof error.response.data === "object") && (error.response.data.statusMessage !== undefined))
+                    statusMessage = error.response.data.statusMessage;
+                else if ((typeof error.response.data === "object") && (error.response.data.errorMessage !== undefined))
+                    statusMessage = error.response.data.errorMessage;
+                else
+                    statusMessage = error.response.data.toString();
+            }
+            else
+                statusMessage = '';
+
+            switch (error.response.status)
+            {
+                case 400:
+                    return new BadRequestError(error.response.status, error.response.statusText, statusMessage);
+                case 404:
+                    return new NotFoundError(error.response.status, error.response.statusText, statusMessage);
+                default:
+                    return new NetworkError(error.response.status, error.response.statusText, statusMessage);
+            }
+        }
+        else
+        {
+            if (error.message !== undefined)
+                return new Error(error.message);
+            else
+                return new Error("An unknown error has occurred.");
+        }
+    }
 }
 
 export interface IsValidPreimageResponse
 {
     result: boolean;
     message: string;
-}
-
-/**
- * @ignore
- * Check if parameter `reason` is type `AxiosError`.
- * @param reason This is why the error occurred
- * @returns {boolean}
- */
-function isAxiosError (reason: any): reason is AxiosError
-{
-    return ((reason as AxiosError).isAxiosError);
-}
-
-/**
- * @ignore
- * Check if parameter `reason` is type `Error`.
- * @param reason This is why the error occurred
- * @returns {boolean}
- */
-function isError (reason: any): reason is Error
-{
-    return ((reason as Error).message != undefined);
-}
-
-/**
- * @ignore
- * It is a common function that handles errors that occur
- * during network communication.
- * @param reason This is why the error occurred
- * @returns The instance of Error
- */
-function handleNetworkError (reason: any): Error
-{
-    if (isAxiosError(reason))
-    {
-        let e = reason as AxiosError;
-        if (e.response != undefined)
-        {
-            let message = "";
-            if (e.response.statusText != undefined) message = e.response.statusText + ", ";
-            if (e.response.data != undefined) message += e.response.data;
-            return new Error(message);
-        }
-    }
-
-    if (isError(reason))
-    {
-        return new Error((reason as Error).message);
-    }
-    else
-    {
-        return new Error("An unknown error has occurred.");
-    }
 }
