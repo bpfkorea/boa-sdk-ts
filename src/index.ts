@@ -29,6 +29,7 @@ export { PreImageInfo } from './modules/data/PreImageInfo';
 export { Utils, Endian } from './modules/utils/Utils';
 export { SodiumHelper } from './modules/utils/SodiumHelper';
 export { checksum, validate } from './modules/utils/CRC16';
+export { TxPayloadFee } from './modules/utils/TxPayloadFee';
 
 export { JSONValidator } from './modules/utils/JSONValidator';
 
