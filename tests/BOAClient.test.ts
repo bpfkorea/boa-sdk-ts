@@ -15,6 +15,7 @@ import * as boasdk from '../lib';
 
 import * as assert from 'assert';
 import axios from 'axios';
+import bodyParser from 'body-parser';
 import express from 'express';
 import * as http from 'http';
 import randomBytes from 'randombytes';
@@ -163,17 +164,6 @@ export class TestStoa
                 res.status(204).send();
             });
 
-        this.app.put("/transaction",
-            (req : express.Request, res : express.Response) =>
-            {
-                if (req.body.tx === undefined)
-                {
-                    res.status(400).send("Missing 'tx' object in body");
-                    return;
-                }
-                res.status(200).send();
-            });
-
         // http://localhost/client_info
         this.app.get("/client_info",
             (req : express.Request, res : express.Response) =>
@@ -223,9 +213,90 @@ export class TestStoa
     }
 }
 
+/**
+ * This is an Agora node for testing.
+ * The test code allows the Agora node to be started and shut down.
+ */
+class TestAgora
+{
+    /**
+     * The bind port
+     */
+    private readonly port: number;
+
+    /**
+     * The application of express module
+     */
+    protected app: express.Application;
+
+    /**
+     * The Http server
+     */
+    protected server: http.Server | null = null;
+
+    /**
+     * Constructor
+     * @param port The bind port
+     */
+    constructor (port: number | string)
+    {
+        if (typeof port == "string")
+            this.port = parseInt(port, 10);
+        else
+            this.port = port;
+
+        this.app = express();
+    }
+
+    /**
+     * Start the web server
+     */
+    public start (): Promise<void>
+    {
+        // parse application/x-www-form-urlencoded
+        this.app.use(bodyParser.urlencoded({ extended: false }))
+        // parse application/json
+        this.app.use(bodyParser.json())
+
+        this.app.put("/transaction",
+            (req : express.Request, res : express.Response) =>
+            {
+                if (req.body.tx === undefined)
+                {
+                    res.status(400).send("Missing 'tx' object in body");
+                    return;
+                }
+                res.status(200).send();
+            });
+
+        this.app.set('port', this.port);
+
+        // Listen on provided this.port on this.address.
+        return new Promise<void>((resolve, reject) => {
+            // Create HTTP server.
+            this.server = http.createServer(this.app);
+            this.server.on('error', reject);
+            this.server.listen(this.port, () => {
+                resolve();
+            });
+        });
+    }
+
+    public stop (): Promise<void>
+    {
+        return new Promise<void>((resolve, reject) => {
+            if (this.server != null)
+                this.server.close((err?) => { err === undefined ? resolve() : reject(err); });
+            else
+                resolve();
+        });
+    }
+}
+
 describe ('BOA Client', () =>
 {
     let stoa_server: TestStoa;
+    let agora_server: TestAgora;
     let stoa_port: string = '5000';
     let agora_port: string = '2826';
 
@@ -240,9 +311,20 @@ describe ('BOA Client', () =>
         return stoa_server.start();
     });
 
+    before('Start TestAgora', () =>
+    {
+        agora_server = new TestAgora(agora_port);
+        return agora_server.start();
+    });
+
     after('Stop TestStoa', () =>
     {
         return stoa_server.stop();
+    });
+
+    after('Stop TestAgora', () =>
+    {
+        return agora_server.stop();
     });
 
     it ('Test requests and responses to data using `LocalNetworkTest`', (doneIt: () => void) =>
