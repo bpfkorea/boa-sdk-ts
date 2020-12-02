@@ -74,151 +74,188 @@ let sample_utxo =
  * This allows data transfer and reception testing with the server.
  * When this is executed, the local web server is run,
  * the test codes are performed, and the web server is shut down.
- * @param port Http server port for test
- * @param test This is the function has unittest code
  */
-function LocalNetworkTest(port: string, test: (onDone: () => void) => void)
+export class TestStoa
 {
-    let server: http.Server;
-    const test_app = express();
+    /**
+     * The bind port
+     */
+    private readonly port: number;
 
-    // http://localhost/validators
-    test_app.get("/validators",
-        (req: express.Request , res: express.Response) =>
+    /**
+     * The application of express module
+     */
+    protected app: express.Application;
+
+    /**
+     * The Http server
+     */
+    protected server: http.Server | null = null;
+
+    /**
+     * Constructor
+     * @param port The bind port
+     */
+    constructor (port: number | string)
     {
-        let height: number = Number(req.query.height);
+        if (typeof port == "string")
+            this.port = parseInt(port, 10);
+        else
+            this.port = port;
 
-        if (!Number.isNaN(height) && (!Number.isInteger(height) || height < 0))
-        {
-            res.status(400).send("The Height value is not valid.");
-            return;
-        }
+        this.app = express();
+    }
 
-        let enrolled_height: number = 0;
-        if (Number.isNaN(height)) height = enrolled_height;
-
-        sample_validators.forEach((elem: any) =>
-        {
-            elem.preimage.distance = height - enrolled_height;
-        });
-
-        res.status(200).send(JSON.stringify(sample_validators));
-    });
-
-    // http://localhost/validator
-    test_app.get("/validator/:address",
-        (req : express.Request , res : express.Response) =>
+    /**
+     * Start the web server
+     */
+    public start (): Promise<void>
     {
-        let height: number = Number(req.query.height);
-        let address: string = String(req.params.address);
-
-        if (!Number.isNaN(height) && (!Number.isInteger(height) || height < 0))
-        {
-            res.status(400).send("The Height value is not valid.");
-            return;
-        }
-
-        let enrolled_height: number = 0;
-        if (Number.isNaN(height)) height = enrolled_height;
-
-        let done = sample_validators.some((elem: any) =>
-        {
-            if (elem.address == address)
+        // http://localhost/validators
+        this.app.get("/validators",
+            (req: express.Request , res: express.Response) =>
             {
-                elem.preimage.distance = height - enrolled_height;
-                res.status(200).send(JSON.stringify([elem]));
-                return true;
-            }
+                let height: number = Number(req.query.height);
+
+                if (!Number.isNaN(height) && (!Number.isInteger(height) || height < 0))
+                {
+                    res.status(400).send("The Height value is not valid.");
+                    return;
+                }
+
+                let enrolled_height: number = 0;
+                if (Number.isNaN(height)) height = enrolled_height;
+
+                for (let elem of sample_validators)
+                {
+                    elem.preimage.distance = height - enrolled_height;
+                }
+
+                res.status(200).send(JSON.stringify(sample_validators));
+            });
+
+        // http://localhost/validator
+        this.app.get("/validator/:address",
+            (req : express.Request , res : express.Response) =>
+            {
+                let height: number = Number(req.query.height);
+                let address: string = String(req.params.address);
+
+                if (!Number.isNaN(height) && (!Number.isInteger(height) || height < 0))
+                {
+                    res.status(400).send("The Height value is not valid.");
+                    return;
+                }
+
+                let enrolled_height: number = 0;
+                if (Number.isNaN(height)) height = enrolled_height;
+
+                for (let elem of sample_validators)
+                {
+                    if (elem.address == address)
+                    {
+                        elem.preimage.distance = height - enrolled_height;
+                        res.status(200).send(JSON.stringify([elem]));
+                        return;
+                    }
+                }
+
+                res.status(204).send();
+            });
+
+        this.app.put("/transaction",
+            (req : express.Request, res : express.Response) =>
+            {
+                if (req.body.tx === undefined)
+                {
+                    res.status(400).send("Missing 'tx' object in body");
+                    return;
+                }
+                res.status(200).send();
+            });
+
+        // http://localhost/client_info
+        this.app.get("/client_info",
+            (req : express.Request, res : express.Response) =>
+            {
+                res.status(200).send({
+                    "X-Client-Name": req.header("X-Client-Name"),
+                    "X-Client-Version": req.header("X-Client-Version"),
+                });
+            });
+
+        // http://localhost/utxo
+        this.app.get("/utxo/:address",
+            (req : express.Request , res : express.Response) =>
+            {
+                let address: boasdk.PublicKey = new boasdk.PublicKey(req.params.address);
+
+                if (sample_utxo_address == address.toString())
+                {
+                    res.status(200).send(JSON.stringify(sample_utxo));
+                    return;
+                }
+
+                res.status(400).send();
+            });
+
+        this.app.set('port', this.port);
+
+        // Listen on provided this.port on this.address.
+        return new Promise<void>((resolve, reject) => {
+            // Create HTTP server.
+            this.server = http.createServer(this.app);
+            this.server.on('error', reject);
+            this.server.listen(this.port, () => {
+                resolve();
+            });
         });
+    }
 
-        if (!done) res.status(204).send();
-    });
-
-    // http://localhost/utxo
-    test_app.get("/utxo/:address",
-        (req : express.Request , res : express.Response) =>
+    public stop (): Promise<void>
     {
-        let address: boasdk.PublicKey = new boasdk.PublicKey(req.params.address);
-
-        if (sample_utxo_address == address.toString())
-        {
-            res.status(200).send(JSON.stringify(sample_utxo));
-            return;
-        }
-
-        res.status(400).send();
-    });
-
-    // http://localhost/client_info
-    test_app.get("/client_info",
-        (req : express.Request, res : express.Response) =>
-    {
-        res.status(200).send({
-            "X-Client-Name": req.header("X-Client-Name"),
-            "X-Client-Version": req.header("X-Client-Version"),
+        return new Promise<void>((resolve, reject) => {
+            if (this.server != null)
+                this.server.close((err?) => { err === undefined ? resolve() : reject(err); });
+            else
+                resolve();
         });
-    });
-
-    // http://localhost/stop
-    test_app.get("/stop",
-        (req: express.Request, res: express.Response) =>
-    {
-        res.send("The test server is stopped.");
-        server.close();
-    });
-
-    // Start to listen
-    server = test_app.listen(port, () =>
-    {
-        // Run test function, the server shuts down when callback is executed.
-        test(async () =>
-        {
-            let uri = URI("http://localhost/stop");
-            uri.port(port);
-            const client = axios.create();
-            await client.get(uri.toString());
-        });
-    });
+    }
 }
 
 describe ('BOA Client', () =>
 {
-    let port: string = '5000';
+    let stoa_server: TestStoa;
+    let stoa_port: string = '5000';
     let agora_port: string = '2826';
-
-    let doneServer: () => void;
-
-    before('Start Server', (doneIt: () => void) =>
-    {
-        LocalNetworkTest (port, (done: () => void) =>
-        {
-            doneServer = done;
-            doneIt();
-        });
-    });
 
     before('Wait for the package libsodium to finish loading', () =>
     {
         return boasdk.SodiumHelper.init();
     });
 
-    after('Stop Server', (doneIt: () => void) =>
+    before('Start TestStoa', () =>
     {
-        doneServer();
-        setTimeout(doneIt, 100);
+        stoa_server = new TestStoa(stoa_port);
+        return stoa_server.start();
+    });
+
+    after('Stop TestStoa', () =>
+    {
+        return stoa_server.stop();
     });
 
     it ('Test requests and responses to data using `LocalNetworkTest`', (doneIt: () => void) =>
     {
         // Now we use axios, but in the future we will implement sdk, and test it.
         const client = axios.create();
-        let uri = URI("http://localhost")
-            .port(port)
+        let stoa_uri = URI("http://localhost")
+            .port(stoa_port)
             .directory("validator")
             .filename("GBJABNUCDJCIL5YJQMB5OZ7VCFPKYLMTUXM2ZKQJACT7PXL7EVOMEKNZ")
             .setSearch("height", "10");
 
-        client.get (uri.toString())
+        client.get (stoa_uri.toString())
         .then((response) =>
         {
             assert.strictEqual(response.data.length, 1);
@@ -237,11 +274,11 @@ describe ('BOA Client', () =>
     it ('Test a function of the BOA Client - `getAllValidators`', (doneIt: () => void) =>
     {
         // Set URL
-        let uri = URI("http://localhost").port(port);
+        let stoa_uri = URI("http://localhost").port(stoa_port);
         let agora_uri = URI("http://localhost").port(agora_port);
 
         // Create BOA Client
-        let boa_client = new boasdk.BOAClient(uri.toString(), agora_uri.toString());
+        let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
 
         // Query
         boa_client.getAllValidators(10)
@@ -268,11 +305,11 @@ describe ('BOA Client', () =>
     it ('Test a function of the BOA Client - `getAllValidator`', (doneIt: () => void) =>
     {
         // Set URL
-        let uri = URI("http://localhost").port(port);
+        let stoa_uri = URI("http://localhost").port(stoa_port);
         let agora_uri = URI("http://localhost").port(agora_port);
 
         // Create BOA Client
-        let boa_client = new boasdk.BOAClient(uri.toString(), agora_uri.toString());
+        let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
 
         // Query
         boa_client.getValidator("GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", 10)
@@ -299,11 +336,11 @@ describe ('BOA Client', () =>
     it ('Test a function of the BOA Client - `getUtxo`', (doneIt: () => void) =>
     {
         // Set URL
-        let uri = URI("http://localhost").port(port);
+        let stoa_uri = URI("http://localhost").port(stoa_port);
         let agora_uri = URI("http://localhost").port(agora_port);
 
         // Create BOA Client
-        let boa_client = new boasdk.BOAClient(uri.toString(), agora_uri.toString());
+        let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
 
         // Query
         let public_key = new boasdk.PublicKey("GDML22LKP3N6S37CYIBFRANXVY7KMJMINH5VFADGDFLGIWNOR3YU7T6I");
@@ -330,11 +367,11 @@ describe ('BOA Client', () =>
     it ('Test a function of the BOA Client using async, await - `getAllValidators`', async () =>
     {
         // Set URL
-        let uri = URI("http://localhost").port(port);
+        let stoa_uri = URI("http://localhost").port(stoa_port);
         let agora_uri = URI("http://localhost").port(agora_port);
 
         // Create BOA Client
-        let boa_client = new boasdk.BOAClient(uri.toString(), agora_uri.toString());
+        let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
 
         // Query
         try
@@ -355,11 +392,11 @@ describe ('BOA Client', () =>
     it ('Test a function of the BOA Client using async, await - `getAllValidator`', async () =>
     {
         // Set URL
-        let uri = URI("http://localhost").port(port);
+        let stoa_uri = URI("http://localhost").port(stoa_port);
         let agora_uri = URI("http://localhost").port(agora_port);
 
         // Create BOA Client
-        let boa_client = new boasdk.BOAClient(uri.toString(), agora_uri.toString());
+        let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
 
         // Query
         try
@@ -381,11 +418,11 @@ describe ('BOA Client', () =>
     it ('When none of the data exists as a result of the inquiry.', (doneIt: () => void) =>
     {
         // Set URL
-        let uri = URI("http://localhost").port(port);
+        let stoa_uri = URI("http://localhost").port(stoa_port);
         let agora_uri = URI("http://localhost").port(agora_port);
 
         // Create BOA Client
-        let boa_client = new boasdk.BOAClient(uri.toString(), agora_uri.toString());
+        let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
 
         // Query
         boa_client.getValidator("GX3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", 10)
@@ -410,11 +447,11 @@ describe ('BOA Client', () =>
     it ('When an error occurs with the wrong input parameter (height is -10).', (doneIt: () => void) =>
     {
         // Set URL
-        let uri = URI("http://localhost").port(port);
+        let stoa_uri = URI("http://localhost").port(stoa_port);
         let agora_uri = URI("http://localhost").port(agora_port);
 
         // Create BOA Client
-        let boa_client = new boasdk.BOAClient(uri.toString(), agora_uri.toString());
+        let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
 
         // Query
         boa_client.getValidator("GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", -10)
@@ -439,11 +476,11 @@ describe ('BOA Client', () =>
     it ('Can not connect to the server by entering the wrong URL', (doneIt: () => void) =>
     {
         // Set URL
-        let uri = URI("http://localhost").port("6000");
+        let stoa_uri = URI("http://localhost").port("6000");
         let agora_uri = URI("http://localhost").port(agora_port);
 
         // Create BOA Client
-        let boa_client = new boasdk.BOAClient(uri.toString(), agora_uri.toString());
+        let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
 
         // Query
         boa_client.getValidator("GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", 10)
@@ -471,11 +508,11 @@ describe ('BOA Client', () =>
     it ('test for validity of pre-image', (doneIt: () => void) =>
     {
         // Set URL
-        let uri = URI("http://localhost").port(port);
+        let stoa_uri = URI("http://localhost").port(stoa_port);
         let agora_uri = URI("http://localhost").port(agora_port);
 
         // Create BOA Client
-        let boa_client = new boasdk.BOAClient(uri.toString(), agora_uri.toString());
+        let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
 
         let pre_images: boasdk.Hash[] = [];
         pre_images.push(boasdk.hash(randomBytes(boasdk.Hash.Width)));
@@ -527,11 +564,11 @@ describe ('BOA Client', () =>
     it ('test for getHeightAt', (doneIt: () => void) =>
     {
         // Set URL
-        let uri = URI("http://localhost").port(port);
+        let stoa_uri = URI("http://localhost").port(stoa_port);
         let agora_uri = URI("http://localhost").port(agora_port);
 
         // Create BOA Client
-        let boa_client = new boasdk.BOAClient(uri.toString(), agora_uri.toString());
+        let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
         let date = new Date(Date.UTC(2020, 3, 29, 0, 0, 0));
         boa_client.getHeightAt(date)
         .then((height: number) =>
@@ -593,11 +630,11 @@ describe ('BOA Client', () =>
     {
         const version = require("../package.json").version;
 
-        let uri = URI("http://localhost")
-            .port(port)
+        let stoa_uri = URI("http://localhost")
+            .port(stoa_port)
             .directory("client_info");
 
-        boasdk.Request.get (uri.toString())
+        boasdk.Request.get (stoa_uri.toString())
             .then((response: any) =>
             {
                 assert.strictEqual(response.data["X-Client-Name"], "boa-sdk-ts");
@@ -702,11 +739,11 @@ describe ('BOA Client', () =>
     it ('Test saving a vote data', async () =>
     {
         // Set URL
-        let uri = URI("http://localhost").port(port);
+        let stoa_uri = URI("http://localhost").port(stoa_port);
         let agora_uri = URI("http://localhost").port(agora_port);
 
         // Create BOA Client
-        let boa_client = new boasdk.BOAClient(uri.toString(), agora_uri.toString());
+        let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
 
         try
         {
