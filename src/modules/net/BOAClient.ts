@@ -16,7 +16,9 @@
 
 import { DataPayload } from '../data/DataPayload';
 import { Hash, hash, hashFull } from '../data/Hash';
+import { PublicKey } from '../data/KeyPair';
 import { Request } from './Request';
+import { UnspentTxOutput } from './response/UnspentTxOutput';
 import { Validator } from './response/Validator';
 import { Seed, Transaction, TxInput, TxOutput } from "../..";
 
@@ -270,6 +272,47 @@ export class BOAClient
             {
                 reject(err);
             }
+        });
+    }
+
+    /**
+     * Request UTXOs of public key
+     * @param address The address of UTXOs
+     * @returns Promise that resolves or
+     * rejects with response from the Stoa
+     */
+    public getUTXOs (address: PublicKey): Promise<Array<UnspentTxOutput>>
+    {
+        return new Promise<Array<UnspentTxOutput>>((resolve, reject) =>
+        {
+            let url = uri(this.server_url)
+            .directory("utxo")
+            .filename(address.toString());
+
+            Request.get(url.toString())
+            .then((response: AxiosResponse) =>
+            {
+                let utxos: Array<UnspentTxOutput> = new Array<UnspentTxOutput>();
+                if (response.status == 200)
+                {
+                    response.data.forEach((elem: any) =>
+                    {
+                        let utxo = new UnspentTxOutput();
+                        utxo.fromJSON(elem);
+                        utxos.push(utxo);
+                    });
+                    resolve(utxos);
+                }
+                else
+                {
+                    // It is not yet defined in Stoa.
+                    reject(new Error(response.statusText));
+                }
+            })
+            .catch((reason: any) =>
+            {
+                reject(handleNetworkError(reason));
+            });
         });
     }
 }

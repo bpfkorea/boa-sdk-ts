@@ -57,6 +57,20 @@ let sample_validators =
 ];
 
 /**
+ * Sample UTXOs
+ */
+let sample_utxo_address = "GDML22LKP3N6S37CYIBFRANXVY7KMJMINH5VFADGDFLGIWNOR3YU7T6I";
+let sample_utxo =
+[
+    {
+      utxo: "0x2e04f355ab7fbc0b495f8267e362b6914b756a60e8c4627142b6a6bd85a20b5986838aaa7fc40f18b7c9601ccdba06cada0d7cb28e098b08605e21324e4bbd1d",
+      type: 0,
+      unlock_height: "2",
+      amount: "24400000000000"
+    }
+];
+
+/**
  * This allows data transfer and reception testing with the server.
  * When this is executed, the local web server is run,
  * the test codes are performed, and the web server is shut down.
@@ -118,6 +132,21 @@ function LocalNetworkTest(port: string, test: (onDone: () => void) => void)
         });
 
         if (!done) res.status(204).send();
+    });
+
+    // http://localhost/utxo
+    test_app.get("/utxo/:address",
+        (req : express.Request , res : express.Response) =>
+    {
+        let address: boasdk.PublicKey = new boasdk.PublicKey(req.params.address);
+
+        if (sample_utxo_address == address.toString())
+        {
+            res.status(200).send(JSON.stringify(sample_utxo));
+            return;
+        }
+
+        res.status(400).send();
     });
 
     // http://localhost/client_info
@@ -263,6 +292,37 @@ describe ('BOA Client', () =>
             assert.ok(!err, err);
 
             // end of this test
+            doneIt();
+        });
+    });
+
+    it ('Test a function of the BOA Client - `getUtxo`', (doneIt: () => void) =>
+    {
+        // Set URL
+        let uri = URI("http://localhost").port(port);
+        let agora_uri = URI("http://localhost").port(agora_port);
+
+        // Create BOA Client
+        let boa_client = new boasdk.BOAClient(uri.toString(), agora_uri.toString());
+
+        // Query
+        let public_key = new boasdk.PublicKey("GDML22LKP3N6S37CYIBFRANXVY7KMJMINH5VFADGDFLGIWNOR3YU7T6I");
+        boa_client.getUTXOs(public_key)
+        .then((utxos: Array<boasdk.UnspentTxOutput>) =>
+        {
+            // On Success
+            assert.strictEqual(utxos.length, 1);
+            assert.deepStrictEqual(utxos[0].utxo, new boasdk.Hash("0x2e04f355ab7fbc0b495f8267e362b6914b756a60e8c4627142b6a6bd85a20b5986838aaa7fc40f18b7c9601ccdba06cada0d7cb28e098b08605e21324e4bbd1d"));
+            assert.strictEqual(utxos[0].type, boasdk.TxType.Payment);
+            assert.strictEqual(utxos[0].unlock_height, BigInt(2));
+            assert.strictEqual(utxos[0].amount, BigInt(24400000000000));
+
+            doneIt();
+        })
+        .catch((err: any) =>
+        {
+            // On Error
+            assert.ok(!err, err);
             doneIt();
         });
     });

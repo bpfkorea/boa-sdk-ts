@@ -32,6 +32,7 @@ export { checksum, validate } from './modules/utils/CRC16';
 
 export { JSONValidator } from './modules/utils/JSONValidator';
 
+export { UnspentTxOutput } from './modules/net/response/UnspentTxOutput';
 export { Validator } from './modules/net/response/Validator';
 export { PreImage  } from './modules/net/response/PreImage';
 
