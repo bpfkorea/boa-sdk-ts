@@ -298,6 +298,20 @@ export class BOAClient
             });
         });
     }
+
+    /**
+     * Request an Stoa's current block height.
+     */
+    public getBlockHeight (): Promise<bigint>
+    {
+        let url = uri(this.server_url)
+            .filename("/block_height");
+
+        return Request.get(url.toString())
+            .then((response: AxiosResponse) => {
+                return BigInt(response.data);
+            });
+    }
 }
 
 export interface IsValidPreimageResponse

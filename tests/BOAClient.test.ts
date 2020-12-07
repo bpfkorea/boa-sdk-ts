@@ -189,6 +189,14 @@ export class TestStoa
                 res.status(400).send();
             });
 
+
+        // http://localhost/block_height
+        this.app.get("/block_height",
+            (req : express.Request , res : express.Response) =>
+            {
+                res.status(200).send("10");
+            });
+
         this.app.set('port', this.port);
 
         // Listen on provided this.port on this.address.
@@ -444,6 +452,31 @@ describe ('BOA Client', () =>
             assert.ok(!err, err);
             doneIt();
         });
+    });
+
+    it ('Test a function of the BOA Client - `getBlockHeight`', (doneIt: () => void) =>
+    {
+        // Set URL
+        let uri = URI("http://localhost").port(stoa_port);
+        let agora_uri = URI("http://localhost").port(agora_port);
+
+        // Create BOA Client
+        let boa_client = new boasdk.BOAClient(uri.toString(), agora_uri.toString());
+
+        // Query
+        boa_client.getBlockHeight()
+            .then((height: bigint) =>
+            {
+                // On Success
+                assert.strictEqual(height, BigInt(10));
+                doneIt();
+            })
+            .catch((err: any) =>
+            {
+                // On Error
+                assert.ok(!err, err);
+                doneIt();
+            });
     });
 
     it ('Test a function of the BOA Client using async, await - `getAllValidators`', async () =>
