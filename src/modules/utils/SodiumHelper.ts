@@ -16,7 +16,7 @@
 /**
  * @ignore
  */
-const _sodium_module = require('libsodium-wrappers-sumo');
+import _sodium_module = require('libsodium-wrappers-sumo-m');
 
 /**
  * The Class to help package libsodium-wrappers-sumo
