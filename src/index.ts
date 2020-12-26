@@ -26,6 +26,8 @@ export { TxOutput } from './modules/data/TxOutput';
 export { DataPayload } from './modules/data/DataPayload';
 export { PreImageInfo } from './modules/data/PreImageInfo';
 
+export { Scalar, Point } from './modules/common/ECC';
+
 export { Utils, Endian } from './modules/utils/Utils';
 export { SodiumHelper } from './modules/utils/SodiumHelper';
 export { checksum, validate } from './modules/utils/CRC16';

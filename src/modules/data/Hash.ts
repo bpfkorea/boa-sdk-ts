@@ -192,6 +192,32 @@ export function hashPart (record: any, buffer: SmartBuffer)
         return;
     }
 
+    if (typeof record === "string")
+    {
+        buffer.writeBuffer(Buffer.from(record));
+        return;
+    }
+
+    if (typeof record === "number")
+    {
+        buffer.writeUInt32LE(record);
+        return;
+    }
+
+    if (typeof record === "bigint")
+    {
+        const buf = Buffer.allocUnsafe(8);
+        Utils.writeBigIntLE(buf, record);
+        buffer.writeBuffer(buf);
+        return;
+    }
+
+    if (record instanceof Buffer)
+    {
+        buffer.writeBuffer(record);
+        return;
+    }
+
     if (Array.isArray(record))
     {
         for (let elem of record)
