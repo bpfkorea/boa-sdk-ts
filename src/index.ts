@@ -27,6 +27,7 @@ export { DataPayload } from './modules/data/DataPayload';
 export { PreImageInfo } from './modules/data/PreImageInfo';
 
 export { Scalar, Point } from './modules/common/ECC';
+export { Sig, Pair, Schnorr, Message } from './modules/common/Schnorr';
 
 export { Utils, Endian } from './modules/utils/Utils';
 export { SodiumHelper } from './modules/utils/SodiumHelper';
