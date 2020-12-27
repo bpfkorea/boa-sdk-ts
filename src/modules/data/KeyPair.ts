@@ -13,6 +13,7 @@
 
 *******************************************************************************/
 
+import { Scalar } from "../common/ECC";
 import { Signature } from './Signature';
 import { SodiumHelper } from '../utils/SodiumHelper';
 import { checksum, validate } from "../utils/CRC16";
@@ -80,6 +81,16 @@ export class KeyPair
             new PublicKey(Buffer.from(kp.publicKey)),
             new SecretKey(Buffer.from(kp.privateKey)),
             seed);
+    }
+
+    /**
+     * Convert SecretKey(Ed25519) to Scalar(X25519)
+     * @param secret SecretKey in Ed25519 format
+     * @returns Converted X25519 secret key
+     */
+    public static secretKeyToCurveScalar (secret: SecretKey): Scalar
+    {
+        return new Scalar(Buffer.from(SodiumHelper.sodium.crypto_sign_ed25519_sk_to_curve25519(secret.data)));
     }
 }
 

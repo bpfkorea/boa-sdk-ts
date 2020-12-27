@@ -251,4 +251,19 @@ describe ('Test of Schnorr', () =>
                 sdk.Point.scalarMul(c, K_2)
             ));
     });
+
+    it ('Test signing using Stellar seed', () =>
+    {
+        let seed = `SCT4KKJNYLTQO4TVDPVJQZEONTVVW66YLRWAINWI3FZDY7U4JS4JJEI4`;
+        let kp: sdk.KeyPair = sdk.KeyPair.fromSeed(new sdk.Seed(seed));
+        let scalar: sdk.Scalar = sdk.KeyPair.secretKeyToCurveScalar(kp.secret)
+        assert.deepStrictEqual(scalar, new sdk.Scalar("0x44245dd23bd7453bf5fe07ec27a29be3dfe8e18d35bba28c7b222b71a4802db8"));
+
+        let pair: sdk.Pair = sdk.Pair.fromScalar(scalar);
+        assert.deepStrictEqual(pair.V.data, kp.address.data);
+        let signature: sdk.Signature = sdk.Schnorr.signPair<string>(pair, "BOSAGORA");
+
+        let point: sdk.Point = new sdk.Point(kp.address.data);
+        assert.ok(sdk.Schnorr.verify<string>(point, signature, "BOSAGORA"));
+    });
 });
