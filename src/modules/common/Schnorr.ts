@@ -37,9 +37,9 @@
 
 *******************************************************************************/
 
-import { hashFull, hashPart } from '../data/Hash';
+import { hashFull, hashPart } from './Hash';
 import { Scalar, Point} from "./ECC";
-import { Signature } from '../data/Signature';
+import { Signature } from './Signature';
 
 import { SmartBuffer} from "smart-buffer";
 

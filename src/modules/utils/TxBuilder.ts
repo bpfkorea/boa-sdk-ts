@@ -11,10 +11,13 @@
 
 *******************************************************************************/
 
-import {
-    DataPayload, Hash, hashFull, KeyPair, SecretKey, PublicKey,
-    Signature, Transaction, TxInput, TxOutput, TxType,
-} from '../..';
+import { Hash, hashFull } from "../common/Hash";
+import { KeyPair, SecretKey, PublicKey } from "../common/KeyPair";
+import { Signature } from "../common/Signature";
+import { DataPayload } from '../data/DataPayload';
+import { Transaction, TxType } from '../data/Transaction';
+import { TxInput } from '../data/TxInput';
+import { TxOutput } from '../data/TxOutput';
 
 /**
  * Class for building a transaction

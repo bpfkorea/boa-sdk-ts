@@ -14,12 +14,12 @@
 
 *******************************************************************************/
 
-import { Hash, hash } from '../data/Hash';
-import { PublicKey } from '../data/KeyPair';
+import { Hash, hash } from '../common/Hash';
+import { PublicKey } from '../common/KeyPair';
 import { Request } from './Request';
 import { UnspentTxOutput } from './response/UnspentTxOutput';
 import { Validator } from './response/Validator';
-import { Transaction } from "../data/Transaction";
+import { Transaction } from '../data/Transaction';
 
 import { AxiosResponse, AxiosError } from 'axios';
 import uri from 'urijs';

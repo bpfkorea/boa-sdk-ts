@@ -11,7 +11,7 @@
 
 *******************************************************************************/
 
-import { Hash }  from '../../data/Hash';
+import { Hash }  from '../../common/Hash';
 import { Utils } from '../../utils/Utils';
 
 /**

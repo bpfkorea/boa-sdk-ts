@@ -18,7 +18,7 @@
 
 import { UnspentTxOutput } from "../net/response/UnspentTxOutput";
 import { TxType } from "../data/Transaction";
-import { Hash } from "../data/Hash";
+import { Hash } from "../common/Hash";
 
 /**
  * Class for managing UTXO

@@ -13,7 +13,7 @@
 
 *******************************************************************************/
 
-import { Scalar } from "../common/ECC";
+import { Scalar } from "./ECC";
 import { Signature } from './Signature';
 import { SodiumHelper } from '../utils/SodiumHelper';
 import { checksum, validate } from "../utils/CRC16";

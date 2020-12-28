@@ -17,7 +17,7 @@
 
 import { Endian, Utils } from '../utils/Utils';
 import { SodiumHelper } from '../utils/SodiumHelper';
-import { Hash } from '../data/Hash';
+import { Hash } from './Hash';
 
 import assert from 'assert';
 import { SmartBuffer } from 'smart-buffer';

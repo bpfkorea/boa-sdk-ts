@@ -14,9 +14,9 @@
 import { BitField } from './BitField';
 import { Enrollment } from './Enrollment';
 import { JSONValidator } from '../utils/JSONValidator';
-import { Hash } from "./Hash";
-import { Height } from './Height';
-import { Signature } from './Signature';
+import { Hash } from "../common/Hash";
+import { Height } from '../common/Height';
+import { Signature } from '../common/Signature';
 
 import { SmartBuffer } from 'smart-buffer';
 

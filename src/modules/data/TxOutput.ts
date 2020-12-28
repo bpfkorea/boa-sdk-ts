@@ -12,7 +12,7 @@
 *******************************************************************************/
 
 import { JSONValidator } from '../utils/JSONValidator';
-import { PublicKey } from './KeyPair';
+import { PublicKey } from '../common/KeyPair';
 import { Utils } from "../utils/Utils";
 
 import { SmartBuffer } from 'smart-buffer';

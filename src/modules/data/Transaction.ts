@@ -12,8 +12,8 @@
 *******************************************************************************/
 
 import { DataPayload } from './DataPayload';
-import { hashFull } from "./Hash";
-import { KeyPair, Seed } from "./KeyPair";
+import { hashFull } from "../common/Hash";
+import { KeyPair, Seed } from "../common/KeyPair";
 import { JSONValidator } from '../utils/JSONValidator';
 import { TxInput } from './TxInput';
 import { TxOutput } from './TxOutput';
