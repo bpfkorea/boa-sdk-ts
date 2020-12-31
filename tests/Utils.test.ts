@@ -66,3 +66,28 @@ describe ('Test for JSON serialization', () =>
         assert.strictEqual(json, '{"value":"45"}');
     });
 });
+
+describe ('Test of Utils', () =>
+{
+    it('Test of Utils.compareBuffer', () =>
+    {
+        let a = Buffer.from([6, 3, 2, 1]);
+        let b = Buffer.from([5, 4, 2, 1]);
+        let c = Buffer.from(b);
+
+        assert.strictEqual(boasdk.Utils.writeToString(a), "0x01020306");
+        assert.strictEqual(boasdk.Utils.writeToString(b), "0x01020405");
+        assert.strictEqual(boasdk.Utils.writeToString(c), "0x01020405");
+
+        assert.ok(Buffer.compare(a, b) > 0);
+        assert.ok(boasdk.Utils.compareBuffer(a, b) < 0);
+        assert.ok(boasdk.Utils.compareBuffer(b, a) > 0);
+        assert.ok(boasdk.Utils.compareBuffer(b, c) == 0);
+        assert.ok(boasdk.Utils.compareBuffer(c, b) == 0);
+
+        let x = Buffer.from([   5, 4, 3, 4, 1]);
+        let y = Buffer.from([6, 5, 4, 3, 4, 1]);
+        assert.ok(boasdk.Utils.compareBuffer(x, y) < 0);
+        assert.ok(boasdk.Utils.compareBuffer(y, x) > 0);
+    });
+});

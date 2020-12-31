@@ -152,6 +152,25 @@ export class Utils
             });
     }
 
+    /**
+     * Compare the two Buffers, This compares the two buffers from the back to the front.
+     * If a is greater than b, it returns a positive number,
+     * if a is less than b, it returns a negative number,
+     * and if a and b are equal, it returns zero.
+     */
+    public static compareBuffer (a: Buffer, b: Buffer): number
+    {
+        let min_length = Math.min(a.length,  b.length)
+        for (let idx = 0; idx < min_length; idx++)
+        {
+            let a_value = a[a.length - 1 - idx];
+            let b_value = b[b.length - 1 - idx];
+            if (a_value !== b_value)
+                return (a_value - b_value)
+        }
+
+        return a.length - b.length;
+    }
 }
 
 declare global {
