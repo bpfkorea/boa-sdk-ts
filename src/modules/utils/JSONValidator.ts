@@ -92,7 +92,16 @@ export class JSONValidator
                             "type": "object"
                         },
                         "type": "array"
-                    }
+                    },
+                    "random_seed": {
+                        "type": "string"
+                    },
+                    "missing_validators": {
+                        "items": {
+                            "type": "number"
+                        },
+                        "type": "array"
+                    },
                 },
                 "additionalProperties": false,
                 "required": [

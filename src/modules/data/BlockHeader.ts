@@ -58,6 +58,16 @@ export class BlockHeader
     public enrollments: Enrollment[];
 
     /**
+     * Hash of random seed of the preimages for this this height
+     */
+    public random_seed: Hash;
+
+    /**
+     * List of indices to the validator UTXO set which have not revealed the preimage
+     */
+    public missing_validators: Array<number>;
+
+    /**
      * Constructor
      * @param prev_block  The Hash of the previous block in the chain of blocks
      * @param height      The block height
@@ -65,9 +75,11 @@ export class BlockHeader
      * @param validators  The bit-field containing the validators' key indices which signed the block
      * @param signature   The Schnorr multisig of all validators which signed this block
      * @param enrollments The enrolled validators
+     * @param random_seed Hash of random seed of the preimages for this this height
+     * @param missing_validators List of indices to the validator UTXO set which have not revealed the preimage
      */
     constructor (prev_block: Hash, height: Height, merkle_root: Hash,
-        validators: BitField, signature: Signature, enrollments: Enrollment[])
+        validators: BitField, signature: Signature, enrollments: Enrollment[], random_seed: Hash, missing_validators: Array<number>)
     {
         this.prev_block = prev_block;
         this.height = height;
@@ -75,6 +87,8 @@ export class BlockHeader
         this.validators = validators;
         this.signature = signature;
         this.enrollments = enrollments;
+        this.random_seed = random_seed;
+        this.missing_validators = missing_validators;
     }
 
     /**
@@ -100,6 +114,8 @@ export class BlockHeader
             BitField.reviver("", value.validators),
             new Signature(value.signature),
             value.enrollments.map((elem: any) => Enrollment.reviver("", elem)),
+            new Hash(value.random_seed),
+            value.missing_validators.map((elem: number) => elem),
         );
     }
 
@@ -114,5 +130,8 @@ export class BlockHeader
         this.merkle_root.computeHash(buffer);
         for (let elem of this.enrollments)
             elem.computeHash(buffer);
+        this.random_seed.computeHash(buffer);
+        for (let elem of this.missing_validators)
+            buffer.writeUInt32LE(elem);
     }
 }
