@@ -66,64 +66,87 @@ let sample_utxo =
         {
             "utxo": "0x6d85d61fd9d7bb663349ca028bd023ad1bd8fa65c68b4b1363a9c7406b4d663fd73fd386195ba2389100b5cd5fc06b440f053fe513f739844e2d72df302e8ad0",
             "type": 1,
+            "height": "0",
+            "time": 1577836800000,
             "unlock_height": "1",
             "amount": "200000"
         },
         {
             "utxo": "0x3451d94322524e3923fd26f0597fb8a9cdbf3a9427c38ed1ca61104796d39c5b9b5ea33d576f17c2dc17bebc5d84a0559de8c8c521dfe725d4c352255fc71e85",
             "type": 0,
+            "height": "1",
+            "time": 1577837400000,
             "unlock_height": "2",
             "amount": "200000"
         },
         {
             "utxo": "0xfca92fe76629311c6208a49e89cb26f5260777278cd8b272e7bb3021adf429957fd6844eb3b8ff64a1f6074126163fd636877fa92a1f4329c5116873161fbaf8",
             "type": 0,
+            "height": "2",
+            "time": 1577838000000,
             "unlock_height": "3",
             "amount": "200000"
         },
         {
             "utxo": "0x7e1958dbe6839d8520d65013bbc85d36d47a9f64cf608cc66c0d816f0b45f5c8a85a8990725ffbb1ab13c3c65b45fdc06f4745d455e00e1068c4c5c0b661d685",
             "type": 0,
+            "height": "3",
+            "time": 1577838600000,
             "unlock_height": "4",
             "amount": "200000"
         },
         {
             "utxo": "0xd44608de8a5015b04f933098fd7f67f84ffbf00c678836d38c661ab6dc1f149606bdc96bad149375e16dc5722b077b14c0a4afdbe6d30932f783650f435bcb92",
             "type": 0,
+            "height": "4",
+            "time": 1577839200000,
             "unlock_height": "5",
+            "unlock_time": 1577836800000,
             "amount": "200000"
         },
         {
             "utxo": "0xc3780f9907a97c20a2955945544e7732a60702c32d81e016bdf1ea172b7b7fb96e9a4164176663a146615307aaadfbbad77e615a7c792a89191e85471120d314",
             "type": 0,
+            "height": "5",
+            "time": 1577839800000,
             "unlock_height": "6",
             "amount": "200000"
         },
         {
             "utxo": "0x451a5b7929615121e0f2be759222853ea3acb45c94430a03de29a47db7c70e04eb4fce5b4a0c5af01d98331732546fede05fdfaf6ab429b3960aad6a20bbf0eb",
             "type": 0,
+            "height": "6",
+            "time": 1577840400000,
             "unlock_height": "7",
             "amount": "200000"
         },
         {
             "utxo": "0xff05579da497ac482ccd2be1851e9ff1196314e97228a1fca62e6292b5e7ea91cadca41d6afe2d57048bf594c6dd73ab1f93e96717c73c128807905e7175beeb",
             "type": 0,
+            "height": "7",
+            "time": 1577841000000,
             "unlock_height": "8",
+            "unlock_time": 1577836800000,
             "amount": "200000"
         },
         {
             "utxo": "0xcfa89b7a9cd48fddc16cdcbbf0ffa7a9fd14d89c96bc3da0151db0bd7e453fe031f8a1e4d575a299c16942d9c96fbafff2497332bc48532aa7e0acf6122be0e2",
             "type": 0,
+            "height": "8",
+            "time": 1577841600000,
             "unlock_height": "9",
             "amount": "200000"
         },
         {
             "utxo": "0x37e17420b4bfd8be693475fbbe8b53bb80904dd3e45f3080c0d0b912b004324a27693559d884b943830f6a21b05c69061f453e8b9f03d56f3b6fd5b0c6fc2f8b",
             "type": 0,
+            "height": "9",
+            "time": 1577842200000,
             "unlock_height": "10",
             "amount": "100000"
         }
     ];
+
 /**
  * This allows data transfer and reception testing with the server.
  * When this is executed, the local web server is run,

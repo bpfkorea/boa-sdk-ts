@@ -41,13 +41,26 @@ export class UnspentTxOutput
     amount: bigint;
 
     /**
+     * Block height on created
+     */
+    height: bigint;
+
+    /**
+     * Block time on created
+     */
+    time: number;
+
+    /**
      * Constructor
      * @param utxo          The hash of the UTXO key
      * @param type          The type of the transaction
      * @param unlock_height The height of the block to be unlock
      * @param amount        The amount value of this utxo, in 1/10^7
+     * @param height        The height of the block on created
+     * @param time          The time of the block on created
      */
-    constructor (utxo?: Hash, type?: TxType, unlock_height?: bigint, amount?: bigint)
+    constructor (utxo?: Hash, type?: TxType, unlock_height?: bigint, amount?: bigint,
+                 height?: bigint, time?: number)
     {
         if (utxo != undefined)
             this.utxo = new Hash(utxo.data);
@@ -68,6 +81,16 @@ export class UnspentTxOutput
             this.amount = amount;
         else
             this.amount = BigInt(0);
+
+        if (height != undefined)
+            this.height = height;
+        else
+            this.height = BigInt(0);
+
+        if (time != undefined)
+            this.time = time;
+        else
+            this.time = 0;
     }
 
     /**
@@ -82,6 +105,8 @@ export class UnspentTxOutput
         this.type = data.type;
         this.unlock_height = BigInt(data.unlock_height);
         this.amount = BigInt(data.amount);
+        this.height = BigInt(data.height);
+        this.time = data.time;
     }
 }
 
@@ -95,4 +120,6 @@ export interface JSONUnspentTxOutput
     type: number;
     unlock_height: string;
     amount: string;
+    height: string;
+    time: number;
 }
