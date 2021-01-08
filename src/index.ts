@@ -29,12 +29,14 @@ export { TxOutput } from './modules/data/TxOutput';
 export { DataPayload } from './modules/data/DataPayload';
 export { PreImageInfo } from './modules/data/PreImageInfo';
 
+export { LockType, Lock, Unlock } from './modules/script/Lock';
+
 export { Utils, Endian } from './modules/utils/Utils';
 export { SodiumHelper } from './modules/utils/SodiumHelper';
 export { checksum, validate } from './modules/utils/CRC16';
 export { TxPayloadFee } from './modules/utils/TxPayloadFee';
 export { UTXOManager } from './modules/utils/UTXOManager';
-export { TxBuilder } from './modules/utils/TxBuilder';
+export { TxBuilder, RawInput } from './modules/utils/TxBuilder';
 
 export { JSONValidator } from './modules/utils/JSONValidator';
 
