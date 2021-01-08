@@ -11,9 +11,12 @@
 
 *******************************************************************************/
 
-import { Hash, hashFull } from "../common/Hash";
+import { Hash } from "../common/Hash";
+import { Height } from "../common/Height";
 import { KeyPair, SecretKey, PublicKey } from "../common/KeyPair";
-import { Signature } from "../common/Signature";
+import { Scalar } from "../common/ECC";
+import { Pair, Schnorr } from "../common/Schnorr";
+import { Lock, Unlock } from "../script/Lock";
 import { DataPayload } from '../data/DataPayload';
 import { Transaction, TxType } from '../data/Transaction';
 import { TxInput } from '../data/TxInput';
@@ -85,22 +88,22 @@ export class TxBuilder
 
     /**
      * Adds information to create transaction output
-     * @param address The address of the destination.
+     * @param lock The public key or instance of Lock
      * @param amount  The amount to be sent. If this is not set,
      * all remaining amounts of registered utxo will be set.
      */
-    public addOutput (address: PublicKey, amount?: bigint): TxBuilder
+    public addOutput (lock: Lock | PublicKey, amount?: bigint): TxBuilder
     {
         if (amount === undefined)
             amount = this.amount;
 
         if (amount <= BigInt(0))
-            throw new Error(`[${address.toString()}] Positive amount expected, not ${amount.toString()}`);
+            throw new Error(`Positive amount expected, not ${amount.toString()}`);
 
         if (amount > this.amount)
-            throw new Error(`[${address.toString()}] Insufficient amount. ${amount.toString()}:${this.amount.toString()}`);
+            throw new Error(`Insufficient amount. ${amount.toString()}:${this.amount.toString()}`);
 
-        this.outputs.push(new TxOutput(amount, address));
+        this.outputs.push(new TxOutput(amount, lock));
 
         this.amount -= amount;
 
@@ -121,8 +124,16 @@ export class TxBuilder
     /**
      * Create and sign a transaction and return the created transactions.
      * @param type The type of Transaction
+     * @param lock_height The transaction-level height lock
+     * @param unlock_age The unlock age for each input in the transaction
+     * @param unlocker optional callback to generate the unlock script.
+     * If one is not provided then a LockType.Key unlock script
+     * is automatically generated.
      */
-    public sign (type: TxType = TxType.Payment) : Transaction
+    public sign (type: TxType = TxType.Payment,
+                 lock_height: Height = new Height(BigInt(0)),
+                 unlock_age: number = 0,
+                 unlocker?: (tx: Transaction, s: RawInput, idx: number) => Unlock) : Transaction
     {
         if (this.inputs.length == 0)
             throw (new Error("No input for transaction."));
@@ -136,19 +147,19 @@ export class TxBuilder
         if (this.amount > 0)
             this.addOutput(this.owner_keypair.address, this.amount);
 
-        let null_signature = new Signature(Buffer.alloc(Signature.Width));
         let tx = new Transaction(type,
-            this.inputs.map(n => new TxInput(n.utxo, null_signature)),
+            this.inputs.map(n => new TxInput(n.utxo, Unlock.Null, unlock_age)),
             this.outputs,
             (
                 (this.payload !== undefined)
                     ? this.payload
                     : new DataPayload(Buffer.alloc(0))
-            ));
+            ),
+            lock_height);
 
-        let tx_hash = hashFull(tx);
+        let _unlocker = (unlocker !== undefined) ? unlocker : this.keyUnlocker;
         tx.inputs.forEach((value, idx) => {
-            value.signature = this.inputs[idx].key.sign(tx_hash.data);
+            value.unlock = _unlocker(tx, this.inputs[idx], idx);
         });
 
         this.payload = undefined;
@@ -158,12 +169,28 @@ export class TxBuilder
 
         return tx;
     }
+
+    /**
+     * Uses a random nonce when signing (non-determenistic signature),
+     * and defaults to LockType.Key
+     * @param tx The instance of the Transaction to sign
+     * @param raw_input The instance of the SecretKey to sign
+     * @param idx
+     * @private
+     */
+    private keyUnlocker (tx: Transaction, raw_input: RawInput, idx: number): Unlock
+    {
+        let scalar: Scalar = KeyPair.secretKeyToCurveScalar(raw_input.key)
+        let pair: Pair = new Pair(scalar, scalar.toPoint());
+        let sig = Schnorr.signPair<Transaction>(pair, tx);
+        return Unlock.fromSignature(sig);
+    }
 }
 
 /**
  * The class with UTXO and a secret key to be spent it
  */
-class RawInput
+export class RawInput
 {
     /**
      * The hash of the UTXO to be spent
