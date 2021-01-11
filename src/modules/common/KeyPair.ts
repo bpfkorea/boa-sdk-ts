@@ -131,6 +131,29 @@ export class PublicKey
     }
 
     /**
+     * Verify the public key with a string for normal.
+     * @param address Representing the public key as a string
+     * @returns If the address passes the validation, it returns an empty string or a message.
+     */
+    public static validate (address: string): string
+    {
+        const decoded = Buffer.from(base32Decode(address));
+
+        if (decoded.length != 1 + SodiumHelper.sodium.crypto_sign_PUBLICKEYBYTES + 2)
+            return 'Decoded data size is not normal';
+
+        if (decoded[0] != VersionByte.AccountID)
+            return 'This is not a valid address type';
+
+        const body = decoded.slice(0, -2);
+        const checksum = decoded.slice(-2);
+        if (!validate(body, checksum))
+            return 'Checksum result do not match';
+
+        return '';
+    }
+
+    /**
      * Uses Stellar's representation instead of hex
      */
     public toString (): string

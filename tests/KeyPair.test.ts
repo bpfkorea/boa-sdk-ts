@@ -29,6 +29,20 @@ describe ('ED25519 Public Key', () =>
         let public_key = new boasdk.PublicKey(address);
         assert.strictEqual(public_key.toString(), address);
     });
+
+    it ('Test of PublicKey.validate()', () =>
+    {
+        assert.strictEqual(boasdk.PublicKey.validate("GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQF"), 'Decoded data size is not normal');
+        assert.strictEqual(boasdk.PublicKey.validate("SDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW"), 'This is not a valid address type');
+        assert.strictEqual(boasdk.PublicKey.validate("GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW"), '');
+
+        const decoded = Buffer.from(base32Decode("GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW"));
+        const body = decoded.slice(0, -2);
+        const checksum = decoded.slice(-2);
+        let invalid_decoded = Buffer.concat([body, checksum.map(n => ~n)]);
+        let invalid_address = base32Encode(invalid_decoded);
+        assert.strictEqual(boasdk.PublicKey.validate(invalid_address), 'Checksum result do not match');
+    });
 });
 
 describe ('ED25519 Secret Key Seed', () =>
