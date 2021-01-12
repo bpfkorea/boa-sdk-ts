@@ -110,7 +110,9 @@ export class JSONValidator
                     "merkle_root",
                     "validators",
                     "signature",
-                    "enrollments"
+                    "enrollments",
+                    "random_seed",
+                    "missing_validators"
                 ]
             }
         ],
