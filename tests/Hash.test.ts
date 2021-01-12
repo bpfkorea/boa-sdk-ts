@@ -128,7 +128,7 @@ describe('Hash', () =>
             [ ],
             new boasdk.Hash(Buffer.alloc(boasdk.Hash.Width)),
             [ ],
-            BigInt(0)
+            0
         );
         assert.strictEqual(boasdk.hashFull(header).toString(),
             "0x110c703c994b2a4ef39819acbf4ea4df99f71b0a99a7cf873e4be60087baff2" +
@@ -155,7 +155,7 @@ describe('Hash', () =>
             [ ],
             new boasdk.Hash(Buffer.alloc(boasdk.Hash.Width)),
             [ 1, 2, 3, 256, 257, 258, 70000, 80000, 90000 ],
-            BigInt(0)
+            0
         );
         assert.strictEqual(boasdk.hashFull(header).toString(),
             "0x8a69d32e2734c627f9b9c5eedf3d5515a2313ddc92314682ef5fe52951e91ea" +

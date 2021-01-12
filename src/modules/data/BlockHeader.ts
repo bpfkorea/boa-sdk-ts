@@ -71,7 +71,7 @@ export class BlockHeader
     /**
      * Block unix timestamp
      */
-    public timestamp: bigint;
+    public timestamp: number;
 
     /**
      * Constructor
@@ -86,7 +86,7 @@ export class BlockHeader
      * @param timestamp Block unix timestamp
      */
     constructor (prev_block: Hash, height: Height, merkle_root: Hash,
-        validators: BitField, signature: Signature, enrollments: Enrollment[], random_seed: Hash, missing_validators: Array<number>, timestamp: bigint)
+        validators: BitField, signature: Signature, enrollments: Enrollment[], random_seed: Hash, missing_validators: Array<number>, timestamp: number)
     {
         this.prev_block = prev_block;
         this.height = height;
@@ -124,7 +124,7 @@ export class BlockHeader
             value.enrollments.map((elem: any) => Enrollment.reviver("", elem)),
             new Hash(value.random_seed),
             value.missing_validators.map((elem: number) => elem),
-            BigInt(value.timestamp)
+            value.timestamp
         );
     }
 
@@ -143,7 +143,7 @@ export class BlockHeader
         for (let elem of this.missing_validators)
             buffer.writeUInt32LE(elem);
         const buf = Buffer.allocUnsafe(8);
-        Utils.writeBigIntLE(buf, this.timestamp);
+        Utils.writeBigIntLE(buf, BigInt(this.timestamp));
         buffer.writeBuffer(buf);
     }
 }
