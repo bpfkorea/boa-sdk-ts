@@ -17,6 +17,7 @@ import { JSONValidator } from '../utils/JSONValidator';
 import { Hash } from "../common/Hash";
 import { Height } from '../common/Height';
 import { Signature } from '../common/Signature';
+import { Utils } from "../utils/Utils";
 
 import { SmartBuffer } from 'smart-buffer';
 
@@ -68,6 +69,11 @@ export class BlockHeader
     public missing_validators: Array<number>;
 
     /**
+     * Block unix timestamp
+     */
+    public timestamp: bigint;
+
+    /**
      * Constructor
      * @param prev_block  The Hash of the previous block in the chain of blocks
      * @param height      The block height
@@ -77,9 +83,10 @@ export class BlockHeader
      * @param enrollments The enrolled validators
      * @param random_seed Hash of random seed of the preimages for this this height
      * @param missing_validators List of indices to the validator UTXO set which have not revealed the preimage
+     * @param timestamp Block unix timestamp
      */
     constructor (prev_block: Hash, height: Height, merkle_root: Hash,
-        validators: BitField, signature: Signature, enrollments: Enrollment[], random_seed: Hash, missing_validators: Array<number>)
+        validators: BitField, signature: Signature, enrollments: Enrollment[], random_seed: Hash, missing_validators: Array<number>, timestamp: bigint)
     {
         this.prev_block = prev_block;
         this.height = height;
@@ -89,6 +96,7 @@ export class BlockHeader
         this.enrollments = enrollments;
         this.random_seed = random_seed;
         this.missing_validators = missing_validators;
+        this.timestamp = timestamp;
     }
 
     /**
@@ -116,6 +124,7 @@ export class BlockHeader
             value.enrollments.map((elem: any) => Enrollment.reviver("", elem)),
             new Hash(value.random_seed),
             value.missing_validators.map((elem: number) => elem),
+            BigInt(value.timestamp)
         );
     }
 
@@ -133,5 +142,8 @@ export class BlockHeader
         this.random_seed.computeHash(buffer);
         for (let elem of this.missing_validators)
             buffer.writeUInt32LE(elem);
+        const buf = Buffer.allocUnsafe(8);
+        Utils.writeBigIntLE(buf, this.timestamp);
+        buffer.writeBuffer(buf);
     }
 }

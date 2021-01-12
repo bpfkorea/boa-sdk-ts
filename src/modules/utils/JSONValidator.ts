@@ -102,6 +102,9 @@ export class JSONValidator
                         },
                         "type": "array"
                     },
+                    "timestamp": {
+                        "type": "number"
+                    }
                 },
                 "additionalProperties": false,
                 "required": [
@@ -112,7 +115,8 @@ export class JSONValidator
                     "signature",
                     "enrollments",
                     "random_seed",
-                    "missing_validators"
+                    "missing_validators",
+                    "timestamp"
                 ]
             }
         ],

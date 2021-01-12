@@ -127,11 +127,12 @@ describe('Hash', () =>
             new boasdk.Signature(Buffer.alloc(boasdk.Signature.Width)),
             [ ],
             new boasdk.Hash(Buffer.alloc(boasdk.Hash.Width)),
-            [ ]
+            [ ],
+            BigInt(0)
         );
         assert.strictEqual(boasdk.hashFull(header).toString(),
-            "0xc49255b83a9e125377df3de687abd883dd57df98aa75bd5f26a7e7de89d78e2" +
-            "922fa426524aef0b7651467051736fb4c98e1d4737b2c91cfa0b866a3fae8bec8");
+            "0x110c703c994b2a4ef39819acbf4ea4df99f71b0a99a7cf873e4be60087baff2" +
+            "0370eeedc3121e67379ccedea082f2c263d9aa576d3806cdcf42b260e4ee20423");
     });
 
     it ('Test for hash value of BlockHeader with missing validators', () =>
@@ -153,10 +154,11 @@ describe('Hash', () =>
             new boasdk.Signature(Buffer.alloc(boasdk.Signature.Width)),
             [ ],
             new boasdk.Hash(Buffer.alloc(boasdk.Hash.Width)),
-            [ 1, 2, 3, 256, 257, 258, 70000, 80000, 90000 ]
+            [ 1, 2, 3, 256, 257, 258, 70000, 80000, 90000 ],
+            BigInt(0)
         );
         assert.strictEqual(boasdk.hashFull(header).toString(),
-            "0x9aa7eee8d482bc225c4550b56c602811e1c4288a1e34b038188b75ecc98ea27" +
-            "2c2f98f3d36db67db06977135d2d2fcd412fe246a5df3e4812325a3b7665eea18");
+            "0x8a69d32e2734c627f9b9c5eedf3d5515a2313ddc92314682ef5fe52951e91ea" +
+            "a4c56803fbccc482cf09107ee251210ba6e78b08f370f403b7a812ea1a8e09ace");
     });
 });
