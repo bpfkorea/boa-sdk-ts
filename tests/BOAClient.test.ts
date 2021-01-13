@@ -367,29 +367,35 @@ describe('BOA Client', () => {
     let stoa_port: string = '5000';
     let agora_port: string = '2826';
 
-    before('Wait for the package libsodium to finish loading', () => {
-        return boasdk.SodiumHelper.init();
+    before('Wait for the package libsodium to finish loading', async () =>
+    {
+        await boasdk.SodiumHelper.init();
     });
 
-    before('Start TestStoa', () => {
+    before('Start TestStoa', async () =>
+    {
         stoa_server = new TestStoa(stoa_port);
-        return stoa_server.start();
+        await stoa_server.start();
     });
 
-    before('Start TestAgora', () => {
+    before('Start TestAgora', async () =>
+    {
         agora_server = new TestAgora(agora_port);
-        return agora_server.start();
+        await agora_server.start();
     });
 
-    after('Stop TestStoa', () => {
-        return stoa_server.stop();
+    after('Stop TestStoa', async () =>
+    {
+        await stoa_server.stop();
     });
 
-    after('Stop TestAgora', () => {
-        return agora_server.stop();
+    after('Stop TestAgora', async () =>
+    {
+        await agora_server.stop();
     });
 
-    it('Test requests and responses to data using `LocalNetworkTest`', (doneIt: () => void) => {
+    it ('Test requests and responses to data using `LocalNetworkTest`', async () =>
+    {
         // Now we use axios, but in the future we will implement sdk, and test it.
         const client = axios.create();
         let stoa_uri = URI("http://localhost")
@@ -398,21 +404,14 @@ describe('BOA Client', () => {
             .filename("GBJABNUCDJCIL5YJQMB5OZ7VCFPKYLMTUXM2ZKQJACT7PXL7EVOMEKNZ")
             .setSearch("height", "10");
 
-        client.get(stoa_uri.toString())
-            .then((response) => {
-                assert.strictEqual(response.data.length, 1);
-                assert.strictEqual(response.data[0].address, "GBJABNUCDJCIL5YJQMB5OZ7VCFPKYLMTUXM2ZKQJACT7PXL7EVOMEKNZ");
-                assert.strictEqual(response.data[0].preimage.distance, 10);
-
-                doneIt();
-            })
-            .catch((error: any) => {
-                assert.ok(!error, error);
-                doneIt();
-            });
+        let response = await client.get (stoa_uri.toString());
+        assert.strictEqual(response.data.length, 1);
+        assert.strictEqual(response.data[0].address, "GBJABNUCDJCIL5YJQMB5OZ7VCFPKYLMTUXM2ZKQJACT7PXL7EVOMEKNZ");
+        assert.strictEqual(response.data[0].preimage.distance, 10);
     });
 
-    it('Test a function of the BOA Client - `getAllValidators`', (doneIt: () => void) => {
+    it ('Test a function of the BOA Client - `getAllValidators`', async () =>
+    {
         // Set URL
         let stoa_uri = URI("http://localhost").port(stoa_port);
         let agora_uri = URI("http://localhost").port(agora_port);
@@ -421,26 +420,14 @@ describe('BOA Client', () => {
         let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
 
         // Query
-        boa_client.getAllValidators(10)
-            .then((validators: Array<boasdk.Validator>) => {
-                // On Success
-                assert.strictEqual(validators.length, 3);
-                assert.strictEqual(validators[0].address, "GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN");
-                assert.strictEqual(validators[0].preimage.distance, 10);
-
-                // end of this test
-                doneIt();
-            })
-            .catch((err: any) => {
-                // On Error
-                assert.ok(!err, err);
-
-                // end of this test
-                doneIt();
-            });
+        let validators = await boa_client.getAllValidators(10);
+        assert.strictEqual(validators.length, 3);
+        assert.strictEqual(validators[0].address, "GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN");
+        assert.strictEqual(validators[0].preimage.distance, 10);
     });
 
-    it('Test a function of the BOA Client - `getAllValidator`', (doneIt: () => void) => {
+    it ('Test a function of the BOA Client - `getAllValidator`', async () =>
+    {
         // Set URL
         let stoa_uri = URI("http://localhost").port(stoa_port);
         let agora_uri = URI("http://localhost").port(agora_port);
@@ -449,26 +436,14 @@ describe('BOA Client', () => {
         let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
 
         // Query
-        boa_client.getValidator("GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", 10)
-            .then((validators: Array<boasdk.Validator>) => {
-                // On Success
-                assert.strictEqual(validators.length, 1);
-                assert.strictEqual(validators[0].address, "GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN");
-                assert.strictEqual(validators[0].preimage.distance, 10);
-
-                // end of this test
-                doneIt();
-            })
-            .catch((err: any) => {
-                // On Error
-                assert.ok(!err, err);
-
-                // end of this test
-                doneIt();
-            });
+        let validators = await boa_client.getValidator("GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", 10);
+        assert.strictEqual(validators.length, 1);
+        assert.strictEqual(validators[0].address, "GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN");
+        assert.strictEqual(validators[0].preimage.distance, 10);
     });
 
-    it('Test a function of the BOA Client - `getUtxo`', (doneIt: () => void) => {
+    it ('Test a function of the BOA Client - `getUtxo`', async () =>
+    {
         // Set URL
         let stoa_uri = URI("http://localhost").port(stoa_port);
         let agora_uri = URI("http://localhost").port(agora_port);
@@ -478,25 +453,16 @@ describe('BOA Client', () => {
 
         // Query
         let public_key = new boasdk.PublicKey("GDML22LKP3N6S37CYIBFRANXVY7KMJMINH5VFADGDFLGIWNOR3YU7T6I");
-        boa_client.getUTXOs(public_key)
-            .then((utxos: Array<boasdk.UnspentTxOutput>) => {
-                // On Success
-                assert.strictEqual(utxos.length, sample_utxo.length);
-                assert.deepStrictEqual(utxos[0].utxo, new boasdk.Hash(sample_utxo[0].utxo));
-                assert.strictEqual(utxos[0].type, sample_utxo[0].type);
-                assert.strictEqual(utxos[0].unlock_height, BigInt(sample_utxo[0].unlock_height));
-                assert.strictEqual(utxos[0].amount, BigInt(sample_utxo[0].amount));
-
-                doneIt();
-            })
-            .catch((err: any) => {
-                // On Error
-                assert.ok(!err, err);
-                doneIt();
-            });
+        let utxos = await boa_client.getUTXOs(public_key);
+        assert.strictEqual(utxos.length, sample_utxo.length);
+        assert.deepStrictEqual(utxos[0].utxo, new boasdk.Hash(sample_utxo[0].utxo));
+        assert.strictEqual(utxos[0].type, sample_utxo[0].type);
+        assert.strictEqual(utxos[0].unlock_height, BigInt(sample_utxo[0].unlock_height));
+        assert.strictEqual(utxos[0].amount, BigInt(sample_utxo[0].amount));
     });
 
-    it('Test a function of the BOA Client - `getBlockHeight`', (doneIt: () => void) => {
+    it ('Test a function of the BOA Client - `getBlockHeight`', async () =>
+    {
         // Set URL
         let uri = URI("http://localhost").port(stoa_port);
         let agora_uri = URI("http://localhost").port(agora_port);
@@ -505,17 +471,8 @@ describe('BOA Client', () => {
         let boa_client = new boasdk.BOAClient(uri.toString(), agora_uri.toString());
 
         // Query
-        boa_client.getBlockHeight()
-            .then((height: bigint) => {
-                // On Success
-                assert.strictEqual(height, BigInt(10));
-                doneIt();
-            })
-            .catch((err: any) => {
-                // On Error
-                assert.ok(!err, err);
-                doneIt();
-            });
+        let height = await boa_client.getBlockHeight();
+        assert.strictEqual(height, BigInt(10));
     });
 
     it('Test a function of the BOA Client using async, await - `getAllValidators`', async () => {
@@ -527,17 +484,10 @@ describe('BOA Client', () => {
         let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
 
         // Query
-        try {
-            let validators = await boa_client.getAllValidators(10);
-            // On Success
-            assert.strictEqual(validators.length, 3);
-            assert.strictEqual(validators[0].address, "GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN");
-            assert.strictEqual(validators[0].preimage.distance, 10);
-        }
-        catch (err) {
-            // On Error
-            assert.ok(!err, err);
-        }
+        let validators = await boa_client.getAllValidators(10);
+        assert.strictEqual(validators.length, 3);
+        assert.strictEqual(validators[0].address, "GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN");
+        assert.strictEqual(validators[0].preimage.distance, 10);
     });
 
     it('Test a function of the BOA Client using async, await - `getAllValidator`', async () => {
@@ -549,21 +499,14 @@ describe('BOA Client', () => {
         let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
 
         // Query
-        try {
-            let validators = await boa_client.getValidator("GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", 10);
-
-            // On Success
-            assert.strictEqual(validators.length, 1);
-            assert.strictEqual(validators[0].address, "GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN");
-            assert.strictEqual(validators[0].preimage.distance, 10);
-        }
-        catch (err) {
-            // On Error
-            assert.ok(!err, err);
-        }
+        let validators = await boa_client.getValidator("GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", 10);
+        assert.strictEqual(validators.length, 1);
+        assert.strictEqual(validators[0].address, "GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN");
+        assert.strictEqual(validators[0].preimage.distance, 10);
     });
 
-    it('When none of the data exists as a result of the inquiry.', (doneIt: () => void) => {
+    it ('When none of the data exists as a result of the inquiry.', async () =>
+    {
         // Set URL
         let stoa_uri = URI("http://localhost").port(stoa_port);
         let agora_uri = URI("http://localhost").port(agora_port);
@@ -572,24 +515,12 @@ describe('BOA Client', () => {
         let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
 
         // Query
-        boa_client.getValidator("GX3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", 10)
-            .then((validators: Array<boasdk.Validator>) => {
-                // On Success
-                assert.strictEqual(validators.length, 0);
-
-                // end of this test
-                doneIt();
-            })
-            .catch((err: any) => {
-                // On Error
-                assert.fail(err);
-
-                // end of this test
-                doneIt();
-            });
+        let validators = await boa_client.getValidator("GX3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", 10);
+        assert.strictEqual(validators.length, 0);
     });
 
-    it('When an error occurs with the wrong input parameter (height is -10).', (doneIt: () => void) => {
+    it ('When an error occurs with the wrong input parameter (height is -10).', async () =>
+    {
         // Set URL
         let stoa_uri = URI("http://localhost").port(stoa_port);
         let agora_uri = URI("http://localhost").port(agora_port);
@@ -597,28 +528,17 @@ describe('BOA Client', () => {
         // Create BOA Client
         let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
 
-        // Query
-        boa_client.getValidator("GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", -10)
-            .then((validators: Array<boasdk.Validator>) => {
-                // On Success
-                assert.ok(false, "A different case occurred than expected.");
-
-                // end of this test
-                doneIt();
-            })
-            .catch((err: boasdk.NetworkError) =>
+        await assert.rejects(
+            boa_client.getValidator("GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", -10),
             {
-                // On Error
-                assert.strictEqual(err.status, 400);
-                assert.strictEqual(err.message, "Bad Request");
-                assert.strictEqual(err.statusMessage, "The Height value is not valid.");
-
-                // end of this test
-                doneIt();
+                status: 400,
+                message: "Bad Request",
+                statusMessage: "The Height value is not valid."
             });
     });
 
-    it('Can not connect to the server by entering the wrong URL', (doneIt: () => void) => {
+    it ('Can not connect to the server by entering the wrong URL', async () =>
+    {
         // Set URL
         let stoa_uri = URI("http://localhost").port("6000");
         let agora_uri = URI("http://localhost").port(agora_port);
@@ -626,21 +546,10 @@ describe('BOA Client', () => {
         // Create BOA Client
         let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
 
-        // Query
-        boa_client.getValidator("GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", 10)
-            .then((validators: Array<boasdk.Validator>) => {
-                // On Success
-                assert.ok(false, "A different case occurred than expected.");
-
-                // end of this test
-                doneIt();
-            })
-            .catch((err: any) => {
-                // On Error
-                assert.strictEqual(err.message, "connect ECONNREFUSED 127.0.0.1:6000");
-
-                // end of this test
-                doneIt();
+        await assert.rejects(
+            boa_client.getValidator("GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", 10),
+            {
+                message: "connect ECONNREFUSED 127.0.0.1:6000"
             });
     });
 
@@ -701,7 +610,8 @@ describe('BOA Client', () => {
         doneIt();
     });
 
-    it('test for getHeightAt', (doneIt: () => void) => {
+    it ('test for getHeightAt', async () =>
+    {
         // Set URL
         let stoa_uri = URI("http://localhost").port(stoa_port);
         let agora_uri = URI("http://localhost").port(agora_port);
@@ -709,69 +619,38 @@ describe('BOA Client', () => {
         // Create BOA Client
         let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
         let date = new Date(Date.UTC(2020, 3, 29, 0, 0, 0));
-        boa_client.getHeightAt(date)
-            .then((height: number) => {
-                assert.strictEqual(height, 17136);
-            })
-            .catch((err: any) => {
-                assert.ifError(err);
-            });
+        let height = await boa_client.getHeightAt(date);
+        assert.strictEqual(height, 17136);
 
         date = new Date(Date.UTC(2019, 3, 29, 0, 0, 0));
-        boa_client.getHeightAt(date)
-            .then(() => {
-                assert.fail("An error must occur with an invalid input value.");
-            })
-            .catch((err: any) => {
-                assert.ok(err);
-            });
+        await assert.rejects(
+            boa_client.getHeightAt(date),
+            new Error("Dates prior to the chain Genesis date (January 1, 2020) are not valid"));
 
         date = new Date(Date.UTC(2020, 0, 1, 0, 0, 0));
-        boa_client.getHeightAt(date)
-            .then((height: number) => {
-                assert.strictEqual(height, 0);
-            })
-            .catch((err: any) => {
-                assert.ifError(err);
-            });
+        height = await boa_client.getHeightAt(date);
+        assert.strictEqual(height, 0);
 
         date = new Date(Date.UTC(2020, 0, 1, 0, 9, 59));
-        boa_client.getHeightAt(date)
-            .then((height: number) => {
-                assert.strictEqual(height, 0);
-            })
-            .catch((err: any) => {
-                assert.ifError(err);
-            });
+        height = await boa_client.getHeightAt(date);
+        assert.strictEqual(height, 0);
 
         date = new Date(Date.UTC(2020, 0, 1, 0, 10, 0));
-        boa_client.getHeightAt(date)
-            .then((height: number) => {
-                assert.strictEqual(height, 1);
-            })
-            .catch((err: any) => {
-                assert.ifError(err);
-            });
-        doneIt();
+        height = await boa_client.getHeightAt(date)
+        assert.strictEqual(height, 1);
     });
 
-    it('Test client name and version', (doneIt: () => void) => {
+    it ('Test client name and version', async () =>
+    {
         const version = require("../package.json").version;
 
         let stoa_uri = URI("http://localhost")
             .port(stoa_port)
             .directory("client_info");
 
-        boasdk.Request.get(stoa_uri.toString())
-            .then((response: any) => {
-                assert.strictEqual(response.data["X-Client-Name"], "boa-sdk-ts");
-                assert.strictEqual(response.data["X-Client-Version"], version);
-                doneIt();
-            })
-            .catch((error: any) => {
-                assert.ok(!error, error);
-                doneIt();
-            });
+        let response = await boasdk.Request.get (stoa_uri.toString())
+        assert.strictEqual(response.data["X-Client-Name"], "boa-sdk-ts");
+        assert.strictEqual(response.data["X-Client-Version"], version);
     });
 
     it('Test creating a vote data', () => {
@@ -890,32 +769,25 @@ describe('BOA Client', () => {
         // Create BOA Client
         let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
 
-        try
-        {
-            let utxo = {
-                utxo: new boasdk.Hash("0x81a326afa790003c32517a2a2556613004e61" +
-                        "47edac28d576cf7bcc2daadf4bb60be1f644c229b775e789484" +
-                        "4ec66b2d70ddf407b8196b46bc1dfe42061c7497"),
-                amount : BigInt(100000000)
-            };
-            let vote_data = new boasdk.DataPayload("0x617461642065746f76");
-            let fee = boasdk.TxPayloadFee.getFee(vote_data.data.length);
+        let utxo = {
+            utxo: new boasdk.Hash("0x81a326afa790003c32517a2a2556613004e61" +
+                "47edac28d576cf7bcc2daadf4bb60be1f644c229b775e789484" +
+                "4ec66b2d70ddf407b8196b46bc1dfe42061c7497"),
+            amount : BigInt(100000000)
+        };
+        let vote_data = new boasdk.DataPayload("0x617461642065746f76");
+        let fee = boasdk.TxPayloadFee.getFee(vote_data.data.length);
 
-            let builder = new boasdk.TxBuilder(
-                boasdk.KeyPair.fromSeed(new boasdk.Seed("SDAKFNYEIAORZKKCYRILFQKLLOCNPL5SWJ3YY5NM3ZH6GJSZGXHZEPQS")));
-            let tx = builder
-                .addInput(utxo.utxo, utxo.amount)
-                .addOutput(new boasdk.PublicKey(boasdk.TxPayloadFee.CommonsBudgetAddress), fee)
-                .assignPayload(vote_data)
-                .sign(boasdk.TxType.Payment);
+        let builder = new boasdk.TxBuilder(
+            boasdk.KeyPair.fromSeed(new boasdk.Seed("SDAKFNYEIAORZKKCYRILFQKLLOCNPL5SWJ3YY5NM3ZH6GJSZGXHZEPQS")));
+        let tx = builder
+            .addInput(utxo.utxo, utxo.amount)
+            .addOutput(new boasdk.PublicKey(boasdk.TxPayloadFee.CommonsBudgetAddress), fee)
+            .assignPayload(vote_data)
+            .sign(boasdk.TxType.Payment);
 
-            let res = await boa_client.sendTransaction(tx);
-            assert.ok(res);
-        }
-        catch (err)
-        {
-            assert.fail(err);
-        }
+        let res = await boa_client.sendTransaction(tx);
+        assert.ok(res);
     });
 
     it ('Test saving a vote data with `UTXOManager`', async () =>
@@ -927,88 +799,79 @@ describe('BOA Client', () => {
         // Create BOA Client
         let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
 
-        try
-        {
-            let key_pair = boasdk.KeyPair.fromSeed(new boasdk.Seed("SBUC7CPSZVNHNNYO3SY7ZNBT3K3X6RWOC3NC4FVU4GOJXC3H5BUBC7YE"));
-            let block_height = await boa_client.getBlockHeight();
-            let utxos = await boa_client.getUTXOs(key_pair.address);
+        let key_pair = boasdk.KeyPair.fromSeed(new boasdk.Seed("SBUC7CPSZVNHNNYO3SY7ZNBT3K3X6RWOC3NC4FVU4GOJXC3H5BUBC7YE"));
+        let block_height = await boa_client.getBlockHeight();
+        let utxos = await boa_client.getUTXOs(key_pair.address);
 
-            let vote_data = new boasdk.DataPayload("0x617461642065746f76");
-            let fee = boasdk.TxPayloadFee.getFee(vote_data.data.length);
+        let vote_data = new boasdk.DataPayload("0x617461642065746f76");
+        let fee = boasdk.TxPayloadFee.getFee(vote_data.data.length);
 
-            let builder = new boasdk.TxBuilder(key_pair);
+        let builder = new boasdk.TxBuilder(key_pair);
 
-            // Create UTXOManager
-            let utxo_manager = new boasdk.UTXOManager(utxos);
-            // Get UTXO for the amount to need.
-            utxo_manager.getUTXO(fee, block_height)
-                .forEach((u:boasdk.UnspentTxOutput) => builder.addInput(u.utxo, u.amount));
+        // Create UTXOManager
+        let utxo_manager = new boasdk.UTXOManager(utxos);
+        // Get UTXO for the amount to need.
+        utxo_manager.getUTXO(fee, block_height)
+            .forEach((u:boasdk.UnspentTxOutput) => builder.addInput(u.utxo, u.amount));
 
-            let tx = builder
-                .addOutput(new boasdk.PublicKey(boasdk.TxPayloadFee.CommonsBudgetAddress), fee)
-                .assignPayload(vote_data)
-                .sign(boasdk.TxType.Payment);
-
-            let expected =
-                {
-                    "type": 0,
-                    "inputs": [
-                        {
-                            "utxo": "0x3451d94322524e3923fd26f0597fb8a9cdbf3a9427c38ed1ca61104796d39c5b9b5ea33d576f17c2dc17bebc5d84a0559de8c8c521dfe725d4c352255fc71e85",
-                            "unlock": {
-                                "bytes": [244,60,20,101,16,157,114,10,4,149,148,207,206,23,58,147,130,231,40,19,84,40,174,247,103,48,241,138,223,5,52,149,82,200,62,158,25,32,61,196,233,2,136,125,222,47,46,126,232,105,98,158,247,170,202,86,173,13,28,96,246,232,237,7]
-                            },
-                            "unlock_age": 0
+        let expected =
+            {
+                "type": 0,
+                "inputs": [
+                    {
+                        "utxo": "0x3451d94322524e3923fd26f0597fb8a9cdbf3a9427c38ed1ca61104796d39c5b9b5ea33d576f17c2dc17bebc5d84a0559de8c8c521dfe725d4c352255fc71e85",
+                        "unlock": {
+                            "bytes": [244,60,20,101,16,157,114,10,4,149,148,207,206,23,58,147,130,231,40,19,84,40,174,247,103,48,241,138,223,5,52,149,82,200,62,158,25,32,61,196,233,2,136,125,222,47,46,126,232,105,98,158,247,170,202,86,173,13,28,96,246,232,237,7]
                         },
-                        {
-                            "utxo": "0xfca92fe76629311c6208a49e89cb26f5260777278cd8b272e7bb3021adf429957fd6844eb3b8ff64a1f6074126163fd636877fa92a1f4329c5116873161fbaf8",
-                            "unlock": {
-                                "bytes": [168,159,5,118,72,86,31,81,92,17,74,118,227,54,56,111,20,11,222,145,225,168,108,35,19,125,128,231,61,72,185,119,58,146,14,82,138,70,118,250,212,197,117,186,241,79,191,94,166,108,78,4,222,92,60,30,104,25,181,88,172,32,29,12]
-                            },
-                            "unlock_age": 0
+                        "unlock_age": 0
+                    },
+                    {
+                        "utxo": "0xfca92fe76629311c6208a49e89cb26f5260777278cd8b272e7bb3021adf429957fd6844eb3b8ff64a1f6074126163fd636877fa92a1f4329c5116873161fbaf8",
+                        "unlock": {
+                            "bytes": [168,159,5,118,72,86,31,81,92,17,74,118,227,54,56,111,20,11,222,145,225,168,108,35,19,125,128,231,61,72,185,119,58,146,14,82,138,70,118,250,212,197,117,186,241,79,191,94,166,108,78,4,222,92,60,30,104,25,181,88,172,32,29,12]
                         },
-                        {
-                            "utxo": "0x7e1958dbe6839d8520d65013bbc85d36d47a9f64cf608cc66c0d816f0b45f5c8a85a8990725ffbb1ab13c3c65b45fdc06f4745d455e00e1068c4c5c0b661d685",
-                            "unlock": {
-                                "bytes": [99,127,60,119,205,196,250,130,47,158,223,97,50,96,146,230,111,188,194,230,188,16,10,157,69,255,55,165,209,70,7,53,242,191,86,80,174,179,186,117,216,234,79,102,71,146,69,88,87,3,31,86,41,99,179,49,36,153,125,45,226,251,244,13]
-                            },
-                            "unlock_age": 0
+                        "unlock_age": 0
+                    },
+                    {
+                        "utxo": "0x7e1958dbe6839d8520d65013bbc85d36d47a9f64cf608cc66c0d816f0b45f5c8a85a8990725ffbb1ab13c3c65b45fdc06f4745d455e00e1068c4c5c0b661d685",
+                        "unlock": {
+                            "bytes": [99,127,60,119,205,196,250,130,47,158,223,97,50,96,146,230,111,188,194,230,188,16,10,157,69,255,55,165,209,70,7,53,242,191,86,80,174,179,186,117,216,234,79,102,71,146,69,88,87,3,31,86,41,99,179,49,36,153,125,45,226,251,244,13]
+                        },
+                        "unlock_age": 0
+                    }
+                ],
+                "outputs": [
+                    {
+                        "value": "500000",
+                        "lock": {
+                            "type": 0,
+                            "bytes": [156,198,57,161,53,47,119,242,37,22,12,66,255,137,26,106,250,91,70,161,26,105,169,73,32,134,215,120,6,118,244,42]
                         }
-                    ],
-                    "outputs": [
-                        {
-                            "value": "500000",
-                            "lock": {
-                                "type": 0,
-                                "bytes": [156,198,57,161,53,47,119,242,37,22,12,66,255,137,26,106,250,91,70,161,26,105,169,73,32,134,215,120,6,118,244,42]
-                            }
-                        },
-                        {
-                            "value": "100000",
-                            "lock": {
-                                "type": 0,
-                                "bytes": [216,189,105,106,126,219,233,111,226,194,2,88,129,183,174,62,166,37,136,105,251,82,128,102,25,86,100,89,174,142,241,79]
-                            }
+                    },
+                    {
+                        "value": "100000",
+                        "lock": {
+                            "type": 0,
+                            "bytes": [216,189,105,106,126,219,233,111,226,194,2,88,129,183,174,62,166,37,136,105,251,82,128,102,25,86,100,89,174,142,241,79]
                         }
-                    ],
-                    "payload": "0x617461642065746f76",
-                    "lock_height": "0"
-                };
+                    }
+                ],
+                "payload": "0x617461642065746f76",
+                "lock_height": "0"
+            };
 
-            tx.inputs.forEach((value, idx) => {
-                expected.inputs[idx].unlock = value.unlock.toJSON();
-            });
+        let tx = builder
+            .addOutput(new boasdk.PublicKey(boasdk.TxPayloadFee.CommonsBudgetAddress), fee)
+            .assignPayload(vote_data)
+            .sign(boasdk.TxType.Payment);
 
-            assert.deepStrictEqual(
-                JSON.stringify(expected),
-                JSON.stringify(tx));
+        tx.inputs.forEach((value, idx) => {
+            expected.inputs[idx].unlock = value.unlock.toJSON();
+        });
 
-            let res = await boa_client.sendTransaction(tx);
-            assert.ok(res);
-        }
-        catch (err)
-        {
-            assert.fail(err);
-        }
+        assert.strictEqual(JSON.stringify(expected), JSON.stringify(tx));
+
+        let res = await boa_client.sendTransaction(tx);
+        assert.ok(res);
     });
 });
