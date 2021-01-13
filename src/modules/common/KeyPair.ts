@@ -241,6 +241,29 @@ export class Seed
     }
 
     /**
+     * Verify the seed with a string for normal.
+     * @param seed Representing the seed as a string
+     * @returns If the seed passes the validation, it returns an empty string or a message.
+     */
+    public static validate (seed: string): string
+    {
+        const decoded = Buffer.from(base32Decode(seed));
+
+        if (decoded.length != 1 + SodiumHelper.sodium.crypto_sign_SEEDBYTES + 2)
+            return 'Decoded data size is not normal';
+
+        if (decoded[0] != VersionByte.Seed)
+            return 'This is not a valid seed type';
+
+        const body = decoded.slice(0, -2);
+        const checksum = decoded.slice(-2);
+        if (!validate(body, checksum))
+            return 'Checksum result do not match';
+
+        return '';
+    }
+
+    /**
      * Returns a secret key seed as a string
      * @returns The secret key seed
      */

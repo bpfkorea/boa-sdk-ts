@@ -14,6 +14,7 @@
 import * as boasdk from '../lib';
 
 import * as assert from 'assert';
+import { base32Encode, base32Decode } from '@ctrl/ts-base32';
 
 describe ('ED25519 Public Key', () =>
 {
@@ -37,6 +38,20 @@ describe ('ED25519 Secret Key Seed', () =>
         let secret_seed = 'SBBUWIMSX5VL4KVFKY44GF6Q6R5LS2Z5B7CTAZBNCNPLS4UKFVDXC7TQ';
         let seed = new boasdk.Seed(secret_seed);
         assert.strictEqual(seed.toString(), secret_seed);
+    });
+
+    it ('Test of Seed.validate()', () =>
+    {
+        assert.strictEqual(boasdk.Seed.validate("SBBUWIMSX5VL4KVFKY44GF6Q6R5LS2Z5B7CTAZBNCNPLS4UKFVDXC7T"), 'Decoded data size is not normal');
+        assert.strictEqual(boasdk.Seed.validate("GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW"), 'This is not a valid seed type');
+        assert.strictEqual(boasdk.Seed.validate("SBBUWIMSX5VL4KVFKY44GF6Q6R5LS2Z5B7CTAZBNCNPLS4UKFVDXC7TQ"), '');
+
+        const decoded = Buffer.from(base32Decode("SBBUWIMSX5VL4KVFKY44GF6Q6R5LS2Z5B7CTAZBNCNPLS4UKFVDXC7TQ"));
+        const body = decoded.slice(0, -2);
+        const checksum = decoded.slice(-2);
+        let invalid_decoded = Buffer.concat([body, checksum.map(n => ~n)]);
+        let invalid_seed = base32Encode(invalid_decoded);
+        assert.strictEqual(boasdk.Seed.validate(invalid_seed), 'Checksum result do not match');
     });
 });
 
