@@ -45,4 +45,4 @@ export { PreImage  } from './modules/net/response/PreImage';
 export { BOAClient } from './modules/net/BOAClient';
 export { Request } from './modules/net/Request';
 
-export { NetworkError, NotFoundError, BadRequestError } from './modules/net/error/ErrorTypes';
+export { NetworkError, NotFoundError, BadRequestError, handleNetworkError } from './modules/net/error/ErrorTypes';

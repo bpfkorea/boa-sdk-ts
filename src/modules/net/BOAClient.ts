@@ -20,7 +20,7 @@ import { Request } from './Request';
 import { UnspentTxOutput } from './response/UnspentTxOutput';
 import { Validator } from './response/Validator';
 import { Transaction } from '../data/Transaction';
-import { NetworkError, NotFoundError, BadRequestError } from './error/ErrorTypes';
+import { handleNetworkError } from './error/ErrorTypes';
 
 import { AxiosResponse } from 'axios';
 import uri from 'urijs';
@@ -94,12 +94,12 @@ export class BOAClient
                 else
                 {
                     // It is not yet defined in Stoa.
-                    reject(new NetworkError(response.status, response.statusText, response.data));
+                    reject(handleNetworkError({response: response}));
                 }
             })
             .catch((reason: any) =>
             {
-                reject(this.handleNetworkError(reason));
+                reject(handleNetworkError(reason));
             });
         });
     }
@@ -145,12 +145,12 @@ export class BOAClient
                 else
                 {
                     // It is not yet defined in Stoa.
-                    reject(new NetworkError(response.status, response.statusText, response.data));
+                    reject(handleNetworkError({response: response}));
                 }
             })
             .catch((reason: any) =>
             {
-                reject(this.handleNetworkError(reason));
+                reject(handleNetworkError(reason));
             });
         });
     }
@@ -244,11 +244,11 @@ export class BOAClient
                     if (response.status == 200)
                         resolve(true);
                     else
-                        reject(new Error(response.statusText));
+                        reject(handleNetworkError({response: response}));
                 })
                 .catch((reason: any) =>
                 {
-                    reject(this.handleNetworkError(reason));
+                    reject(handleNetworkError(reason));
                 });
         });
     }
@@ -284,12 +284,12 @@ export class BOAClient
                 else
                 {
                     // It is not yet defined in Stoa.
-                    reject(new Error(response.statusText));
+                    reject(handleNetworkError({response: response}));
                 }
             })
             .catch((reason: any) =>
             {
-                reject(this.handleNetworkError(reason));
+                reject(handleNetworkError(reason));
             });
         });
     }
@@ -306,51 +306,6 @@ export class BOAClient
             .then((response: AxiosResponse) => {
                 return BigInt(response.data);
             });
-    }
-
-    /**
-     * @ignore
-     * It is a method that handles errors that occur during communication
-     * with a server for easy use.
-     * @param error This is why the error occurred
-     * @returns The instance of Error
-     */
-    private handleNetworkError (error: any): Error
-    {
-        if (error.response && error.response.status && error.response.statusText)
-        {
-            let statusMessage: string;
-            if (error.response.data !== undefined)
-            {
-                if (typeof error.response.data === "string")
-                    statusMessage = error.response.data;
-                else if ((typeof error.response.data === "object") && (error.response.data.statusMessage !== undefined))
-                    statusMessage = error.response.data.statusMessage;
-                else if ((typeof error.response.data === "object") && (error.response.data.errorMessage !== undefined))
-                    statusMessage = error.response.data.errorMessage;
-                else
-                    statusMessage = error.response.data.toString();
-            }
-            else
-                statusMessage = '';
-
-            switch (error.response.status)
-            {
-                case 400:
-                    return new BadRequestError(error.response.status, error.response.statusText, statusMessage);
-                case 404:
-                    return new NotFoundError(error.response.status, error.response.statusText, statusMessage);
-                default:
-                    return new NetworkError(error.response.status, error.response.statusText, statusMessage);
-            }
-        }
-        else
-        {
-            if (error.message !== undefined)
-                return new Error(error.message);
-            else
-                return new Error("An unknown error has occurred.");
-        }
     }
 }
 
