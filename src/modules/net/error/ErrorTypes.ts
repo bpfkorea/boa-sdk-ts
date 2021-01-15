@@ -82,3 +82,51 @@ export class BadRequestError extends NetworkError
         this.name = 'BadRequestError';
     }
 }
+
+/**
+ * It is a function that handles errors that occur during communication
+ * with a server for easy use.
+ * @param error This is why the error occurred
+ * @returns The instance of Error
+ */
+export function handleNetworkError (error: any): Error
+{
+    if (
+            (error.response !== undefined) &&
+            (error.response.status !== undefined) &&
+            (error.response.statusText !== undefined)
+    )
+    {
+        let statusMessage: string;
+        if (error.response.data !== undefined)
+        {
+            if (typeof error.response.data === "string")
+                statusMessage = error.response.data;
+            else if ((typeof error.response.data === "object") && (error.response.data.statusMessage !== undefined))
+                statusMessage = error.response.data.statusMessage;
+            else if ((typeof error.response.data === "object") && (error.response.data.errorMessage !== undefined))
+                statusMessage = error.response.data.errorMessage;
+            else
+                statusMessage = error.response.data.toString();
+        }
+        else
+            statusMessage = '';
+
+        switch (error.response.status)
+        {
+            case 400:
+                return new BadRequestError(error.response.status, error.response.statusText, statusMessage);
+            case 404:
+                return new NotFoundError(error.response.status, error.response.statusText, statusMessage);
+            default:
+                return new NetworkError(error.response.status, error.response.statusText, statusMessage);
+        }
+    }
+    else
+    {
+        if (error.message !== undefined)
+            return new Error(error.message);
+        else
+            return new Error("An unknown error has occurred.");
+    }
+}
