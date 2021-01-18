@@ -19,7 +19,6 @@ import { Endian, Utils } from '../utils/Utils';
 import { SodiumHelper } from '../utils/SodiumHelper';
 import { Hash } from './Hash';
 
-import assert from 'assert';
 import { SmartBuffer } from 'smart-buffer';
 
 /**
@@ -48,7 +47,8 @@ export class Scalar
             this.data = Buffer.alloc(SodiumHelper.sodium.crypto_core_ed25519_SCALARBYTES);
             this.fromBinary(data, endian);
         }
-        assert.ok(this.data.length == SodiumHelper.sodium.crypto_core_ed25519_SCALARBYTES);
+        if (this.data.length !== SodiumHelper.sodium.crypto_core_ed25519_SCALARBYTES)
+            throw new Error("The size of the data is abnormal.");
     }
 
     /**
@@ -92,7 +92,8 @@ export class Scalar
      */
     public fromBinary (bin: Buffer, endian: Endian = Endian.Big): Scalar
     {
-        assert.strictEqual(bin.length, SodiumHelper.sodium.crypto_core_ed25519_SCALARBYTES);
+        if (bin.length !== SodiumHelper.sodium.crypto_core_ed25519_SCALARBYTES)
+            throw new Error("The size of the input data is abnormal.");
 
         this.data.set(bin);
         if (endian === Endian.Little)
@@ -303,7 +304,8 @@ export class Point
             this.data = Buffer.alloc(SodiumHelper.sodium.crypto_core_ed25519_BYTES);
             this.fromBinary(data, endian);
         }
-        assert.strictEqual(this.data.length, SodiumHelper.sodium.crypto_core_ed25519_BYTES);
+        if (this.data.length !== SodiumHelper.sodium.crypto_core_ed25519_BYTES)
+            throw new Error("The size of the data is abnormal.");
     }
 
     /**
@@ -342,7 +344,8 @@ export class Point
      */
     public fromBinary (bin: Buffer, endian: Endian = Endian.Big): Point
     {
-        assert.strictEqual(bin.length, SodiumHelper.sodium.crypto_core_ed25519_BYTES);
+        if (bin.length !== SodiumHelper.sodium.crypto_core_ed25519_BYTES)
+            throw new Error("The size of the input data is abnormal.");
 
         this.data.set(bin);
         if (endian === Endian.Little)

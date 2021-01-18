@@ -14,7 +14,6 @@
 import { Utils, Endian } from '../utils/Utils';
 import { SodiumHelper } from '../utils/SodiumHelper';
 
-import * as assert from 'assert';
 import { SmartBuffer } from 'smart-buffer';
 
 /**
@@ -47,7 +46,8 @@ export class Hash
             this.data = Buffer.alloc(Hash.Width);
             this.fromBinary(data, endian);
         }
-        assert.ok(this.data.length == Hash.Width);
+        if (this.data.length !== Hash.Width)
+            throw new Error("The size of the data is abnormal.");
     }
 
     /**
@@ -78,7 +78,8 @@ export class Hash
      */
     public fromBinary (bin: Buffer, endian: Endian = Endian.Big): Hash
     {
-        assert.strictEqual(bin.length, Hash.Width);
+        if (bin.length !== Hash.Width)
+            throw new Error("The size of the data is abnormal.");
 
         bin.copy(this.data);
         if (endian === Endian.Little)

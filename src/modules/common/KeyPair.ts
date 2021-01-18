@@ -18,7 +18,6 @@ import { Signature } from './Signature';
 import { SodiumHelper } from '../utils/SodiumHelper';
 import { checksum, validate } from "../utils/CRC16";
 
-import * as assert from 'assert';
 import { base32Encode, base32Decode } from '@ctrl/ts-base32';
 import { SmartBuffer } from 'smart-buffer';
 
@@ -113,21 +112,26 @@ export class PublicKey
         if (typeof data === 'string')
         {
             const decoded = Buffer.from(base32Decode(data));
-            assert.strictEqual(decoded.length, 1 + SodiumHelper.sodium.crypto_sign_PUBLICKEYBYTES + 2);
-            assert.strictEqual(decoded[0], VersionByte.AccountID);
+
+            if (decoded.length != 1 + SodiumHelper.sodium.crypto_sign_PUBLICKEYBYTES + 2)
+                throw new Error('Decoded data size is not normal');
+
+            if (decoded[0] != VersionByte.AccountID)
+                throw new Error('This is not a valid address type');
 
             const body = decoded.slice(0, -2);
             this.data = body.slice(1);
 
             const checksum = decoded.slice(-2);
-            assert.ok(validate(body, checksum));
+            if (!validate(body, checksum))
+                throw new Error('Checksum result do not match');
         }
         else
         {
-            assert.ok(data.length == SodiumHelper.sodium.crypto_sign_PUBLICKEYBYTES);
+            if (data.length !== SodiumHelper.sodium.crypto_sign_PUBLICKEYBYTES)
+                throw new Error("The size of the input data is abnormal.");
             this.data = Buffer.from(data);
         }
-        assert.ok(this.data.length == SodiumHelper.sodium.crypto_sign_PUBLICKEYBYTES);
     }
 
     /**
@@ -210,7 +214,8 @@ export class SecretKey
      */
     constructor (data: Buffer)
     {
-        assert.strictEqual(data.length, SodiumHelper.sodium.crypto_sign_SECRETKEYBYTES);
+        if (data.length !== SodiumHelper.sodium.crypto_sign_SECRETKEYBYTES)
+            throw new Error("The size of the input data is abnormal.");
         this.data = Buffer.from(data);
     }
 
@@ -245,22 +250,26 @@ export class Seed
         if (typeof data === 'string')
         {
             const decoded = Buffer.from(base32Decode(data));
-            assert.strictEqual(decoded.length, 1 + SodiumHelper.sodium.crypto_sign_SEEDBYTES + 2);
-            assert.strictEqual(decoded[0], VersionByte.Seed);
+            if (decoded.length != 1 + SodiumHelper.sodium.crypto_sign_SEEDBYTES + 2)
+                throw new Error('Decoded data size is not normal');
+
+            if (decoded[0] != VersionByte.Seed)
+                throw new Error('This is not a valid seed type');
 
             const body = decoded.slice(0, -2);
             const cs = decoded.slice(-2);
 
-            assert.ok(validate(body, cs));
+            if (!validate(body, cs))
+                throw new Error('Checksum result do not match');
 
             this.data = body.slice(1);
         }
         else
         {
-            assert.strictEqual(data.length, SodiumHelper.sodium.crypto_sign_SEEDBYTES);
+            if (data.length !== SodiumHelper.sodium.crypto_sign_SEEDBYTES)
+                throw new Error("The size of the input data is abnormal.");
             this.data = Buffer.from(data);
         }
-        assert.ok(this.data.length == SodiumHelper.sodium.crypto_sign_SEEDBYTES);
     }
 
     /**

@@ -13,8 +13,6 @@
 
 import { Utils, Endian } from '../utils/Utils';
 
-import * as assert from 'assert';
-
 /**
  * Define the signature
  */
@@ -45,7 +43,8 @@ export class Signature
             this.data = Buffer.alloc(Signature.Width);
             this.fromBinary(data, endian);
         }
-        assert.ok(this.data.length == Signature.Width);
+        if (this.data.length !== Signature.Width)
+            throw new Error("The size of the data is abnormal.");
     }
 
     /**
@@ -76,7 +75,8 @@ export class Signature
      */
     public fromBinary (bin: Buffer, endian: Endian = Endian.Big): Signature
     {
-        assert.strictEqual(bin.length, Signature.Width);
+        if (bin.length !== Signature.Width)
+            throw new Error("The size of the data is abnormal.");
 
         bin.copy(this.data);
         if (endian === Endian.Little)

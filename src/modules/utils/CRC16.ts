@@ -23,7 +23,6 @@
 
 *******************************************************************************/
 
-import * as assert from 'assert';
 import crc from 'crc';
 
 /**
@@ -50,7 +49,8 @@ export function checksum (data: Buffer): Buffer
  */
 export function validate (data: Buffer, expected: Buffer): boolean
 {
-    assert.strictEqual(expected.length, 2);
+    if (expected.length !== 2)
+        return false;
     const actual = Buffer.alloc(2);
     actual.writeUInt16LE(crc.crc16xmodem(data), 0);
     return expected.equals(actual);
