@@ -37,6 +37,7 @@ export class Scalar
      *
      * @param data   The string or binary representation of the scalar
      * @param endian The byte order
+     * @throws Will throw an error if the data is not the same size as 'crypto_core_ed25519_SCALARBYTES'.
      */
     constructor (data: Buffer | string, endian: Endian = Endian.Big)
     {
@@ -89,6 +90,7 @@ export class Scalar
      * @param bin    The binary data of the scalar
      * @param endian The byte order
      * @returns The instance of Scalar
+     * @throws Will throw an error if the argument `bin` is not the same size as `crypto_core_ed25519_SCALARBYTES`.
      */
     public fromBinary (bin: Buffer, endian: Endian = Endian.Big): Scalar
     {
@@ -145,7 +147,7 @@ export class Scalar
     /**
      * Invert Scalar.
      * @returns The instance of Scalar
-     * If an error occurs during calculation, throw the error.
+     * @throws Will throw the error if an error occurs during calculation.
      */
     public invert (): Scalar
     {
@@ -185,7 +187,7 @@ export class Scalar
 
     /**
      * Return the point corresponding to this scalar multiplied by the generator
-     * If an error occurs during calculation, throw the error.
+     * @throws Will throw an error if an error occurs during calculation.
      */
     public toPoint (): Point
     {
@@ -294,6 +296,7 @@ export class Point
      *
      * @param data   The string or binary representation of the point
      * @param endian The byte order
+     * @throws Will throw an error if the data is not the same size as `crypto_core_ed25519_BYTES`.
      */
     constructor (data: Buffer | string, endian: Endian = Endian.Big)
     {
@@ -341,6 +344,7 @@ export class Point
      * @param bin    The binary data of the point
      * @param endian The byte order
      * @returns The instance of Point
+     * @throws Will throw an error if the argument `bin` is not the same size as `crypto_core_ed25519_BYTES`
      */
     public fromBinary (bin: Buffer, endian: Endian = Endian.Big): Point
     {
@@ -405,7 +409,7 @@ export class Point
      * Adds the element represented by p to the element q using libsodium
      * @param p The instance of the Point
      * @param q The instance of the Point
-     * If an error occurs during calculation, throw the error.
+     * @throws Will throw the error if an error occurs during calculation.
      */
     public static add (p: Point, q: Point): Point
     {
@@ -420,7 +424,7 @@ export class Point
      * Subtracts the element represented by p to the element q using libsodium
      * @param p The instance of the Point
      * @param q The instance of the Point
-     * If an error occurs during calculation, throw the error.
+     * @throws Will throw the error if an error occurs during calculation.
      */
     public static sub (p: Point, q: Point): Point
     {
@@ -435,7 +439,7 @@ export class Point
      * Multiplies an element represented by p by a scalar n using libsodium
      * @param s The instance of the Scalar
      * @param n The instance of the Point
-     * If an error occurs during calculation, throw the error.
+     * @throws Will throw the error if an error occurs during calculation.
      */
     public static scalarMul (s: Scalar, n: Point): Point
     {

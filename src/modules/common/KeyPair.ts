@@ -106,6 +106,7 @@ export class PublicKey
     /**
      * Constructor
      * @param data The string or binary representation of the public key
+     * @throws Will throw the error if the public key validation fails.
      */
     constructor (data: Buffer | string)
     {
@@ -211,6 +212,7 @@ export class SecretKey
     /**
      * Constructor
      * @param data The binary data of the secret key
+     * @throws Will throw the error if the secret key validation fails.
      */
     constructor (data: Buffer)
     {
@@ -244,6 +246,7 @@ export class Seed
     /**
      * Constructor
      * @param data The binary data of the seed
+     * @throws Will throw the error if the seed key validation fails.
      */
     constructor (data: Buffer | string)
     {

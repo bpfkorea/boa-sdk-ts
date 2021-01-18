@@ -33,6 +33,7 @@ export class Signature
      *
      * @param data   The string or binary representation of the Signature
      * @param endian The byte order
+     * @throws Will throw an error if the data is not the same size as 64.
      */
     constructor (data: Buffer | string, endian: Endian = Endian.Big)
     {
@@ -72,6 +73,7 @@ export class Signature
      * @param bin    The binary data of the signature
      * @param endian The byte order
      * @returns The instance of Signature
+     * @throws Will throw an error if the argument `bin` is not the same size as 64.
      */
     public fromBinary (bin: Buffer, endian: Endian = Endian.Big): Signature
     {
