@@ -254,10 +254,7 @@ export class JSONValidator
                         "type": "integer"
                     },
                     "bytes": {
-                        "type": "array",
-                        "items": {
-                            "type": "integer"
-                        }
+                        "type": "string"
                     }
                 },
                 "additionalProperties": false,
@@ -271,10 +268,7 @@ export class JSONValidator
                 "type": "object",
                 "properties": {
                     "bytes": {
-                        "type": "array",
-                        "items": {
-                            "type": "integer"
-                        }
+                        "type": "string"
                     }
                 },
                 "additionalProperties": false,
