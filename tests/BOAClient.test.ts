@@ -699,51 +699,38 @@ describe('BOA Client', () => {
                 .addOutput(new boasdk.PublicKey(boasdk.TxPayloadFee.CommonsBudgetAddress), fee)
                 .sign(boasdk.TxType.Payment)
 
-        let expected_object =
-            {
-                "type": 0,
-                "inputs": [
-                    {
-                        "utxo": "0x81a326afa790003c32517a2a2556613004e6147edac28d576cf7bcc2daadf4bb60be1f644c229b775e7894844ec66b2d70ddf407b8196b46bc1dfe42061c7497",
-                        "unlock": {
-                            "bytes": [151,117,154,227,144,110,241,197,225,147,127,135,205,54,7,233,248,231,246,129,128,34,144,252,66,231,89,70,204,113,72,153,56,45,60,175,155,252,121,90,0,218,249,246,22,217,248,100,79,224,119,168,46,93,95,4,20,31,113,116,64,70,161,9]
-                        },
-                        "unlock_age": 0
-                    },
-                    {
-                        "utxo": "0xb82cb96710af2e9804c59d1f1e1679f8b8b69f4c0f6cd79c8c12f365dd766c09aaa4febcc18b3665d33301cb248ac7afd343ac7b98b27beaf246ad12d3b3219a",
-                        "unlock": {
-                            "bytes": [125,128,102,237,108,255,115,14,135,51,192,205,198,31,68,191,179,170,210,50,250,214,153,127,155,192,147,131,145,134,58,121,168,221,244,138,135,73,237,218,179,182,229,4,11,42,129,59,35,58,101,192,210,43,87,252,190,78,225,151,237,163,86,8]
-                        },
-                        "unlock_age": 0
-                    },
-                    {
-                        "utxo": "0x4028965b7408566a66e4cf8c603a1cdebc7659a3e693d36d2fdcb39b196da967914f40ef4966d5b4b1f4b3aae00fbd68ffe8808b070464c2a101d44f4d7b0170",
-                        "unlock": {
-                            "bytes": [248,99,68,126,158,161,232,69,217,41,121,25,126,214,6,23,48,93,191,188,48,97,126,253,105,134,80,233,182,177,98,21,98,204,215,137,39,184,248,246,168,216,181,203,134,60,228,46,206,161,133,187,247,157,176,176,31,126,200,88,153,223,132,9]
-                        },
-                        "unlock_age": 0
-                    }
-                ],
-                "outputs": [
-                    {
-                        "value": "500000",
-                        "lock": {
-                            "type": 0,
-                            "bytes": [156,198,57,161,53,47,119,242,37,22,12,66,255,137,26,106,250,91,70,161,26,105,169,73,32,134,215,120,6,118,244,42]
-                        }
-                    },
-                    {
-                        "value": "100000",
-                        "lock": {
-                            "type": 0,
-                            "bytes": [42,74,94,158,4,147,158,213,72,135,77,251,105,243,234,185,36,176,186,175,202,149,184,68,175,252,157,80,243,56,158,142]
-                        }
-                    }
-                ],
-                "payload": "0x617461642065746f76",
-                "lock_height": "0"
-            };
+        let expected_object = {
+            "type": 0,
+            "inputs": [
+                {
+                    "utxo": "0x81a326afa790003c32517a2a2556613004e6147edac28d576cf7bcc2daadf4bb60be1f644c229b775e7894844ec66b2d70ddf407b8196b46bc1dfe42061c7497",
+                    "unlock": {"bytes": "9V6z4ewI7o2lHj+aSqWUfFSIC+kFUEHzmn3P7pS/awiZnoschDusRIs/KgbFSV+nhaL6QiM0H1zBKqJJOxKZAw=="},
+                    "unlock_age": 0
+                },
+                {
+                    "utxo": "0xb82cb96710af2e9804c59d1f1e1679f8b8b69f4c0f6cd79c8c12f365dd766c09aaa4febcc18b3665d33301cb248ac7afd343ac7b98b27beaf246ad12d3b3219a",
+                    "unlock": {"bytes": "sCpcf2LqujF794oqi7RYJgVBFvimnPAuYq7GQO9LQqJhqkNheowL8AgQufmMRA7rsFxeEybYC8dq4dqBF4MGDw=="},
+                    "unlock_age": 0
+                },
+                {
+                    "utxo": "0x4028965b7408566a66e4cf8c603a1cdebc7659a3e693d36d2fdcb39b196da967914f40ef4966d5b4b1f4b3aae00fbd68ffe8808b070464c2a101d44f4d7b0170",
+                    "unlock": {"bytes": "EHobP9FMCW9Z1BR2KGjplSnD0ngPzY14qzgrtUz3NLPZUHgbWVz1aOu7JyCaoRgySodbwigwELePtxztRY8WBQ=="},
+                    "unlock_age": 0
+                }
+            ],
+            "outputs": [
+                {
+                    "value": "500000",
+                    "lock": {"type": 0, "bytes": "nMY5oTUvd/IlFgxC/4kaavpbRqEaaalJIIbXeAZ29Co="}
+                },
+                {
+                    "value": "100000",
+                    "lock": {"type": 0, "bytes": "KkpengSTntVIh037afPquSSwuq/KlbhEr/ydUPM4no4="}
+                }
+            ],
+            "payload": "0x617461642065746f76",
+            "lock_height": "0"
+        };
 
         vote_tx.inputs.forEach((value, idx) => {
             expected_object.inputs[idx].unlock = value.unlock.toJSON();
@@ -820,40 +807,28 @@ describe('BOA Client', () => {
                 "inputs": [
                     {
                         "utxo": "0x3451d94322524e3923fd26f0597fb8a9cdbf3a9427c38ed1ca61104796d39c5b9b5ea33d576f17c2dc17bebc5d84a0559de8c8c521dfe725d4c352255fc71e85",
-                        "unlock": {
-                            "bytes": [244,60,20,101,16,157,114,10,4,149,148,207,206,23,58,147,130,231,40,19,84,40,174,247,103,48,241,138,223,5,52,149,82,200,62,158,25,32,61,196,233,2,136,125,222,47,46,126,232,105,98,158,247,170,202,86,173,13,28,96,246,232,237,7]
-                        },
+                        "unlock": {"bytes": "Duk3N1M9Uc7jXvtRnooaGK4B5AsXBI3wVxKJ32mdc4kJyoTuxqXI1Ih781yfYHP3yqlIkb1I2nfOKkmvSw29AQ=="},
                         "unlock_age": 0
                     },
                     {
                         "utxo": "0xfca92fe76629311c6208a49e89cb26f5260777278cd8b272e7bb3021adf429957fd6844eb3b8ff64a1f6074126163fd636877fa92a1f4329c5116873161fbaf8",
-                        "unlock": {
-                            "bytes": [168,159,5,118,72,86,31,81,92,17,74,118,227,54,56,111,20,11,222,145,225,168,108,35,19,125,128,231,61,72,185,119,58,146,14,82,138,70,118,250,212,197,117,186,241,79,191,94,166,108,78,4,222,92,60,30,104,25,181,88,172,32,29,12]
-                        },
+                        "unlock": {"bytes": "L5ThbuygS8wh7G92m9oMr1LkIjsLyJU+yjGvNLkgahSFUKuHhg1WpleD6u/QccR45QyMcs6wvPcRWF38wlNpCQ=="},
                         "unlock_age": 0
                     },
                     {
                         "utxo": "0x7e1958dbe6839d8520d65013bbc85d36d47a9f64cf608cc66c0d816f0b45f5c8a85a8990725ffbb1ab13c3c65b45fdc06f4745d455e00e1068c4c5c0b661d685",
-                        "unlock": {
-                            "bytes": [99,127,60,119,205,196,250,130,47,158,223,97,50,96,146,230,111,188,194,230,188,16,10,157,69,255,55,165,209,70,7,53,242,191,86,80,174,179,186,117,216,234,79,102,71,146,69,88,87,3,31,86,41,99,179,49,36,153,125,45,226,251,244,13]
-                        },
+                        "unlock": {"bytes": "WEjSPkXBh0iqzGnYinwWYyNckuHdOU3TNbVr7oURPBxFKyXaCXkRc0o3O2IwNZKple6+qmNp3VkAPr1jHsjoCw=="},
                         "unlock_age": 0
                     }
                 ],
                 "outputs": [
                     {
                         "value": "500000",
-                        "lock": {
-                            "type": 0,
-                            "bytes": [156,198,57,161,53,47,119,242,37,22,12,66,255,137,26,106,250,91,70,161,26,105,169,73,32,134,215,120,6,118,244,42]
-                        }
+                        "lock": {"type": 0, "bytes": "nMY5oTUvd/IlFgxC/4kaavpbRqEaaalJIIbXeAZ29Co="}
                     },
                     {
                         "value": "100000",
-                        "lock": {
-                            "type": 0,
-                            "bytes": [216,189,105,106,126,219,233,111,226,194,2,88,129,183,174,62,166,37,136,105,251,82,128,102,25,86,100,89,174,142,241,79]
-                        }
+                        "lock": {"type": 0, "bytes": "2L1pan7b6W/iwgJYgbeuPqYliGn7UoBmGVZkWa6O8U8="}
                     }
                 ],
                 "payload": "0x617461642065746f76",
