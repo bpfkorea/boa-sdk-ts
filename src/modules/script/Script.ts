@@ -44,7 +44,7 @@ export class Script
     /**
      * opcodes and any associated data for each push opcode
      */
-    private readonly _opcodes : Buffer;
+    private readonly _opcodes: Buffer;
 
     /**
      * Constructor
