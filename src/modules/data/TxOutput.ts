@@ -14,7 +14,6 @@
 import { JSONValidator } from '../utils/JSONValidator';
 import { PublicKey } from '../common/KeyPair';
 import { Utils } from "../utils/Utils";
-import { Lock } from '../script/Lock';
 
 import { SmartBuffer } from 'smart-buffer';
 
@@ -31,23 +30,19 @@ export class TxOutput
     public value: bigint;
 
     /**
-     * The lock condition for this Output
+     * The public key that can spend this output
      */
-    public lock: Lock;
+    public address: PublicKey;
 
     /**
      * Constructor
      * @param value   The monetary value
-     * @param lock    The public key or instance of Lock
+     * @param address The public key
      */
-    constructor (value: bigint, lock: Lock | PublicKey)
+    constructor (value: bigint, address: PublicKey)
     {
         this.value = value;
-
-        if (lock instanceof PublicKey)
-            this.lock = Lock.fromPublicKey(lock);
-        else
-            this.lock = lock
+        this.address = address;
     }
 
     /**
@@ -66,9 +61,7 @@ export class TxOutput
             return value;
 
         JSONValidator.isValidOtherwiseThrow('TxOutput', value);
-        return new TxOutput(
-            BigInt(value.value),
-            Lock.reviver("", value.lock));
+        return new TxOutput(BigInt(value.value), new PublicKey(value.address));
     }
 
     /**
@@ -80,6 +73,6 @@ export class TxOutput
         const buf = Buffer.allocUnsafe(8);
         Utils.writeBigIntLE(buf, this.value);
         buffer.writeBuffer(buf);
-        this.lock.computeHash(buffer);
+        this.address.computeHash(buffer);
     }
 }

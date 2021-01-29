@@ -13,7 +13,7 @@
 
 import { JSONValidator } from '../utils/JSONValidator';
 import { Hash, makeUTXOKey } from '../common/Hash';
-import { Unlock } from '../script/Lock';
+import { Signature } from '../common/Signature';
 
 import { SmartBuffer } from 'smart-buffer';
 
@@ -30,37 +30,28 @@ export class TxInput
     public utxo: Hash;
 
     /**
-     * The unlock script, which will be ran together with the matching Input's
-     * lock script in the execution engine
+     * A signature that should be verified using public key of the output in the previous transaction
      */
-    public unlock: Unlock;
-
-    /**
-     * The UTXO this `Input` references must be at least `unlock_age` older
-     * than the block height at which the spending transaction wants to be
-     * included in the block. Use for implementing relative time locks.
-     */
-    public unlock_age: number;
+    public signature: Signature;
 
     /**
      * Constructor
-     * @param hash  The hash of the UTXO or the hash of the transaction
-     * @param unlock The instance of Unlock
-     * @param unlock_age The UTXO this `Input` references must be at least
-     * `unlock_age` older than the block height at which the spending
-     * transaction wants to be  included in the block.
-     * Use for implementing relative time locks.
+     * @param first  The hash of the UTXO or the hash of the transaction
+     * @param second The instance of Signature or output index
+     * in the previous transaction
+     * If the type of the second parameter is bigint,
+     * the first parameter is considered the hash of the transaction
+     * otherwise, the first parameter is considered the hash of the UTXO.
      */
-    constructor (hash: Hash, unlock: Unlock = Unlock.Null, unlock_age: number = 0)
+    constructor (first: Hash, second: Signature | bigint)
     {
-        this.utxo = hash;
-        this.unlock = unlock;
-        this.unlock_age = unlock_age;
-    }
-
-    public static fromTxHash (hash: Hash, index: bigint, unlock: Unlock = Unlock.Null, unlock_age: number = 0)
-    {
-        return new TxInput(makeUTXOKey(hash, index), unlock, unlock_age);
+        if (typeof second == "bigint") {
+            this.utxo = makeUTXOKey(first, second);
+            this.signature = new Signature(Buffer.alloc(Signature.Width));
+        } else {
+            this.utxo = first;
+            this.signature = second;
+        }
     }
 
     /**
@@ -80,9 +71,7 @@ export class TxInput
 
         JSONValidator.isValidOtherwiseThrow('TxInput', value);
         return new TxInput(
-            new Hash(value.utxo),
-            Unlock.reviver("", value.unlock),
-            value.unlock_age);
+            new Hash(value.utxo), new Signature(value.signature));
     }
 
     /**
@@ -92,6 +81,5 @@ export class TxInput
     public computeHash (buffer: SmartBuffer)
     {
         this.utxo.computeHash(buffer);
-        buffer.writeUInt32LE(this.unlock_age)
     }
 }

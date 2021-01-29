@@ -12,11 +12,11 @@
 *******************************************************************************/
 
 import { DataPayload } from './DataPayload';
-import { Height } from '../common/Height';
+import { hashFull } from "../common/Hash";
+import { KeyPair, Seed } from "../common/KeyPair";
 import { JSONValidator } from '../utils/JSONValidator';
 import { TxInput } from './TxInput';
 import { TxOutput } from './TxOutput';
-import { Utils } from '../utils/Utils';
 
 import { SmartBuffer } from 'smart-buffer';
 
@@ -57,28 +57,18 @@ export class Transaction
     public payload: DataPayload;
 
     /**
-     * This transaction may only be included in a block with `height >= lock_height`.
-     * Note that another tx with a lower lock time could double-spend this tx.
-     *
-     */
-    public lock_height: Height;
-
-    /**
      * Constructor
      * @param type    The type of the transaction
      * @param inputs  The array of references to the unspent output of the previous transaction
      * @param outputs The array of newly created outputs
      * @param payload The data payload to store
-     * @param lock_height The lock height
      */
-    constructor (type: number, inputs: TxInput[], outputs: TxOutput[], payload: DataPayload,
-                 lock_height: Height = new Height(BigInt(0)))
+    constructor (type: number, inputs: TxInput[], outputs: TxOutput[], payload: DataPayload)
     {
         this.type = type;
         this.inputs = inputs;
         this.outputs = outputs;
         this.payload = payload;
-        this.lock_height = lock_height;
     }
 
     /**
@@ -102,8 +92,7 @@ export class Transaction
             Number(value.type),
             value.inputs.map((elem: any) => TxInput.reviver("", elem)),
             value.outputs.map((elem: any) => TxOutput.reviver("", elem)),
-            DataPayload.reviver("", value.payload),
-            new Height(value.lock_height));
+            DataPayload.reviver("", value.payload));
     }
 
     /**
@@ -118,9 +107,5 @@ export class Transaction
         for (let elem of this.outputs)
             elem.computeHash(buffer);
         this.payload.computeHash(buffer);
-
-        const buf = Buffer.allocUnsafe(8);
-        Utils.writeBigIntLE(buf, this.lock_height.value);
-        buffer.writeBuffer(buf);
     }
 }
