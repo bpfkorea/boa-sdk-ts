@@ -73,7 +73,10 @@ describe ('Test that validation with JSON schema', () =>
             "outputs": [
                 {
                     "value": "400000000000",
-                    "lock": {"type": 0, "bytes": "KkpengSTntVIh037afPquSSwuq/KlbhEr/ydUPM4no4="}
+                    "lock": {
+                        "type": 0,
+                        "bytes": [156,198,57,161,53,47,119,242,37,22,12,66,255,137,26,106,250,91,70,161,26,105,169,73,32,134,215,120,6,118,244,42]
+                    }
                 }
             ],
             "payload": "",
@@ -88,7 +91,9 @@ describe ('Test that validation with JSON schema', () =>
             "inputs": [
                 {
                     "utxo": "0xd9482016835acc6defdfd060216a5890e00cf8f0a79ab0b83d3385fc723cd45bfea66eb3587a684518ff1756951d38bf4f07abda96dcdea1c160a4f83e377c32",
-                    "unlock": {"bytes": "WEjSPkXBh0iqzGnYinwWYyNckuHdOU3TNbVr7oURPBxFKyXaCXkRc0o3O2IwNZKple6+qmNp3VkAPr1jHsjoCw=="},
+                    "unlock": {
+                        "bytes": [129,99,113,164,31,190,159,33,93,141,80,191,196,72,235,214,177,91,177,253,146,84,246,161,64,114,37,88,137,122,94,133,186,140,54,231,86,139,216,200,186,69,24,18,227,31,71,18,93,59,134,206,142,43,57,28,111,105,68,253,153,197,180,14]
+                    },
                     "unlock_age": 0
                 }
             ],
@@ -183,6 +188,6 @@ describe ('Test that JSON.stringify of Transaction', () =>
             new boasdk.DataPayload("0x0001")
         )
         assert.strictEqual(JSON.stringify(tx),
-            `{"type":0,"inputs":[{"utxo":"0xd9482016835acc6defdfd060216a5890e00cf8f0a79ab0b83d3385fc723cd45bfea66eb3587a684518ff1756951d38bf4f07abda96dcdea1c160a4f83e377c32","unlock":{"bytes":"vaX+wxScBr2KIsPgKzku9kkGrfuQI8ar1eXWn9LoHxfWrLOmnliHjkGOGWk+QJ7urnpz9lRENrCMv9gsQZ4DCQ=="},"unlock_age":0}],"outputs":[{"value":"1663400000","lock":{"type":0,"bytes":"nMY5oTUvd/IlFgxC/4kaavpbRqEaaalJIIbXeAZ29Co="}},{"value":"24398336600000","lock":{"type":0,"bytes":"0D1r5Jne5i4rQeo0ybJNVjlwfANw6h7vYbVrEy3qXc8="}}],"payload":"0x0001","lock_height":"0"}`);
+            `{"type":0,"inputs":[{"utxo":"0xd9482016835acc6defdfd060216a5890e00cf8f0a79ab0b83d3385fc723cd45bfea66eb3587a684518ff1756951d38bf4f07abda96dcdea1c160a4f83e377c32","unlock":{"bytes":[189,165,254,195,20,156,6,189,138,34,195,224,43,57,46,246,73,6,173,251,144,35,198,171,213,229,214,159,210,232,31,23,214,172,179,166,158,88,135,142,65,142,25,105,62,64,158,238,174,122,115,246,84,68,54,176,140,191,216,44,65,158,3,9]},"unlock_age":0}],"outputs":[{"value":"1663400000","lock":{"type":0,"bytes":[156,198,57,161,53,47,119,242,37,22,12,66,255,137,26,106,250,91,70,161,26,105,169,73,32,134,215,120,6,118,244,42]}},{"value":"24398336600000","lock":{"type":0,"bytes":[208,61,107,228,153,222,230,46,43,65,234,52,201,178,77,86,57,112,124,3,112,234,30,239,97,181,107,19,45,234,93,207]}}],"payload":"0x0001","lock_height":"0"}`);
     });
 });
