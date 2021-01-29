@@ -80,13 +80,10 @@ export class Lock
      * @param type  Specifies the type of lock script
      * @param data May either be a Hash, or a sequence of opcodes
      */
-    constructor (type: LockType, data: Buffer | string)
+    constructor (type: LockType, data: Buffer | Array<Number>)
     {
         this.type = type;
-        if (typeof data === 'string')
-            this.bytes = Buffer.from(data, "base64");
-        else
-            this.bytes = Buffer.from(data);
+        this.bytes = Buffer.from(data);
     }
 
     /**
@@ -140,7 +137,7 @@ export class Lock
     {
         return {
             type: this.type,
-            bytes: this.bytes.toString("base64")
+            bytes: this.bytes.toJSON().data
         }
     }
 }
@@ -159,12 +156,9 @@ export class Unlock
      * Constructor
      * @param data May be: <signature>, <signature, key>, <key, push opcodes>
      */
-    constructor (data: Buffer | string)
+    constructor (data: Buffer | Array<Number>)
     {
-        if (typeof data === 'string')
-            this.bytes = Buffer.from(data, "base64");
-        else
-            this.bytes = Buffer.from(data);
+        this.bytes = Buffer.from(data);
     }
 
     /**
@@ -216,7 +210,7 @@ export class Unlock
     public toJSON (key?: string): any
     {
         return {
-            bytes: this.bytes.toString("base64")
+            bytes: this.bytes.toJSON().data
         }
     }
 }
