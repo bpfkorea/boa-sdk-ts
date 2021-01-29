@@ -198,13 +198,10 @@ export class JSONValidator
                     },
                     "payload": {
                         "type": "string"
-                    },
-                    "lock_height": {
-                        "type": "string"
                     }
                 },
                 "additionalProperties": false,
-                "required": ["type", "inputs", "outputs", "payload", "lock_height"]
+                "required": ["type", "inputs", "outputs", "payload"]
             }
         ],
         [
@@ -216,15 +213,12 @@ export class JSONValidator
                     "utxo": {
                         "type": "string"
                     },
-                    "unlock": {
-                        "type": "object"
-                    },
-                    "unlock_age": {
-                        "type": "integer"
+                    "signature": {
+                        "type": "string"
                     }
                 },
                 "additionalProperties": false,
-                "required": ["utxo", "unlock", "unlock_age"]
+                "required": ["utxo", "signature"]
             }
         ],
         [
@@ -236,49 +230,12 @@ export class JSONValidator
                     "value": {
                         "type": "string"
                     },
-                    "lock": {
-                        "type": "object"
+                    "address": {
+                        "type": "string"
                     }
                 },
                 "additionalProperties": false,
-                "required": ["value", "lock"]
-            }
-        ],
-        [
-            "Lock",
-            {
-                "title": "Lock",
-                "type": "object",
-                "properties": {
-                    "type": {
-                        "type": "integer"
-                    },
-                    "bytes": {
-                        "type": "array",
-                        "items": {
-                            "type": "integer"
-                        }
-                    }
-                },
-                "additionalProperties": false,
-                "required": ["type", "bytes"]
-            }
-        ],
-        [
-            "Unlock",
-            {
-                "title": "Lock",
-                "type": "object",
-                "properties": {
-                    "bytes": {
-                        "type": "array",
-                        "items": {
-                            "type": "integer"
-                        }
-                    }
-                },
-                "additionalProperties": false,
-                "required": ["bytes"]
+                "required": ["value", "address"]
             }
         ]
     ]);
