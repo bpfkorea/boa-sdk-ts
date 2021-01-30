@@ -721,34 +721,39 @@ describe ('BOA Client', () =>
                 .addOutput(new boasdk.PublicKey(boasdk.TxPayloadFee.CommonsBudgetAddress), fee)
                 .sign(boasdk.TxType.Payment)
 
-        let expected_object = {
-            type: 0,
-            inputs: [
-                {
-                    utxo: '0x81a326afa790003c32517a2a2556613004e6147edac28d576cf7bcc2daadf4bb60be1f644c229b775e7894844ec66b2d70ddf407b8196b46bc1dfe42061c7497',
-                    signature: '0x02780c8abbc9b9e1fb1bdcd74787e968fdd53818980922543a60ffbccb4c9b67535e78293a0f5f76fff7bceefb4b5c0d5b9614f38b8e24161b1ae35408c690ef'
-                },
-                {
-                    utxo: '0xb82cb96710af2e9804c59d1f1e1679f8b8b69f4c0f6cd79c8c12f365dd766c09aaa4febcc18b3665d33301cb248ac7afd343ac7b98b27beaf246ad12d3b3219a',
-                    signature: '0x00e851b18b0ab681f5ca5982ecc5340b6cdf5151960bf0a98af5cc647a3cba758200f35da264a8b0a6f01051fb418f37f3827a5c0971f6b4ff71c9ad888d6779'
-                },
-                {
-                    utxo: '0x4028965b7408566a66e4cf8c603a1cdebc7659a3e693d36d2fdcb39b196da967914f40ef4966d5b4b1f4b3aae00fbd68ffe8808b070464c2a101d44f4d7b0170',
-                    signature: '0x04828c97c29b41838e41a5b3327824409f6413c90c68bc926ef7cefce70d53539b29786c0fbe0519574ec089ae5814c6fd3efdafb34bea37cb082bf1b8bdd02e'
-                }
-            ],
-            outputs: [
-                {
-                    value: '500000',
-                    address: 'GCOMMONBGUXXP4RFCYGEF74JDJVPUW2GUENGTKKJECDNO6AGO32CUWGU'
-                },
-                {
-                    value: '100000',
-                    address: 'GAVEUXU6ASJZ5VKIQ5G7W2PT5K4SJMF2V7FJLOCEV76J2UHTHCPI4IYM'
-                }
-            ],
-            payload: '0x617461642065746f76'
-        };
+        let expected_object =
+            {
+                "type": 0,
+                "inputs": [
+                    {
+                        "utxo": "0x81a326afa790003c32517a2a2556613004e6147edac28d576cf7bcc2daadf4bb60be1f644c229b775e7894844ec66b2d70ddf407b8196b46bc1dfe42061c7497",
+                        "signature": "0x0833a2b778e1d8124184fe7631304c04a4749b53a2153adffaad17db301f73979eeaba08474e649b6b715b4662b7f545da981de60bfda76ff8df5486bc46e467",
+                        "unlock_age": 0
+                    },
+                    {
+                        "utxo": "0xb82cb96710af2e9804c59d1f1e1679f8b8b69f4c0f6cd79c8c12f365dd766c09aaa4febcc18b3665d33301cb248ac7afd343ac7b98b27beaf246ad12d3b3219a",
+                        "signature": "0x06479cb7622552a9cef40bba5470b20fba904e7d7bbd3bd96f935cc1b45ed7ae49139d63fd6c1bb29b0e192920d35a9aa2b17a6bd95ab602f2b5e7bdfe9e7c0f",
+                        "unlock_age": 0
+                    },
+                    {
+                        "utxo": "0x4028965b7408566a66e4cf8c603a1cdebc7659a3e693d36d2fdcb39b196da967914f40ef4966d5b4b1f4b3aae00fbd68ffe8808b070464c2a101d44f4d7b0170",
+                        "signature": "0x0b11c5ebeb5cef46db7e0c34db4972f604dc0ff44510be47731ede045772363fe803c93e0102b1c3d2ccb53acedd2acdc3500597e51bc2d353b4b6e7846f817f",
+                        "unlock_age": 0
+                    }
+                ],
+                "outputs": [
+                    {
+                        "value": "500000",
+                        "address": "GCOMMONBGUXXP4RFCYGEF74JDJVPUW2GUENGTKKJECDNO6AGO32CUWGU"
+                    },
+                    {
+                        "value": "100000",
+                        "address": "GAVEUXU6ASJZ5VKIQ5G7W2PT5K4SJMF2V7FJLOCEV76J2UHTHCPI4IYM"
+                    }
+                ],
+                "payload": "0x617461642065746f76",
+                "lock_height": "0"
+            };
 
         assert.deepStrictEqual(
             JSON.stringify(vote_tx),
@@ -820,33 +825,37 @@ describe ('BOA Client', () =>
             .sign(boasdk.TxType.Payment);
 
         let expected = {
-            type: 0,
-            inputs: [
+            "type": 0,
+            "inputs": [
                 {
-                    utxo: '0x3451d94322524e3923fd26f0597fb8a9cdbf3a9427c38ed1ca61104796d39c5b9b5ea33d576f17c2dc17bebc5d84a0559de8c8c521dfe725d4c352255fc71e85',
-                    signature: '0x0ffb3ea5d227c2e2691f6a8ade638354c6665b1828512399c0a5df155f371baece80d6537619baeb3d6746677f9a92d06914292762b1b07b4938874340797c1b'
+                    "utxo": "0x3451d94322524e3923fd26f0597fb8a9cdbf3a9427c38ed1ca61104796d39c5b9b5ea33d576f17c2dc17bebc5d84a0559de8c8c521dfe725d4c352255fc71e85",
+                    "signature": "0x030c0c7ca3470195ba78cf437ac11e22d94640837ab1c43fec4a2741714a18eb1a18a36edc3ad721208c2990cb68b1d052cbdddf88489fc3ff6158468bbc7da6",
+                    "unlock_age": 0
                 },
                 {
-                    utxo: '0xfca92fe76629311c6208a49e89cb26f5260777278cd8b272e7bb3021adf429957fd6844eb3b8ff64a1f6074126163fd636877fa92a1f4329c5116873161fbaf8',
-                    signature: '0x0ffb3ea5d227c2e2691f6a8ade638354c6665b1828512399c0a5df155f371baece80d6537619baeb3d6746677f9a92d06914292762b1b07b4938874340797c1b'
+                    "utxo": "0xfca92fe76629311c6208a49e89cb26f5260777278cd8b272e7bb3021adf429957fd6844eb3b8ff64a1f6074126163fd636877fa92a1f4329c5116873161fbaf8",
+                    "signature": "0x030c0c7ca3470195ba78cf437ac11e22d94640837ab1c43fec4a2741714a18eb1a18a36edc3ad721208c2990cb68b1d052cbdddf88489fc3ff6158468bbc7da6",
+                    "unlock_age": 0
                 },
                 {
-                    utxo: '0x7e1958dbe6839d8520d65013bbc85d36d47a9f64cf608cc66c0d816f0b45f5c8a85a8990725ffbb1ab13c3c65b45fdc06f4745d455e00e1068c4c5c0b661d685',
-                    signature: '0x0ffb3ea5d227c2e2691f6a8ade638354c6665b1828512399c0a5df155f371baece80d6537619baeb3d6746677f9a92d06914292762b1b07b4938874340797c1b'
+                    "utxo": "0x7e1958dbe6839d8520d65013bbc85d36d47a9f64cf608cc66c0d816f0b45f5c8a85a8990725ffbb1ab13c3c65b45fdc06f4745d455e00e1068c4c5c0b661d685",
+                    "signature": "0x030c0c7ca3470195ba78cf437ac11e22d94640837ab1c43fec4a2741714a18eb1a18a36edc3ad721208c2990cb68b1d052cbdddf88489fc3ff6158468bbc7da6",
+                    "unlock_age": 0
                 }
             ],
-            outputs: [
+            "outputs": [
                 {
-                    value: '500000',
-                    address: 'GCOMMONBGUXXP4RFCYGEF74JDJVPUW2GUENGTKKJECDNO6AGO32CUWGU'
+                    "value": "500000",
+                    "address": "GCOMMONBGUXXP4RFCYGEF74JDJVPUW2GUENGTKKJECDNO6AGO32CUWGU"
                 },
                 {
-                    value: '100000',
-                    address: 'GDML22LKP3N6S37CYIBFRANXVY7KMJMINH5VFADGDFLGIWNOR3YU7T6I'
+                    "value": "100000",
+                    "address": "GDML22LKP3N6S37CYIBFRANXVY7KMJMINH5VFADGDFLGIWNOR3YU7T6I"
                 }
             ],
-            payload: '0x617461642065746f76'
-        }
+            "payload": "0x617461642065746f76",
+            "lock_height": "0"
+        };
         assert.strictEqual(JSON.stringify(expected), JSON.stringify(tx));
 
         let res = await boa_client.sendTransaction(tx);

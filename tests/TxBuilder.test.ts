@@ -79,28 +79,31 @@ describe ('TxBuilder', () =>
         }
 
         let obj = {
-            type: 0,
-            inputs: [
+            "type": 0,
+            "inputs": [
                 {
-                    utxo: '0xd9482016835acc6defdfd060216a5890e00cf8f0a79ab0b83d3385fc723cd45bfea66eb3587a684518ff1756951d38bf4f07abda96dcdea1c160a4f83e377c32',
-                    signature: '0x0c18f38ec29c793358de53f56d37ffb9b23e1d6db991d3520bbee6392a1d42176380e26d1721e11bbf99f57309e5d62061017084b74d2654c2e1190b6f455525'
+                    "utxo": "0xd9482016835acc6defdfd060216a5890e00cf8f0a79ab0b83d3385fc723cd45bfea66eb3587a684518ff1756951d38bf4f07abda96dcdea1c160a4f83e377c32",
+                    "signature": "0x017198f81b6fee21a2eac43cf86e1526db9deda3e23eb32cf7088dd1c921baba61525dba4afa2cd24d308a2bf107d021e8914e759b7830b92059cccc761d64a3",
+                    "unlock_age": 0
                 },
                 {
-                    utxo: '0x4dde806d2e09367f9d5bdaaf46deab01a336a64fdb088dbb94edb171560c63cf6a39377bf0c4d35118775681d989dee46531926299463256da303553f09be6ef',
-                    signature: '0x0c18f38ec29c793358de53f56d37ffb9b23e1d6db991d3520bbee6392a1d42176380e26d1721e11bbf99f57309e5d62061017084b74d2654c2e1190b6f455525'
+                    "utxo": "0x4dde806d2e09367f9d5bdaaf46deab01a336a64fdb088dbb94edb171560c63cf6a39377bf0c4d35118775681d989dee46531926299463256da303553f09be6ef",
+                    "signature": "0x017198f81b6fee21a2eac43cf86e1526db9deda3e23eb32cf7088dd1c921baba61525dba4afa2cd24d308a2bf107d021e8914e759b7830b92059cccc761d64a3",
+                    "unlock_age": 0
                 }
             ],
-            outputs: [
+            "outputs": [
                 {
-                    value: '20000000',
-                    address: 'GDNODE7J5EUK7T6HLEO2FDUBWZEXVXHJO7C4AF5VZAKZENGQ4WR3IX2U'
+                    "value": "20000000",
+                    "address": "GDNODE7J5EUK7T6HLEO2FDUBWZEXVXHJO7C4AF5VZAKZENGQ4WR3IX2U"
                 },
                 {
-                    value: '1980000000',
-                    address: 'GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW'
+                    "value": "1980000000",
+                    "address": "GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW"
                 }
             ],
-            payload: ''
+            "payload": "",
+            "lock_height": "0"
         };
         assert.deepStrictEqual(JSON.stringify(tx), JSON.stringify(obj));
     });
@@ -127,28 +130,31 @@ describe ('TxBuilder', () =>
         }
 
         let obj = {
-            type: 0,
-            inputs: [
+            "type": 0,
+            "inputs": [
                 {
-                    utxo: '0xd9482016835acc6defdfd060216a5890e00cf8f0a79ab0b83d3385fc723cd45bfea66eb3587a684518ff1756951d38bf4f07abda96dcdea1c160a4f83e377c32',
-                    signature: '0x0ec831ebda9cbe7b56af44f95f5db2e79c1cbb69e9952c2e1b7f0ca7d19795c5e47e1dd727bfc8a48b7b49bb2c983f5476e7f035a995e258b4fe8b21237943ad'
+                    "utxo": "0xd9482016835acc6defdfd060216a5890e00cf8f0a79ab0b83d3385fc723cd45bfea66eb3587a684518ff1756951d38bf4f07abda96dcdea1c160a4f83e377c32",
+                    "signature": "0x0ea6df484865f020a101ecf3370a39ffc5aa7814563875be4a4e379c14e15a9314581278c97a677fa89128f2c27e6a22334fcc6fb0f5b409807df8e74a9a718d",
+                    "unlock_age": 0
                 },
                 {
-                    utxo: '0x4dde806d2e09367f9d5bdaaf46deab01a336a64fdb088dbb94edb171560c63cf6a39377bf0c4d35118775681d989dee46531926299463256da303553f09be6ef',
-                    signature: '0x0ec831ebda9cbe7b56af44f95f5db2e79c1cbb69e9952c2e1b7f0ca7d19795c5e47e1dd727bfc8a48b7b49bb2c983f5476e7f035a995e258b4fe8b21237943ad'
+                    "utxo": "0x4dde806d2e09367f9d5bdaaf46deab01a336a64fdb088dbb94edb171560c63cf6a39377bf0c4d35118775681d989dee46531926299463256da303553f09be6ef",
+                    "signature": "0x0ea6df484865f020a101ecf3370a39ffc5aa7814563875be4a4e379c14e15a9314581278c97a677fa89128f2c27e6a22334fcc6fb0f5b409807df8e74a9a718d",
+                    "unlock_age": 0
                 }
             ],
-            outputs: [
+            "outputs": [
                 {
-                    value: '500000',
-                    address: 'GCOMMONBGUXXP4RFCYGEF74JDJVPUW2GUENGTKKJECDNO6AGO32CUWGU'
+                    "value": "500000",
+                    "address": "GCOMMONBGUXXP4RFCYGEF74JDJVPUW2GUENGTKKJECDNO6AGO32CUWGU"
                 },
                 {
-                    value: '1999500000',
-                    address: 'GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW'
+                    "value": "1999500000",
+                    "address": "GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW"
                 }
             ],
-            payload: '0x617461642065746f76'
+            "payload": "0x617461642065746f76",
+            "lock_height": "0"
         };
         assert.deepStrictEqual(JSON.stringify(tx), JSON.stringify(obj));
     });

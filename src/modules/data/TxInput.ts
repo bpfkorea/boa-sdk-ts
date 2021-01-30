@@ -35,6 +35,13 @@ export class TxInput
     public signature: Signature;
 
     /**
+     * The UTXO this `Input` references must be at least `unlock_age` older
+     * than the block height at which the spending transaction wants to be
+     * included in the block. Use for implementing relative time locks.
+     */
+    public unlock_age: number;
+
+    /**
      * Constructor
      * @param first  The hash of the UTXO or the hash of the transaction
      * @param second The instance of Signature or output index
@@ -42,15 +49,21 @@ export class TxInput
      * If the type of the second parameter is bigint,
      * the first parameter is considered the hash of the transaction
      * otherwise, the first parameter is considered the hash of the UTXO.
+     * @param unlock_age The UTXO this `Input` references must be at least
+     * `unlock_age` older than the block height at which the spending
+     * transaction wants to be  included in the block.
+     * Use for implementing relative time locks.
      */
-    constructor (first: Hash, second: Signature | bigint)
+    constructor (first: Hash, second: Signature | bigint, unlock_age: number = 0)
     {
         if (typeof second == "bigint") {
             this.utxo = makeUTXOKey(first, second);
             this.signature = new Signature(Buffer.alloc(Signature.Width));
+            this.unlock_age = unlock_age;
         } else {
             this.utxo = first;
             this.signature = second;
+            this.unlock_age = unlock_age;
         }
     }
 
@@ -71,7 +84,8 @@ export class TxInput
 
         JSONValidator.isValidOtherwiseThrow('TxInput', value);
         return new TxInput(
-            new Hash(value.utxo), new Signature(value.signature));
+            new Hash(value.utxo), new Signature(value.signature),
+            value.unlock_age);
     }
 
     /**
@@ -81,5 +95,6 @@ export class TxInput
     public computeHash (buffer: SmartBuffer)
     {
         this.utxo.computeHash(buffer);
+        buffer.writeUInt32LE(this.unlock_age)
     }
 }
