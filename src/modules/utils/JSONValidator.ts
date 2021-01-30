@@ -198,10 +198,13 @@ export class JSONValidator
                     },
                     "payload": {
                         "type": "string"
+                    },
+                    "lock_height": {
+                        "type": "string"
                     }
                 },
                 "additionalProperties": false,
-                "required": ["type", "inputs", "outputs", "payload"]
+                "required": ["type", "inputs", "outputs", "payload", "lock_height"]
             }
         ],
         [
@@ -215,10 +218,13 @@ export class JSONValidator
                     },
                     "signature": {
                         "type": "string"
+                    },
+                    "unlock_age": {
+                        "type": "integer"
                     }
                 },
                 "additionalProperties": false,
-                "required": ["utxo", "signature"]
+                "required": ["utxo", "signature", "unlock_age"]
             }
         ],
         [

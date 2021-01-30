@@ -88,8 +88,8 @@ describe('Hash', () =>
         );
 
         assert.strictEqual(boasdk.hashFull(payment_tx).toString(),
-            "0x35927f79ab7f2c8273f5dc24bb1efa5ebe3ac050fd4fd84d014b51124d0322ed" +
-            "709225b92ba28b3ee6b70144d4acafb9a5289fc48ecb4a4f273b537837c78cb0");
+            "0x428d691addd27708b719a5e47cbac932618f0f843681dc0a46c97971ff8c419" +
+            "c817c65d90f3b74394db46801843b79537a583903bec5da57de70155276d2aa46");
 
         let freeze_tx = new boasdk.Transaction(
             boasdk.TxType.Freeze,
@@ -103,8 +103,8 @@ describe('Hash', () =>
         );
 
         assert.strictEqual(boasdk.hashFull(freeze_tx).toString(),
-            "0x0277044f0628605485a8f8a999f9a2519231e8c59c1568ef2dac2f241ce569d8" +
-            "54e15f950e0fd3d88460309d3e0ef3fbd57b8f5af998f8bacbe391ddb9aea328");
+            "0x6ce6bdeac41ffa444e6c2250ec09e04652597c3ec92f54f69029cc16ae4fc84" +
+            "faa5372b56e24c4c8667d00a8d1c0a7bc550999e4cdcd039548361a15e72fa081");
     });
 
     // See_Also: https://github.com/bpfkorea/agora/blob/73a7cd593afab6726021e05cf16b90d246343d65/source/agora/consensus/data/Block.d#L118-L138
@@ -131,8 +131,8 @@ describe('Hash', () =>
             0
         );
         assert.strictEqual(boasdk.hashFull(header).toString(),
-            "0x110c703c994b2a4ef39819acbf4ea4df99f71b0a99a7cf873e4be60087baff2" +
-            "0370eeedc3121e67379ccedea082f2c263d9aa576d3806cdcf42b260e4ee20423");
+            "0x2ee9f52b2072e7f6f980d337ea1d7646a9eb51dd4a8f964a4188ea7de316165" +
+            "f07a3cf1ad209fd8712bb0ef9d0d76c5bde8148bdf7c7704406b7bc7f1e0d7291");
     });
 
     it ('Test for hash value of BlockHeader with missing validators', () =>
@@ -158,7 +158,7 @@ describe('Hash', () =>
             0
         );
         assert.strictEqual(boasdk.hashFull(header).toString(),
-            "0x8a69d32e2734c627f9b9c5eedf3d5515a2313ddc92314682ef5fe52951e91ea" +
-            "a4c56803fbccc482cf09107ee251210ba6e78b08f370f403b7a812ea1a8e09ace");
+            "0x33e422944768cc3ce6a61b63d99289a7e63f1fdb9bc1f0297cf57998e8446dc" +
+            "68a28fad0253d356a878c008e58d15aecfdee1762e97a0f3924474f11156e3c3b");
     });
 });
