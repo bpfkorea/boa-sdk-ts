@@ -105,6 +105,21 @@ describe('Hash', () =>
         assert.strictEqual(boasdk.hashFull(freeze_tx).toString(),
             "0x6ce6bdeac41ffa444e6c2250ec09e04652597c3ec92f54f69029cc16ae4fc84" +
             "faa5372b56e24c4c8667d00a8d1c0a7bc550999e4cdcd039548361a15e72fa081");
+
+        let payload_tx = new boasdk.Transaction(
+            boasdk.TxType.Payment,
+            [
+                new boasdk.TxInput(new boasdk.Hash(Buffer.alloc(boasdk.Hash.Width)), BigInt(0))
+            ],
+            [
+                new boasdk.TxOutput(BigInt(0), new boasdk.PublicKey(Buffer.alloc(boasdk.SodiumHelper.sodium.crypto_sign_PUBLICKEYBYTES)))
+            ],
+            new boasdk.DataPayload(Buffer.from([1,2,3]))
+        );
+
+        assert.strictEqual(boasdk.hashFull(payload_tx).toString(),
+            "0x3bb3e7a067921ddace392673083330164d5913cb86f61a211be34d2b42df1ec" +
+            "46e024178b6219d9b4d853b09c0332b427ad6757c9d3b865ab9e9e94bec48f6a9");
     });
 
     // See_Also: https://github.com/bpfkorea/agora/blob/73a7cd593afab6726021e05cf16b90d246343d65/source/agora/consensus/data/Block.d#L118-L138

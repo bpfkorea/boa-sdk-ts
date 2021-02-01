@@ -34,7 +34,7 @@ export class DataPayload
     constructor (data: Buffer | string, endian: Endian = Endian.Big)
     {
         if (typeof data === 'string')
-            this.data = Utils.readFromString(data);
+            this.data = Utils.readFromString(data, undefined, endian);
         else
             this.data = this.fromBinary(data, endian).data;
     }
@@ -76,7 +76,7 @@ export class DataPayload
      */
     public toString (): string
     {
-        return Utils.writeToString(this.data);
+        return Utils.writeToString(this.data, Endian.Big);
     }
 
     /**
@@ -113,7 +113,7 @@ export class DataPayload
      */
     public computeHash (buffer: SmartBuffer)
     {
-        buffer.writeBuffer(this.data)
+        buffer.writeBuffer(this.data);
     }
 
     /**

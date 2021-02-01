@@ -727,17 +727,17 @@ describe ('BOA Client', () =>
                 "inputs": [
                     {
                         "utxo": "0x81a326afa790003c32517a2a2556613004e6147edac28d576cf7bcc2daadf4bb60be1f644c229b775e7894844ec66b2d70ddf407b8196b46bc1dfe42061c7497",
-                        "signature": "0x0833a2b778e1d8124184fe7631304c04a4749b53a2153adffaad17db301f73979eeaba08474e649b6b715b4662b7f545da981de60bfda76ff8df5486bc46e467",
+                        "signature": "0x0f8963612990c70682b9d5ff108b7d1d12cdf1a11d19503963973ba86847dac48b2725d4aef5ba19add4fdb305f6add3ee30d2ca75e281976d8473fbc64000b2",
                         "unlock_age": 0
                     },
                     {
                         "utxo": "0xb82cb96710af2e9804c59d1f1e1679f8b8b69f4c0f6cd79c8c12f365dd766c09aaa4febcc18b3665d33301cb248ac7afd343ac7b98b27beaf246ad12d3b3219a",
-                        "signature": "0x06479cb7622552a9cef40bba5470b20fba904e7d7bbd3bd96f935cc1b45ed7ae49139d63fd6c1bb29b0e192920d35a9aa2b17a6bd95ab602f2b5e7bdfe9e7c0f",
+                        "signature": "0x06d38e0fa2f38377d8252573dc8cfe38c163ea2a51e99b35f30863c09a6185cc34f7bfbaa1b7a0abd94d595208923ea54d75c0af3e38ab8c90dbeb66c5e64ff1",
                         "unlock_age": 0
                     },
                     {
                         "utxo": "0x4028965b7408566a66e4cf8c603a1cdebc7659a3e693d36d2fdcb39b196da967914f40ef4966d5b4b1f4b3aae00fbd68ffe8808b070464c2a101d44f4d7b0170",
-                        "signature": "0x0b11c5ebeb5cef46db7e0c34db4972f604dc0ff44510be47731ede045772363fe803c93e0102b1c3d2ccb53acedd2acdc3500597e51bc2d353b4b6e7846f817f",
+                        "signature": "0x02a5dc4a36ee3406e9d568b6b97acc3c65adb0a6a95bcb6519ff3cbe335e953bd7b377fa87b9b42d845bfc69d2c6323173c61ae33b8f2ff4b6d30b8ccbe68d17",
                         "unlock_age": 0
                     }
                 ],
@@ -829,17 +829,17 @@ describe ('BOA Client', () =>
             "inputs": [
                 {
                     "utxo": "0x3451d94322524e3923fd26f0597fb8a9cdbf3a9427c38ed1ca61104796d39c5b9b5ea33d576f17c2dc17bebc5d84a0559de8c8c521dfe725d4c352255fc71e85",
-                    "signature": "0x030c0c7ca3470195ba78cf437ac11e22d94640837ab1c43fec4a2741714a18eb1a18a36edc3ad721208c2990cb68b1d052cbdddf88489fc3ff6158468bbc7da6",
+                    "signature": "0x00e327f63351254a1eab8da6e5b8b7219e0118d5685a8132559750f5c0183d5820c155faf54d296486c0f90d148fec3ed66e1052bc5142430e8c3f02da5b9edf",
                     "unlock_age": 0
                 },
                 {
                     "utxo": "0xfca92fe76629311c6208a49e89cb26f5260777278cd8b272e7bb3021adf429957fd6844eb3b8ff64a1f6074126163fd636877fa92a1f4329c5116873161fbaf8",
-                    "signature": "0x030c0c7ca3470195ba78cf437ac11e22d94640837ab1c43fec4a2741714a18eb1a18a36edc3ad721208c2990cb68b1d052cbdddf88489fc3ff6158468bbc7da6",
+                    "signature": "0x00e327f63351254a1eab8da6e5b8b7219e0118d5685a8132559750f5c0183d5820c155faf54d296486c0f90d148fec3ed66e1052bc5142430e8c3f02da5b9edf",
                     "unlock_age": 0
                 },
                 {
                     "utxo": "0x7e1958dbe6839d8520d65013bbc85d36d47a9f64cf608cc66c0d816f0b45f5c8a85a8990725ffbb1ab13c3c65b45fdc06f4745d455e00e1068c4c5c0b661d685",
-                    "signature": "0x030c0c7ca3470195ba78cf437ac11e22d94640837ab1c43fec4a2741714a18eb1a18a36edc3ad721208c2990cb68b1d052cbdddf88489fc3ff6158468bbc7da6",
+                    "signature": "0x00e327f63351254a1eab8da6e5b8b7219e0118d5685a8132559750f5c0183d5820c155faf54d296486c0f90d148fec3ed66e1052bc5142430e8c3f02da5b9edf",
                     "unlock_age": 0
                 }
             ],

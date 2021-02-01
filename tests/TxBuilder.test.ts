@@ -134,12 +134,12 @@ describe ('TxBuilder', () =>
             "inputs": [
                 {
                     "utxo": "0xd9482016835acc6defdfd060216a5890e00cf8f0a79ab0b83d3385fc723cd45bfea66eb3587a684518ff1756951d38bf4f07abda96dcdea1c160a4f83e377c32",
-                    "signature": "0x0ea6df484865f020a101ecf3370a39ffc5aa7814563875be4a4e379c14e15a9314581278c97a677fa89128f2c27e6a22334fcc6fb0f5b409807df8e74a9a718d",
+                    "signature": "0x01ca033a54c68d383a2259d418f789be923176484bad957196fd862141272faf16a9cb5698eeddf67b0bd1106fbaf3027889e12d8b1f0068d59c03b20f9a146f",
                     "unlock_age": 0
                 },
                 {
                     "utxo": "0x4dde806d2e09367f9d5bdaaf46deab01a336a64fdb088dbb94edb171560c63cf6a39377bf0c4d35118775681d989dee46531926299463256da303553f09be6ef",
-                    "signature": "0x0ea6df484865f020a101ecf3370a39ffc5aa7814563875be4a4e379c14e15a9314581278c97a677fa89128f2c27e6a22334fcc6fb0f5b409807df8e74a9a718d",
+                    "signature": "0x01ca033a54c68d383a2259d418f789be923176484bad957196fd862141272faf16a9cb5698eeddf67b0bd1106fbaf3027889e12d8b1f0068d59c03b20f9a146f",
                     "unlock_age": 0
                 }
             ],
