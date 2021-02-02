@@ -25,6 +25,8 @@ import { handleNetworkError } from './error/ErrorTypes';
 import { AxiosResponse } from 'axios';
 import uri from 'urijs';
 
+import JSBI from 'jsbi';
+
 /**
  * Define the BOA Client of TypeScript.
  * It is responsible for requesting and receiving responses from
@@ -297,14 +299,14 @@ export class BOAClient
     /**
      * Request an Stoa's current block height.
      */
-    public getBlockHeight (): Promise<bigint>
+    public getBlockHeight (): Promise<JSBI>
     {
         let url = uri(this.server_url)
             .filename("/block_height");
 
         return Request.get(url.toString())
             .then((response: AxiosResponse) => {
-                return BigInt(response.data);
+                return JSBI.BigInt(response.data);
             });
     }
 }

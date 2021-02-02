@@ -16,6 +16,7 @@ import { PublicKey } from '../common/KeyPair';
 import { Utils } from "../utils/Utils";
 import { Lock } from '../script/Lock';
 
+import JSBI from 'jsbi';
 import { SmartBuffer } from 'smart-buffer';
 
 /**
@@ -28,7 +29,7 @@ export class TxOutput
     /**
      * The monetary value of this output, in 1/10^7
      */
-    public value: bigint;
+    public value: JSBI;
 
     /**
      * The lock condition for this Output
@@ -40,9 +41,9 @@ export class TxOutput
      * @param value   The monetary value
      * @param lock    The public key or instance of Lock
      */
-    constructor (value: bigint, lock: Lock | PublicKey)
+    constructor (value: JSBI | string, lock: Lock | PublicKey)
     {
-        this.value = value;
+        this.value = JSBI.BigInt(value);
 
         if (lock instanceof PublicKey)
             this.lock = Lock.fromPublicKey(lock);
@@ -67,7 +68,7 @@ export class TxOutput
 
         JSONValidator.isValidOtherwiseThrow('TxOutput', value);
         return new TxOutput(
-            BigInt(value.value),
+            value.value,
             Lock.reviver("", value.lock));
     }
 
@@ -78,8 +79,19 @@ export class TxOutput
     public computeHash (buffer: SmartBuffer)
     {
         const buf = Buffer.allocUnsafe(8);
-        Utils.writeBigIntLE(buf, this.value);
+        Utils.writeJSBigIntLE(buf, this.value);
         buffer.writeBuffer(buf);
         this.lock.computeHash(buffer);
+    }
+
+    /**
+     * Converts this object to its JSON representation
+     */
+    public toJSON (key?: string): any
+    {
+        return {
+            value: this.value.toString(),
+            lock: this.lock.toJSON()
+        };
     }
 }

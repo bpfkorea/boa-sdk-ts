@@ -14,6 +14,7 @@
 import { Utils, Endian } from '../utils/Utils';
 import { SodiumHelper } from '../utils/SodiumHelper';
 
+import JSBI from 'jsbi';
 import { SmartBuffer } from 'smart-buffer';
 
 /**
@@ -154,10 +155,10 @@ export function hashMulti (source1: Buffer, source2: Buffer): Hash
  * @returns The instance of Hash
  * See_Also https://github.com/bpfkorea/agora/blob/93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/consensus/data/UTXOSetValue.d#L50-L53
  */
-export function makeUTXOKey (h: Hash, index: bigint): Hash
+export function makeUTXOKey (h: Hash, index: JSBI): Hash
 {
     const buf = Buffer.allocUnsafe(8);
-    Utils.writeBigIntLE(buf, index);
+    Utils.writeJSBigIntLE(buf, index);
     return hashMulti(h.data, buf);
 }
 
@@ -207,10 +208,10 @@ export function hashPart (record: any, buffer: SmartBuffer)
         return;
     }
 
-    if (typeof record === "bigint")
+    if (record instanceof JSBI)
     {
         const buf = Buffer.allocUnsafe(8);
-        Utils.writeBigIntLE(buf, record);
+        Utils.writeJSBigIntLE(buf, record);
         buffer.writeBuffer(buf);
         return;
     }

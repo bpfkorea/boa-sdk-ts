@@ -11,6 +11,8 @@
 
 *******************************************************************************/
 
+import JSBI from 'jsbi';
+
 /**
  * A class for calculating the fee of transaction data payload
  */
@@ -36,7 +38,7 @@ export class TxPayloadFee
      * Calculates the fee of data payloads
      * @data_size The size of the data
      */
-    public static getFee(data_size: number): bigint
+    public static getFee(data_size: number): JSBI
     {
         if (data_size < 0)
             throw(new Error("Data size cannot be negative."));
@@ -45,7 +47,7 @@ export class TxPayloadFee
             throw(new Error("Data size cannot be greater than maximum."));
 
         const decimal = 100;
-        return BigInt(
+        return JSBI.BigInt(
             Math.round(
                 (
                     Math.exp(data_size / TxPayloadFee.TxPayloadFeeFactor) -

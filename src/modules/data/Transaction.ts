@@ -72,7 +72,7 @@ export class Transaction
      * @param lock_height The lock height
      */
     constructor (type: number, inputs: TxInput[], outputs: TxOutput[], payload: DataPayload,
-                 lock_height: Height = new Height(BigInt(0)))
+                 lock_height: Height = new Height("0"))
     {
         this.type = type;
         this.inputs = inputs;
@@ -120,7 +120,7 @@ export class Transaction
         this.payload.computeHash(buffer);
 
         const buf = Buffer.allocUnsafe(8);
-        Utils.writeBigIntLE(buf, this.lock_height.value);
+        Utils.writeJSBigIntLE(buf, this.lock_height.value);
         buffer.writeBuffer(buf);
     }
 }

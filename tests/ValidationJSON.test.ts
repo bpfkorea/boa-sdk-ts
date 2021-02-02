@@ -172,11 +172,11 @@ describe ('Test that JSON.stringify of Transaction', () =>
             ],
             [
                 new boasdk.TxOutput(
-                    BigInt("1663400000"),
+                    "1663400000",
                     new boasdk.PublicKey("GCOMMONBGUXXP4RFCYGEF74JDJVPUW2GUENGTKKJECDNO6AGO32CUWGU")
                 ),
                 new boasdk.TxOutput(
-                    BigInt("24398336600000"),
+                    "24398336600000",
                     new boasdk.PublicKey("GDID227ETHPOMLRLIHVDJSNSJVLDS4D4ANYOUHXPMG2WWEZN5JO473ZO")
                 )
             ],

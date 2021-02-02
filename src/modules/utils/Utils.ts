@@ -12,6 +12,7 @@
 *******************************************************************************/
 
 import * as assert from 'assert';
+import JSBI from "jsbi";
 
 /**
  * The byte order
@@ -125,9 +126,17 @@ export class Utils
      * @param buffer The allocated buffer
      * @param value  The big integer value
      */
-    public static writeBigIntLE (buffer: Buffer, value: bigint)
+    public static writeJSBigIntLE (buffer: Buffer, value: JSBI)
     {
-        let lo = Number(value & BigInt(0xffffffff));
+        // See https://github.com/nodejs/node/blob/
+        // 88fb5a5c7933022de750745e51e5dc0996a1e2c4/lib/internal/buffer.js#L573-L592
+        let lo =
+            JSBI.toNumber(
+                JSBI.bitwiseAnd(
+                    value,
+                    JSBI.BigInt(0xffffffff)
+                )
+            );
         buffer[0] = lo;
         lo = lo >> 8;
         buffer[1] = lo;
@@ -136,7 +145,16 @@ export class Utils
         lo = lo >> 8;
         buffer[3] = lo;
 
-        let hi = Number(value >> BigInt(32) & BigInt(0xffffffff));
+        let hi =
+            JSBI.toNumber(
+                JSBI.bitwiseAnd(
+                    JSBI.signedRightShift(
+                        value,
+                        JSBI.BigInt(32)
+                    ),
+                    JSBI.BigInt(0xffffffff)
+                )
+            );
         buffer[4] = hi;
         hi = hi >> 8;
         buffer[5] = hi;
@@ -180,15 +198,4 @@ export class Utils
 
         return a.length - b.length;
     }
-}
-
-declare global {
-    interface BigInt {
-        toJSON(key?: string): string;
-    }
-}
-
-// Allow JSON serialization of BigInt
-BigInt.prototype.toJSON = function(key?: string) {
-    return this.toString();
 }

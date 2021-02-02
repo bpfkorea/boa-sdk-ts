@@ -14,6 +14,7 @@
 import { SmartBuffer } from 'smart-buffer';
 import { Utils } from '../utils/Utils';
 
+import JSBI from 'jsbi';
 /**
  * The class that defines the Height.
  */
@@ -22,15 +23,15 @@ export class Height
     /**
      * the block height
      */
-    public value: bigint;
+    public value: JSBI;
 
     /**
      * Construct
      * @param value The block height
      */
-    constructor (value: bigint | string)
+    constructor (value: JSBI | string)
     {
-        this.value = BigInt(value);
+        this.value = JSBI.BigInt(value);
     }
 
     /**
@@ -40,7 +41,7 @@ export class Height
     public computeHash (buffer: SmartBuffer)
     {
         const buf = Buffer.allocUnsafe(8);
-        Utils.writeBigIntLE(buf, this.value);
+        Utils.writeJSBigIntLE(buf, this.value);
         buffer.writeBuffer(buf);
     }
 
@@ -50,7 +51,7 @@ export class Height
      */
     public fromString (value: string)
     {
-        this.value = BigInt(value);
+        this.value = JSBI.BigInt(value);
     }
 
     /**

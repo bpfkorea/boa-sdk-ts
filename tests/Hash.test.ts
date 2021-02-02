@@ -14,6 +14,7 @@
 import * as boasdk from '../lib';
 
 import * as assert from 'assert';
+import JSBI from "jsbi";
 
 describe('Hash', () =>
 {
@@ -67,7 +68,7 @@ describe('Hash', () =>
         let tx_hash = new boasdk.Hash('0x5d7f6a7a30f7ff591c8649f61eb8a35d034824ed5cd252c2c6f10cdbd223671' +
             '3dc369ef2a44b62ba113814a9d819a276ff61582874c9aee9c98efa2aa1f10d73');
         //let hash = boasdk.makeUTXOKey(tx_hash, JSBI.BigInt(1));
-        let hash = boasdk.makeUTXOKey(tx_hash, BigInt(1));
+        let hash = boasdk.makeUTXOKey(tx_hash, JSBI.BigInt(1));
         assert.strictEqual(hash.toString(),
             '0x7c95c29b184e47fbd32e58e5abd42c6e22e8bd5a7e934ab049d21df545e09c2' +
             'e33bb2b89df2e59ee01eb2519b1508284b577f66a76d42546b65a6813e592bb84');
@@ -79,10 +80,10 @@ describe('Hash', () =>
         let payment_tx = new boasdk.Transaction(
             boasdk.TxType.Payment,
             [
-                boasdk.TxInput.fromTxHash(new boasdk.Hash(Buffer.alloc(boasdk.Hash.Width)), BigInt(0))
+                boasdk.TxInput.fromTxHash(new boasdk.Hash(Buffer.alloc(boasdk.Hash.Width)), JSBI.BigInt(0))
             ],
             [
-                new boasdk.TxOutput(BigInt(0), boasdk.Lock.Null)
+                new boasdk.TxOutput("0", boasdk.Lock.Null)
             ],
             boasdk.DataPayload.init
         );
@@ -93,10 +94,10 @@ describe('Hash', () =>
         let freeze_tx = new boasdk.Transaction(
             boasdk.TxType.Freeze,
             [
-                boasdk.TxInput.fromTxHash(new boasdk.Hash(Buffer.alloc(boasdk.Hash.Width)), BigInt(0))
+                boasdk.TxInput.fromTxHash(new boasdk.Hash(Buffer.alloc(boasdk.Hash.Width)), JSBI.BigInt(0))
             ],
             [
-                new boasdk.TxOutput(BigInt(0), boasdk.Lock.Null)
+                new boasdk.TxOutput("0", boasdk.Lock.Null)
             ],
             boasdk.DataPayload.init
         );
@@ -114,7 +115,7 @@ describe('Hash', () =>
         let tx = new boasdk.Transaction(
             boasdk.TxType.Payment,
             [ ],
-            [ new boasdk.TxOutput(BigInt(100), pubkey) ],
+            [ new boasdk.TxOutput("100", pubkey) ],
             boasdk.DataPayload.init
         );
 
@@ -141,7 +142,7 @@ describe('Hash', () =>
         let tx = new boasdk.Transaction(
             boasdk.TxType.Payment,
             [ ],
-            [ new boasdk.TxOutput(BigInt(100), pubkey) ],
+            [ new boasdk.TxOutput("100", pubkey) ],
             boasdk.DataPayload.init
         );
 

@@ -15,6 +15,7 @@ import { JSONValidator } from '../utils/JSONValidator';
 import { Hash, makeUTXOKey } from '../common/Hash';
 import { Unlock } from '../script/Lock';
 
+import JSBI from 'jsbi';
 import { SmartBuffer } from 'smart-buffer';
 
 /**
@@ -58,7 +59,7 @@ export class TxInput
         this.unlock_age = unlock_age;
     }
 
-    public static fromTxHash (hash: Hash, index: bigint, unlock: Unlock = Unlock.Null, unlock_age: number = 0)
+    public static fromTxHash (hash: Hash, index: JSBI, unlock: Unlock = Unlock.Null, unlock_age: number = 0)
     {
         return new TxInput(makeUTXOKey(hash, index), unlock, unlock_age);
     }

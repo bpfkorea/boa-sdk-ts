@@ -19,6 +19,7 @@ import { Height } from '../common/Height';
 import { Signature } from '../common/Signature';
 import { Utils } from "../utils/Utils";
 
+import JSBI from 'jsbi';
 import { SmartBuffer } from 'smart-buffer';
 
 /**
@@ -143,7 +144,7 @@ export class BlockHeader
         for (let elem of this.missing_validators)
             buffer.writeUInt32LE(elem);
         const buf = Buffer.allocUnsafe(8);
-        Utils.writeBigIntLE(buf, BigInt(this.timestamp));
+        Utils.writeJSBigIntLE(buf, JSBI.BigInt(this.timestamp));
         buffer.writeBuffer(buf);
     }
 }

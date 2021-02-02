@@ -20,6 +20,8 @@ import { UnspentTxOutput } from "../net/response/UnspentTxOutput";
 import { TxType } from "../data/Transaction";
 import { Hash } from "../common/Hash";
 
+import JSBI from 'jsbi';
+
 /**
  * Class for managing UTXO
  * Manage what is used and not used in payment for UTXO
@@ -62,8 +64,8 @@ export class UTXOManager
         if (this.items.length > old_length)
             this.items.sort((a, b) =>
             {
-                let cmp = (a: bigint, b: bigint) => ((a > b) ? 1 : ((a < b) ? -1 : 0));
-                if (a.unlock_height !== b.unlock_height)
+                let cmp = (a: JSBI, b: JSBI) => (JSBI.greaterThan(a, b) ? 1 : (JSBI.lessThan(a, b) ? -1 : 0));
+                if (JSBI.notEqual(a.unlock_height, b.unlock_height))
                     return cmp(a.unlock_height, b.unlock_height);
                 return cmp(a.amount, b.amount);
             });
@@ -79,21 +81,21 @@ export class UTXOManager
      * and the third is the amount that was released from the freeze
      * but locked to `unlock_height`.
      */
-    public getSum (height?: bigint): [bigint, bigint, bigint]
+    public getSum (height?: JSBI): [JSBI, JSBI, JSBI]
     {
-        if ((height !== undefined) && (height <= 0))
+        if ((height !== undefined) && JSBI.lessThanOrEqual(height, JSBI.BigInt(0)))
             throw new Error(`Positive height expected, not ${height.toString()}`);
 
         return this.items
             .filter(n => !n.used)
-            .reduce<[bigint, bigint, bigint]>((sum, n) =>
+            .reduce<[JSBI, JSBI, JSBI]>((sum, n) =>
             {
-                if ((height !== undefined) && (n.unlock_height - BigInt(1) > height))
-                    sum[2] += n.amount;
+                if ((height !== undefined) && JSBI.greaterThan(JSBI.subtract(n.unlock_height, JSBI.BigInt(1)), height))
+                    sum[2] = JSBI.add(sum[2], n.amount);
                 else
-                    sum[n.type] += n.amount;
+                    sum[n.type] = JSBI.add(sum[n.type], n.amount);
                 return sum;
-            }, [BigInt(0), BigInt(0), BigInt(0)]);
+            }, [JSBI.BigInt(0), JSBI.BigInt(0), JSBI.BigInt(0)]);
     }
 
     /**
@@ -104,26 +106,26 @@ export class UTXOManager
      * @returns Returns the available array of UTXO. If the available amount
      * is less than the requested amount, the empty array is returned.
      */
-    public getUTXO (amount: bigint, height: bigint): Array<UnspentTxOutput>
+    public getUTXO (amount: JSBI, height: JSBI): Array<UnspentTxOutput>
     {
-        if (amount <= 0)
+        if (JSBI.lessThanOrEqual(amount, JSBI.BigInt(0)))
             throw new Error(`Positive amount expected, not ${amount.toString()}`);
 
-        if (height <= 0)
+        if (JSBI.lessThanOrEqual(height, JSBI.BigInt(0)))
             throw new Error(`Positive height expected, not ${height.toString()}`);
 
-        if (amount > this.getSum(height)[TxType.Payment])
+        if (JSBI.greaterThan(amount, this.getSum(height)[TxType.Payment]))
             return [];
 
-        let sum = BigInt(0);
+        let sum = JSBI.BigInt(0);
         return this.items
             .filter(n => (!n.used && (n.type == TxType.Payment)
-                && (n.unlock_height - BigInt(1) <= height)))
+                && JSBI.lessThanOrEqual(JSBI.subtract(n.unlock_height, JSBI.BigInt(1)), height)))
             .filter((n) =>
             {
                 if (sum >= amount)
                     return false;
-                sum += n.amount;
+                sum = JSBI.add(sum, n.amount);
                 n.used = true;
                 return true
             })
@@ -150,14 +152,14 @@ class InternalUTXO extends UnspentTxOutput
      * @param unlock_height The height of the block that can be used
      * @param amount        The monetary value of UTXO
      */
-    constructor (utxo: Hash, type: TxType, unlock_height: bigint, amount: bigint)
+    constructor (utxo: Hash, type: TxType, unlock_height: JSBI, amount: JSBI)
     {
         super(utxo, type, unlock_height, amount);
 
-        if (unlock_height <= 0)
+        if (JSBI.lessThanOrEqual(this.unlock_height, JSBI.BigInt(0)))
             throw new Error(`Positive unlock_height expected, not ${unlock_height.toString()}`);
 
-        if (amount <= 0)
+        if (JSBI.lessThanOrEqual(this.amount, JSBI.BigInt(0)))
             throw new Error(`Positive amount expected, not ${amount.toString()}`);
 
         this.used = false;

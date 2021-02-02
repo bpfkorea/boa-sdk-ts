@@ -20,6 +20,8 @@ import { Transaction, TxType } from '../data/Transaction';
 import { TxInput } from '../data/TxInput';
 import { TxOutput } from '../data/TxOutput';
 
+import JSBI from 'jsbi';
+
 /**
  * Class for building a transaction
  */
@@ -38,7 +40,7 @@ export class TxBuilder
     /**
      * The sum of UTXO in `inputs`
      */
-    private amount: bigint;
+    private amount: JSBI;
 
     /**
      * The data payload in transaction to be created
@@ -60,7 +62,7 @@ export class TxBuilder
         this.owner_keypair = owner_keypair;
         this.inputs = [];
         this.outputs = [];
-        this.amount = BigInt(0);
+        this.amount = JSBI.BigInt(0);
     }
 
     /**
@@ -69,9 +71,9 @@ export class TxBuilder
      * @param amount The value of UTXO to be spent
      * @param secret The key pair to spend UTXO.
      */
-    public addInput (utxo: Hash, amount: bigint, secret?: SecretKey): TxBuilder
+    public addInput (utxo: Hash, amount: JSBI, secret?: SecretKey): TxBuilder
     {
-        if (amount <= 0)
+        if (JSBI.lessThanOrEqual(amount, JSBI.BigInt(0)))
             throw new Error(`Positive amount expected, not ${amount.toString()}`);
 
         if (secret === undefined)
@@ -79,7 +81,7 @@ export class TxBuilder
         else
             this.inputs.push(new RawInput(utxo, secret));
 
-        this.amount += amount
+        this.amount = JSBI.add(this.amount, amount);
 
         return this;
     }
@@ -90,20 +92,20 @@ export class TxBuilder
      * @param amount  The amount to be sent. If this is not set,
      * all remaining amounts of registered utxo will be set.
      */
-    public addOutput (lock: Lock | PublicKey, amount?: bigint): TxBuilder
+    public addOutput (lock: Lock | PublicKey, amount?: JSBI): TxBuilder
     {
         if (amount === undefined)
             amount = this.amount;
 
-        if (amount <= BigInt(0))
+        if (JSBI.lessThanOrEqual(amount, JSBI.BigInt(0)))
             throw new Error(`Positive amount expected, not ${amount.toString()}`);
 
-        if (amount > this.amount)
+        if (JSBI.greaterThan(amount, this.amount))
             throw new Error(`Insufficient amount. ${amount.toString()}:${this.amount.toString()}`);
 
-        this.outputs.push(new TxOutput(amount, lock));
+        this.outputs.push(new TxOutput(amount.toString(), lock));
 
-        this.amount -= amount;
+        this.amount = JSBI.subtract(this.amount, amount);
 
         return this;
     }
@@ -131,9 +133,9 @@ export class TxBuilder
      * is automatically generated.
      */
     public sign (type: TxType = TxType.Payment,
-                 tx_fee: bigint = BigInt(0),
-                 payload_fee: bigint = BigInt(0),
-                 lock_height: Height = new Height(BigInt(0)),
+                 tx_fee: JSBI = JSBI.BigInt(0),
+                 payload_fee: JSBI = JSBI.BigInt(0),
+                 lock_height: Height = new Height("0"),
                  unlock_age: number = 0,
                  unlocker?: (tx: Transaction, s: RawInput, idx: number) => Unlock) : Transaction
     {
@@ -143,10 +145,10 @@ export class TxBuilder
         if ((type === TxType.Freeze) && (this.payload !== undefined) && (this.payload.data.length > 0))
             throw (new Error("Freeze transaction cannot have data payload."));
 
-        let total_fee = tx_fee + payload_fee;
-        if (this.amount > total_fee)
-            this.addOutput(this.owner_keypair.address, this.amount - total_fee);
-        else if (this.amount < total_fee)
+        let total_fee = JSBI.add(tx_fee, payload_fee);
+        if (JSBI.greaterThan(this.amount, total_fee))
+            this.addOutput(this.owner_keypair.address, JSBI.subtract(this.amount, total_fee));
+        else if (JSBI.lessThan(this.amount, total_fee))
             throw (new Error("There is not enough fee."));
 
         if (this.outputs.length == 0)
@@ -170,7 +172,7 @@ export class TxBuilder
         this.payload = undefined;
         this.inputs = [];
         this.outputs = [];
-        this.amount = BigInt(0);
+        this.amount = JSBI.BigInt(0);
 
         return tx;
     }

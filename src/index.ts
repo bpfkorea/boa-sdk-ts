@@ -50,3 +50,6 @@ export { BOAClient } from './modules/net/BOAClient';
 export { Request } from './modules/net/Request';
 
 export { NetworkError, NotFoundError, BadRequestError, handleNetworkError } from './modules/net/error/ErrorTypes';
+
+import JSBI from 'jsbi';
+export { JSBI };

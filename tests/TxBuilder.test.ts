@@ -14,6 +14,7 @@
 import * as boasdk from '../lib';
 
 import * as assert from 'assert';
+import JSBI from 'jsbi';
 
 describe ('TxBuilder', () =>
 {
@@ -30,11 +31,11 @@ describe ('TxBuilder', () =>
     {
         utxo_data1 = {
             utxo: new boasdk.Hash('0xd9482016835acc6defdfd060216a5890e00cf8f0a79ab0b83d3385fc723cd45bfea66eb3587a684518ff1756951d38bf4f07abda96dcdea1c160a4f83e377c32'),
-            amount: BigInt(1000000000)
+            amount: JSBI.BigInt(1000000000)
         }
         utxo_data2 = {
             utxo: new boasdk.Hash('0x4dde806d2e09367f9d5bdaaf46deab01a336a64fdb088dbb94edb171560c63cf6a39377bf0c4d35118775681d989dee46531926299463256da303553f09be6ef'),
-            amount: BigInt(1000000000)
+            amount: JSBI.BigInt(1000000000)
         }
         owner = boasdk.KeyPair.fromSeed(new boasdk.Seed("SBBUWIMSX5VL4KVFKY44GF6Q6R5LS2Z5B7CTAZBNCNPLS4UKFVDXC7TQ"))
     });
@@ -43,7 +44,7 @@ describe ('TxBuilder', () =>
     {
         let destination = new boasdk.PublicKey("GDNODE7J5EUK7T6HLEO2FDUBWZEXVXHJO7C4AF5VZAKZENGQ4WR3IX2U");
         let builder = new boasdk.TxBuilder(owner);
-        let amount = BigInt(0);
+        let amount = JSBI.BigInt(0);
         builder.addInput(utxo_data1.utxo, utxo_data1.amount);
         assert.throws(() => {
             builder.addOutput(destination, amount);
@@ -70,7 +71,7 @@ describe ('TxBuilder', () =>
             tx = builder
                 .addInput(utxo_data1.utxo, utxo_data1.amount)
                 .addInput(utxo_data2.utxo, utxo_data2.amount)
-                .addOutput(destination, BigInt(20000000))
+                .addOutput(destination, JSBI.BigInt(20000000))
                 .sign(boasdk.TxType.Payment);
         }
         catch (error)
@@ -124,8 +125,8 @@ describe ('TxBuilder', () =>
         let builder = new boasdk.TxBuilder(owner);
         let tx: boasdk.Transaction;
         let payload = new boasdk.DataPayload("0x617461642065746f76");
-        let payload_fee = BigInt(500000);
-        let tx_fee = BigInt(0);
+        let payload_fee = JSBI.BigInt(500000);
+        let tx_fee = JSBI.BigInt(0);
 
         try {
             tx = builder
@@ -178,8 +179,8 @@ describe ('TxBuilder', () =>
         let builder = new boasdk.TxBuilder(owner);
         let tx: boasdk.Transaction;
         let payload = new boasdk.DataPayload("0x617461642065746f76");
-        let payload_fee = BigInt(1000000000);
-        let tx_fee = BigInt(0);
+        let payload_fee = JSBI.BigInt(1000000000);
+        let tx_fee = JSBI.BigInt(0);
 
         assert.throws(() => {
             tx = builder
@@ -194,8 +195,8 @@ describe ('TxBuilder', () =>
         let builder = new boasdk.TxBuilder(owner);
         let tx: boasdk.Transaction;
         let payload = new boasdk.DataPayload("0x617461642065746f76");
-        let payload_fee = BigInt(1000000000);
-        let tx_fee = BigInt(0);
+        let payload_fee = JSBI.BigInt(1000000000);
+        let tx_fee = JSBI.BigInt(0);
 
         assert.doesNotThrow(() => {
             tx = builder

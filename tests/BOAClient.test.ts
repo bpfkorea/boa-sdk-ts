@@ -18,6 +18,7 @@ import axios from 'axios';
 import bodyParser from 'body-parser';
 import express from 'express';
 import * as http from 'http';
+import JSBI from 'jsbi';
 import randomBytes from 'randombytes';
 import URI from 'urijs';
 
@@ -457,8 +458,8 @@ describe('BOA Client', () => {
         assert.strictEqual(utxos.length, sample_utxo.length);
         assert.deepStrictEqual(utxos[0].utxo, new boasdk.Hash(sample_utxo[0].utxo));
         assert.strictEqual(utxos[0].type, sample_utxo[0].type);
-        assert.strictEqual(utxos[0].unlock_height, BigInt(sample_utxo[0].unlock_height));
-        assert.strictEqual(utxos[0].amount, BigInt(sample_utxo[0].amount));
+        assert.deepStrictEqual(utxos[0].unlock_height, JSBI.BigInt(sample_utxo[0].unlock_height));
+        assert.deepStrictEqual(utxos[0].amount, JSBI.BigInt(sample_utxo[0].amount));
     });
 
     it ('Test a function of the BOA Client - `getBlockHeight`', async () =>
@@ -472,7 +473,7 @@ describe('BOA Client', () => {
 
         // Query
         let height = await boa_client.getBlockHeight();
-        assert.strictEqual(height, BigInt(10));
+        assert.deepStrictEqual(height, JSBI.BigInt(10));
     });
 
     it('Test a function of the BOA Client using async, await - `getAllValidators`', async () => {
@@ -660,21 +661,21 @@ describe('BOA Client', () => {
                     "2556613004e6147edac28d576cf7bcc2daadf4bb60be1f644c2" +
                     "29b775e7894844ec66b2d70ddf407b8196b46bc1dfe42061c74" +
                     "97"),
-                amount: BigInt(100000)
+                amount: JSBI.BigInt(100000)
             },
             {
                 utxo: new boasdk.Hash("0xb82cb96710af2e9804c59d1f" +
                     "1e1679f8b8b69f4c0f6cd79c8c12f365dd766c09aaa4febcc18" +
                     "b3665d33301cb248ac7afd343ac7b98b27beaf246ad12d3b321" +
                     "9a"),
-                amount: BigInt(200000)
+                amount: JSBI.BigInt(200000)
             },
             {
                 utxo: new boasdk.Hash("0x4028965b7408566a66e4cf8c" +
                     "603a1cdebc7659a3e693d36d2fdcb39b196da967914f40ef496" +
                     "6d5b4b1f4b3aae00fbd68ffe8808b070464c2a101d44f4d7b01" +
                     "70"),
-                amount: BigInt(300000)
+                amount: JSBI.BigInt(300000)
             },
         ];
 
@@ -767,7 +768,7 @@ describe('BOA Client', () => {
             utxo: new boasdk.Hash("0x81a326afa790003c32517a2a2556613004e61" +
                 "47edac28d576cf7bcc2daadf4bb60be1f644c229b775e789484" +
                 "4ec66b2d70ddf407b8196b46bc1dfe42061c7497"),
-            amount : BigInt(100000000)
+            amount : JSBI.BigInt(100000000)
         };
         let vote_data = new boasdk.DataPayload("0x617461642065746f76");
         let fee = boasdk.TxPayloadFee.getFee(vote_data.data.length);
@@ -799,14 +800,14 @@ describe('BOA Client', () => {
 
         let vote_data = new boasdk.DataPayload("0x617461642065746f76");
         let payload_fee = boasdk.TxPayloadFee.getFee(vote_data.data.length);
-        let tx_fee = BigInt(0);
+        let tx_fee = JSBI.BigInt(0);
 
         let builder = new boasdk.TxBuilder(key_pair);
 
         // Create UTXOManager
         let utxo_manager = new boasdk.UTXOManager(utxos);
         // Get UTXO for the amount to need.
-        utxo_manager.getUTXO(payload_fee + tx_fee + BigInt(1), block_height)
+        utxo_manager.getUTXO(JSBI.add(JSBI.add(payload_fee, tx_fee), JSBI.BigInt(1)), block_height)
             .forEach((u:boasdk.UnspentTxOutput) => builder.addInput(u.utxo, u.amount));
 
         let expected =
@@ -876,8 +877,8 @@ describe('BOA Client', () => {
         let utxos = await boa_client.getUTXOs(key_pair.address);
 
         let vote_data = new boasdk.DataPayload("0x617461642065746f76");
-        let payload_fee = BigInt(200000);
-        let tx_fee = BigInt(0);
+        let payload_fee = JSBI.BigInt(200000);
+        let tx_fee = JSBI.BigInt(0);
 
         let builder = new boasdk.TxBuilder(key_pair);
 
@@ -886,7 +887,7 @@ describe('BOA Client', () => {
         // Get UTXO for the amount to need.
         // There can't be any output. An error occurs because the constraint of
         // the transaction is not satisfied that it must have at least one output.
-        utxo_manager.getUTXO(payload_fee + tx_fee, block_height)
+        utxo_manager.getUTXO(JSBI.add(payload_fee, tx_fee), block_height)
             .forEach((u:boasdk.UnspentTxOutput) => builder.addInput(u.utxo, u.amount));
 
         assert.throws(() => {
@@ -910,8 +911,8 @@ describe('BOA Client', () => {
         let utxos = await boa_client.getUTXOs(key_pair.address);
 
         let vote_data = new boasdk.DataPayload("0x617461642065746f76");
-        let payload_fee = BigInt(200000);
-        let tx_fee = BigInt(0);
+        let payload_fee = JSBI.BigInt(200000);
+        let tx_fee = JSBI.BigInt(0);
 
         let builder = new boasdk.TxBuilder(key_pair);
 
@@ -919,7 +920,7 @@ describe('BOA Client', () => {
         let utxo_manager = new boasdk.UTXOManager(utxos);
         // Get UTXO for the amount to need.
         // The amount of the UTXO found is one greater than the fee, allowing at least one change output.
-        utxo_manager.getUTXO(payload_fee + tx_fee + BigInt(1), block_height)
+        utxo_manager.getUTXO(JSBI.add(JSBI.add(payload_fee, tx_fee), JSBI.BigInt(1)), block_height)
             .forEach((u:boasdk.UnspentTxOutput) => builder.addInput(u.utxo, u.amount));
 
         let tx = builder

@@ -15,6 +15,8 @@ import { Hash }  from '../../common/Hash';
 import { TxType } from '../../data/Transaction';
 import { Utils } from '../../utils/Utils';
 
+import JSBI from 'jsbi';
+
 /**
  * Define the unspentTxOutput
  */
@@ -33,17 +35,17 @@ export class UnspentTxOutput
     /**
      * The height of the block to be unlock
      */
-    unlock_height: bigint;
+    unlock_height: JSBI;
 
     /**
      * The amount value of this utxo, in 1/10^7
      */
-    amount: bigint;
+    amount: JSBI;
 
     /**
      * Block height on created
      */
-    height: bigint;
+    height: JSBI;
 
     /**
      * Block time on created
@@ -59,8 +61,8 @@ export class UnspentTxOutput
      * @param height        The height of the block on created
      * @param time          The time of the block on created
      */
-    constructor (utxo?: Hash, type?: TxType, unlock_height?: bigint, amount?: bigint,
-                 height?: bigint, time?: number)
+    constructor (utxo?: Hash, type?: TxType, unlock_height?: JSBI, amount?: JSBI,
+                 height?: JSBI, time?: number)
     {
         if (utxo != undefined)
             this.utxo = new Hash(utxo.data);
@@ -73,19 +75,19 @@ export class UnspentTxOutput
             this.type = TxType.Payment;
 
         if (unlock_height != undefined)
-            this.unlock_height = unlock_height;
+            this.unlock_height = JSBI.BigInt(unlock_height);
         else
-            this.unlock_height = BigInt(0);
+            this.unlock_height = JSBI.BigInt(0);
 
         if (amount != undefined)
-            this.amount = amount;
+            this.amount = JSBI.BigInt(amount);
         else
-            this.amount = BigInt(0);
+            this.amount = JSBI.BigInt(0);
 
         if (height != undefined)
-            this.height = height;
+            this.height = JSBI.BigInt(height);
         else
-            this.height = BigInt(0);
+            this.height = JSBI.BigInt(0);
 
         if (time != undefined)
             this.time = time;
@@ -103,9 +105,9 @@ export class UnspentTxOutput
 
         this.utxo.fromString(data.utxo);
         this.type = data.type;
-        this.unlock_height = BigInt(data.unlock_height);
-        this.amount = BigInt(data.amount);
-        this.height = BigInt(data.height);
+        this.unlock_height = JSBI.BigInt(data.unlock_height);
+        this.amount = JSBI.BigInt(data.amount);
+        this.height = JSBI.BigInt(data.height);
         this.time = data.time;
     }
 }
