@@ -798,14 +798,15 @@ describe('BOA Client', () => {
         let utxos = await boa_client.getUTXOs(key_pair.address);
 
         let vote_data = new boasdk.DataPayload("0x617461642065746f76");
-        let fee = boasdk.TxPayloadFee.getFee(vote_data.data.length);
+        let payload_fee = boasdk.TxPayloadFee.getFee(vote_data.data.length);
+        let tx_fee = BigInt(0);
 
         let builder = new boasdk.TxBuilder(key_pair);
 
         // Create UTXOManager
         let utxo_manager = new boasdk.UTXOManager(utxos);
         // Get UTXO for the amount to need.
-        utxo_manager.getUTXO(fee, block_height)
+        utxo_manager.getUTXO(payload_fee + tx_fee + BigInt(1), block_height)
             .forEach((u:boasdk.UnspentTxOutput) => builder.addInput(u.utxo, u.amount));
 
         let expected =
@@ -815,33 +816,26 @@ describe('BOA Client', () => {
                     {
                         "utxo": "0x3451d94322524e3923fd26f0597fb8a9cdbf3a9427c38ed1ca61104796d39c5b9b5ea33d576f17c2dc17bebc5d84a0559de8c8c521dfe725d4c352255fc71e85",
                         "unlock": {
-                            "bytes": "cZxcDw1Njiwv2w4fGc552PlRVID9Eg4al7HST0+QeS3vAO/ieiAC206EAHLokgzywh6TFbpjj7DF/90XHyOaAg=="
+                            "bytes": "ODMPbmbTEP1rLeAjCG1HBubfsWF2m7GzFpbUKuKJZDq+z5tb5m2QVkxUrEpihmUI8axkJUc11w6kaP34o4QqBg=="
                         },
                         "unlock_age": 0
                     },
                     {
                         "utxo": "0xfca92fe76629311c6208a49e89cb26f5260777278cd8b272e7bb3021adf429957fd6844eb3b8ff64a1f6074126163fd636877fa92a1f4329c5116873161fbaf8",
                         "unlock": {
-                            "bytes": "cZxcDw1Njiwv2w4fGc552PlRVID9Eg4al7HST0+QeS3vAO/ieiAC206EAHLokgzywh6TFbpjj7DF/90XHyOaAg=="
+                            "bytes": "ODMPbmbTEP1rLeAjCG1HBubfsWF2m7GzFpbUKuKJZDq+z5tb5m2QVkxUrEpihmUI8axkJUc11w6kaP34o4QqBg=="
                         },
                         "unlock_age": 0
                     },
                     {
                         "utxo": "0x7e1958dbe6839d8520d65013bbc85d36d47a9f64cf608cc66c0d816f0b45f5c8a85a8990725ffbb1ab13c3c65b45fdc06f4745d455e00e1068c4c5c0b661d685",
                         "unlock": {
-                            "bytes": "cZxcDw1Njiwv2w4fGc552PlRVID9Eg4al7HST0+QeS3vAO/ieiAC206EAHLokgzywh6TFbpjj7DF/90XHyOaAg=="
+                            "bytes": "ODMPbmbTEP1rLeAjCG1HBubfsWF2m7GzFpbUKuKJZDq+z5tb5m2QVkxUrEpihmUI8axkJUc11w6kaP34o4QqBg=="
                         },
                         "unlock_age": 0
                     }
                 ],
                 "outputs": [
-                    {
-                        "value": "500000",
-                        "lock": {
-                            "type": 0,
-                            "bytes": "nMY5oTUvd/IlFgxC/4kaavpbRqEaaalJIIbXeAZ29Co="
-                        }
-                    },
                     {
                         "value": "100000",
                         "lock": {
@@ -855,15 +849,120 @@ describe('BOA Client', () => {
             };
 
         let tx = builder
-            .addOutput(new boasdk.PublicKey(boasdk.TxPayloadFee.CommonsBudgetAddress), fee)
             .assignPayload(vote_data)
-            .sign(boasdk.TxType.Payment);
+            .sign(boasdk.TxType.Payment, tx_fee, payload_fee);
 
         tx.inputs.forEach((value, idx) => {
             expected.inputs[idx].unlock = value.unlock.toJSON();
         });
 
-        assert.strictEqual(JSON.stringify(expected), JSON.stringify(tx));
+        assert.strictEqual(JSON.stringify(tx), JSON.stringify(expected));
+
+        let res = await boa_client.sendTransaction(tx);
+        assert.ok(res);
+    });
+
+    it ('Test saving a vote data with `UTXOManager` - There is no output', async () =>
+    {
+        // Set URL
+        let stoa_uri = URI("http://localhost").port(stoa_port);
+        let agora_uri = URI("http://localhost").port(agora_port);
+
+        // Create BOA Client
+        let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
+
+        let key_pair = boasdk.KeyPair.fromSeed(new boasdk.Seed("SBUC7CPSZVNHNNYO3SY7ZNBT3K3X6RWOC3NC4FVU4GOJXC3H5BUBC7YE"));
+        let block_height = await boa_client.getBlockHeight();
+        let utxos = await boa_client.getUTXOs(key_pair.address);
+
+        let vote_data = new boasdk.DataPayload("0x617461642065746f76");
+        let payload_fee = BigInt(200000);
+        let tx_fee = BigInt(0);
+
+        let builder = new boasdk.TxBuilder(key_pair);
+
+        // Create UTXOManager
+        let utxo_manager = new boasdk.UTXOManager(utxos);
+        // Get UTXO for the amount to need.
+        // There can't be any output. An error occurs because the constraint of
+        // the transaction is not satisfied that it must have at least one output.
+        utxo_manager.getUTXO(payload_fee + tx_fee, block_height)
+            .forEach((u:boasdk.UnspentTxOutput) => builder.addInput(u.utxo, u.amount));
+
+        assert.throws(() => {
+            let tx = builder
+                .assignPayload(vote_data)
+                .sign(boasdk.TxType.Payment, tx_fee, payload_fee);
+        });
+    });
+
+    it ('Test saving a vote data - There is at least one output', async () =>
+    {
+        // Set URL
+        let stoa_uri = URI("http://localhost").port(stoa_port);
+        let agora_uri = URI("http://localhost").port(agora_port);
+
+        // Create BOA Client
+        let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
+
+        let key_pair = boasdk.KeyPair.fromSeed(new boasdk.Seed("SBUC7CPSZVNHNNYO3SY7ZNBT3K3X6RWOC3NC4FVU4GOJXC3H5BUBC7YE"));
+        let block_height = await boa_client.getBlockHeight();
+        let utxos = await boa_client.getUTXOs(key_pair.address);
+
+        let vote_data = new boasdk.DataPayload("0x617461642065746f76");
+        let payload_fee = BigInt(200000);
+        let tx_fee = BigInt(0);
+
+        let builder = new boasdk.TxBuilder(key_pair);
+
+        // Create UTXOManager
+        let utxo_manager = new boasdk.UTXOManager(utxos);
+        // Get UTXO for the amount to need.
+        // The amount of the UTXO found is one greater than the fee, allowing at least one change output.
+        utxo_manager.getUTXO(payload_fee + tx_fee + BigInt(1), block_height)
+            .forEach((u:boasdk.UnspentTxOutput) => builder.addInput(u.utxo, u.amount));
+
+        let tx = builder
+            .assignPayload(vote_data)
+            .sign(boasdk.TxType.Payment, tx_fee, payload_fee);
+
+        let expected =
+            {
+                "type": 0,
+                "inputs": [
+                    {
+                        "utxo": "0x3451d94322524e3923fd26f0597fb8a9cdbf3a9427c38ed1ca61104796d39c5b9b5ea33d576f17c2dc17bebc5d84a0559de8c8c521dfe725d4c352255fc71e85",
+                        "unlock": {
+                            "bytes": "ZFYeW86bZ06qFwu+F6Bjegi/ZZElrwEpvlw3IkM5KyqlHzUbCx3kOXfSSo8+WUtAFbKBtzES9QxU+ywfx6RUBQ=="
+                        },
+                        "unlock_age": 0
+                    },
+                    {
+                        "utxo": "0xfca92fe76629311c6208a49e89cb26f5260777278cd8b272e7bb3021adf429957fd6844eb3b8ff64a1f6074126163fd636877fa92a1f4329c5116873161fbaf8",
+                        "unlock": {
+                            "bytes": "ZFYeW86bZ06qFwu+F6Bjegi/ZZElrwEpvlw3IkM5KyqlHzUbCx3kOXfSSo8+WUtAFbKBtzES9QxU+ywfx6RUBQ=="
+                        },
+                        "unlock_age": 0
+                    }
+                ],
+                "outputs": [
+                    {
+                        "value": "200000",
+                        "lock": {
+                            "type": 0,
+                            "bytes": "2L1pan7b6W/iwgJYgbeuPqYliGn7UoBmGVZkWa6O8U8="
+                        }
+                    }
+                ],
+                "payload": "0x617461642065746f76",
+                "lock_height": "0"
+            };
+
+        tx.inputs.forEach((value, idx) => {
+            expected.inputs[idx].unlock = value.unlock.toJSON();
+        });
+
+        assert.strictEqual(JSON.stringify(tx), JSON.stringify(expected));
 
         let res = await boa_client.sendTransaction(tx);
         assert.ok(res);

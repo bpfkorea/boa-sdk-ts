@@ -123,12 +123,16 @@ export class TxBuilder
      * Create and sign a transaction and return the created transactions.
      * @param type The type of Transaction
      * @param lock_height The transaction-level height lock
+     * @param tx_fee The transaction fee
+     * @param payload_fee The payload fee
      * @param unlock_age The unlock age for each input in the transaction
      * @param unlocker optional callback to generate the unlock script.
      * If one is not provided then a LockType.Key unlock script
      * is automatically generated.
      */
     public sign (type: TxType = TxType.Payment,
+                 tx_fee: bigint = BigInt(0),
+                 payload_fee: bigint = BigInt(0),
                  lock_height: Height = new Height(BigInt(0)),
                  unlock_age: number = 0,
                  unlocker?: (tx: Transaction, s: RawInput, idx: number) => Unlock) : Transaction
@@ -136,14 +140,17 @@ export class TxBuilder
         if (this.inputs.length == 0)
             throw (new Error("No input for transaction."));
 
-        if (this.outputs.length == 0)
-            throw (new Error("No output for transaction."));
-
         if ((type === TxType.Freeze) && (this.payload !== undefined) && (this.payload.data.length > 0))
             throw (new Error("Freeze transaction cannot have data payload."));
 
-        if (this.amount > 0)
-            this.addOutput(this.owner_keypair.address, this.amount);
+        let total_fee = tx_fee + payload_fee;
+        if (this.amount > total_fee)
+            this.addOutput(this.owner_keypair.address, this.amount - total_fee);
+        else if (this.amount < total_fee)
+            throw (new Error("There is not enough fee."));
+
+        if (this.outputs.length == 0)
+            throw (new Error("No output for transaction."));
 
         let tx = new Transaction(type,
             this.inputs.map(n => new TxInput(n.utxo, Unlock.Null, unlock_age)),

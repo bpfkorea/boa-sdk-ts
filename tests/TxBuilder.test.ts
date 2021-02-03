@@ -124,16 +124,15 @@ describe ('TxBuilder', () =>
         let builder = new boasdk.TxBuilder(owner);
         let tx: boasdk.Transaction;
         let payload = new boasdk.DataPayload("0x617461642065746f76");
-        let commons_budget_address = new boasdk.PublicKey("GCOMMONBGUXXP4RFCYGEF74JDJVPUW2GUENGTKKJECDNO6AGO32CUWGU");
-        let fee = BigInt(500000);
+        let payload_fee = BigInt(500000);
+        let tx_fee = BigInt(0);
 
         try {
             tx = builder
                 .addInput(utxo_data1.utxo, utxo_data1.amount)
                 .addInput(utxo_data2.utxo, utxo_data2.amount)
-                .addOutput(commons_budget_address, fee)
                 .assignPayload(payload)
-                .sign(boasdk.TxType.Payment);
+                .sign(boasdk.TxType.Payment, tx_fee, payload_fee);
         }
         catch (error)
         {
@@ -146,26 +145,19 @@ describe ('TxBuilder', () =>
                 {
                     "utxo": "0xd9482016835acc6defdfd060216a5890e00cf8f0a79ab0b83d3385fc723cd45bfea66eb3587a684518ff1756951d38bf4f07abda96dcdea1c160a4f83e377c32",
                     "unlock": {
-                        "bytes": "2jPCqENPCJCXlrzkqNdtWnzeR98LTVH1VmIxPV2pXbJopuEIefcXKLr7BzzZzYc3HbTIb9ztmgMVQCehllATDg=="
+                        "bytes": "Y1fK4ZgV0ujaiJesexIv1QdamFUe6oZFDzWnoF/gVGP8ovuLs6Sxsg/40bLXOJvk1zuReko0IYgYAdk8DK+pCA=="
                     },
                     "unlock_age": 0
                 },
                 {
                     "utxo": "0x4dde806d2e09367f9d5bdaaf46deab01a336a64fdb088dbb94edb171560c63cf6a39377bf0c4d35118775681d989dee46531926299463256da303553f09be6ef",
                     "unlock": {
-                        "bytes": "2jPCqENPCJCXlrzkqNdtWnzeR98LTVH1VmIxPV2pXbJopuEIefcXKLr7BzzZzYc3HbTIb9ztmgMVQCehllATDg=="
+                        "bytes": "Y1fK4ZgV0ujaiJesexIv1QdamFUe6oZFDzWnoF/gVGP8ovuLs6Sxsg/40bLXOJvk1zuReko0IYgYAdk8DK+pCA=="
                     },
                     "unlock_age": 0
                 }
             ],
             "outputs": [
-                {
-                    "value": "500000",
-                    "lock": {
-                        "type": 0,
-                        "bytes": "nMY5oTUvd/IlFgxC/4kaavpbRqEaaalJIIbXeAZ29Co="
-                    }
-                },
                 {
                     "value": "1999500000",
                     "lock": {
@@ -179,5 +171,38 @@ describe ('TxBuilder', () =>
         };
 
         assert.deepStrictEqual(JSON.stringify(tx), JSON.stringify(obj));
+    });
+
+    it ('Test to create a transaction with data payload - no output', () =>
+    {
+        let builder = new boasdk.TxBuilder(owner);
+        let tx: boasdk.Transaction;
+        let payload = new boasdk.DataPayload("0x617461642065746f76");
+        let payload_fee = BigInt(1000000000);
+        let tx_fee = BigInt(0);
+
+        assert.throws(() => {
+            tx = builder
+                .addInput(utxo_data1.utxo, utxo_data1.amount)
+                .assignPayload(payload)
+                .sign(boasdk.TxType.Payment, tx_fee, payload_fee);
+        }, new Error("No output for transaction."));
+    });
+
+    it ('Test to create a transaction with data payload - exist output', () =>
+    {
+        let builder = new boasdk.TxBuilder(owner);
+        let tx: boasdk.Transaction;
+        let payload = new boasdk.DataPayload("0x617461642065746f76");
+        let payload_fee = BigInt(1000000000);
+        let tx_fee = BigInt(0);
+
+        assert.doesNotThrow(() => {
+            tx = builder
+                .addInput(utxo_data1.utxo, utxo_data1.amount)
+                .addInput(utxo_data2.utxo, utxo_data2.amount)
+                .assignPayload(payload)
+                .sign(boasdk.TxType.Payment, tx_fee, payload_fee);
+        }, new Error("No output for transaction."));
     });
 });
