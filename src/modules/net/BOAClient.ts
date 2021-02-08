@@ -19,6 +19,7 @@ import { PublicKey } from '../common/KeyPair';
 import { Request } from './Request';
 import { UnspentTxOutput } from './response/UnspentTxOutput';
 import { Validator } from './response/Validator';
+import { TransactionFee } from './response/TrasactionFee';
 import { Transaction } from '../data/Transaction';
 import { handleNetworkError } from './error/ErrorTypes';
 
@@ -308,6 +309,42 @@ export class BOAClient
             .then((response: AxiosResponse) => {
                 return JSBI.BigInt(response.data);
             });
+    }
+
+    /**
+     * Request an appropriate fee based on the size of the transaction to Stoa.
+     * @param tx_size The size of the transaction
+     * @returns Promise that resolves or
+     * rejects with response from the Stoa
+     */
+    public getTransactionFee (tx_size: number): Promise<TransactionFee>
+    {
+        return new Promise<TransactionFee>((resolve, reject) =>
+        {
+            let url = uri(this.server_url)
+                .directory("transaction/fees")
+                .filename(tx_size.toString());
+
+            Request.get(url.toString())
+                .then((response: AxiosResponse) =>
+                {
+                    if (response.status == 200)
+                    {
+                        let fees = new TransactionFee();
+                        fees.fromJSON(response.data)
+                        resolve(fees);
+                    }
+                    else
+                    {
+                        // It is not yet defined in Stoa.
+                        reject(handleNetworkError({response: response}));
+                    }
+                })
+                .catch((reason: any) =>
+                {
+                    reject(handleNetworkError(reason));
+                });
+        });
     }
 }
 

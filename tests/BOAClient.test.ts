@@ -261,6 +261,41 @@ export class TestStoa {
                 res.status(200).send("10");
             });
 
+        // http://localhost/transaction/fees
+        this.app.get("/transaction/fees/:tx_size",
+            (req: express.Request, res: express.Response) => {
+
+                let size: string = req.params.tx_size.toString();
+
+                if (!boasdk.Utils.isPositiveInteger(size))
+                {
+                    res.status(400).send(`Invalid value for parameter 'tx_size': ${size}`);
+                    return;
+                }
+
+                let tx_size = JSBI.BigInt(size);
+                let factor = JSBI.BigInt(200);
+                let minimum = JSBI.BigInt(100_000);     // 0.01BOA
+                let medium = JSBI.multiply(tx_size, factor);
+                if (JSBI.lessThan(medium, minimum))
+                    medium = JSBI.BigInt(minimum);
+
+                let width = JSBI.divide(medium, JSBI.BigInt(10));
+                let high = JSBI.add(medium, width);
+                let low = JSBI.subtract(medium, width);
+                if (JSBI.lessThan(low, minimum))
+                    low = JSBI.BigInt(minimum);
+
+                let data = {
+                    tx_size: JSBI.toNumber(tx_size),
+                    high: high.toString(),
+                    medium: medium.toString(),
+                    low: low.toString()
+                };
+
+                res.status(200).send(JSON.stringify(data));
+            });
+
         this.app.set('port', this.port);
 
         // Listen on provided this.port on this.address.
@@ -967,5 +1002,34 @@ describe('BOA Client', () => {
 
         let res = await boa_client.sendTransaction(tx);
         assert.ok(res);
+    });
+
+    it('Test calculating fees of the transaction', async () =>
+    {
+        // Set URL
+        let stoa_uri = URI("http://localhost").port(stoa_port);
+        let agora_uri = URI("http://localhost").port(agora_port);
+
+        // Create BOA Client
+        let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
+        let fees = await boa_client.getTransactionFee(0);
+        assert.strictEqual(fees.medium, "100000");
+        assert.strictEqual(fees.low, "100000");
+        assert.strictEqual(fees.high, "110000");
+
+        fees = await boa_client.getTransactionFee(500);
+        assert.strictEqual(fees.medium, "100000");
+        assert.strictEqual(fees.low, "100000");
+        assert.strictEqual(fees.high, "110000");
+
+        fees = await boa_client.getTransactionFee(1_000);
+        assert.strictEqual(fees.medium, "200000");
+        assert.strictEqual(fees.low, "180000");
+        assert.strictEqual(fees.high, "220000");
+
+        fees = await boa_client.getTransactionFee(100_000);
+        assert.strictEqual(fees.medium, "20000000");
+        assert.strictEqual(fees.low, "18000000");
+        assert.strictEqual(fees.high, "22000000");
     });
 });
