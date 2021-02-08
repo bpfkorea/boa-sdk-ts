@@ -324,7 +324,7 @@ export class Point
      * @param hex The hex string
      * @returns The instance of Point
      */
-    public fromString (hex: string): Hash
+    public fromString (hex: string): Point
     {
         Utils.readFromString(hex, this.data);
         return this;
