@@ -94,4 +94,13 @@ export class TxOutput
             lock: this.lock.toJSON()
         };
     }
+
+    /**
+     * Returns the data size.
+     */
+    public getNumberOfBytes (): number
+    {
+        return Utils.SIZE_OF_LONG +         //  TxOutput.value
+            this.lock.getNumberOfBytes();   //  TxOutput.lock
+    }
 }

@@ -14,6 +14,7 @@
 import { JSONValidator } from '../utils/JSONValidator';
 import { Hash, makeUTXOKey } from '../common/Hash';
 import { Unlock } from '../script/Lock';
+import { Utils } from '../utils/Utils';
 
 import JSBI from 'jsbi';
 import { SmartBuffer } from 'smart-buffer';
@@ -94,5 +95,15 @@ export class TxInput
     {
         this.utxo.computeHash(buffer);
         buffer.writeUInt32LE(this.unlock_age)
+    }
+
+    /**
+     * Returns the data size.
+     */
+    public getNumberOfBytes (): number
+    {
+        return Hash.Width +                     // TxInput.utxo
+            this.unlock.getNumberOfBytes() +    // TxInput.unlock
+            Utils.SIZE_OF_INT;                  // TxInput.unlock_age
     }
 }

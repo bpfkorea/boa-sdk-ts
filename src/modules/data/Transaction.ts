@@ -123,4 +123,21 @@ export class Transaction
         Utils.writeJSBigIntLE(buf, this.lock_height.value);
         buffer.writeBuffer(buf);
     }
+
+    /**
+     * Returns the transaction size.
+     */
+    public getNumberOfBytes (): number
+    {
+        let bytes_length = Utils.SIZE_OF_BYTE + //  Transaction.type
+            this.payload.data.length +          //  Transaction.payload
+            Utils.SIZE_OF_LONG;                 //  Transaction.lock_height
+
+        for (let elem of this.inputs)
+            bytes_length += elem.getNumberOfBytes();
+        for (let elem of this.outputs)
+            bytes_length += elem.getNumberOfBytes();
+
+        return bytes_length;
+    }
 }

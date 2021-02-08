@@ -25,6 +25,10 @@ export enum Endian
 
 export class Utils
 {
+    public static readonly SIZE_OF_BYTE: number = 1;
+    public static readonly SIZE_OF_INT: number = 4;
+    public static readonly SIZE_OF_LONG: number  = 8;
+
     /**
      * Check whether the string is a integer.
      * @param value

@@ -91,6 +91,18 @@ describe('Hash', () =>
             "0x6dbcc8c36bd1f95986d8b06a6bad320b0719e14bb1afe2cf824618c3311a23b" +
             "5ac9c35f474dc67182cf17bb609f46e4049f793b996321f6fad88a2925badf198");
 
+        let nBytes =
+            boasdk.Utils.SIZE_OF_BYTE +     //  Transaction.type
+            boasdk.Hash.Width +             //  TxInput.utxo
+            0 +                             //  TxInput.unlock.bytes
+            boasdk.Utils.SIZE_OF_INT +      //  TxInput.unlock_age
+            boasdk.Utils.SIZE_OF_LONG +     //  TxOutput.value
+            boasdk.Utils.SIZE_OF_BYTE  +    //  TxOutput.lock.type
+            0 +                             //  TxOutput.lock.bytes
+            0 +                             //  Transaction.payload
+            boasdk.Utils.SIZE_OF_LONG;      //  Transaction.lock_height
+        assert.strictEqual(payment_tx.getNumberOfBytes(), nBytes);
+
         let freeze_tx = new boasdk.Transaction(
             boasdk.TxType.Freeze,
             [
@@ -105,6 +117,8 @@ describe('Hash', () =>
         assert.strictEqual(boasdk.hashFull(freeze_tx).toString(),
             "0xf028cecf9498bc615e3ac4ff18efa98c6428b8af1f26a2cfa73518d039a4f2e" +
             "f4f600f28cd25403ad588f0d42e3987863bbd26cdd28b136fee4b80b7f0cc061a");
+
+        assert.strictEqual(freeze_tx.getNumberOfBytes(), nBytes);
     });
 
     // See_Also: https://github.com/bpfkorea/agora/blob/73a7cd593afab6726021e05cf16b90d246343d65/source/agora/consensus/data/Block.d#L118-L138

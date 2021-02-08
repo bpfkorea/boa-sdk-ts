@@ -38,6 +38,7 @@
 import { PublicKey } from '../common/KeyPair';
 import { Signature } from '../common/Signature';
 import { JSONValidator } from '../..';
+import { Utils } from "../utils/Utils";
 
 import { SmartBuffer } from 'smart-buffer';
 
@@ -143,6 +144,15 @@ export class Lock
             bytes: this.bytes.toString("base64")
         }
     }
+
+    /**
+     * Returns the data size.
+     */
+    public getNumberOfBytes (): number
+    {
+        return Utils.SIZE_OF_BYTE + // Lock.type
+            this.bytes.length;      // Lock.bytes
+    }
 }
 
 /**
@@ -218,5 +228,13 @@ export class Unlock
         return {
             bytes: this.bytes.toString("base64")
         }
+    }
+
+    /**
+     * Returns the data size.
+     */
+    public getNumberOfBytes (): number
+    {
+        return this.bytes.length;   // Unlock.bytes
     }
 }
