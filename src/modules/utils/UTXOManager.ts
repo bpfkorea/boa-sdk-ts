@@ -123,7 +123,7 @@ export class UTXOManager
                 && JSBI.lessThanOrEqual(JSBI.subtract(n.unlock_height, JSBI.BigInt(1)), height)))
             .filter((n) =>
             {
-                if (sum >= amount)
+                if (JSBI.greaterThanOrEqual(sum, amount))
                     return false;
                 sum = JSBI.add(sum, n.amount);
                 n.used = true;
