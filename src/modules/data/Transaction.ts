@@ -140,4 +140,17 @@ export class Transaction
 
         return bytes_length;
     }
+
+    /**
+     * Returns the estimated transaction size.
+     * @param num_input The number of the inputs
+     * @param num_output The number of the outputs
+     * @param num_bytes_payload The bytes of the payload
+     */
+    public static getEstimatedNumberOfBytes (num_input: number, num_output: number, num_bytes_payload: number): number
+    {
+        return Utils.SIZE_OF_BYTE + Utils.SIZE_OF_LONG + num_bytes_payload +
+            (num_input * TxInput.getEstimatedNumberOfBytes()) +
+            (num_output * TxOutput.getEstimatedNumberOfBytes());
+    }
 }

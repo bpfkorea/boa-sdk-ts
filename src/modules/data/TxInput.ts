@@ -13,6 +13,7 @@
 
 import { JSONValidator } from '../utils/JSONValidator';
 import { Hash, makeUTXOKey } from '../common/Hash';
+import { Signature } from '../common/Signature';
 import { Unlock } from '../script/Lock';
 import { Utils } from '../utils/Utils';
 
@@ -105,5 +106,13 @@ export class TxInput
         return Hash.Width +                     // TxInput.utxo
             this.unlock.getNumberOfBytes() +    // TxInput.unlock
             Utils.SIZE_OF_INT;                  // TxInput.unlock_age
+    }
+
+    /**
+     * Returns the estimated data size.
+     */
+    public static getEstimatedNumberOfBytes (): number
+    {
+        return Hash.Width + Utils.SIZE_OF_INT + Signature.Width;
     }
 }

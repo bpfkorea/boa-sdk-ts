@@ -14,6 +14,7 @@
 import { JSONValidator } from '../utils/JSONValidator';
 import { PublicKey } from '../common/KeyPair';
 import { Utils } from "../utils/Utils";
+import { SodiumHelper } from '../utils/SodiumHelper';
 import { Lock } from '../script/Lock';
 
 import JSBI from 'jsbi';
@@ -102,5 +103,13 @@ export class TxOutput
     {
         return Utils.SIZE_OF_LONG +         //  TxOutput.value
             this.lock.getNumberOfBytes();   //  TxOutput.lock
+    }
+
+    /**
+     * Returns the estimated data size.
+     */
+    public static getEstimatedNumberOfBytes (): number
+    {
+        return Utils.SIZE_OF_LONG + Utils.SIZE_OF_BYTE + Utils.SIZE_OF_PUBLIC_KEY;
     }
 }
