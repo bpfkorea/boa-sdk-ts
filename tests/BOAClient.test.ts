@@ -1054,32 +1054,20 @@ describe('BOA Client', () => {
         // Create UTXOManager
         let utxo_manager = new boasdk.UTXOManager(utxos);
 
-        let fee_factor = 200;
-        let estimated_input_size = boasdk.Hash.Width + boasdk.Utils.SIZE_OF_INT + boasdk.Signature.Width;
-        let estimated_output_size = boasdk.Utils.SIZE_OF_LONG + boasdk.Utils.SIZE_OF_BYTE + boasdk.SodiumHelper.sodium.crypto_sign_PUBLICKEYBYTES;
-        let estimated_tx_size = boasdk.Utils.SIZE_OF_BYTE + boasdk.Utils.SIZE_OF_LONG;
-
-        let getTxEstimatedNumberOfBytes = (num_input: number, num_output: number, num_bytes_payload: number): number =>
-        {
-            return estimated_tx_size + num_bytes_payload +
-                num_input * estimated_input_size +
-                num_output + estimated_output_size;
-        }
-
         let output_address = "GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW";
         let output_count = 2;
-        let estimated_tx_fee = JSBI.BigInt(fee_factor *
-            getTxEstimatedNumberOfBytes(0, output_count, vote_data.data.length));
+        let estimated_tx_fee = JSBI.BigInt(boasdk.Utils.FEE_FACTOR *
+            boasdk.Transaction.getEstimatedNumberOfBytes(0, output_count, vote_data.data.length));
 
         let send_boa = JSBI.BigInt(200000);
         let total_fee = JSBI.add(payload_fee, estimated_tx_fee);
         let total_send_amount = JSBI.add(total_fee, send_boa);
 
         let in_utxos = utxo_manager.getUTXO(total_send_amount, block_height,
-            JSBI.BigInt(fee_factor * estimated_input_size));
+            JSBI.BigInt(boasdk.Utils.FEE_FACTOR * boasdk.TxInput.getEstimatedNumberOfBytes()));
         in_utxos.forEach((u: boasdk.UnspentTxOutput) => builder.addInput(u.utxo, u.amount));
-        estimated_tx_fee = JSBI.BigInt(fee_factor *
-            getTxEstimatedNumberOfBytes(in_utxos.length, output_count, vote_data.data.length));
+        estimated_tx_fee = JSBI.BigInt(boasdk.Utils.FEE_FACTOR *
+            boasdk.Transaction.getEstimatedNumberOfBytes(in_utxos.length, output_count, vote_data.data.length));
 
         // Build a transaction
         let tx = builder
@@ -1107,11 +1095,11 @@ describe('BOA Client', () => {
             in_utxos.push(
                 ...utxo_manager.getUTXO(JSBI.subtract(total_send_amount, sum_amount_utxo),
                     block_height,
-                    JSBI.BigInt(fee_factor * estimated_input_size))
+                    JSBI.BigInt(boasdk.Utils.FEE_FACTOR * boasdk.TxInput.getEstimatedNumberOfBytes()))
             );
             in_utxos.forEach((u: boasdk.UnspentTxOutput) => builder.addInput(u.utxo, u.amount));
-            estimated_tx_fee = JSBI.BigInt(fee_factor *
-                getTxEstimatedNumberOfBytes(in_utxos.length, output_count, vote_data.data.length));
+            estimated_tx_fee = JSBI.BigInt(boasdk.Utils.FEE_FACTOR *
+                boasdk.Transaction.getEstimatedNumberOfBytes(in_utxos.length, output_count, vote_data.data.length));
 
             // Build a transaction
             tx = builder

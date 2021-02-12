@@ -32,6 +32,8 @@ export class Utils
     public static readonly SIZE_OF_SECRET_KEY: number = 64;
     public static readonly SIZE_OF_SEED_KEY: number = 32;
 
+    public static readonly FEE_FACTOR: number = 200;
+
     /**
      * Check whether the string is a integer.
      * @param value
