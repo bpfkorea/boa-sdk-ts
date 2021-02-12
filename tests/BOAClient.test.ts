@@ -1032,4 +1032,168 @@ describe('BOA Client', () => {
         assert.strictEqual(fees.low, "18000000");
         assert.strictEqual(fees.high, "22000000");
     });
+
+    it ('Test applying accurate transaction fee', async () =>
+    {
+        // Set URL
+        let stoa_uri = URI("http://localhost").port(stoa_port);
+        let agora_uri = URI("http://localhost").port(agora_port);
+
+        // Create BOA Client
+        let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
+
+        let key_pair = boasdk.KeyPair.fromSeed(new boasdk.Seed("SBUC7CPSZVNHNNYO3SY7ZNBT3K3X6RWOC3NC4FVU4GOJXC3H5BUBC7YE"));
+        let block_height = await boa_client.getBlockHeight();
+        let utxos = await boa_client.getUTXOs(key_pair.address);
+
+        let vote_data = new boasdk.DataPayload("0x617461642065746f76");
+        let payload_fee = boasdk.TxPayloadFee.getFee(vote_data.data.length);
+
+        let builder = new boasdk.TxBuilder(key_pair);
+
+        // Create UTXOManager
+        let utxo_manager = new boasdk.UTXOManager(utxos);
+
+        let fee_factor = 200;
+        let estimated_input_size = boasdk.Hash.Width + boasdk.Utils.SIZE_OF_INT + boasdk.Signature.Width;
+        let estimated_output_size = boasdk.Utils.SIZE_OF_LONG + boasdk.Utils.SIZE_OF_BYTE + boasdk.SodiumHelper.sodium.crypto_sign_PUBLICKEYBYTES;
+        let estimated_tx_size = boasdk.Utils.SIZE_OF_BYTE + boasdk.Utils.SIZE_OF_LONG;
+
+        let getTxEstimatedNumberOfBytes = (num_input: number, num_output: number, num_bytes_payload: number): number =>
+        {
+            return estimated_tx_size + num_bytes_payload +
+                num_input * estimated_input_size +
+                num_output + estimated_output_size;
+        }
+
+        let output_address = "GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW";
+        let output_count = 2;
+        let estimated_tx_fee = JSBI.BigInt(fee_factor *
+            getTxEstimatedNumberOfBytes(0, output_count, vote_data.data.length));
+
+        let send_boa = JSBI.BigInt(200000);
+        let total_fee = JSBI.add(payload_fee, estimated_tx_fee);
+        let total_send_amount = JSBI.add(total_fee, send_boa);
+
+        let in_utxos = utxo_manager.getUTXO(total_send_amount, block_height,
+            JSBI.BigInt(fee_factor * estimated_input_size));
+        in_utxos.forEach((u: boasdk.UnspentTxOutput) => builder.addInput(u.utxo, u.amount));
+        estimated_tx_fee = JSBI.BigInt(fee_factor *
+            getTxEstimatedNumberOfBytes(in_utxos.length, output_count, vote_data.data.length));
+
+        // Build a transaction
+        let tx = builder
+            .addOutput(new boasdk.PublicKey(output_address), send_boa)
+            .assignPayload(vote_data)
+            .sign(boasdk.TxType.Payment, estimated_tx_fee, payload_fee);
+
+        // Get the size of the transaction
+        let tx_size = tx.getNumberOfBytes();
+
+        // Fees based on the transaction size is obtained from Stoa.
+        let fees = await boa_client.getTransactionFee(tx_size);
+
+        // Select medium
+        let tx_fee = JSBI.BigInt(fees.medium);
+
+        let sum_amount_utxo = in_utxos.reduce<JSBI>((sum, n) => JSBI.add(sum, n.amount), JSBI.BigInt(0));
+        total_fee = JSBI.add(payload_fee, tx_fee);
+        total_send_amount = JSBI.add(total_fee, send_boa);
+
+        // If the value of LockType in UTXO is not a 'LockType.Key', the size may vary. The code below is for that.
+        if (JSBI.lessThan(sum_amount_utxo, total_send_amount))
+        {
+            //  Add additional UTXO for the required amount.
+            in_utxos.push(
+                ...utxo_manager.getUTXO(JSBI.subtract(total_send_amount, sum_amount_utxo),
+                    block_height,
+                    JSBI.BigInt(fee_factor * estimated_input_size))
+            );
+            in_utxos.forEach((u: boasdk.UnspentTxOutput) => builder.addInput(u.utxo, u.amount));
+            estimated_tx_fee = JSBI.BigInt(fee_factor *
+                getTxEstimatedNumberOfBytes(in_utxos.length, output_count, vote_data.data.length));
+
+            // Build a transaction
+            tx = builder
+                .addOutput(new boasdk.PublicKey(output_address), send_boa)
+                .assignPayload(vote_data)
+                .sign(boasdk.TxType.Payment, estimated_tx_fee, payload_fee);
+
+            // Get the size of the transaction
+            tx_size = tx.getNumberOfBytes();
+
+            // Fees based on the transaction size is obtained from Stoa.
+            fees = await boa_client.getTransactionFee(tx_size);
+
+            // Select medium
+            tx_fee = JSBI.BigInt(fees.medium);
+        }
+
+        in_utxos.forEach((u: boasdk.UnspentTxOutput) => builder.addInput(u.utxo, u.amount));
+        tx = builder
+            .addOutput(new boasdk.PublicKey(output_address), send_boa)
+            .assignPayload(vote_data)
+            .sign(boasdk.TxType.Payment, tx_fee, payload_fee);
+
+        let expected = {
+            "type": 0,
+            "inputs": [
+                {
+                    "utxo": "0x3451d94322524e3923fd26f0597fb8a9cdbf3a9427c38ed1ca61104796d39c5b9b5ea33d576f17c2dc17bebc5d84a0559de8c8c521dfe725d4c352255fc71e85",
+                    "unlock": {
+                        "bytes": "D7ADPkzI0kwSxrGTyQXCsE8Z2jlSmQQUW++CzorlTzcAVgddL/CvksFudgZgMZDHDe6p9JjAlhA1W/3nzAzBBg=="
+                    },
+                    "unlock_age": 0
+                },
+                {
+                    "utxo": "0xfca92fe76629311c6208a49e89cb26f5260777278cd8b272e7bb3021adf429957fd6844eb3b8ff64a1f6074126163fd636877fa92a1f4329c5116873161fbaf8",
+                    "unlock": {
+                        "bytes": "D7ADPkzI0kwSxrGTyQXCsE8Z2jlSmQQUW++CzorlTzcAVgddL/CvksFudgZgMZDHDe6p9JjAlhA1W/3nzAzBBg=="
+                    },
+                    "unlock_age": 0
+                },
+                {
+                    "utxo": "0x7e1958dbe6839d8520d65013bbc85d36d47a9f64cf608cc66c0d816f0b45f5c8a85a8990725ffbb1ab13c3c65b45fdc06f4745d455e00e1068c4c5c0b661d685",
+                    "unlock": {
+                        "bytes": "D7ADPkzI0kwSxrGTyQXCsE8Z2jlSmQQUW++CzorlTzcAVgddL/CvksFudgZgMZDHDe6p9JjAlhA1W/3nzAzBBg=="
+                    },
+                    "unlock_age": 0
+                },
+                {
+                    "utxo": "0xd44608de8a5015b04f933098fd7f67f84ffbf00c678836d38c661ab6dc1f149606bdc96bad149375e16dc5722b077b14c0a4afdbe6d30932f783650f435bcb92",
+                    "unlock": {
+                        "bytes": "D7ADPkzI0kwSxrGTyQXCsE8Z2jlSmQQUW++CzorlTzcAVgddL/CvksFudgZgMZDHDe6p9JjAlhA1W/3nzAzBBg=="
+                    },
+                    "unlock_age": 0
+                },
+                {
+                    "utxo": "0xc3780f9907a97c20a2955945544e7732a60702c32d81e016bdf1ea172b7b7fb96e9a4164176663a146615307aaadfbbad77e615a7c792a89191e85471120d314",
+                    "unlock": {
+                        "bytes": "D7ADPkzI0kwSxrGTyQXCsE8Z2jlSmQQUW++CzorlTzcAVgddL/CvksFudgZgMZDHDe6p9JjAlhA1W/3nzAzBBg=="
+                    },
+                    "unlock_age": 0
+                }
+            ],
+            "outputs": [
+                {
+                    "value": "200000",
+                    "lock": {
+                        "type": 0,
+                        "bytes": "x9iUwUUAUTrwBrnguo84lfyvTZHHT46ge180pVV6WNU="
+                    }
+                },
+                {
+                    "value": "148000",
+                    "lock": {
+                        "type": 0,
+                        "bytes": "2L1pan7b6W/iwgJYgbeuPqYliGn7UoBmGVZkWa6O8U8="
+                    }
+                }
+            ],
+            "payload": "0x617461642065746f76",
+            "lock_height": "0"
+        };
+
+        assert.strictEqual(JSON.stringify(tx), JSON.stringify(expected));
+    });
 });

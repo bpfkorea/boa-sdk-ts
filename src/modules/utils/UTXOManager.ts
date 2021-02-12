@@ -103,30 +103,35 @@ export class UTXOManager
      * based on the amount entered.
      * @param amount The required amount
      * @param height The height of latest block
+     * @param estimated_input_fee The estimated fee of the size of one TxInput
      * @returns Returns the available array of UTXO. If the available amount
      * is less than the requested amount, the empty array is returned.
      */
-    public getUTXO (amount: JSBI, height: JSBI): Array<UnspentTxOutput>
+    public getUTXO (amount: JSBI, height: JSBI, estimated_input_fee: JSBI = JSBI.BigInt(0)): Array<UnspentTxOutput>
     {
-        if (JSBI.lessThanOrEqual(amount, JSBI.BigInt(0)))
-            throw new Error(`Positive amount expected, not ${amount.toString()}`);
+        let target_amount = JSBI.BigInt(amount);
+        if (JSBI.lessThanOrEqual(target_amount, JSBI.BigInt(0)))
+            throw new Error(`Positive amount expected, not ${target_amount.toString()}`);
 
         if (JSBI.lessThanOrEqual(height, JSBI.BigInt(0)))
             throw new Error(`Positive height expected, not ${height.toString()}`);
 
-        if (JSBI.greaterThan(amount, this.getSum(height)[TxType.Payment]))
+        if (JSBI.greaterThan(target_amount, this.getSum(height)[TxType.Payment]))
             return [];
 
+        target_amount = JSBI.add(target_amount, estimated_input_fee);
         let sum = JSBI.BigInt(0);
         return this.items
             .filter(n => (!n.used && (n.type == TxType.Payment)
                 && JSBI.lessThanOrEqual(JSBI.subtract(n.unlock_height, JSBI.BigInt(1)), height)))
             .filter((n) =>
             {
-                if (JSBI.greaterThanOrEqual(sum, amount))
+                if (JSBI.greaterThanOrEqual(sum, target_amount))
                     return false;
                 sum = JSBI.add(sum, n.amount);
                 n.used = true;
+
+                target_amount = JSBI.add(target_amount, estimated_input_fee);
                 return true
             })
             .map(n => new UnspentTxOutput(
