@@ -28,6 +28,9 @@ export class Utils
     public static readonly SIZE_OF_BYTE: number = 1;
     public static readonly SIZE_OF_INT: number = 4;
     public static readonly SIZE_OF_LONG: number  = 8;
+    public static readonly SIZE_OF_PUBLIC_KEY: number = 32;
+    public static readonly SIZE_OF_SECRET_KEY: number = 64;
+    public static readonly SIZE_OF_SEED_KEY: number = 32;
 
     /**
      * Check whether the string is a integer.

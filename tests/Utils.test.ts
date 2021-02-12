@@ -14,6 +14,7 @@
 import * as boasdk from '../lib';
 
 import * as assert from 'assert';
+import {SodiumHelper} from "../src";
 
 describe ('Test of isInteger, isPositiveInteger, isNegativeInteger', () =>
 {
@@ -61,6 +62,11 @@ describe ('Test for JSON serialization', () =>
 
 describe ('Test of Utils', () =>
 {
+    before('Wait for the package libsodium to finish loading', async () =>
+    {
+        await boasdk.SodiumHelper.init();
+    });
+
     it('Test of Utils.compareBuffer', () =>
     {
         let a = Buffer.from([6, 3, 2, 1]);
@@ -81,5 +87,12 @@ describe ('Test of Utils', () =>
         let y = Buffer.from([6, 5, 4, 3, 4, 1]);
         assert.ok(boasdk.Utils.compareBuffer(x, y) < 0);
         assert.ok(boasdk.Utils.compareBuffer(y, x) > 0);
+    });
+
+    it ('Test of sizeof keys', () =>
+    {
+        assert.strictEqual(boasdk.Utils.SIZE_OF_PUBLIC_KEY, boasdk.SodiumHelper.sodium.crypto_sign_PUBLICKEYBYTES);
+        assert.strictEqual(boasdk.Utils.SIZE_OF_SECRET_KEY, boasdk.SodiumHelper.sodium.crypto_sign_SECRETKEYBYTES);
+        assert.strictEqual(boasdk.Utils.SIZE_OF_SEED_KEY, boasdk.SodiumHelper.sodium.crypto_sign_SEEDBYTES);
     });
 });
