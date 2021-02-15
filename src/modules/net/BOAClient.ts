@@ -20,6 +20,7 @@ import { Request } from './Request';
 import { UnspentTxOutput } from './response/UnspentTxOutput';
 import { Validator } from './response/Validator';
 import { TransactionFee } from './response/TrasactionFee';
+import { ITxHistoryElement, ITxOverview, IPendingTxs } from './response/Types';
 import { Transaction } from '../data/Transaction';
 import { handleNetworkError } from './error/ErrorTypes';
 
@@ -333,6 +334,127 @@ export class BOAClient
                         let fees = new TransactionFee();
                         fees.fromJSON(response.data)
                         resolve(fees);
+                    }
+                    else
+                    {
+                        // It is not yet defined in Stoa.
+                        reject(handleNetworkError({response: response}));
+                    }
+                })
+                .catch((reason: any) =>
+                {
+                    reject(handleNetworkError(reason));
+                });
+        });
+    }
+
+    /**
+     * Request a history of transactions.
+     * @param address   An address that want to be inquired.
+     * @param page_size Maximum record count that can be obtained from one query
+     * @param page      The number on the page, this value begins with 1
+     * @param type      The parameter `type` is the type of transaction to query. ("payment", "freeze")
+     * @param begin     The start date of the range of dates to look up.
+     * @param end       The end date of the range of dates to look up.
+     * @param peer      This is used when users want to look up only specific
+     * Peer is the withdrawal address in the inbound transaction and a deposit address
+     * in the outbound transaction address of their counterparts.
+     */
+    public getWalletTransactionsHistory (
+        address: PublicKey,
+        page_size: number, page: number,
+        type: Array<string>,
+        begin?: number, end?: number,
+        peer?: string): Promise<Array<ITxHistoryElement>>
+    {
+        return new Promise<Array<ITxHistoryElement>>((resolve, reject) =>
+        {
+            let url = uri(this.server_url)
+                .directory("/wallet/transactions/history/")
+                .filename(address.toString())
+                .addSearch("pageSize", page_size.toString())
+                .addSearch("page", page.toString())
+                .addSearch("type", type.join(","));
+
+            if (begin !== undefined)
+                url.addSearch("beginDate", begin.toString());
+
+            if (end !== undefined)
+                url.addSearch("endDate", end.toString());
+
+            if (peer !== undefined)
+                url.addSearch("peer", peer);
+
+            Request.get(url.toString())
+                .then((response: AxiosResponse) =>
+                {
+                    if (response.status == 200)
+                    {
+                        resolve(response.data);
+                    }
+                    else
+                    {
+                        // It is not yet defined in Stoa.
+                        reject(handleNetworkError({response: response}));
+                    }
+                })
+                .catch((reason: any) =>
+                {
+                    reject(handleNetworkError(reason));
+                });
+        });
+    }
+
+    /**
+     * Request a overview of a transaction.
+     * @param tx_hash The hash of the transaction
+     */
+    public getWalletTransactionOverview (tx_hash: Hash): Promise<ITxOverview>
+    {
+        return new Promise<ITxOverview>((resolve, reject) =>
+        {
+            let url = uri(this.server_url)
+                .directory("/wallet/transaction/overview")
+                .filename(tx_hash.toString());
+
+            Request.get(url.toString())
+                .then((response: AxiosResponse) =>
+                {
+                    if (response.status == 200)
+                    {
+                        resolve(response.data);
+                    }
+                    else
+                    {
+                        // It is not yet defined in Stoa.
+                        reject(handleNetworkError({response: response}));
+                    }
+                })
+                .catch((reason: any) =>
+                {
+                    reject(handleNetworkError(reason));
+                });
+        });
+    }
+
+    /**
+     * Request pending transactions.
+     * @param address The input address of the pending transaction
+     */
+    public getWalletTransactionsPending (address: PublicKey): Promise<Array<IPendingTxs>>
+    {
+        return new Promise<Array<IPendingTxs>>((resolve, reject) =>
+        {
+            let url = uri(this.server_url)
+                .directory("/wallet/transactions/pending")
+                .filename(address.toString());
+
+            Request.get(url.toString())
+                .then((response: AxiosResponse) =>
+                {
+                    if (response.status == 200)
+                    {
+                        resolve(response.data);
                     }
                     else
                     {
