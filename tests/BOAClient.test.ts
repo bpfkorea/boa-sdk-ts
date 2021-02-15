@@ -149,6 +149,58 @@ let sample_utxo =
         }
     ];
 
+let sample_tx = {
+    "type": 0,
+    "inputs": [
+        {
+            "utxo": "0xc0abcbff07879bfdb1495b8fdb9a9e5d2b07a689c7b9b3c583459082259be35687c125a1ddd6bd28b4fe8533ff794d3dba466b5f91117bbf557c3f1b6ff50e5f",
+            "unlock": {
+                "bytes": "o78xIUchVl3X7B/KzFtDnt1K72bVeiAK4iy1ZK4+T5m0Fw3KCxf2YBdgLJ3jANQsH5eU7+YbABxCO1ayJaAGBw=="
+            },
+            "unlock_age": 0
+        }
+    ],
+    "outputs": [
+        {
+            "value": "4000000000000",
+            "lock": {
+                "type": 0,
+                "bytes": "2uGT6ekor8/HWR2ijoG2SXrc6XfFwBe1yBWSNNDlo7Q="
+            }
+        },
+        {
+            "value": "4000000000000",
+            "lock": {
+                "type": 0,
+                "bytes": "2uGT6ekor8/HWR2ijoG2SXrc6XfFwBe1yBWSNNDlo7Q="
+            }
+        },
+        {
+            "value": "4000000000000",
+            "lock": {
+                "type": 0,
+                "bytes": "2uGT6ekor8/HWR2ijoG2SXrc6XfFwBe1yBWSNNDlo7Q="
+            }
+        },
+        {
+            "value": "4000000000000",
+            "lock": {
+                "type": 0,
+                "bytes": "2uGT6ekor8/HWR2ijoG2SXrc6XfFwBe1yBWSNNDlo7Q="
+            }
+        },
+        {
+            "value": "4000000000000",
+            "lock": {
+                "type": 0,
+                "bytes": "2uGT6ekor8/HWR2ijoG2SXrc6XfFwBe1yBWSNNDlo7Q="
+            }
+        }
+    ],
+    "payload": "",
+    "lock_height": "0"
+};
+
 let sample_txs_history =
     [
         {
@@ -498,6 +550,37 @@ export class TestStoa {
                     return;
                 }
                 res.status(200).send(JSON.stringify(sample_txs_pending));
+            });
+
+        // http://localhost/transaction/pending
+        this.app.get("/transaction/pending/:hash",
+            (req: express.Request, res: express.Response) => {
+
+                let hash: string = String(req.params.hash);
+
+                let tx_hash: boasdk.Hash;
+                try
+                {
+                    tx_hash = new boasdk.Hash(hash);
+                }
+                catch (error)
+                {
+                    res.status(400).send(`Invalid value for parameter 'hash': ${hash}`);
+                    return;
+                }
+
+                let sample_tx_hash = new boasdk.Hash(
+                    "0x4c1d71415c9ec7b182438e8bb669e324dde9be93b9c223a2ca831689d2e9598" +
+                    "c628d07c84d3ee0941e9f6fb597faf4fe92518fa35e577ba12125919c0501d4bd");
+
+                if (Buffer.compare(tx_hash.data, sample_tx_hash.data) != 0)
+                {
+                    res.status(204).send(`No pending transactions. hash': (${hash})`);
+                }
+                else
+                {
+                    res.status(200).send(JSON.stringify(sample_tx));
+                }
             });
 
         this.app.set('port', this.port);
@@ -1432,5 +1515,21 @@ describe('BOA Client', () => {
         let public_key = new boasdk.PublicKey("GDML22LKP3N6S37CYIBFRANXVY7KMJMINH5VFADGDFLGIWNOR3YU7T6I");
         let data = await boa_client.getWalletTransactionsPending(public_key);
         assert.deepStrictEqual(data, sample_txs_pending);
+    });
+
+    it ('Test a function of the BOA Client - `getPendingTransaction`', async () =>
+    {
+        // Set URL
+        let stoa_uri = URI("http://localhost").port(stoa_port);
+        let agora_uri = URI("http://localhost").port(agora_port);
+
+        // Create BOA Client
+        let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
+
+        let tx_hash = new boasdk.Hash(
+            "0x4c1d71415c9ec7b182438e8bb669e324dde9be93b9c223a2ca831689d2e9598" +
+            "c628d07c84d3ee0941e9f6fb597faf4fe92518fa35e577ba12125919c0501d4bd");
+        let tx = await boa_client.getPendingTransaction(tx_hash);
+        assert.deepStrictEqual(tx, boasdk.Transaction.reviver("", sample_tx));
     });
 });
