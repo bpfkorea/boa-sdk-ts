@@ -111,6 +111,30 @@ export class TxBuilder
     }
 
     /**
+     * Adds information to create transaction output in front
+     * @param lock The public key or instance of Lock
+     * @param amount  The amount to be sent. If this is not set,
+     * all remaining amounts of registered utxo will be set.
+     */
+    public addOutputInFront (lock: Lock | PublicKey, amount?: JSBI): TxBuilder
+    {
+        if (amount === undefined)
+            amount = this.amount;
+
+        if (JSBI.lessThanOrEqual(amount, JSBI.BigInt(0)))
+            throw new Error(`Positive amount expected, not ${amount.toString()}`);
+
+        if (JSBI.greaterThan(amount, this.amount))
+            throw new Error(`Insufficient amount. ${amount.toString()}:${this.amount.toString()}`);
+
+        this.outputs.unshift(new TxOutput(amount.toString(), lock));
+
+        this.amount = JSBI.subtract(this.amount, amount);
+
+        return this;
+    }
+
+    /**
      * Sets the data payload.
      * @param payload
      */
@@ -147,7 +171,7 @@ export class TxBuilder
 
         let total_fee = JSBI.add(tx_fee, payload_fee);
         if (JSBI.greaterThan(this.amount, total_fee))
-            this.addOutput(this.owner_keypair.address, JSBI.subtract(this.amount, total_fee));
+            this.addOutputInFront(this.owner_keypair.address, JSBI.subtract(this.amount, total_fee));
         else if (JSBI.lessThan(this.amount, total_fee))
             throw (new Error("There is not enough fee."));
 

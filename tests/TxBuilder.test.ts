@@ -85,31 +85,31 @@ describe ('TxBuilder', () =>
                 {
                     "utxo": "0xd9482016835acc6defdfd060216a5890e00cf8f0a79ab0b83d3385fc723cd45bfea66eb3587a684518ff1756951d38bf4f07abda96dcdea1c160a4f83e377c32",
                     "unlock": {
-                        "bytes": "ULl6e1e62IhkeeRgd9gMW4Y1rh6ngx0oGmOUDpAGIzoOPRjIYx3SyG/epY0D4fRkJ6WoVtavMe0/VgO8yZ9BBg=="
+                        "bytes": "6T6TFGKbFrd5RIJkLNRSU+dWv90lAi82SDNWLb55xT/9r8HMmhn/pyk3kmxgM6NS3xOo3+G+ZeaI41MStFTWAQ=="
                     },
                     "unlock_age": 0
                 },
                 {
                     "utxo": "0x4dde806d2e09367f9d5bdaaf46deab01a336a64fdb088dbb94edb171560c63cf6a39377bf0c4d35118775681d989dee46531926299463256da303553f09be6ef",
                     "unlock": {
-                        "bytes": "ULl6e1e62IhkeeRgd9gMW4Y1rh6ngx0oGmOUDpAGIzoOPRjIYx3SyG/epY0D4fRkJ6WoVtavMe0/VgO8yZ9BBg=="
+                        "bytes": "6T6TFGKbFrd5RIJkLNRSU+dWv90lAi82SDNWLb55xT/9r8HMmhn/pyk3kmxgM6NS3xOo3+G+ZeaI41MStFTWAQ=="
                     },
                     "unlock_age": 0
                 }
             ],
             "outputs": [
                 {
-                    "value": "20000000",
-                    "lock": {
-                        "type": 0,
-                        "bytes": "2uGT6ekor8/HWR2ijoG2SXrc6XfFwBe1yBWSNNDlo7Q="
-                    }
-                },
-                {
                     "value": "1980000000",
                     "lock": {
                         "type": 0,
                         "bytes": "x9iUwUUAUTrwBrnguo84lfyvTZHHT46ge180pVV6WNU="
+                    }
+                },
+                {
+                    "value": "20000000",
+                    "lock": {
+                        "type": 0,
+                        "bytes": "2uGT6ekor8/HWR2ijoG2SXrc6XfFwBe1yBWSNNDlo7Q="
                     }
                 }
             ],
