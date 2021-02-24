@@ -83,8 +83,8 @@ export class UTXOManager
      */
     public getSum (height?: JSBI): [JSBI, JSBI, JSBI]
     {
-        if ((height !== undefined) && JSBI.lessThanOrEqual(height, JSBI.BigInt(0)))
-            throw new Error(`Positive height expected, not ${height.toString()}`);
+        if ((height !== undefined) && JSBI.lessThan(height, JSBI.BigInt(0)))
+            throw new Error(`The height must be greater than or equal to zero, not ${height.toString()}`);
 
         return this.items
             .filter(n => !n.used)
@@ -113,8 +113,8 @@ export class UTXOManager
         if (JSBI.lessThanOrEqual(target_amount, JSBI.BigInt(0)))
             throw new Error(`Positive amount expected, not ${target_amount.toString()}`);
 
-        if (JSBI.lessThanOrEqual(height, JSBI.BigInt(0)))
-            throw new Error(`Positive height expected, not ${height.toString()}`);
+        if (JSBI.lessThan(height, JSBI.BigInt(0)))
+            throw new Error(`The height must be greater than or equal to zero, not ${height.toString()}`);
 
         if (JSBI.greaterThan(target_amount, this.getSum(height)[TxType.Payment]))
             return [];
