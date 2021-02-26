@@ -54,4 +54,12 @@ export class BitField
 
         return new BitField(storage);
     }
+
+    /**
+     * Converts this object to its JSON representation
+     */
+    public toJSON (key?: string): string
+    {
+        return JSON.stringify(this.storage);
+    }
 }

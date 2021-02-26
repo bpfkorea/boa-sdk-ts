@@ -95,4 +95,10 @@ describe ('Test of Utils', () =>
         assert.strictEqual(boasdk.Utils.SIZE_OF_SECRET_KEY, boasdk.SodiumHelper.sodium.crypto_sign_SECRETKEYBYTES);
         assert.strictEqual(boasdk.Utils.SIZE_OF_SEED_KEY, boasdk.SodiumHelper.sodium.crypto_sign_SEEDBYTES);
     });
+
+    it ('Test of BitField JSON serialization', () =>
+    {
+        let validator = new boasdk.BitField([45, 90, 150]);
+        assert.strictEqual(JSON.stringify(validator), `"[45,90,150]"`);
+    });
 });
