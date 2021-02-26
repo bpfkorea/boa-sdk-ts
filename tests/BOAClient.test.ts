@@ -19,7 +19,6 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import * as http from 'http';
 import JSBI from 'jsbi';
-import randomBytes from 'randombytes';
 import URI from 'urijs';
 
 /**
@@ -888,7 +887,8 @@ describe('BOA Client', () => {
         let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
 
         let pre_images: boasdk.Hash[] = [];
-        pre_images.push(boasdk.hash(randomBytes(boasdk.Hash.Width)));
+
+        pre_images.push(boasdk.hash(boasdk.SodiumHelper.sodium.randombytes_buf(boasdk.Hash.Width)));
         for (let idx = 0; idx < 20; idx++) {
             pre_images.push(boasdk.hash(pre_images[idx].data))
         }
