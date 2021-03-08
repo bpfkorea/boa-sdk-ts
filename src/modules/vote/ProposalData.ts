@@ -15,6 +15,7 @@ import { Hash } from '../common/Hash';
 import { PublicKey } from '../common/KeyPair';
 import { Utils } from '../utils/Utils';
 import { VarInt } from '../utils/VarInt';
+import { LinkDataWithProposalData } from '../wallet/LinkData';
 
 import JSBI from 'jsbi';
 import { SmartBuffer } from 'smart-buffer';
@@ -202,5 +203,26 @@ export class ProposalData
             vote_start_height, vote_end_height,
             doc_hash, fund_amount, proposal_fee, vote_fee, tx_hash_proposal_fee,
             proposer_address, proposal_fee_address);
+    }
+
+    /**
+     * Returns the data to be linked to the BOA wallet.
+     * @param proposer_address The public address of proposer
+     * @param validators Array of all validators
+     * @param voting_fee Voting fee per validator
+     */
+    public getLinkData (
+        proposer_address: PublicKey,
+        validators: Array<PublicKey>,
+        voting_fee: JSBI): LinkDataWithProposalData
+    {
+        let buffer = new SmartBuffer();
+        this.serialize(buffer);
+        return {
+            proposer_address: proposer_address.toString(),
+            validators: validators.map(k => k.toString()),
+            voting_fee: voting_fee.toString(),
+            payload: buffer.toBuffer().toString("base64")
+        }
     }
 }

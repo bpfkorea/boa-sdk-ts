@@ -12,8 +12,11 @@
 
 *******************************************************************************/
 
+import { PublicKey } from '../common/KeyPair';
 import { VarInt } from '../utils/VarInt';
+import { LinkDataWithProposalFee } from '../wallet/LinkData';
 
+import JSBI from 'jsbi';
 import { SmartBuffer } from 'smart-buffer';
 import {Utils} from "../..";
 
@@ -70,5 +73,26 @@ export class ProposalFeeData
         let temp = Utils.readBuffer(buffer, length);
         let proposal_id = temp.toString();
         return new ProposalFeeData(proposal_id);
+    }
+
+    /**
+     * Returns the data to be linked to the BOA wallet.
+     * @param proposer_address The public address of proposer
+     * @param destination The public address to deposit
+     * @param amount Proposal fee
+     */
+    public getLinkData (
+        proposer_address: PublicKey,
+        destination: PublicKey,
+        amount: JSBI): LinkDataWithProposalFee
+    {
+        let buffer = new SmartBuffer();
+        this.serialize(buffer);
+        return {
+            proposer_address: proposer_address.toString(),
+            destination: destination.toString(),
+            amount: amount.toString(),
+            payload: buffer.toBuffer().toString("base64")
+        }
     }
 }

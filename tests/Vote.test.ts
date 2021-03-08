@@ -146,4 +146,104 @@ describe ('Vote Data', () =>
 
         assert.strictEqual(ballot_bytes.length, boasdk.BallotData.WIDTH);
     });
+
+    it ('Test link data of ProposalFeeData', () =>
+    {
+        let data = new boasdk.ProposalFeeData("ID1234567890");
+        let proposal_address = new boasdk.PublicKey("GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW");
+        let destination = new boasdk.PublicKey("GDPU22KOCCNMCACFVN3BGDNC4NWXKQ4YGMZ75X4JXMNS7LO5IBQWB7CJ");
+        let amount = boasdk.JSBI.BigInt("10000000000000")
+        let link_data = data.getLinkData(proposal_address, destination, amount);
+        let expected = {
+            proposer_address: 'GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW',
+            destination: 'GDPU22KOCCNMCACFVN3BGDNC4NWXKQ4YGMZ75X4JXMNS7LO5IBQWB7CJ',
+            amount: '10000000000000',
+            payload: 'CFBST1AtRkVFDElEMTIzNDU2Nzg5MA=='
+        }
+        assert.deepStrictEqual(link_data, expected);
+    });
+
+    it ('Test link data of ProposalData', () =>
+    {
+        let data = new boasdk.ProposalData(
+            boasdk.ProposalType.Fund,
+            "ID1234567890",
+            "Title",
+            boasdk.JSBI.BigInt(1000),
+            boasdk.JSBI.BigInt(3026),
+            new boasdk.Hash(Buffer.alloc(boasdk.Hash.Width)),
+            boasdk.JSBI.BigInt(10000000000000),
+            boasdk.JSBI.BigInt(100000000000),
+            boasdk.JSBI.BigInt(100000000),
+            new boasdk.Hash(Buffer.alloc(boasdk.Hash.Width)),
+            new boasdk.PublicKey("GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW"),
+            new boasdk.PublicKey("GCOMMONBGUXXP4RFCYGEF74JDJVPUW2GUENGTKKJECDNO6AGO32CUWGU")
+        );
+        let proposal_address = new boasdk.PublicKey("GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW");
+        let validators = [
+            new boasdk.PublicKey("GDPU22KOCCNMCACFVN3BGDNC4NWXKQ4YGMZ75X4JXMNS7LO5IBQWB7CJ"),
+            new boasdk.PublicKey("GDPV22UHJUZKPO4SDIZBNZXNKDFFSPLRHC3VPBO2TUBP2Y4LHGZYCP4L"),
+            new boasdk.PublicKey("GDPW227UM2JOHIV7ASZPZ7KQ6DP2V2QX4VHLSKZX27545YBYFS7FZWFK"),
+            new boasdk.PublicKey("GDPX22XXTETXC4YJCMGMI55OBGUVIXVL5AOKP2RGT24B4HCGBRIPFHHD"),
+            new boasdk.PublicKey("GDPY22WMCY3TH5OUZRRN2CZF4I6UFBV3VDT627HCQMQCQAR7M2WQ5UT4"),
+            new boasdk.PublicKey("GDPZ225K4MUNOHGEYKP4RWBFXCHL6TXDLHZYRNGRXQ2MGGLTUSUCUNA7"),
+            new boasdk.PublicKey("GDQA224KNN7LBDRWG3VFL72DRZGKKLNYE4RB6NWP4HX26WKPPEWLNYWW"),
+        ];
+        let voting_fee = boasdk.JSBI.BigInt("12000000")
+        let link_data = data.getLinkData(proposal_address, validators, voting_fee);
+        let expected = {
+            proposer_address: 'GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW',
+            validators: [
+                'GDPU22KOCCNMCACFVN3BGDNC4NWXKQ4YGMZ75X4JXMNS7LO5IBQWB7CJ',
+                'GDPV22UHJUZKPO4SDIZBNZXNKDFFSPLRHC3VPBO2TUBP2Y4LHGZYCP4L',
+                'GDPW227UM2JOHIV7ASZPZ7KQ6DP2V2QX4VHLSKZX27545YBYFS7FZWFK',
+                'GDPX22XXTETXC4YJCMGMI55OBGUVIXVL5AOKP2RGT24B4HCGBRIPFHHD',
+                'GDPY22WMCY3TH5OUZRRN2CZF4I6UFBV3VDT627HCQMQCQAR7M2WQ5UT4',
+                'GDPZ225K4MUNOHGEYKP4RWBFXCHL6TXDLHZYRNGRXQ2MGGLTUSUCUNA7',
+                'GDQA224KNN7LBDRWG3VFL72DRZGKKLNYE4RB6NWP4HX26WKPPEWLNYWW'
+            ],
+            voting_fee: '12000000',
+            payload: 'CFBST1BPU0FMAQxJRDEyMzQ1Njc4OTAFVGl0bGX96AP90gsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/wCgck4YCQAA/wDodkgXAAAA/gDh9QUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAx9iUwUUAUTrwBrnguo84lfyvTZHHT46ge180pVV6WNWcxjmhNS938iUWDEL/iRpq+ltGoRppqUkghtd4Bnb0Kg=='
+        };
+        assert.deepStrictEqual(link_data, expected);
+    });
+
+    it ('Test link data of Vote', () =>
+    {
+        // The KeyPair of the validator
+        let validator_key = boasdk.KeyPair.fromSeed(new boasdk.Seed("SBBUWIMSX5VL4KVFKY44GF6Q6R5LS2Z5B7CTAZBNCNPLS4UKFVDXC7TQ"));
+
+        // The temporary KeyPair
+        let temporary_key = boasdk.KeyPair.fromSeed(new boasdk.Seed("SDVK3TKVJLE324I5JYKZK62YU6ADXKCLKDKTHRJIED5FL32WMAFDPDXZ"));
+
+        let voter_card = new boasdk.VoterCard(validator_key.address, temporary_key.address, boasdk.JSBI.BigInt(10000000));
+        let voter_card_hash = boasdk.hashFull(voter_card);
+        voter_card.signature = validator_key.secret.sign(voter_card_hash.data);
+
+        let pre_image = new boasdk.Hash('0x0a8201f9f5096e1ce8e8de4147694940a57a188b78293a55144fc8777a774f2349b3a910fb1fb208514fb16deaf49eb05882cdb6796a81f913c6daac3eb74328');
+        let app_name = "Votera";
+        let proposal_id = "ID1234567890";
+        let key = boasdk.Encrypt.createKey(pre_image.data, app_name, proposal_id);
+        let ballot = boasdk.Encrypt.encrypt(Buffer.from([boasdk.BallotData.YES]), key);
+        let ballot_data = new boasdk.BallotData("ID1234567890", ballot, voter_card, 100);
+        let ballot_data_hash = boasdk.hashFull(ballot_data);
+        ballot_data.signature = temporary_key.secret.sign(ballot_data_hash.data);
+
+        let link_data = ballot_data.getLinkData();
+        let expected = {
+            payload: 'CEJBTExPVCAgDElEMTIzNDU2Nzg5MCnrh2CqgtLfg5AHdxBVuZMzSeM18Ym5b/NTj1wn7D77DX6nQauhGnpQ+MfYlMFFAFE68Aa54LqPOJX8r02Rx0+OoHtfNKVVeljV3601ecRvqYXBtM3PYEcP7V/5PfTYPLuzHSD0L+0TOQ/+gJaYADctGQG0YgE1vUjOIy36U7S+f/YJfiQ3csek6FCZ03jE2pHlGLmyaNlyvaH+W1LLYN0JmTovL1wJ2dSuDdb07AxkxQw6J3MFkkTwHuBwJV6i8cXcstC4gYdXkRwZa93JPW+LFxRZ++JPFx/ecghOd4Oxdg9eGfrREDc5m6dZ1JL/Bw=='
+        };
+
+        let deserialized_ballot_data = boasdk.BallotData.deserialize(SmartBuffer.fromBuffer(Buffer.from(link_data.payload, "base64")));
+        assert.deepStrictEqual(ballot_data, deserialized_ballot_data);
+
+        let expected_ballot_data = boasdk.BallotData.deserialize(SmartBuffer.fromBuffer(Buffer.from(expected.payload, "base64")));
+        assert.deepStrictEqual(ballot_data.proposal_id, expected_ballot_data.proposal_id);
+        assert.deepStrictEqual(boasdk.Encrypt.decrypt(ballot_data.ballot, key), boasdk.Encrypt.decrypt(expected_ballot_data.ballot, key));
+        assert.deepStrictEqual(ballot_data.card.validator_address, expected_ballot_data.card.validator_address);
+        assert.deepStrictEqual(ballot_data.card.address, expected_ballot_data.card.address);
+        assert.deepStrictEqual(ballot_data.card.expires, expected_ballot_data.card.expires);
+        assert.deepStrictEqual(ballot_data.card.expires, expected_ballot_data.card.expires);
+        assert.deepStrictEqual(ballot_data.sequence, expected_ballot_data.sequence);
+    });
 });

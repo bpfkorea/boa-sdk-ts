@@ -16,6 +16,7 @@ import { Signature } from '../common/Signature';
 import { VarInt } from '../utils/VarInt';
 import { Utils } from '../utils/Utils';
 import { hashFull } from '../common/Hash';
+import { LinkDataWithVoteData } from '../wallet/LinkData';
 
 import JSBI from 'jsbi';
 import { SmartBuffer } from 'smart-buffer';
@@ -239,5 +240,17 @@ export class BallotData
         let sequence = VarInt.toNumber(buffer);
         let signature = new Signature(Utils.readBuffer(buffer, Signature.Width));
         return new BallotData(proposal_id, ballot, card, sequence, signature);
+    }
+
+    /**
+     * Returns the data to be linked to the BOA wallet.
+     */
+    public getLinkData (): LinkDataWithVoteData
+    {
+        let buffer = new SmartBuffer();
+        this.serialize(buffer);
+        return {
+            payload: buffer.toBuffer().toString("base64")
+        }
     }
 }
