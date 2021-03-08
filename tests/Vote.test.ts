@@ -92,4 +92,29 @@ describe ('Vote Data', () =>
         let deserialized_ballot_data = boasdk.BallotData.deserialize(ballot_bytes);
         assert.deepStrictEqual(ballot_data, deserialized_ballot_data);
     });
+
+    it ('Test of encrypt and decrypt', () =>
+    {
+        let pre_image = new boasdk.Hash('0x0a8201f9f5096e1ce8e8de4147694940a57a188b78293a55144fc8777a774f2349b3a910fb1fb208514fb16deaf49eb05882cdb6796a81f913c6daac3eb74328');
+        let app_name = "Votera";
+        let proposal_id = "ID1234567890";
+        let key = boasdk.Encrypt.createKey(pre_image.data, app_name, proposal_id);
+
+        let message = Buffer.from([boasdk.BallotData.YES]);
+        let cipher_message = boasdk.Encrypt.encrypt(message, key);
+        let decode_message = boasdk.Encrypt.decrypt(cipher_message, key);
+        assert.deepStrictEqual(message, decode_message);
+
+        let cipher_message1 = boasdk.Encrypt.encrypt(Buffer.from([boasdk.BallotData.YES  ]), key);
+        let cipher_message2 = boasdk.Encrypt.encrypt(Buffer.from([boasdk.BallotData.NO   ]), key);
+        let cipher_message3 = boasdk.Encrypt.encrypt(Buffer.from([boasdk.BallotData.BLANK]), key);
+
+        assert.notDeepStrictEqual(cipher_message1, cipher_message2);
+        assert.notDeepStrictEqual(cipher_message2, cipher_message3);
+        assert.notDeepStrictEqual(cipher_message3, cipher_message1);
+
+        assert.strictEqual(cipher_message1.length, 41);
+        assert.strictEqual(cipher_message2.length, 41);
+        assert.strictEqual(cipher_message3.length, 41);
+    });
 });

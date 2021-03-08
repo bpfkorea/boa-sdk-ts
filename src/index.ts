@@ -32,6 +32,7 @@ export { PreImageInfo } from './modules/data/PreImageInfo';
 export { ProposalFeeData } from './modules/vote/ProposalFeeData';
 export { ProposalType, ProposalData } from './modules/vote/ProposalData';
 export { VoterCard, BallotData } from './modules/vote/BallotData';
+export { Encrypt } from './modules/vote/Encrypt';
 
 export { LockType, Lock, Unlock } from './modules/script/Lock';
 export { OP, isOpcode, isConditional, isPayload } from './modules/script/Opcodes';

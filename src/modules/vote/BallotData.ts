@@ -148,6 +148,10 @@ export class BallotData
      */
     public signature: Signature;
 
+    public static YES: number   = 0;
+    public static NO: number    = 1;
+    public static BLANK: number = 2;
+
     /**
      * Constructor
      * @param proposal_id   The id of the proposal
