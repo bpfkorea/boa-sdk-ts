@@ -13,6 +13,7 @@
 
 import * as assert from 'assert';
 import JSBI from "jsbi";
+import { SmartBuffer } from 'smart-buffer';
 
 /**
  * The byte order
@@ -172,6 +173,53 @@ export class Utils
         hi = hi >> 8;
         buffer[7] = hi;
     }
+
+    /**
+     * Reads little endian 64-bits Big integer value to an allocated buffer
+     * An exception occurs when the size of the remaining data is less than the required.
+     * See https://github.com/nodejs/node/blob/88fb5a5c7933022de750745e51e5dc0996a1e2c4/lib/internal/buffer.js#L86-L105
+     * @param buffer The allocated buffer
+     * @returns The instance of JSBI
+     */
+    public static readJSBigIntLE (buffer: Buffer): JSBI
+    {
+        if (buffer.length < 8)
+            throw new Error(`Requested 8 bytes but only ${buffer.length} bytes available`)
+
+        let offset = 0;
+        const lo = buffer[offset] +
+            buffer[++offset] * 2 ** 8 +
+            buffer[++offset] * 2 ** 16 +
+            buffer[++offset] * 2 ** 24;
+
+        const hi = buffer[++offset] +
+            buffer[++offset] * 2 ** 8 +
+            buffer[++offset] * 2 ** 16 +
+            buffer[++offset] * 2 ** 24;
+
+        return JSBI.add(
+            JSBI.BigInt(lo),
+            JSBI.leftShift(
+                JSBI.BigInt(hi),
+                JSBI.BigInt(32)
+            ));
+    }
+
+    /**
+     * Reads from `source` to return to the buffer by the requested bytes.
+     * An exception occurs when the size of the remaining data is less than the requested.
+     * @param source The instance of the SmartBuffer
+     * @param length The requested bytes
+     */
+    public static readBuffer (source: SmartBuffer, length: number): Buffer
+    {
+        let remaining = source.remaining();
+        if (remaining < length)
+            throw new Error(`Requested ${length} bytes but only ${remaining} bytes available`)
+
+        return source.readBuffer(length);
+    }
+
     /**
      * This checks that the JSON data has all the properties of the class.
      * @param obj  The instance of a class

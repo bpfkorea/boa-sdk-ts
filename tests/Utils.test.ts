@@ -14,6 +14,7 @@
 import * as boasdk from '../lib';
 
 import * as assert from 'assert';
+import {SmartBuffer} from "smart-buffer";
 
 describe ('Test of isInteger, isPositiveInteger, isNegativeInteger', () =>
 {
@@ -99,5 +100,26 @@ describe ('Test of Utils', () =>
     {
         let validator = new boasdk.BitField([45, 90, 150]);
         assert.strictEqual(JSON.stringify(validator), `"[45,90,150]"`);
+    });
+
+    it('Test of writeJSBigIntLE, readJSBigIntLE', () =>
+    {
+        let buffer = Buffer.allocUnsafe(8);
+        let original = boasdk.JSBI.BigInt("9007199254740992");
+        boasdk.Utils.writeJSBigIntLE(buffer, original);
+        let value = boasdk.Utils.readJSBigIntLE(buffer);
+        assert.deepStrictEqual(value, original);
+    });
+
+    it('Test of readBuffer', () =>
+    {
+        let source = SmartBuffer.fromBuffer(Buffer.from("1234567890"));
+        let result = boasdk.Utils.readBuffer(source, 10);
+        assert.deepStrictEqual(source.toBuffer(), result);
+
+        source.readOffset = 0;
+        assert.throws(() => {
+            result = boasdk.Utils.readBuffer(source, 12);
+        }, new Error("Requested 12 bytes but only 10 bytes available"));
     });
 });
