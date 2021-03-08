@@ -14,7 +14,7 @@
 import * as boasdk from '../lib';
 
 import * as assert from 'assert';
-import {SmartBuffer} from "smart-buffer";
+import { SmartBuffer } from 'smart-buffer';
 
 describe ('Test of isInteger, isPositiveInteger, isNegativeInteger', () =>
 {
@@ -121,5 +121,189 @@ describe ('Test of Utils', () =>
         assert.throws(() => {
             result = boasdk.Utils.readBuffer(source, 12);
         }, new Error("Requested 12 bytes but only 10 bytes available"));
+    });
+
+    it('Test of VarInt serialization', () => {
+        let buffer = new SmartBuffer();
+        boasdk.VarInt.fromNumber(0, buffer);
+        assert.deepStrictEqual(buffer.toBuffer(), Buffer.from([0]));
+
+        buffer.clear();
+        boasdk.VarInt.fromNumber(252, buffer);
+        assert.deepStrictEqual(buffer.toBuffer(), Buffer.from([0xFC]));
+
+        buffer.clear();
+        boasdk.VarInt.fromNumber(253, buffer);
+        assert.deepStrictEqual(buffer.toBuffer(), Buffer.from([0xFD, 0xFD, 0x00]));
+
+        buffer.clear();
+        boasdk.VarInt.fromNumber(255, buffer);
+        assert.deepStrictEqual(buffer.toBuffer(), Buffer.from([0xFD, 0xFF, 0x00]));
+
+        buffer.clear();
+        boasdk.VarInt.fromNumber(0xFFFF, buffer);
+        assert.deepStrictEqual(buffer.toBuffer(), Buffer.from([0xFD, 0xFF, 0xFF]));
+
+        buffer.clear();
+        boasdk.VarInt.fromNumber(0x10000, buffer);
+        assert.deepStrictEqual(buffer.toBuffer(), Buffer.from([0xFE, 0x00, 0x00, 0x01, 0x00]));
+
+        buffer.clear();
+        boasdk.VarInt.fromNumber(0xFFFFFFFF, buffer);
+        assert.deepStrictEqual(buffer.toBuffer(), Buffer.from([0xFE, 0xFF, 0xFF, 0xFF, 0xFF]));
+
+
+        buffer.clear();
+        boasdk.VarInt.fromJSBI(boasdk.JSBI.BigInt(0), buffer);
+        assert.deepStrictEqual(buffer.toBuffer(), Buffer.from([0]));
+
+        buffer.clear();
+        boasdk.VarInt.fromJSBI(boasdk.JSBI.BigInt(252), buffer);
+        assert.deepStrictEqual(buffer.toBuffer(), Buffer.from([0xFC]));
+
+        buffer.clear();
+        boasdk.VarInt.fromJSBI(boasdk.JSBI.BigInt(253), buffer);
+        assert.deepStrictEqual(buffer.toBuffer(), Buffer.from([0xFD, 0xFD, 0x00]));
+
+        buffer.clear();
+        boasdk.VarInt.fromJSBI(boasdk.JSBI.BigInt(255), buffer);
+        assert.deepStrictEqual(buffer.toBuffer(), Buffer.from([0xFD, 0xFF, 0x00]));
+
+        buffer.clear();
+        boasdk.VarInt.fromJSBI(boasdk.JSBI.BigInt(0xFFFF), buffer);
+        assert.deepStrictEqual(buffer.toBuffer(), Buffer.from([0xFD, 0xFF, 0xFF]));
+
+        buffer.clear();
+        boasdk.VarInt.fromJSBI(boasdk.JSBI.BigInt(0x10000), buffer);
+        assert.deepStrictEqual(buffer.toBuffer(), Buffer.from([0xFE, 0x00, 0x00, 0x01, 0x00]));
+
+        buffer.clear();
+        boasdk.VarInt.fromJSBI(boasdk.JSBI.BigInt(0xFFFFFFFF), buffer);
+        assert.deepStrictEqual(buffer.toBuffer(), Buffer.from([0xFE, 0xFF, 0xFF, 0xFF, 0xFF]));
+
+        buffer.clear();
+        boasdk.VarInt.fromJSBI(boasdk.JSBI.BigInt(0x100000000), buffer);
+        assert.deepStrictEqual(buffer.toBuffer(), Buffer.from([0xFF, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00]));
+
+        buffer.clear();
+        let unsigned_log_max = boasdk.JSBI.add(
+            boasdk.JSBI.leftShift(boasdk.JSBI.BigInt(0xFFFFFFFF), boasdk.JSBI.BigInt(32)),
+            boasdk.JSBI.BigInt(0xFFFFFFFF)
+        );
+        boasdk.VarInt.fromJSBI(unsigned_log_max, buffer);
+        assert.deepStrictEqual(buffer.toBuffer(), Buffer.from([0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]));
+    });
+
+    it('Test of VarInt deserialization', () =>
+    {
+        let buffer = new SmartBuffer();
+        buffer.writeBuffer(Buffer.from([]));
+        assert.throws(() => {
+            boasdk.VarInt.toNumber(buffer);
+        }, new Error("Requested 1 bytes but only 0 bytes available"));
+
+        buffer.clear();
+        buffer.writeBuffer(Buffer.from([0xFD]));
+        assert.throws(() => {
+            boasdk.VarInt.toNumber(buffer);
+        }, new Error("Requested 2 bytes but only 0 bytes available"));
+
+        buffer.clear();
+        buffer.writeBuffer(Buffer.from([0xFE]));
+        assert.throws(() => {
+            boasdk.VarInt.toNumber(buffer);
+        }, new Error("Requested 4 bytes but only 0 bytes available"));
+
+        buffer.clear();
+        buffer.writeBuffer(Buffer.from([]));
+        assert.throws(() => {
+            boasdk.VarInt.toJSBI(buffer);
+        }, new Error("Requested 1 bytes but only 0 bytes available"));
+
+        buffer.clear();
+        buffer.writeBuffer(Buffer.from([0xFD]));
+        assert.throws(() => {
+            boasdk.VarInt.toJSBI(buffer);
+        }, new Error("Requested 2 bytes but only 0 bytes available"));
+
+        buffer.clear();
+        buffer.writeBuffer(Buffer.from([0xFE]));
+        assert.throws(() => {
+            boasdk.VarInt.toJSBI(buffer);
+        }, new Error("Requested 4 bytes but only 0 bytes available"));
+
+        buffer.clear();
+        buffer.writeBuffer(Buffer.from([0xFF]));
+        assert.throws(() => {
+            boasdk.VarInt.toJSBI(buffer);
+        }, new Error("Requested 8 bytes but only 0 bytes available"));
+
+        buffer.clear();
+        buffer.writeBuffer(Buffer.from([0]));
+        assert.deepStrictEqual(boasdk.VarInt.toNumber(buffer), 0);
+
+        buffer.clear();
+        buffer.writeBuffer(Buffer.from([0xFC]));
+        assert.deepStrictEqual(boasdk.VarInt.toNumber(buffer), 252);
+
+        buffer.clear();
+        buffer.writeBuffer(Buffer.from([0xFD, 0xFD, 0x00]));
+        assert.deepStrictEqual(boasdk.VarInt.toNumber(buffer), 253);
+
+        buffer.clear();
+        buffer.writeBuffer(Buffer.from([0xFD, 0xFF, 0x00]));
+        assert.deepStrictEqual(boasdk.VarInt.toNumber(buffer), 255);
+
+        buffer.clear();
+        buffer.writeBuffer(Buffer.from([0xFD, 0xFF, 0xFF]));
+        assert.deepStrictEqual(boasdk.VarInt.toNumber(buffer), 0xFFFF);
+
+        buffer.clear();
+        buffer.writeBuffer(Buffer.from([0xFE, 0x00, 0x00, 0x01, 0x00]));
+        assert.deepStrictEqual(boasdk.VarInt.toNumber(buffer), 0x10000);
+
+        buffer.clear();
+        buffer.writeBuffer(Buffer.from([0xFE, 0xFF, 0xFF, 0xFF, 0xFF]));
+        assert.deepStrictEqual(boasdk.VarInt.toNumber(buffer), 0xFFFFFFFF);
+
+        buffer.clear();
+        buffer.writeBuffer(Buffer.from([0]));
+        assert.deepStrictEqual(boasdk.VarInt.toJSBI(buffer), boasdk.JSBI.BigInt(0));
+
+        buffer.clear();
+        buffer.writeBuffer(Buffer.from([0xFC]));
+        assert.deepStrictEqual(boasdk.VarInt.toJSBI(buffer), boasdk.JSBI.BigInt(252));
+
+        buffer.clear();
+        buffer.writeBuffer(Buffer.from([0xFD, 0xFD, 0x00]));
+        assert.deepStrictEqual(boasdk.VarInt.toJSBI(buffer), boasdk.JSBI.BigInt(253));
+
+        buffer.clear();
+        buffer.writeBuffer(Buffer.from([0xFD, 0xFF, 0x00]));
+        assert.deepStrictEqual(boasdk.VarInt.toJSBI(buffer), boasdk.JSBI.BigInt(255));
+
+        buffer.clear();
+        buffer.writeBuffer(Buffer.from([0xFD, 0xFF, 0xFF]));
+        assert.deepStrictEqual(boasdk.VarInt.toJSBI(buffer), boasdk.JSBI.BigInt(0xFFFF));
+
+        buffer.clear();
+        buffer.writeBuffer(Buffer.from([0xFE, 0x00, 0x00, 0x01, 0x00]));
+        assert.deepStrictEqual(boasdk.VarInt.toJSBI(buffer), boasdk.JSBI.BigInt(0x10000));
+
+        buffer.clear();
+        buffer.writeBuffer(Buffer.from([0xFE, 0xFF, 0xFF, 0xFF, 0xFF]));
+        assert.deepStrictEqual(boasdk.VarInt.toJSBI(buffer), boasdk.JSBI.BigInt(0xFFFFFFFF));
+
+        buffer.clear();
+        buffer.writeBuffer(Buffer.from([0xFF, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00]));
+        assert.deepStrictEqual(boasdk.VarInt.toJSBI(buffer), boasdk.JSBI.BigInt(0x100000000));
+
+        buffer.clear();
+        let unsigned_log_max = boasdk.JSBI.add(
+            boasdk.JSBI.leftShift(boasdk.JSBI.BigInt(0xFFFFFFFF), boasdk.JSBI.BigInt(32)),
+            boasdk.JSBI.BigInt(0xFFFFFFFF)
+        );
+        buffer.writeBuffer(Buffer.from([0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]));
+        assert.deepStrictEqual(boasdk.VarInt.toJSBI(buffer), unsigned_log_max);
     });
 });
