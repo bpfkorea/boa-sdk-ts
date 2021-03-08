@@ -29,6 +29,10 @@ export { TxOutput } from './modules/data/TxOutput';
 export { DataPayload } from './modules/data/DataPayload';
 export { PreImageInfo } from './modules/data/PreImageInfo';
 
+export { ProposalFeeData } from './modules/vote/ProposalFeeData';
+export { ProposalType, ProposalData } from './modules/vote/ProposalData';
+export { VoterCard, BallotData } from './modules/vote/BallotData';
+
 export { LockType, Lock, Unlock } from './modules/script/Lock';
 export { OP, isOpcode, isConditional, isPayload } from './modules/script/Opcodes';
 export { ScriptType, Script } from './modules/script/Script';
