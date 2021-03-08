@@ -117,4 +117,33 @@ describe ('Vote Data', () =>
         assert.strictEqual(cipher_message2.length, 41);
         assert.strictEqual(cipher_message3.length, 41);
     });
+
+    it ('The size of BallotData', () =>
+    {
+        // The seed key of the validator
+        let seed = `SBBUWIMSX5VL4KVFKY44GF6Q6R5LS2Z5B7CTAZBNCNPLS4UKFVDXC7TQ`;
+
+        // The KeyPair of the validator
+        let validator_key = boasdk.KeyPair.fromSeed(new boasdk.Seed(seed));
+        // The temporary KeyPair
+        let temporary_key = boasdk.KeyPair.random();
+        let voter_card = new boasdk.VoterCard(validator_key.address, temporary_key.address, JSBI.BigInt(Date.now().valueOf()));
+        let voter_card_hash = boasdk.hashFull(voter_card);
+        voter_card.signature = validator_key.secret.sign(voter_card_hash.data);
+
+        //  This is sample
+        let pre_image = new boasdk.Hash('0x0a8201f9f5096e1ce8e8de4147694940a57a188b78293a55144fc8777a774f2349b3a910fb1fb208514fb16deaf49eb05882cdb6796a81f913c6daac3eb74328');
+        let app_name = "Votera";
+        let proposal_id = "ID1234567890";
+        let key = boasdk.Encrypt.createKey(pre_image.data, app_name, proposal_id);
+        let ballot = boasdk.Encrypt.encrypt(Buffer.from([boasdk.BallotData.BLANK]), key);
+        let ballot_data = new boasdk.BallotData(proposal_id, ballot, voter_card, 100);
+        let ballot_data_hash = boasdk.hashFull(ballot_data);
+        ballot_data.signature = temporary_key.secret.sign(ballot_data_hash.data);
+
+        let ballot_bytes = new SmartBuffer();
+        ballot_data.serialize(ballot_bytes);
+
+        assert.strictEqual(ballot_bytes.length, boasdk.BallotData.WIDTH);
+    });
 });

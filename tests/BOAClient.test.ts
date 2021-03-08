@@ -1579,4 +1579,19 @@ describe('BOA Client', () => {
         let tx = await boa_client.getTransaction(tx_hash);
         assert.deepStrictEqual(tx, boasdk.Transaction.reviver("", sample_tx));
     });
+
+    it ('Get a voting fee', async () =>
+    {
+        // Set URL
+        let stoa_uri = URI("http://localhost").port(stoa_port);
+        let agora_uri = URI("http://localhost").port(agora_port);
+
+        // Create BOA Client
+        let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
+
+        // Get Voting Fee
+        let fee = await boa_client.getVotingFee();
+
+        assert.deepStrictEqual(fee, JSBI.BigInt(27910000,));
+    });
 });

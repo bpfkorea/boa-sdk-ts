@@ -23,6 +23,8 @@ import { TransactionFee } from './response/TrasactionFee';
 import { ITxHistoryElement, ITxOverview, IPendingTxs } from './response/Types';
 import { Transaction } from '../data/Transaction';
 import { handleNetworkError } from './error/ErrorTypes';
+import { TxPayloadFee } from '../utils/TxPayloadFee';
+import { BallotData } from '../vote/BallotData';
 
 import { AxiosResponse } from 'axios';
 import uri from 'urijs';
@@ -536,6 +538,30 @@ export class BOAClient
                 {
                     reject(handleNetworkError(reason));
                 });
+        });
+    }
+
+    /**
+     * Request a fee for a voting transaction
+     * @returns Promise that resolves or
+     * rejects with response from the Stoa
+     */
+    public getVotingFee () : Promise<JSBI>
+    {
+        return new Promise<JSBI>(async (resolve, reject) =>
+        {
+            try
+            {
+                let payload_fee = TxPayloadFee.getFee(BallotData.WIDTH);
+                let tx_size = Transaction.getEstimatedNumberOfBytes(1, 2, BallotData.WIDTH);
+                let fees = await this.getTransactionFee(tx_size);
+                let tx_fee = JSBI.BigInt(fees.high);
+                resolve(JSBI.add(payload_fee, tx_fee));
+            }
+            catch (error)
+            {
+                reject(error);
+            }
         });
     }
 }
