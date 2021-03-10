@@ -503,6 +503,41 @@ export class BOAClient
                 });
         });
     }
+
+    /**
+     * Request a transaction based on the hash of the transaction.
+     * @param tx_hash The hash of the transaction
+     * @returns Promise that resolves or
+     * rejects with response from the Stoa
+     */
+    public getTransaction (tx_hash: Hash): Promise<Transaction>
+    {
+        return new Promise<Transaction>((resolve, reject) =>
+        {
+            let url = uri(this.server_url)
+                .directory("transaction")
+                .filename(tx_hash.toString());
+
+            Request.get(url.toString())
+                .then((response: AxiosResponse) =>
+                {
+                    if (response.status == 200)
+                    {
+                        let tx = Transaction.reviver("",response.data)
+                        resolve(tx);
+                    }
+                    else
+                    {
+                        // It is not yet defined in Stoa.
+                        reject(handleNetworkError({response: response}));
+                    }
+                })
+                .catch((reason: any) =>
+                {
+                    reject(handleNetworkError(reason));
+                });
+        });
+    }
 }
 
 export interface IsValidPreimageResponse

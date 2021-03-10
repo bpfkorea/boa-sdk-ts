@@ -582,6 +582,37 @@ export class TestStoa {
                 }
             });
 
+        // http://localhost/transaction
+        this.app.get("/transaction/:hash",
+            (req: express.Request, res: express.Response) => {
+
+                let hash: string = String(req.params.hash);
+
+                let tx_hash: boasdk.Hash;
+                try
+                {
+                    tx_hash = new boasdk.Hash(hash);
+                }
+                catch (error)
+                {
+                    res.status(400).send(`Invalid value for parameter 'hash': ${hash}`);
+                    return;
+                }
+
+                let sample_tx_hash = new boasdk.Hash(
+                    "0x4c1d71415c9ec7b182438e8bb669e324dde9be93b9c223a2ca831689d2e9598" +
+                    "c628d07c84d3ee0941e9f6fb597faf4fe92518fa35e577ba12125919c0501d4bd");
+
+                if (Buffer.compare(tx_hash.data, sample_tx_hash.data) != 0)
+                {
+                    res.status(204).send(`No pending transactions. hash': (${hash})`);
+                }
+                else
+                {
+                    res.status(200).send(JSON.stringify(sample_tx));
+                }
+            });
+
         this.app.set('port', this.port);
 
         // Listen on provided this.port on this.address.
@@ -1530,6 +1561,22 @@ describe('BOA Client', () => {
             "0x4c1d71415c9ec7b182438e8bb669e324dde9be93b9c223a2ca831689d2e9598" +
             "c628d07c84d3ee0941e9f6fb597faf4fe92518fa35e577ba12125919c0501d4bd");
         let tx = await boa_client.getPendingTransaction(tx_hash);
+        assert.deepStrictEqual(tx, boasdk.Transaction.reviver("", sample_tx));
+    });
+
+    it ('Test a function of the BOA Client - `getTransaction`', async () =>
+    {
+        // Set URL
+        let stoa_uri = URI("http://localhost").port(stoa_port);
+        let agora_uri = URI("http://localhost").port(agora_port);
+
+        // Create BOA Client
+        let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
+
+        let tx_hash = new boasdk.Hash(
+            "0x4c1d71415c9ec7b182438e8bb669e324dde9be93b9c223a2ca831689d2e9598" +
+            "c628d07c84d3ee0941e9f6fb597faf4fe92518fa35e577ba12125919c0501d4bd");
+        let tx = await boa_client.getTransaction(tx_hash);
         assert.deepStrictEqual(tx, boasdk.Transaction.reviver("", sample_tx));
     });
 });
