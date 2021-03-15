@@ -79,7 +79,7 @@ describe ('TxBuilder', () =>
             assert.fail(error)
         }
 
-        let obj = {
+        let expected = {
             "type": 0,
             "inputs": [
                 {
@@ -117,7 +117,14 @@ describe ('TxBuilder', () =>
             "lock_height": "0"
         };
 
-        assert.deepStrictEqual(JSON.stringify(tx), JSON.stringify(obj));
+        // Because randomly generated values are used when signing,
+        // different signatures are created even when signed using the same secret key.
+        // Therefore, omit the signature comparison.
+        tx.inputs.forEach((value, idx) => {
+            expected.inputs[idx].unlock = value.unlock.toJSON();
+        });
+
+        assert.deepStrictEqual(JSON.stringify(tx), JSON.stringify(expected));
     });
 
     it ('Test to create a transaction with data payload', () =>
@@ -140,7 +147,7 @@ describe ('TxBuilder', () =>
             assert.fail(error)
         }
 
-        let obj = {
+        let expected = {
             "type": 0,
             "inputs": [
                 {
@@ -171,7 +178,14 @@ describe ('TxBuilder', () =>
             "lock_height": "0"
         };
 
-        assert.deepStrictEqual(JSON.stringify(tx), JSON.stringify(obj));
+        // Because randomly generated values are used when signing,
+        // different signatures are created even when signed using the same secret key.
+        // Therefore, omit the signature comparison.
+        tx.inputs.forEach((value, idx) => {
+            expected.inputs[idx].unlock = value.unlock.toJSON();
+        });
+
+        assert.deepStrictEqual(JSON.stringify(tx), JSON.stringify(expected));
     });
 
     it ('Test to create a transaction with data payload - no output', () =>

@@ -16,7 +16,7 @@ import * as boasdk from '../lib';
 import * as assert from 'assert';
 import { base32Encode, base32Decode } from '@ctrl/ts-base32';
 
-describe ('ED25519 Public Key', () =>
+describe ('Curve25519 Public Key', () =>
 {
     before('Wait for the package libsodium to finish loading', () =>
     {
@@ -45,8 +45,13 @@ describe ('ED25519 Public Key', () =>
     });
 });
 
-describe ('ED25519 Secret Key Seed', () =>
+describe ('Curve25519 Secret Key Seed', () =>
 {
+    before('Wait for the package libsodium to finish loading', () =>
+    {
+        return boasdk.SodiumHelper.init();
+    });
+
     it ('Extract the seed from a string then convert it back into a string and compare it.', () =>
     {
         let secret_seed = 'SBBUWIMSX5VL4KVFKY44GF6Q6R5LS2Z5B7CTAZBNCNPLS4UKFVDXC7TQ';
@@ -71,6 +76,11 @@ describe ('ED25519 Secret Key Seed', () =>
 
 describe ('KeyPair', () =>
 {
+    before('Wait for the package libsodium to finish loading', () =>
+    {
+        return boasdk.SodiumHelper.init();
+    });
+
     // See: https://github.com/bpfkorea/agora/blob/93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/common/crypto/Key.d#L375-L386
     it ('Test of KeyPair.fromSeed, sign, verify', () =>
     {
@@ -99,6 +109,5 @@ describe ('KeyPair', () =>
 
         assert.deepStrictEqual(random_kp.secret, reproduced_kp.secret);
         assert.deepStrictEqual(random_kp.address, reproduced_kp.address);
-        assert.deepStrictEqual(random_kp_signature, reproduced_kp_signature);
     });
 });

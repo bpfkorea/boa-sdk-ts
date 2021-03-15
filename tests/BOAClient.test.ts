@@ -1098,6 +1098,13 @@ describe('BOA Client', () => {
             "lock_height": "0"
         };
 
+        // Because randomly generated values are used when signing,
+        // different signatures are created even when signed using the same secret key.
+        // Therefore, omit the signature comparison.
+        vote_tx.inputs.forEach((value, idx) => {
+            expected_object.inputs[idx].unlock = value.unlock.toJSON();
+        });
+
         assert.deepStrictEqual(
             JSON.stringify(vote_tx),
             JSON.stringify(expected_object));
@@ -1206,6 +1213,9 @@ describe('BOA Client', () => {
             .assignPayload(vote_data)
             .sign(boasdk.TxType.Payment, tx_fee, payload_fee);
 
+        // Because randomly generated values are used when signing,
+        // different signatures are created even when signed using the same secret key.
+        // Therefore, omit the signature comparison.
         tx.inputs.forEach((value, idx) => {
             expected.inputs[idx].unlock = value.unlock.toJSON();
         });
@@ -1312,6 +1322,9 @@ describe('BOA Client', () => {
                 "lock_height": "0"
             };
 
+        // Because randomly generated values are used when signing,
+        // different signatures are created even when signed using the same secret key.
+        // Therefore, omit the signature comparison.
         tx.inputs.forEach((value, idx) => {
             expected.inputs[idx].unlock = value.unlock.toJSON();
         });
@@ -1500,6 +1513,12 @@ describe('BOA Client', () => {
             "lock_height": "0"
         };
 
+        // Because randomly generated values are used when signing,
+        // different signatures are created even when signed using the same secret key.
+        // Therefore, omit the signature comparison.
+        tx.inputs.forEach((value, idx) => {
+            expected.inputs[idx].unlock = value.unlock.toJSON()
+        });
         assert.strictEqual(JSON.stringify(tx), JSON.stringify(expected));
     });
 
