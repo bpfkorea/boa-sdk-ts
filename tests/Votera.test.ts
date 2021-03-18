@@ -168,7 +168,7 @@ export class TestStoa {
                             [
                                 new boasdk.TxOutput("3000000", boasdk.Lock.fromPublicKey(new boasdk.PublicKey("GDML22LKP3N6S37CYIBFRANXVY7KMJMINH5VFADGDFLGIWNOR3YU7T6I")))
                             ],
-                            new boasdk.DataPayload(Buffer.from("CEJBTExPVCAgDElEMTIzNDU2Nzg5MClUTiocNELNM5xeTNNlANGXFpcz59UX9wepY6ZoUdZ9DbCmh+e87lYxfcfYlMFFAFE68Aa54LqPOJX8r02Rx0+OoHtfNKVVeljVwDyCNi+r0gE943Cv6SKEkvbuJU90PhAPaP8vLbqSmgn/H7NMJXgBAAB5IeCs66u7j5gWcqRIkUEiAZErvBonWSblUWEeQNnLrYBtgZoH55cqfKsBsRf/7VbC3s79f0hpZ9405H0ZiFwOZLGz+kWDyLwvU9c+BZ0rwLuyQvrBq1BCXd194svExAPec8bz8n3Cu4+ckSVSC+gpjtlcYRKjOHgkCwOi/V4jSwU=\n", "base64"))
+                            new boasdk.DataPayload(Buffer.from("CEJBTExPVCAgDElEMTIzNDU2Nzg5MCk/jaJyIx7QYTYh8AMDAm0e8h9Hzs+GtqX8Inu07Az4V890VmCvPgMYacfYlMFFAFE68Aa54LqPOJX8r02Rx0+OoHtfNKVVeljVMHwj8iaJZVNCDMbzBZDsH+cqe4Mz8PFDE2fRZTwJla7/lFzwQngBAADz24ft0KJLJ2xeuww0GmiB1k00n+BWybptLD11dCzrPn7v18n16Qb1KJdttZw+DhS26EINNQW1Ph0QEVYJpzEAZOA4XXWtlUGRHSIYm6vdyojZTAMJR7o8drBAn6Ji5bExBpch79TyQtAi9yZdfuMV5wWt+eeeyK1vE66ZtD1a2Ac=", "base64"))
                         );
                         res.status(200).send(JSON.stringify(tx));
                     }
@@ -410,7 +410,7 @@ describe('Checking the proposal and ballot data', () =>
                 else if (Buffer.compare(Buffer.from(boasdk.BallotData.HEADER), header) === 0)
                 {
                     // Exceptions should be handled in actual use.
-                    //assert.doesNotThrow(() => {
+                    assert.doesNotThrow(() => {
                         let payload = boasdk.BallotData.deserialize(SmartBuffer.fromBuffer(tx.payload.data));
 
                         // This verifies the signature of the ballot.
@@ -422,7 +422,7 @@ describe('Checking the proposal and ballot data', () =>
                         let proposal_id = payload.proposal_id;
                         let key = boasdk.Encrypt.createKey(pre_image.data, app_name, proposal_id);
                         assert.deepStrictEqual(boasdk.Encrypt.decrypt(payload.ballot, key), Buffer.from([boasdk.BallotData.BLANK]));
-                    //});
+                    });
                 }
             }
         }
