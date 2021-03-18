@@ -44,7 +44,7 @@ export class Encrypt
      * @param message       The message to encrypt
      * @param key           The secret key
      */
-    public static encrypt (message: Buffer, key: Buffer)
+    public static encrypt (message: Buffer, key: Buffer): Buffer
     {
         let public_nonce_size = SodiumHelper.sodium.crypto_aead_xchacha20poly1305_ietf_NPUBBYTES;
         let public_nonce = SodiumHelper.sodium.randombytes_buf(public_nonce_size)
@@ -64,7 +64,7 @@ export class Encrypt
      * @param cipher_message    The encrypted message
      * @param key               The secret key
      */
-    static decrypt (cipher_message: Buffer, key: Buffer)
+    static decrypt (cipher_message: Buffer, key: Buffer): Buffer
     {
         let public_nonce_size = SodiumHelper.sodium.crypto_aead_xchacha20poly1305_ietf_NPUBBYTES;
         let public_nonce = cipher_message.slice(0, public_nonce_size);
