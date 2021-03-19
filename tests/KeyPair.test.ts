@@ -3,7 +3,7 @@
     Test for KeyPair, PublicKey, SecretKey and Seed
 
     Copyright:
-        Copyright (c) 2020 BOS Platform Foundation Korea
+        Copyright (c) 2020-2021 BOSAGORA Foundation
         All rights reserved.
 
     License:
@@ -81,7 +81,7 @@ describe ('KeyPair', () =>
         return boasdk.SodiumHelper.init();
     });
 
-    // See: https://github.com/bpfkorea/agora/blob/93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/common/crypto/Key.d#L375-L386
+    // See: https://github.com/bosagora/agora/blob/93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/common/crypto/Key.d#L375-L386
     it ('Test of KeyPair.fromSeed, sign, verify', () =>
     {
         let address = `GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW`;

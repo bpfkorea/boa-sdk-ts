@@ -3,7 +3,7 @@
     Includes classes and functions associated with hash.
 
     Copyright:
-        Copyright (c) 2020 BOS Platform Foundation Korea
+        Copyright (c) 2020-2021 BOSAGORA Foundation
         All rights reserved.
 
     License:
@@ -137,7 +137,7 @@ export function hash (source: Buffer): Hash
  * @param source1 The original for creating hash
  * @param source2 The original for creating hash
  * @returns The instance of Hash
- * See_Also https://github.com/bpfkorea/agora/blob/93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/common/Hash.d#L239-L255
+ * See_Also https://github.com/bosagora/agora/blob/93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/common/Hash.d#L239-L255
  */
 export function hashMulti (source1: Buffer, source2: Buffer): Hash
 {
@@ -153,7 +153,7 @@ export function hashMulti (source1: Buffer, source2: Buffer): Hash
  * @param h     The instance of transaction's Hash
  * @param index The index of the output
  * @returns The instance of Hash
- * See_Also https://github.com/bpfkorea/agora/blob/93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/consensus/data/UTXOSetValue.d#L50-L53
+ * See_Also https://github.com/bosagora/agora/blob/93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/consensus/data/UTXOSetValue.d#L50-L53
  */
 export function makeUTXOKey (h: Hash, index: JSBI): Hash
 {

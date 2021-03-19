@@ -2,10 +2,10 @@
 
     Contains definition for the class KeyPair, PublicKey, SecretKey and Seed
 
-    See_Also: https://github.com/bpfkorea/agora/blob/e5fc8fcd925c81c5fcff354880868b5fdbeffc5b/source/agora/common/crypto/Key.d
+    See_Also: https://github.com/bosagora/agora/blob/e5fc8fcd925c81c5fcff354880868b5fdbeffc5b/source/agora/common/crypto/Key.d
 
     Copyright:
-        Copyright (c) 2020 BOS Platform Foundation Korea
+        Copyright (c) 2020-2021 BOSAGORA Foundation
         All rights reserved.
 
     License:
@@ -180,7 +180,7 @@ export class PublicKey
      * @param signature The signature of `msg` matching `this` public key.
      * @param msg       The signed message. Should not include the signature.
      * @returns `true` if the signature is valid
-     * See_Also: https://github.com/bpfkorea/agora/blob/e5fc8fcd925c81c5fcff354880868b5fdbeffc5b/source/agora/common/crypto/Key.d#L257-L261
+     * See_Also: https://github.com/bosagora/agora/blob/e5fc8fcd925c81c5fcff354880868b5fdbeffc5b/source/agora/common/crypto/Key.d#L257-L261
      */
     public verify (signature: Signature, msg: Buffer): boolean
     {
@@ -244,7 +244,7 @@ export class SecretKey
      * Signs a message with this private key
      * @param msg The message to sign.
      * @returns The signature of `msg` using `this`
-     * See_Also: https://github.com/bpfkorea/agora/blob/e5fc8fcd925c81c5fcff354880868b5fdbeffc5b/source/agora/common/crypto/Key.d#L352-L355
+     * See_Also: https://github.com/bosagora/agora/blob/e5fc8fcd925c81c5fcff354880868b5fdbeffc5b/source/agora/common/crypto/Key.d#L352-L355
      */
     public sign (msg: Buffer): Signature
     {

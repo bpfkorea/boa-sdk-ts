@@ -6,7 +6,7 @@
     It also provides other functions.(Verification of signature and pre-image)
 
     Copyright:
-        Copyright (c) 2020 BOS Platform Foundation Korea
+        Copyright (c) 2020-2021 BOSAGORA Foundation
         All rights reserved.
 
     License:
@@ -170,7 +170,7 @@ export class BOAClient
      * @returns
      * {result: true, message: "The pre-image is valid."} if the pre-image is valid,
      * otherwise the result is false and the message is the reason for invalid
-     * See_Also: https://github.com/bpfkorea/agora/blob/93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/consensus/validation/PreImage.d#L50-L69
+     * See_Also: https://github.com/bosagora/agora/blob/93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/consensus/validation/PreImage.d#L50-L69
      */
     public isValidPreimage (
         original_image: Hash, original_image_height: number,

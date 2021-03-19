@@ -3,7 +3,7 @@
     Test that create hash.
 
     Copyright:
-        Copyright (c) 2020 BOS Platform Foundation Korea
+        Copyright (c) 2020-2021 BOSAGORA Foundation
         All rights reserved.
 
     License:
@@ -47,7 +47,7 @@ describe('Hash', () =>
             'dd1a2ffdb6fbb124bb7c45a68142f214ce9f6129fb697276a0d4d1c983fa580ba');
     });
 
-    // https://github.com/bpfkorea/agora/blob/v0.x.x/source/agora/common/Hash.d#L260-L265
+    // https://github.com/bosagora/agora/blob/v0.x.x/source/agora/common/Hash.d#L260-L265
     it('Test of multi hash', () => {
         // Source 1 : "foo"
         let foo = boasdk.hash(Buffer.from("foo"));
@@ -74,7 +74,7 @@ describe('Hash', () =>
             'e33bb2b89df2e59ee01eb2519b1508284b577f66a76d42546b65a6813e592bb84');
     });
 
-    // See_Also: https://github.com/bpfkorea/agora/blob/dac8b3ea6500af68a99c0248c3ade8ab821ee9ef/source/agora/consensus/data/Transaction.d#L203-L229
+    // See_Also: https://github.com/bosagora/agora/blob/dac8b3ea6500af68a99c0248c3ade8ab821ee9ef/source/agora/consensus/data/Transaction.d#L203-L229
     it ('Test for hash value of transaction data', () =>
     {
         let payment_tx = new boasdk.Transaction(
@@ -121,7 +121,7 @@ describe('Hash', () =>
         assert.strictEqual(freeze_tx.getNumberOfBytes(), nBytes);
     });
 
-    // See_Also: https://github.com/bpfkorea/agora/blob/73a7cd593afab6726021e05cf16b90d246343d65/source/agora/consensus/data/Block.d#L118-L138
+    // See_Also: https://github.com/bosagora/agora/blob/73a7cd593afab6726021e05cf16b90d246343d65/source/agora/consensus/data/Block.d#L118-L138
     it ('Test for hash value of BlockHeader', () =>
     {
         let pubkey = new boasdk.PublicKey('GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW');

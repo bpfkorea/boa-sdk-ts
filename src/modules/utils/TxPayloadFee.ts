@@ -3,7 +3,7 @@
     Contains a class to calculate the fees used to store the data
 
     Copyright:
-        Copyright (c) 2020 BOS Platform Foundation Korea
+        Copyright (c) 2020-2021 BOSAGORA Foundation
         All rights reserved.
 
     License:

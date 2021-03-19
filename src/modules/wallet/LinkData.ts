@@ -3,7 +3,7 @@
     The class that defines data structures to pass from Votera to BOA wallet
 
     Copyright:
-        Copyright (c) 2020 BOS Platform Foundation Korea
+        Copyright (c) 2020-2021 BOSAGORA Foundation
         All rights reserved.
 
     License:

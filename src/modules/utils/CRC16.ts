@@ -3,7 +3,7 @@
     This provides functions to use the CRC16 package.
 
     Copyright:
-        Copyright (c) 2020 BOS Platform Foundation Korea
+        Copyright (c) 2020-2021 BOSAGORA Foundation
         All rights reserved.
 
     License:
@@ -30,7 +30,7 @@ import crc from 'crc';
  * Data returned is in little endian
  * @param data Input data
  * @returns The result of checksum
- * See_Also: https://github.com/bpfkorea/agora/blob/93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/common/crypto/Crc16.d#L90-L100
+ * See_Also: https://github.com/bosagora/agora/blob/93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/common/crypto/Crc16.d#L90-L100
  */
 export function checksum (data: Buffer): Buffer
 {
@@ -45,7 +45,7 @@ export function checksum (data: Buffer): Buffer
  * @param data     Data to checksum
  * @param expected Expected checksum value
  * @returns The result of validation
- * See_Also: https://github.com/bpfkorea/agora/blob/93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/common/crypto/Crc16.d#L104-L109
+ * See_Also: https://github.com/bosagora/agora/blob/93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/common/crypto/Crc16.d#L104-L109
  */
 export function validate (data: Buffer, expected: Buffer): boolean
 {

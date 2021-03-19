@@ -5,7 +5,7 @@
     This is designed to compensate for the slow loading of packages.
     
     Copyright:
-        Copyright (c) 2020 BOS Platform Foundation Korea
+        Copyright (c) 2020-2021 BOSAGORA Foundation
         All rights reserved.
 
     License:
@@ -55,7 +55,7 @@ export class SodiumHelper
     }
 
     /**
-     * Returns the object of the package that has already been loaded. 
+     * Returns the object of the package that has already been loaded.
      * If loading is not completed, throw an error.
      */
     public static get sodium (): any
