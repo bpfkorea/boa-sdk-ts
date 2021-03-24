@@ -14,18 +14,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bpfkorea/boa-sdk-ts.git"
+    "url": "git+https://github.com/bosagora/boa-sdk-ts.git"
   },
   "keywords": [
     "SDK",
     "TypeScript"
   ],
-  "author": "BOS Platform Foundation Korea",
+  "author": "BOSAGORA Foundation",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/bpfkorea/boa-sdk-ts/issues"
+    "url": "https://github.com/bosagora/boa-sdk-ts/issues"
   },
-  "homepage": "https://bpfkorea.github.io/boa-sdk-ts/",
+  "homepage": "https://bosagora.github.io/boa-sdk-ts/",
   "dependencies": {
     "@ctrl/ts-base32": "^1.2.1",
     "ajv": "^6.12.6",

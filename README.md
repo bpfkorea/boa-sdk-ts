@@ -71,11 +71,11 @@ In Browser
 ```
 
 ## Documentation
-[BOA-SDK for TypeScript documentation](https://bpfkorea.github.io/boa-sdk-ts)
+[BOA-SDK for TypeScript documentation](https://bosagora.github.io/boa-sdk-ts)
 
 ## Testing
 ```bash
-$ git clone https://github.com/bpfkorea/boa-sdk-ts.git
+$ git clone https://github.com/bosagora/boa-sdk-ts.git
 $ npm install
 $ npm run build
 $ npm test
