@@ -60,10 +60,10 @@ describe ('Vote Data', () =>
     it ('Test of Vote', () =>
     {
         // The seed key of the validator
-        let seed = `SBBUWIMSX5VL4KVFKY44GF6Q6R5LS2Z5B7CTAZBNCNPLS4UKFVDXC7TQ`;
+        let seed = `SD4IEXJ6GWZ226ALTDDM72SYMHBTTJ6CHDPUNNTVZK4XSDHAM4BAQIC4`;
 
         // The KeyPair of the validator
-        let validator_key = boasdk.KeyPair.fromSeed(new boasdk.Seed(seed));
+        let validator_key = boasdk.KeyPair.fromSeed(new boasdk.SecretKey(seed));
 
         // The temporary KeyPair
         let temporary_key = boasdk.KeyPair.random();
@@ -121,10 +121,10 @@ describe ('Vote Data', () =>
     it ('The size of BallotData', () =>
     {
         // The seed key of the validator
-        let seed = `SBBUWIMSX5VL4KVFKY44GF6Q6R5LS2Z5B7CTAZBNCNPLS4UKFVDXC7TQ`;
+        let seed = `SD4IEXJ6GWZ226ALTDDM72SYMHBTTJ6CHDPUNNTVZK4XSDHAM4BAQIC4`;
 
         // The KeyPair of the validator
-        let validator_key = boasdk.KeyPair.fromSeed(new boasdk.Seed(seed));
+        let validator_key = boasdk.KeyPair.fromSeed(new boasdk.SecretKey(seed));
         // The temporary KeyPair
         let temporary_key = boasdk.KeyPair.random();
         let voter_card = new boasdk.VoterCard(validator_key.address, temporary_key.address, JSBI.BigInt(Date.now().valueOf()));
@@ -211,10 +211,10 @@ describe ('Vote Data', () =>
     it ('Test link data of Vote', () =>
     {
         // The KeyPair of the validator
-        let validator_key = boasdk.KeyPair.fromSeed(new boasdk.Seed("SBBUWIMSX5VL4KVFKY44GF6Q6R5LS2Z5B7CTAZBNCNPLS4UKFVDXC7TQ"));
+        let validator_key = boasdk.KeyPair.fromSeed(new boasdk.SecretKey("SDZQW3XBFXRXW2L7GVLS7DARGRKPQR5QIB5CDMGQ4KB24T46JURAAOLT"));
 
         // The temporary KeyPair
-        let temporary_key = boasdk.KeyPair.fromSeed(new boasdk.Seed("SDVK3TKVJLE324I5JYKZK62YU6ADXKCLKDKTHRJIED5FL32WMAFDPDXZ"));
+        let temporary_key = boasdk.KeyPair.fromSeed(new boasdk.SecretKey("SANGEY2BIMFZ3K3T3NWSVYBS65N55SZE7WBEVVXQFLLZI6GLZBKACO6G"));
 
         let voter_card = new boasdk.VoterCard(validator_key.address, temporary_key.address, boasdk.JSBI.BigInt(10000000));
         let voter_card_hash = boasdk.hashFull(voter_card);
@@ -231,7 +231,7 @@ describe ('Vote Data', () =>
 
         let link_data = ballot_data.getLinkData();
         let expected = {
-            payload: 'CEJBTExPVCAgDElEMTIzNDU2Nzg5MCnrh2CqgtLfg5AHdxBVuZMzSeM18Ym5b/NTj1wn7D77DX6nQauhGnpQ+MfYlMFFAFE68Aa54LqPOJX8r02Rx0+OoHtfNKVVeljV3601ecRvqYXBtM3PYEcP7V/5PfTYPLuzHSD0L+0TOQ/+gJaYADctGQG0YgE1vUjOIy36U7S+f/YJfiQ3csek6FCZ03jE2pHlGLmyaNlyvaH+W1LLYN0JmTovL1wJ2dSuDdb07AxkxQw6J3MFkkTwHuBwJV6i8cXcstC4gYdXkRwZa93JPW+LFxRZ++JPFx/ecghOd4Oxdg9eGfrREDc5m6dZ1JL/Bw=='
+            payload: 'CEJBTExPVCAgDElEMTIzNDU2Nzg5MCkOBl0aicgLwMN9EnvkTlm/n9reo1cC9ALJjL8hwMZo+0ZIs7VLqrqgwMWtIp2TBufIJIhInD6XvqjImZjxWdzHSZiNYVXVuKDmx60Co13nUDL3h+pKXCsG460FHRgDZWnJFfTYnch/tLj+gJaYAHe47it2ufN/ZpM/06sDLIv5OdpdlxIi8XIfJdWEenBLRI7A6tBYX9h+9jx1KXmPoEE2OfnC8+JOuTCvxrXZrwJkiPjaBEYGCGIoQ1GDr0M8J8BdnRPxXCIMvw7L422+eaCn0HuVWrMySyf93G7fWlU+DiHdJzuyVm9P+zAvJVQQAg=='
         };
 
         let deserialized_ballot_data = boasdk.BallotData.deserialize(SmartBuffer.fromBuffer(Buffer.from(link_data.payload, "base64")));

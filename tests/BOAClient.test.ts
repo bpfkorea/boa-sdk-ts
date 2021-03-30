@@ -61,7 +61,7 @@ let sample_validators =
 /**
  * Sample UTXOs
  */
-let sample_utxo_address = "GDML22LKP3N6S37CYIBFRANXVY7KMJMINH5VFADGDFLGIWNOR3YU7T6I";
+let sample_utxo_address = "GDA22T4I2OTZTFQBUY36GXJOPREZ5HZFG2RII5ERMUNXZ2NFSZDADLGE";
 let sample_utxo =
     [
         {
@@ -805,7 +805,7 @@ describe('BOA Client', () => {
         let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
 
         // Query
-        let public_key = new boasdk.PublicKey("GDML22LKP3N6S37CYIBFRANXVY7KMJMINH5VFADGDFLGIWNOR3YU7T6I");
+        let public_key = new boasdk.PublicKey("GDA22T4I2OTZTFQBUY36GXJOPREZ5HZFG2RII5ERMUNXZ2NFSZDADLGE");
         let utxos = await boa_client.getUTXOs(public_key);
         assert.strictEqual(utxos.length, sample_utxo.length);
         assert.deepStrictEqual(utxos[0].utxo, new boasdk.Hash(sample_utxo[0].utxo));
@@ -1033,13 +1033,13 @@ describe('BOA Client', () => {
         ];
 
         let keys: Array<boasdk.KeyPair> = [
-            boasdk.KeyPair.fromSeed(new boasdk.Seed("SDAKFNYEIAORZKKCYRILFQKLLOCNPL5SWJ3YY5NM3ZH6GJSZGXHZEPQS")),
-            boasdk.KeyPair.fromSeed(new boasdk.Seed("SAXA7RLGWM5I7Q34WBKXWLDPZ3NHFHATOZG7UUOG5ZGZCM7J64OLTJOT")),
-            boasdk.KeyPair.fromSeed(new boasdk.Seed("SDWAMFTNWY6XLZ2FDGBEMBYIXJTQSSA6OKSPH2YVLZH7NDE3LDFC2AJR"))
+            boasdk.KeyPair.fromSeed(new boasdk.SecretKey("SD4IEXJ6GWZ226ALTDDM72SYMHBTTJ6CHDPUNNTVZK4XSDHAM4BAQIC4")),
+            boasdk.KeyPair.fromSeed(new boasdk.SecretKey("SCUCEYS4ZHJ2L6ME4Y37Q77KC3CQE42GLGAV6YDWP5NJVDC53HTQ4IIM")),
+            boasdk.KeyPair.fromSeed(new boasdk.SecretKey("SDZQW3XBFXRXW2L7GVLS7DARGRKPQR5QIB5CDMGQ4KB24T46JURAAOLT"))
         ];
 
         let builder = new boasdk.TxBuilder(
-            boasdk.KeyPair.fromSeed(new boasdk.Seed("SDAKFNYEIAORZKKCYRILFQKLLOCNPL5SWJ3YY5NM3ZH6GJSZGXHZEPQS")));
+            boasdk.KeyPair.fromSeed(new boasdk.SecretKey("SD4IEXJ6GWZ226ALTDDM72SYMHBTTJ6CHDPUNNTVZK4XSDHAM4BAQIC4")));
 
         let vote_data = new boasdk.DataPayload("0x617461642065746f76");
         let fee = boasdk.TxPayloadFee.getFee(vote_data.data.length);
@@ -1083,7 +1083,7 @@ describe('BOA Client', () => {
                     "value": "100000",
                     "lock": {
                         "type": 0,
-                        "bytes": "KkpengSTntVIh037afPquSSwuq/KlbhEr/ydUPM4no4="
+                        "bytes": "wa1PiNOnmZYBpjfjXS58SZ6fJTaihHSRZRt86aWWRgE="
                     }
                 },
                 {
@@ -1134,7 +1134,7 @@ describe('BOA Client', () => {
         let fee = boasdk.TxPayloadFee.getFee(vote_data.data.length);
 
         let builder = new boasdk.TxBuilder(
-            boasdk.KeyPair.fromSeed(new boasdk.Seed("SDAKFNYEIAORZKKCYRILFQKLLOCNPL5SWJ3YY5NM3ZH6GJSZGXHZEPQS")));
+            boasdk.KeyPair.fromSeed(new boasdk.SecretKey("SD4IEXJ6GWZ226ALTDDM72SYMHBTTJ6CHDPUNNTVZK4XSDHAM4BAQIC4")));
         let tx = builder
             .addInput(utxo.utxo, utxo.amount)
             .addOutput(new boasdk.PublicKey(boasdk.TxPayloadFee.CommonsBudgetAddress), fee)
@@ -1154,7 +1154,7 @@ describe('BOA Client', () => {
         // Create BOA Client
         let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
 
-        let key_pair = boasdk.KeyPair.fromSeed(new boasdk.Seed("SBUC7CPSZVNHNNYO3SY7ZNBT3K3X6RWOC3NC4FVU4GOJXC3H5BUBC7YE"));
+        let key_pair = boasdk.KeyPair.fromSeed(new boasdk.SecretKey("SD4IEXJ6GWZ226ALTDDM72SYMHBTTJ6CHDPUNNTVZK4XSDHAM4BAQIC4"));
         let block_height = await boa_client.getBlockHeight();
         let utxos = await boa_client.getUTXOs(key_pair.address);
 
@@ -1201,7 +1201,7 @@ describe('BOA Client', () => {
                         "value": "100000",
                         "lock": {
                             "type": 0,
-                            "bytes": "2L1pan7b6W/iwgJYgbeuPqYliGn7UoBmGVZkWa6O8U8="
+                            "bytes": "wa1PiNOnmZYBpjfjXS58SZ6fJTaihHSRZRt86aWWRgE="
                         }
                     }
                 ],
@@ -1235,7 +1235,7 @@ describe('BOA Client', () => {
         // Create BOA Client
         let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
 
-        let key_pair = boasdk.KeyPair.fromSeed(new boasdk.Seed("SBUC7CPSZVNHNNYO3SY7ZNBT3K3X6RWOC3NC4FVU4GOJXC3H5BUBC7YE"));
+        let key_pair = boasdk.KeyPair.fromSeed(new boasdk.SecretKey("SD4IEXJ6GWZ226ALTDDM72SYMHBTTJ6CHDPUNNTVZK4XSDHAM4BAQIC4"));
         let block_height = await boa_client.getBlockHeight();
         let utxos = await boa_client.getUTXOs(key_pair.address);
 
@@ -1269,7 +1269,7 @@ describe('BOA Client', () => {
         // Create BOA Client
         let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
 
-        let key_pair = boasdk.KeyPair.fromSeed(new boasdk.Seed("SBUC7CPSZVNHNNYO3SY7ZNBT3K3X6RWOC3NC4FVU4GOJXC3H5BUBC7YE"));
+        let key_pair = boasdk.KeyPair.fromSeed(new boasdk.SecretKey("SD4IEXJ6GWZ226ALTDDM72SYMHBTTJ6CHDPUNNTVZK4XSDHAM4BAQIC4"));
         let block_height = await boa_client.getBlockHeight();
         let utxos = await boa_client.getUTXOs(key_pair.address);
 
@@ -1314,7 +1314,7 @@ describe('BOA Client', () => {
                         "value": "200000",
                         "lock": {
                             "type": 0,
-                            "bytes": "2L1pan7b6W/iwgJYgbeuPqYliGn7UoBmGVZkWa6O8U8="
+                            "bytes": "wa1PiNOnmZYBpjfjXS58SZ6fJTaihHSRZRt86aWWRgE="
                         }
                     }
                 ],
@@ -1373,7 +1373,7 @@ describe('BOA Client', () => {
         // Create BOA Client
         let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
 
-        let key_pair = boasdk.KeyPair.fromSeed(new boasdk.Seed("SBUC7CPSZVNHNNYO3SY7ZNBT3K3X6RWOC3NC4FVU4GOJXC3H5BUBC7YE"));
+        let key_pair = boasdk.KeyPair.fromSeed(new boasdk.SecretKey("SD4IEXJ6GWZ226ALTDDM72SYMHBTTJ6CHDPUNNTVZK4XSDHAM4BAQIC4"));
         let block_height = await boa_client.getBlockHeight();
         let utxos = await boa_client.getUTXOs(key_pair.address);
 
@@ -1498,7 +1498,7 @@ describe('BOA Client', () => {
                     "value": "148000",
                     "lock": {
                         "type": 0,
-                        "bytes": "2L1pan7b6W/iwgJYgbeuPqYliGn7UoBmGVZkWa6O8U8="
+                        "bytes": "wa1PiNOnmZYBpjfjXS58SZ6fJTaihHSRZRt86aWWRgE="
                     }
                 },
                 {

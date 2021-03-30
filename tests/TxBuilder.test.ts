@@ -37,7 +37,7 @@ describe ('TxBuilder', () =>
             utxo: new boasdk.Hash('0x4dde806d2e09367f9d5bdaaf46deab01a336a64fdb088dbb94edb171560c63cf6a39377bf0c4d35118775681d989dee46531926299463256da303553f09be6ef'),
             amount: JSBI.BigInt(1000000000)
         }
-        owner = boasdk.KeyPair.fromSeed(new boasdk.Seed("SBBUWIMSX5VL4KVFKY44GF6Q6R5LS2Z5B7CTAZBNCNPLS4UKFVDXC7TQ"))
+        owner = boasdk.KeyPair.fromSeed(new boasdk.SecretKey("SD4IEXJ6GWZ226ALTDDM72SYMHBTTJ6CHDPUNNTVZK4XSDHAM4BAQIC4"))
     });
 
     it ('When trying to send the wrong amount', () =>
@@ -102,7 +102,7 @@ describe ('TxBuilder', () =>
                     "value": "1980000000",
                     "lock": {
                         "type": 0,
-                        "bytes": "x9iUwUUAUTrwBrnguo84lfyvTZHHT46ge180pVV6WNU="
+                        "bytes": "wa1PiNOnmZYBpjfjXS58SZ6fJTaihHSRZRt86aWWRgE="
                     }
                 },
                 {
@@ -170,7 +170,7 @@ describe ('TxBuilder', () =>
                     "value": "1999500000",
                     "lock": {
                         "type": 0,
-                        "bytes": "x9iUwUUAUTrwBrnguo84lfyvTZHHT46ge180pVV6WNU="
+                        "bytes": "wa1PiNOnmZYBpjfjXS58SZ6fJTaihHSRZRt86aWWRgE="
                     }
                 }
             ],

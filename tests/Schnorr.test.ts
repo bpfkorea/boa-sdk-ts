@@ -254,9 +254,9 @@ describe ('Test of Schnorr', () =>
 
     it ('Test signing using Stellar seed', () =>
     {
-        let seed = `SCT4KKJNYLTQO4TVDPVJQZEONTVVW66YLRWAINWI3FZDY7U4JS4JJEI4`;
-        let kp: sdk.KeyPair = sdk.KeyPair.fromSeed(new sdk.Seed(seed));
-        assert.deepStrictEqual(kp.secret.scalar, new sdk.Scalar("0x44245dd23bd7453bf5fe07ec27a29be3dfe8e18d35bba28c7b222b71a4802db8"));
+        let seed = `SD4IEXJ6GWZ226ALTDDM72SYMHBTTJ6CHDPUNNTVZK4XSDHAM4BAQIC4`;
+        let kp: sdk.KeyPair = sdk.KeyPair.fromSeed(new sdk.SecretKey(seed));
+        assert.deepStrictEqual(kp.secret.scalar, new sdk.Scalar("0x080267e00c79b9ca75b646df38c2a739c36158eacfc6980b78adb3353e5d82f8"));
 
         let pair: sdk.Pair = sdk.Pair.fromScalar(kp.secret.scalar);
         assert.deepStrictEqual(pair.V.data, kp.address.data);

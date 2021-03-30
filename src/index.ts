@@ -14,7 +14,7 @@
 
 export { Hash, hash, hashMulti, makeUTXOKey, hashFull, hashPart } from './modules/common/Hash';
 export { Height } from './modules/common/Height';
-export { KeyPair, PublicKey, SecretKey, Seed } from './modules/common/KeyPair';
+export { KeyPair, PublicKey, SecretKey } from './modules/common/KeyPair';
 export { Signature } from './modules/common/Signature';
 export { Scalar, Point } from './modules/common/ECC';
 export { Sig, Pair, Schnorr, Message } from './modules/common/Schnorr';

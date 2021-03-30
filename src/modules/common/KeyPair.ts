@@ -2,7 +2,7 @@
 
     Contains definition for the class KeyPair, PublicKey, SecretKey and Seed
 
-    See_Also: https://github.com/bosagora/agora/blob/e5fc8fcd925c81c5fcff354880868b5fdbeffc5b/source/agora/common/crypto/Key.d
+    See_Also: https://github.com/bosagora/agora/blob/bcd14f2c6a3616d7f05ef850dc95fae3eb386760/source/agora/crypto/Key.d
 
     Copyright:
         Copyright (c) 2020-2021 BOSAGORA Foundation
@@ -38,52 +38,51 @@ export class KeyPair
     public secret: SecretKey;
 
     /**
-     * The seed key
-     */
-    public seed: Seed;
-
-    /**
      * Constructor
      * @param address The instance of PublicKey
      * @param secret  The instance of SecretKey
-     * @param seed    The instance of Seed
      */
-    constructor (address: PublicKey, secret: SecretKey, seed: Seed)
+    constructor (address: PublicKey, secret: SecretKey)
     {
         this.address = address;
         this.secret = secret;
-        this.seed = seed;
     }
 
     /**
-     * Create a KeyPair from a Seed
-     * @param seed The instance of Seed
+     * Create a KeyPair from a SecretKey
+     * @param secret The instance of SecretKey
      * @returns The instance of KeyPair
+     * See_Also: https://github.com/bosagora/agora/blob/bcd14f2c6a3616d7f05ef850dc95fae3eb386760/source/agora/crypto/Key.d#L64-L67
      */
-    public static fromSeed (seed: Seed): KeyPair
+    public static fromSeed (secret: SecretKey): KeyPair
     {
-        let kp = SodiumHelper.sodium.crypto_sign_seed_keypair(seed.data);
-        let x25519_sk = new Scalar(Buffer.from(SodiumHelper.sodium.crypto_sign_ed25519_sk_to_curve25519(kp.privateKey)));
-
-        return new KeyPair(
-            new PublicKey(Buffer.from(kp.publicKey)),
-            new SecretKey(x25519_sk.data),
-            seed);
+        if (!secret.scalar.isValid())
+            throw new Error("SecretKey should always be valid Scalar!");
+        return new KeyPair(new PublicKey(secret.scalar.toPoint()), new SecretKey(secret.scalar));
     }
 
     /**
-     * Generate a KeyPair with a randomly generated Seed
+     * Generate a new, random, keypair
      * @returns The instance of KeyPair
+     * See_Also: https://github.com/bosagora/agora/blob/bcd14f2c6a3616d7f05ef850dc95fae3eb386760/source/agora/crypto/Key.d#L98-L102
      */
     public static random (): KeyPair
     {
-        let kp = SodiumHelper.sodium.crypto_sign_keypair();
-        let seed = new Seed(Buffer.from(SodiumHelper.sodium.crypto_sign_ed25519_sk_to_seed(kp.privateKey)));
-        let x25519_sk = new Scalar(Buffer.from(SodiumHelper.sodium.crypto_sign_ed25519_sk_to_curve25519(kp.privateKey)));
-        return new KeyPair(
-            new PublicKey(Buffer.from(kp.publicKey)),
-            new SecretKey(x25519_sk.data),
-            seed);
+        let scalar = Scalar.random();
+        if (!scalar.isValid())
+            throw new Error("SecretKey should always be valid Scalar!");
+        return new KeyPair(new PublicKey(scalar.toPoint()), new SecretKey(scalar));
+    }
+
+    /**
+     * Signs a message with this keypair's private key
+     * @param msg The message to sign.
+     * @returns The signature of `msg` using `this`
+     * See_Also: https://github.com/bosagora/agora/blob/bcd14f2c6a3616d7f05ef850dc95fae3eb386760/source/agora/crypto/Key.d#L91-L95
+     */
+    public sign (msg: Buffer): Signature
+    {
+        return Schnorr.signPair<Buffer>(new Pair(this.secret.scalar, this.address.point), msg);
     }
 }
 
@@ -116,7 +115,7 @@ export class PublicKey
         {
             const decoded = Buffer.from(base32Decode(data));
 
-            if (decoded.length != 1 + SodiumHelper.sodium.crypto_sign_PUBLICKEYBYTES + 2)
+            if (decoded.length != 1 + SodiumHelper.sodium.crypto_core_ed25519_BYTES + 2)
                 throw new Error('Decoded data size is not normal');
 
             if (decoded[0] != VersionByte.AccountID)
@@ -131,11 +130,11 @@ export class PublicKey
         }
         else if (data instanceof Point)
         {
-            this.point = data;
+            this.point = new Point(data.data);
         }
         else
         {
-            if (data.length !== SodiumHelper.sodium.crypto_sign_PUBLICKEYBYTES)
+            if (data.length !== SodiumHelper.sodium.crypto_core_ed25519_BYTES)
                 throw new Error("The size of the input data is abnormal.");
             this.point = new Point(data);
         }
@@ -150,7 +149,7 @@ export class PublicKey
     {
         const decoded = Buffer.from(base32Decode(address));
 
-        if (decoded.length != 1 + SodiumHelper.sodium.crypto_sign_PUBLICKEYBYTES + 2)
+        if (decoded.length != 1 + SodiumHelper.sodium.crypto_core_ed25519_BYTES + 2)
             return 'Decoded data size is not normal';
 
         if (decoded[0] != VersionByte.AccountID)
@@ -180,7 +179,7 @@ export class PublicKey
      * @param signature The signature of `msg` matching `this` public key.
      * @param msg       The signed message. Should not include the signature.
      * @returns `true` if the signature is valid
-     * See_Also: https://github.com/bosagora/agora/blob/e5fc8fcd925c81c5fcff354880868b5fdbeffc5b/source/agora/common/crypto/Key.d#L257-L261
+     * See_Also: https://github.com/bosagora/agora/blob/bcd14f2c6a3616d7f05ef850dc95fae3eb386760/source/agora/crypto/Key.d#L242-L246
      */
     public verify (signature: Signature, msg: Buffer): boolean
     {
@@ -228,51 +227,12 @@ export class SecretKey
      * @param data The instance of Scalar or binary data of the secret key
      * @throws Will throw the error if the secret key validation fails.
      */
-    constructor (data: Buffer | Scalar)
-    {
-        if (data instanceof Scalar)
-        {
-            this.scalar = data;
-        }
-        else
-        {
-            this.scalar = new Scalar(data);
-        }
-    }
-
-    /**
-     * Signs a message with this private key
-     * @param msg The message to sign.
-     * @returns The signature of `msg` using `this`
-     * See_Also: https://github.com/bosagora/agora/blob/e5fc8fcd925c81c5fcff354880868b5fdbeffc5b/source/agora/common/crypto/Key.d#L352-L355
-     */
-    public sign (msg: Buffer): Signature
-    {
-        return Schnorr.signPair<Buffer>(Pair.fromScalar(this.scalar), msg);
-    }
-}
-
-/**
- * Define secret key seed
- */
-export class Seed
-{
-    /**
-     * Buffer containing raw seed
-     */
-    public readonly data: Buffer;
-
-    /**
-     * Constructor
-     * @param data The binary data of the seed
-     * @throws Will throw the error if the seed key validation fails.
-     */
-    constructor (data: Buffer | string)
+    constructor (data: Buffer | Scalar | string)
     {
         if (typeof data === 'string')
         {
             const decoded = Buffer.from(base32Decode(data));
-            if (decoded.length != 1 + SodiumHelper.sodium.crypto_sign_SEEDBYTES + 2)
+            if (decoded.length != 1 + SodiumHelper.sodium.crypto_core_ed25519_SCALARBYTES + 2)
                 throw new Error('Decoded data size is not normal');
 
             if (decoded[0] != VersionByte.Seed)
@@ -284,13 +244,15 @@ export class Seed
             if (!validate(body, cs))
                 throw new Error('Checksum result do not match');
 
-            this.data = body.slice(1);
+            this.scalar = new Scalar(body.slice(1));
+        }
+        else if (data instanceof Scalar)
+        {
+            this.scalar = new Scalar(data.data);
         }
         else
         {
-            if (data.length !== SodiumHelper.sodium.crypto_sign_SEEDBYTES)
-                throw new Error("The size of the input data is abnormal.");
-            this.data = Buffer.from(data);
+            this.scalar = new Scalar(data);
         }
     }
 
@@ -303,7 +265,7 @@ export class Seed
     {
         const decoded = Buffer.from(base32Decode(seed));
 
-        if (decoded.length != 1 + SodiumHelper.sodium.crypto_sign_SEEDBYTES + 2)
+        if (decoded.length != 1 + SodiumHelper.sodium.crypto_core_ed25519_SCALARBYTES + 2)
             return 'Decoded data size is not normal';
 
         if (decoded[0] != VersionByte.Seed)
@@ -318,11 +280,26 @@ export class Seed
     }
 
     /**
+     * Signs a message with this private key
+     * @param msg The message to sign.
+     * @returns The signature of `msg` using `this`
+     */
+    public sign (msg: Buffer): Signature
+    {
+        return Schnorr.signPair<Buffer>(Pair.fromScalar(this.scalar), msg);
+    }
+
+    /**
      * Returns a secret key seed as a string
+     * @param obfuscation If this value is true, print out '**SCALAR**' without printing
+     * the actual value. Default is true.
      * @returns The secret key seed
      */
-    public toString (): string
+    public toString (obfuscation: boolean = true): string
     {
+        if (obfuscation)
+            return "**SCALAR**";
+
         const body = Buffer.concat([Buffer.from([VersionByte.Seed]), this.data]);
         const cs = checksum(body);
         const decoded = Buffer.concat([body, cs]);

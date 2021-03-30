@@ -91,9 +91,8 @@ describe ('Test of Utils', () =>
 
     it ('Test of sizeof keys', () =>
     {
-        assert.strictEqual(boasdk.Utils.SIZE_OF_PUBLIC_KEY, boasdk.SodiumHelper.sodium.crypto_sign_PUBLICKEYBYTES);
-        assert.strictEqual(boasdk.Utils.SIZE_OF_SECRET_KEY, boasdk.SodiumHelper.sodium.crypto_sign_SECRETKEYBYTES);
-        assert.strictEqual(boasdk.Utils.SIZE_OF_SEED_KEY, boasdk.SodiumHelper.sodium.crypto_sign_SEEDBYTES);
+        assert.strictEqual(boasdk.Utils.SIZE_OF_PUBLIC_KEY, boasdk.SodiumHelper.sodium.crypto_core_ed25519_BYTES);
+        assert.strictEqual(boasdk.Utils.SIZE_OF_SECRET_KEY, boasdk.SodiumHelper.sodium.crypto_core_ed25519_SCALARBYTES);
     });
 
     it ('Test of BitField JSON serialization', () =>
