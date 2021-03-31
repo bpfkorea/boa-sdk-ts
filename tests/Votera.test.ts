@@ -168,7 +168,7 @@ export class TestStoa {
                             [
                                 new boasdk.TxOutput("3000000", boasdk.Lock.fromPublicKey(new boasdk.PublicKey("GDML22LKP3N6S37CYIBFRANXVY7KMJMINH5VFADGDFLGIWNOR3YU7T6I")))
                             ],
-                            new boasdk.DataPayload(Buffer.from("CEJBTExPVCAgDElEMTIzNDU2Nzg5MCk/jaJyIx7QYTYh8AMDAm0e8h9Hzs+GtqX8Inu07Az4V890VmCvPgMYacfYlMFFAFE68Aa54LqPOJX8r02Rx0+OoHtfNKVVeljVMHwj8iaJZVNCDMbzBZDsH+cqe4Mz8PFDE2fRZTwJla7/lFzwQngBAADz24ft0KJLJ2xeuww0GmiB1k00n+BWybptLD11dCzrPn7v18n16Qb1KJdttZw+DhS26EINNQW1Ph0QEVYJpzEAZOA4XXWtlUGRHSIYm6vdyojZTAMJR7o8drBAn6Ji5bExBpch79TyQtAi9yZdfuMV5wWt+eeeyK1vE66ZtD1a2Ac=", "base64"))
+                            new boasdk.DataPayload(Buffer.from("CEJBTExPVCAgDElEMTIzNDU2Nzg5MCnNDXqsIjf122wQG3k9SKb580hRF7MXqyls/Wjq7dxrztafXvbMlKQnLMWtIp2TBufIJIhInD6XvqjImZjxWdzHSZiNYVXVuKDmx60Co13nUDL3h+pKXCsG460FHRgDZWnJFfTYnch/tLj+gJaYAJGWUGjimvGZAq2HVp9kC3ClurMEA05RNDV484T/bh8I86ZoO4yFlkiLwOf+QOtUR0Qf65D2Rg2yq5V+YT05AAJkbTtR5m+izCVSoIcXz4+Nju9lq2K/FkcdJGrAsrYiRoPuerQHTl9HopfqdZDjFO4gcciSaI5x5mws87fLGSL9AQ==", "base64"))
                         );
                         res.status(200).send(JSON.stringify(tx));
                     }
@@ -420,8 +420,9 @@ describe('Checking the proposal and ballot data', () =>
                         let pre_image = new boasdk.Hash('0x0a8201f9f5096e1ce8e8de4147694940a57a188b78293a55144fc8777a774f2349b3a910fb1fb208514fb16deaf49eb05882cdb6796a81f913c6daac3eb74328');
                         let app_name = "Votera";
                         let proposal_id = payload.proposal_id;
-                        let key = boasdk.Encrypt.createKey(pre_image.data, app_name, proposal_id);
-                        assert.deepStrictEqual(boasdk.Encrypt.decrypt(payload.ballot, key), Buffer.from([boasdk.BallotData.BLANK]));
+                        let key_agora_admin = boasdk.hashMulti(pre_image.data, Buffer.from(app_name));
+                        let key_encrypt = boasdk.Encrypt.createKey(key_agora_admin.data, proposal_id);
+                        assert.deepStrictEqual(boasdk.Encrypt.decrypt(payload.ballot, key_encrypt), Buffer.from([boasdk.BallotData.YES]));
                     });
                 }
             }

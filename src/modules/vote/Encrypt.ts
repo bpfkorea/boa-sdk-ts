@@ -11,6 +11,7 @@
 
 *******************************************************************************/
 
+import { hashMulti } from '../common/Hash';
 import { SodiumHelper } from '../utils/SodiumHelper';
 
 /**
@@ -25,17 +26,15 @@ export class Encrypt
 
     /**
      * Creates a secure key
-     * @param pre_image     The pre-image
-     * @param app_name      The name of the app
+     * @param first_key     The key obtained from the Agora admin page
      * @param proposal_id   The ID of proposal
      */
-    public static createKey (pre_image: Buffer, app_name: string, proposal_id: string): Buffer
+    public static createKey (first_key: Buffer, proposal_id: string): Buffer
     {
+        let key_proposal = hashMulti(first_key, Buffer.from(proposal_id));
         let key_size = SodiumHelper.sodium.crypto_aead_xchacha20poly1305_ietf_KEYBYTES;
         let state = SodiumHelper.sodium.crypto_generichash_init(null, key_size);
-        SodiumHelper.sodium.crypto_generichash_update(state, pre_image);
-        SodiumHelper.sodium.crypto_generichash_update(state, Buffer.from(app_name));
-        SodiumHelper.sodium.crypto_generichash_update(state, Buffer.from(proposal_id));
+        SodiumHelper.sodium.crypto_generichash_update(state, key_proposal.data);
         return SodiumHelper.sodium.crypto_generichash_final(state, key_size);
     }
 

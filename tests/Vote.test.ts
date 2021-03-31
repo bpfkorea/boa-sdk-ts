@@ -98,16 +98,17 @@ describe ('Vote Data', () =>
         let pre_image = new boasdk.Hash('0x0a8201f9f5096e1ce8e8de4147694940a57a188b78293a55144fc8777a774f2349b3a910fb1fb208514fb16deaf49eb05882cdb6796a81f913c6daac3eb74328');
         let app_name = "Votera";
         let proposal_id = "ID1234567890";
-        let key = boasdk.Encrypt.createKey(pre_image.data, app_name, proposal_id);
+        let key_agora_admin = boasdk.hashMulti(pre_image.data, Buffer.from(app_name));
+        let key_encrypt = boasdk.Encrypt.createKey(key_agora_admin.data, proposal_id);
 
         let message = Buffer.from([boasdk.BallotData.YES]);
-        let cipher_message = boasdk.Encrypt.encrypt(message, key);
-        let decode_message = boasdk.Encrypt.decrypt(cipher_message, key);
+        let cipher_message = boasdk.Encrypt.encrypt(message, key_encrypt);
+        let decode_message = boasdk.Encrypt.decrypt(cipher_message, key_encrypt);
         assert.deepStrictEqual(message, decode_message);
 
-        let cipher_message1 = boasdk.Encrypt.encrypt(Buffer.from([boasdk.BallotData.YES  ]), key);
-        let cipher_message2 = boasdk.Encrypt.encrypt(Buffer.from([boasdk.BallotData.NO   ]), key);
-        let cipher_message3 = boasdk.Encrypt.encrypt(Buffer.from([boasdk.BallotData.BLANK]), key);
+        let cipher_message1 = boasdk.Encrypt.encrypt(Buffer.from([boasdk.BallotData.YES  ]), key_encrypt);
+        let cipher_message2 = boasdk.Encrypt.encrypt(Buffer.from([boasdk.BallotData.NO   ]), key_encrypt);
+        let cipher_message3 = boasdk.Encrypt.encrypt(Buffer.from([boasdk.BallotData.BLANK]), key_encrypt);
 
         assert.notDeepStrictEqual(cipher_message1, cipher_message2);
         assert.notDeepStrictEqual(cipher_message2, cipher_message3);
@@ -135,8 +136,9 @@ describe ('Vote Data', () =>
         let pre_image = new boasdk.Hash('0x0a8201f9f5096e1ce8e8de4147694940a57a188b78293a55144fc8777a774f2349b3a910fb1fb208514fb16deaf49eb05882cdb6796a81f913c6daac3eb74328');
         let app_name = "Votera";
         let proposal_id = "ID1234567890";
-        let key = boasdk.Encrypt.createKey(pre_image.data, app_name, proposal_id);
-        let ballot = boasdk.Encrypt.encrypt(Buffer.from([boasdk.BallotData.BLANK]), key);
+        let key_agora_admin = boasdk.hashMulti(pre_image.data, Buffer.from(app_name));
+        let key_encrypt = boasdk.Encrypt.createKey(key_agora_admin.data, proposal_id);
+        let ballot = boasdk.Encrypt.encrypt(Buffer.from([boasdk.BallotData.BLANK]), key_encrypt);
         let ballot_data = new boasdk.BallotData(proposal_id, ballot, voter_card, 100);
         let ballot_data_hash = boasdk.hashFull(ballot_data);
         ballot_data.signature = temporary_key.secret.sign(ballot_data_hash.data);
@@ -223,15 +225,16 @@ describe ('Vote Data', () =>
         let pre_image = new boasdk.Hash('0x0a8201f9f5096e1ce8e8de4147694940a57a188b78293a55144fc8777a774f2349b3a910fb1fb208514fb16deaf49eb05882cdb6796a81f913c6daac3eb74328');
         let app_name = "Votera";
         let proposal_id = "ID1234567890";
-        let key = boasdk.Encrypt.createKey(pre_image.data, app_name, proposal_id);
-        let ballot = boasdk.Encrypt.encrypt(Buffer.from([boasdk.BallotData.YES]), key);
+        let key_agora_admin = boasdk.hashMulti(pre_image.data, Buffer.from(app_name));
+        let key_encrypt = boasdk.Encrypt.createKey(key_agora_admin.data, proposal_id);
+        let ballot = boasdk.Encrypt.encrypt(Buffer.from([boasdk.BallotData.YES]), key_encrypt);
         let ballot_data = new boasdk.BallotData("ID1234567890", ballot, voter_card, 100);
         let ballot_data_hash = boasdk.hashFull(ballot_data);
         ballot_data.signature = temporary_key.secret.sign(ballot_data_hash.data);
 
         let link_data = ballot_data.getLinkData();
         let expected = {
-            payload: 'CEJBTExPVCAgDElEMTIzNDU2Nzg5MCkOBl0aicgLwMN9EnvkTlm/n9reo1cC9ALJjL8hwMZo+0ZIs7VLqrqgwMWtIp2TBufIJIhInD6XvqjImZjxWdzHSZiNYVXVuKDmx60Co13nUDL3h+pKXCsG460FHRgDZWnJFfTYnch/tLj+gJaYAHe47it2ufN/ZpM/06sDLIv5OdpdlxIi8XIfJdWEenBLRI7A6tBYX9h+9jx1KXmPoEE2OfnC8+JOuTCvxrXZrwJkiPjaBEYGCGIoQ1GDr0M8J8BdnRPxXCIMvw7L422+eaCn0HuVWrMySyf93G7fWlU+DiHdJzuyVm9P+zAvJVQQAg=='
+            payload: 'CEJBTExPVCAgDElEMTIzNDU2Nzg5MCnNDXqsIjf122wQG3k9SKb580hRF7MXqyls/Wjq7dxrztafXvbMlKQnLMWtIp2TBufIJIhInD6XvqjImZjxWdzHSZiNYVXVuKDmx60Co13nUDL3h+pKXCsG460FHRgDZWnJFfTYnch/tLj+gJaYAJGWUGjimvGZAq2HVp9kC3ClurMEA05RNDV484T/bh8I86ZoO4yFlkiLwOf+QOtUR0Qf65D2Rg2yq5V+YT05AAJkbTtR5m+izCVSoIcXz4+Nju9lq2K/FkcdJGrAsrYiRoPuerQHTl9HopfqdZDjFO4gcciSaI5x5mws87fLGSL9AQ=='
         };
 
         let deserialized_ballot_data = boasdk.BallotData.deserialize(SmartBuffer.fromBuffer(Buffer.from(link_data.payload, "base64")));
@@ -239,7 +242,7 @@ describe ('Vote Data', () =>
 
         let expected_ballot_data = boasdk.BallotData.deserialize(SmartBuffer.fromBuffer(Buffer.from(expected.payload, "base64")));
         assert.deepStrictEqual(ballot_data.proposal_id, expected_ballot_data.proposal_id);
-        assert.deepStrictEqual(boasdk.Encrypt.decrypt(ballot_data.ballot, key), boasdk.Encrypt.decrypt(expected_ballot_data.ballot, key));
+        assert.deepStrictEqual(boasdk.Encrypt.decrypt(ballot_data.ballot, key_encrypt), boasdk.Encrypt.decrypt(expected_ballot_data.ballot, key_encrypt));
         assert.deepStrictEqual(ballot_data.card.validator_address, expected_ballot_data.card.validator_address);
         assert.deepStrictEqual(ballot_data.card.address, expected_ballot_data.card.address);
         assert.deepStrictEqual(ballot_data.card.expires, expected_ballot_data.card.expires);
