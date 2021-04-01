@@ -22,7 +22,7 @@ export class TxPayloadFee
      * The address of commons budget
      */
     public static CommonsBudgetAddress: string
-        = "GCOMMONBGUXXP4RFCYGEF74JDJVPUW2GUENGTKKJECDNO6AGO32CUWGU";
+        = "boa1xrzwvvw6l6d9k84ansqgs9yrtsetpv44wfn8zm9a7lehuej3ssskxth867s";
 
     /**
      * The maximum size of data payload

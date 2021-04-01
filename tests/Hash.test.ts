@@ -124,7 +124,7 @@ describe('Hash', () =>
     // See_Also: https://github.com/bosagora/agora/blob/73a7cd593afab6726021e05cf16b90d246343d65/source/agora/consensus/data/Block.d#L118-L138
     it ('Test for hash value of BlockHeader', () =>
     {
-        let pubkey = new boasdk.PublicKey('GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW');
+        let pubkey = new boasdk.PublicKey('boa1xrr66q4rthn4qvhhsl4y5hptqm366pgarqpk26wfzh6d38wg076tsqqesgg');
 
         let tx = new boasdk.Transaction(
             boasdk.TxType.Payment,
@@ -145,13 +145,13 @@ describe('Hash', () =>
             0
         );
         assert.strictEqual(boasdk.hashFull(header).toString(),
-            "0xf9970c8b9f45c172c21df299db3c1db6ac3e618629e3229eb8650921e52fc00" +
-            "80417a93714fc15a01d6bbf91004e0646c7377c2608c34d272a2b0a5897fced4f");
+            "0xae5eb320aec482edb3fa2ab8eb3c7577f9fe10beaba95eb46e72b39b4053b79" +
+            "74da42afeb1d34439c7a57b5b3dc6df4d46f72870138636decd5e60b367612138");
     });
 
     it ('Test for hash value of BlockHeader with missing validators', () =>
     {
-        let pubkey = new boasdk.PublicKey('GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW');
+        let pubkey = new boasdk.PublicKey('boa1xrr66q4rthn4qvhhsl4y5hptqm366pgarqpk26wfzh6d38wg076tsqqesgg');
 
         let tx = new boasdk.Transaction(
             boasdk.TxType.Payment,
@@ -172,7 +172,7 @@ describe('Hash', () =>
             0
         );
         assert.strictEqual(boasdk.hashFull(header).toString(),
-            "0xab369553e5871c2e180fa2ab8162f74e552266baa71efc2445fc208048f2824" +
-            "99106f0ba280e3c83a13dab79b7f91be72973ca1e23c56b094ed02a182ef53956");
+            "0x252c0ef24da4ba4d4302b8b14eadfb8a4ba87862ff75acd8a7c801e3c55dbb8" +
+            "6307f5208ceb2b8095630cfb5d9e28dbc709824df85bed906a05a1005a076c672");
     });
 });

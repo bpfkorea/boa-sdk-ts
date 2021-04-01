@@ -42,13 +42,13 @@ describe ('Vote Data', () =>
             "Title",
             boasdk.JSBI.BigInt(1000),
             boasdk.JSBI.BigInt(3026),
-            new boasdk.Hash(Buffer.allocUnsafe(boasdk.Hash.Width)),
+            new boasdk.Hash(Buffer.alloc(boasdk.Hash.Width)),
             boasdk.JSBI.BigInt(10000000000000),
             boasdk.JSBI.BigInt(100000000000),
-            boasdk.JSBI.BigInt(100000000),
-            new boasdk.Hash(Buffer.allocUnsafe(boasdk.Hash.Width)),
-            new boasdk.PublicKey("GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW"),
-            new boasdk.PublicKey("GCOMMONBGUXXP4RFCYGEF74JDJVPUW2GUENGTKKJECDNO6AGO32CUWGU")
+            boasdk.JSBI.BigInt(27000000),
+            new boasdk.Hash(Buffer.alloc(boasdk.Hash.Width)),
+            new boasdk.PublicKey("boa1xrw66w303s5x05ej9uu6djc54kue29j72kah22xqqcrtqj57ztwm5uh524e"),
+            new boasdk.PublicKey("boa1xrzwvvw6l6d9k84ansqgs9yrtsetpv44wfn8zm9a7lehuej3ssskxth867s")
             );
         let bytes = new SmartBuffer();
         original_data.serialize(bytes);
@@ -152,13 +152,13 @@ describe ('Vote Data', () =>
     it ('Test link data of ProposalFeeData', () =>
     {
         let data = new boasdk.ProposalFeeData("ID1234567890");
-        let proposal_address = new boasdk.PublicKey("GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW");
-        let destination = new boasdk.PublicKey("GDPU22KOCCNMCACFVN3BGDNC4NWXKQ4YGMZ75X4JXMNS7LO5IBQWB7CJ");
+        let proposal_address = new boasdk.PublicKey("boa1xrw66w303s5x05ej9uu6djc54kue29j72kah22xqqcrtqj57ztwm5uh524e");
+        let destination = new boasdk.PublicKey("boa1xrgq6607dulyra5r9dw0ha6883va0jghdzk67er49h3ysm7k222ruhh7400");
         let amount = boasdk.JSBI.BigInt("10000000000000")
         let link_data = data.getLinkData(proposal_address, destination, amount);
         let expected = {
-            proposer_address: 'GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW',
-            destination: 'GDPU22KOCCNMCACFVN3BGDNC4NWXKQ4YGMZ75X4JXMNS7LO5IBQWB7CJ',
+            proposer_address: 'boa1xrw66w303s5x05ej9uu6djc54kue29j72kah22xqqcrtqj57ztwm5uh524e',
+            destination: 'boa1xrgq6607dulyra5r9dw0ha6883va0jghdzk67er49h3ysm7k222ruhh7400',
             amount: '10000000000000',
             payload: 'CFBST1AtRkVFDElEMTIzNDU2Nzg5MA=='
         }
@@ -178,34 +178,34 @@ describe ('Vote Data', () =>
             boasdk.JSBI.BigInt(100000000000),
             boasdk.JSBI.BigInt(100000000),
             new boasdk.Hash(Buffer.alloc(boasdk.Hash.Width)),
-            new boasdk.PublicKey("GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW"),
-            new boasdk.PublicKey("GCOMMONBGUXXP4RFCYGEF74JDJVPUW2GUENGTKKJECDNO6AGO32CUWGU")
+            new boasdk.PublicKey("boa1xrw66w303s5x05ej9uu6djc54kue29j72kah22xqqcrtqj57ztwm5uh524e"),
+            new boasdk.PublicKey("boa1xrzwvvw6l6d9k84ansqgs9yrtsetpv44wfn8zm9a7lehuej3ssskxth867s")
         );
-        let proposal_address = new boasdk.PublicKey("GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW");
+        let proposer_address = new boasdk.PublicKey("boa1xrw66w303s5x05ej9uu6djc54kue29j72kah22xqqcrtqj57ztwm5uh524e");
         let validators = [
-            new boasdk.PublicKey("GDPU22KOCCNMCACFVN3BGDNC4NWXKQ4YGMZ75X4JXMNS7LO5IBQWB7CJ"),
-            new boasdk.PublicKey("GDPV22UHJUZKPO4SDIZBNZXNKDFFSPLRHC3VPBO2TUBP2Y4LHGZYCP4L"),
-            new boasdk.PublicKey("GDPW227UM2JOHIV7ASZPZ7KQ6DP2V2QX4VHLSKZX27545YBYFS7FZWFK"),
-            new boasdk.PublicKey("GDPX22XXTETXC4YJCMGMI55OBGUVIXVL5AOKP2RGT24B4HCGBRIPFHHD"),
-            new boasdk.PublicKey("GDPY22WMCY3TH5OUZRRN2CZF4I6UFBV3VDT627HCQMQCQAR7M2WQ5UT4"),
-            new boasdk.PublicKey("GDPZ225K4MUNOHGEYKP4RWBFXCHL6TXDLHZYRNGRXQ2MGGLTUSUCUNA7"),
-            new boasdk.PublicKey("GDQA224KNN7LBDRWG3VFL72DRZGKKLNYE4RB6NWP4HX26WKPPEWLNYWW"),
+            new boasdk.PublicKey("boa1xrdwry6fpk7a57k4gwyj3mwnf59w808nygtuxsgdrpmv4p7ua2hqx78z5en"),
+            new boasdk.PublicKey("boa1xrdwrymw40ae7kdumk5uf24rf7wj6kxeem0t3mh9yclz6j46rnen6htq9ju"),
+            new boasdk.PublicKey("boa1xrdwryuhc2tw2j97wqe3ahh37qnjya59n5etz88n9fvwyyt9jyvrvfq5ecp"),
+            new boasdk.PublicKey("boa1xrdwryayr9r3nacx26vwe6ymy2kl7zp7dc03q5h6zk65vnu6mtkkzdqg39f"),
+            new boasdk.PublicKey("boa1xrdwry7vltf9mrzf62qgpdh282grqn9nlnvhzp0yt8y0y9zedmgh64s2qjg"),
+            new boasdk.PublicKey("boa1xrdwryl0ajdd86c45w4zrjf8spmrt7u4l7s5jy64ac3dc78x2ucd7wkakac"),
+            new boasdk.PublicKey("boa1xrgr66gdm5je646x70l5ar6qkhun0hg3yy2eh7tf8xxlmlt9fgjd2q0uj8p"),
         ];
         let voting_fee = boasdk.JSBI.BigInt("12000000")
-        let link_data = data.getLinkData(proposal_address, validators, voting_fee);
+        let link_data = data.getLinkData(proposer_address, validators, voting_fee);
         let expected = {
-            proposer_address: 'GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW',
+            proposer_address: 'boa1xrw66w303s5x05ej9uu6djc54kue29j72kah22xqqcrtqj57ztwm5uh524e',
             validators: [
-                'GDPU22KOCCNMCACFVN3BGDNC4NWXKQ4YGMZ75X4JXMNS7LO5IBQWB7CJ',
-                'GDPV22UHJUZKPO4SDIZBNZXNKDFFSPLRHC3VPBO2TUBP2Y4LHGZYCP4L',
-                'GDPW227UM2JOHIV7ASZPZ7KQ6DP2V2QX4VHLSKZX27545YBYFS7FZWFK',
-                'GDPX22XXTETXC4YJCMGMI55OBGUVIXVL5AOKP2RGT24B4HCGBRIPFHHD',
-                'GDPY22WMCY3TH5OUZRRN2CZF4I6UFBV3VDT627HCQMQCQAR7M2WQ5UT4',
-                'GDPZ225K4MUNOHGEYKP4RWBFXCHL6TXDLHZYRNGRXQ2MGGLTUSUCUNA7',
-                'GDQA224KNN7LBDRWG3VFL72DRZGKKLNYE4RB6NWP4HX26WKPPEWLNYWW'
+                'boa1xrdwry6fpk7a57k4gwyj3mwnf59w808nygtuxsgdrpmv4p7ua2hqx78z5en',
+                'boa1xrdwrymw40ae7kdumk5uf24rf7wj6kxeem0t3mh9yclz6j46rnen6htq9ju',
+                'boa1xrdwryuhc2tw2j97wqe3ahh37qnjya59n5etz88n9fvwyyt9jyvrvfq5ecp',
+                'boa1xrdwryayr9r3nacx26vwe6ymy2kl7zp7dc03q5h6zk65vnu6mtkkzdqg39f',
+                'boa1xrdwry7vltf9mrzf62qgpdh282grqn9nlnvhzp0yt8y0y9zedmgh64s2qjg',
+                'boa1xrdwryl0ajdd86c45w4zrjf8spmrt7u4l7s5jy64ac3dc78x2ucd7wkakac',
+                'boa1xrgr66gdm5je646x70l5ar6qkhun0hg3yy2eh7tf8xxlmlt9fgjd2q0uj8p'
             ],
             voting_fee: '12000000',
-            payload: 'CFBST1BPU0FMAQxJRDEyMzQ1Njc4OTAFVGl0bGX96AP90gsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/wCgck4YCQAA/wDodkgXAAAA/gDh9QUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAx9iUwUUAUTrwBrnguo84lfyvTZHHT46ge180pVV6WNWcxjmhNS938iUWDEL/iRpq+ltGoRppqUkghtd4Bnb0Kg=='
+            payload: 'CFBST1BPU0FMAQxJRDEyMzQ1Njc4OTAFVGl0bGX96AP90gsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/wCgck4YCQAA/wDodkgXAAAA/gDh9QUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA3a06L4woZ9MyLzmmyxStuZUWXlW7dSjABgawSp4S3brE5jHa/ppbHr2cAIgUg1wysLK1cmZxbL33835mUYQhYw=='
         };
         assert.deepStrictEqual(link_data, expected);
     });

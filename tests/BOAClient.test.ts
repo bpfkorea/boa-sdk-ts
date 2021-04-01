@@ -27,7 +27,7 @@ import URI from 'urijs';
 let sample_validators =
     [
         {
-            "address": "GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN",
+            "address": "boa1xrq66nug6wnen9sp5cm7xhfw03yea8e9x63ggay3v5dhe6d9jerqz50eld0",
             "enrolled_at": 0,
             "stake": "0x210b66053c73e7bd7b27673706f0272617d09b8cda76605e91ab66ad1cc3bfc1f3f5fede91fd74bb2d2073de587c6ee495cfb0d981f03a83651b48ce0e576a1a",
             "preimage":
@@ -37,7 +37,7 @@ let sample_validators =
                 }
         },
         {
-            "address": "GBUVRIIBMHKC4PE6BK7MO2O26U2NJLW4WGGWKLAVLAA2DLFZTBHHKOEK",
+            "address": "boa1xrp66va5qe84kyfhywhxz9luy7glpxu99n30cuv3mu0vkhcswuzajgak3pw",
             "enrolled_at": 0,
             "stake": "0x86f1a6dff3b1f2256d2417b71ecc5511293b224894da5fd75c192965aa1874824ca777ecac678c871e717ad38c295046f4f64130f31750aa967c30c35529944a",
             "preimage":
@@ -47,7 +47,7 @@ let sample_validators =
                 }
         },
         {
-            "address": "GBJABNUCDJCIL5YJQMB5OZ7VCFPKYLMTUXM2ZKQJACT7PXL7EVOMEKNZ",
+            "address": "boa1xrz66g5ajvrw0jpy3pyfc05hh65v3xvc79vae36fnzxkz4w4hzswv90ypcp",
             "enrolled_at": 0,
             "stake": "0xf21f606e96d6130b02a807655fda22c8888111f2045c0d45eda9c26d3c97741ca32fc68960ae68220809843d92671083e32395a848203380e5dfd46e4b0261f0",
             "preimage":
@@ -61,7 +61,7 @@ let sample_validators =
 /**
  * Sample UTXOs
  */
-let sample_utxo_address = "GDA22T4I2OTZTFQBUY36GXJOPREZ5HZFG2RII5ERMUNXZ2NFSZDADLGE";
+let sample_utxo_address = "boa1xrq66nug6wnen9sp5cm7xhfw03yea8e9x63ggay3v5dhe6d9jerqz50eld0";
 let sample_utxo =
     [
         {
@@ -204,8 +204,8 @@ let sample_txs_history =
     [
         {
             display_tx_type: 'inbound',
-            address: 'GDG22B5FTPXE5THQMCTGDUC4LF2N4DFF44PGX2LIFG4WNUZZAT4L6ZGD',
-            peer: 'GDO22PFYWMU3YFLKDYP2PVM4PLX2D4BLJ2IRQMIHWJHFS3TZ6ITJMGPU',
+            address: 'boa1xrx66ezhd6uzx2s0plpgtwwmwmv4tfzvgp5sswqcg8z6m79s05pactt2yc9',
+            peer: 'boa1xrw66w303s5x05ej9uu6djc54kue29j72kah22xqqcrtqj57ztwm5uh524e',
             peer_count: 1,
             height: '9',
             time: 1601553600,
@@ -217,8 +217,8 @@ let sample_txs_history =
         },
         {
             display_tx_type: 'outbound',
-            address: 'GDG22B5FTPXE5THQMCTGDUC4LF2N4DFF44PGX2LIFG4WNUZZAT4L6ZGD',
-            peer: 'GDO22PFYWMU3YFLKDYP2PVM4PLX2D4BLJ2IRQMIHWJHFS3TZ6ITJMGPU',
+            address: 'boa1xrx66ezhd6uzx2s0plpgtwwmwmv4tfzvgp5sswqcg8z6m79s05pactt2yc9',
+            peer: 'boa1xrw66w303s5x05ej9uu6djc54kue29j72kah22xqqcrtqj57ztwm5uh524e',
             peer_count: 1,
             height: '8',
             time: 1600953600,
@@ -230,8 +230,8 @@ let sample_txs_history =
         },
         {
             display_tx_type: 'inbound',
-            address: 'GDG22B5FTPXE5THQMCTGDUC4LF2N4DFF44PGX2LIFG4WNUZZAT4L6ZGD',
-            peer: 'GDO22PFYWMU3YFLKDYP2PVM4PLX2D4BLJ2IRQMIHWJHFS3TZ6ITJMGPU',
+            address: 'boa1xrx66ezhd6uzx2s0plpgtwwmwmv4tfzvgp5sswqcg8z6m79s05pactt2yc9',
+            peer: 'boa1xrw66w303s5x05ej9uu6djc54kue29j72kah22xqqcrtqj57ztwm5uh524e',
             peer_count: 1,
             height: '7',
             time: 1600353600,
@@ -243,8 +243,8 @@ let sample_txs_history =
         },
         {
             display_tx_type: 'outbound',
-            address: 'GDG22B5FTPXE5THQMCTGDUC4LF2N4DFF44PGX2LIFG4WNUZZAT4L6ZGD',
-            peer: 'GDO22PFYWMU3YFLKDYP2PVM4PLX2D4BLJ2IRQMIHWJHFS3TZ6ITJMGPU',
+            address: 'boa1xrx66ezhd6uzx2s0plpgtwwmwmv4tfzvgp5sswqcg8z6m79s05pactt2yc9',
+            peer: 'boa1xrw66w303s5x05ej9uu6djc54kue29j72kah22xqqcrtqj57ztwm5uh524e',
             peer_count: 1,
             height: '6',
             time: 1599753600,
@@ -256,8 +256,8 @@ let sample_txs_history =
         },
         {
             display_tx_type: 'inbound',
-            address: 'GDG22B5FTPXE5THQMCTGDUC4LF2N4DFF44PGX2LIFG4WNUZZAT4L6ZGD',
-            peer: 'GDO22PFYWMU3YFLKDYP2PVM4PLX2D4BLJ2IRQMIHWJHFS3TZ6ITJMGPU',
+            address: 'boa1xrx66ezhd6uzx2s0plpgtwwmwmv4tfzvgp5sswqcg8z6m79s05pactt2yc9',
+            peer: 'boa1xrw66w303s5x05ej9uu6djc54kue29j72kah22xqqcrtqj57ztwm5uh524e',
             peer_count: 1,
             height: '5',
             time: 1599153600,
@@ -269,8 +269,8 @@ let sample_txs_history =
         },
         {
             display_tx_type: 'outbound',
-            address: 'GDG22B5FTPXE5THQMCTGDUC4LF2N4DFF44PGX2LIFG4WNUZZAT4L6ZGD',
-            peer: 'GDO22PFYWMU3YFLKDYP2PVM4PLX2D4BLJ2IRQMIHWJHFS3TZ6ITJMGPU',
+            address: 'boa1xrx66ezhd6uzx2s0plpgtwwmwmv4tfzvgp5sswqcg8z6m79s05pactt2yc9',
+            peer: 'boa1xrw66w303s5x05ej9uu6djc54kue29j72kah22xqqcrtqj57ztwm5uh524e',
             peer_count: 1,
             height: '4',
             time: 1598553600,
@@ -282,8 +282,8 @@ let sample_txs_history =
         },
         {
             display_tx_type: 'inbound',
-            address: 'GDG22B5FTPXE5THQMCTGDUC4LF2N4DFF44PGX2LIFG4WNUZZAT4L6ZGD',
-            peer: 'GDO22PFYWMU3YFLKDYP2PVM4PLX2D4BLJ2IRQMIHWJHFS3TZ6ITJMGPU',
+            address: 'boa1xrx66ezhd6uzx2s0plpgtwwmwmv4tfzvgp5sswqcg8z6m79s05pactt2yc9',
+            peer: 'boa1xrw66w303s5x05ej9uu6djc54kue29j72kah22xqqcrtqj57ztwm5uh524e',
             peer_count: 1,
             height: '3',
             time: 1597953600,
@@ -295,8 +295,8 @@ let sample_txs_history =
         },
         {
             display_tx_type: 'outbound',
-            address: 'GDG22B5FTPXE5THQMCTGDUC4LF2N4DFF44PGX2LIFG4WNUZZAT4L6ZGD',
-            peer: 'GDO22PFYWMU3YFLKDYP2PVM4PLX2D4BLJ2IRQMIHWJHFS3TZ6ITJMGPU',
+            address: 'boa1xrx66ezhd6uzx2s0plpgtwwmwmv4tfzvgp5sswqcg8z6m79s05pactt2yc9',
+            peer: 'boa1xrw66w303s5x05ej9uu6djc54kue29j72kah22xqqcrtqj57ztwm5uh524e',
             peer_count: 1,
             height: '2',
             time: 1597353600,
@@ -308,8 +308,8 @@ let sample_txs_history =
         },
         {
             display_tx_type: 'inbound',
-            address: 'GDG22B5FTPXE5THQMCTGDUC4LF2N4DFF44PGX2LIFG4WNUZZAT4L6ZGD',
-            peer: 'GCOQEOHAUFYUAC6G22FJ3GZRNLGVCCLESEJ2AXBIJ5BJNUVTAERPLRIJ',
+            address: 'boa1xrx66ezhd6uzx2s0plpgtwwmwmv4tfzvgp5sswqcg8z6m79s05pactt2yc9',
+            peer: 'GDAZW22V4WVQ6Y6ILIKY3BNODEWBXXK5VY2B3HACFM6VWV4JEEAPDHCC',
             peer_count: 1,
             height: '1',
             time: 1596753600,
@@ -332,14 +332,14 @@ let sample_tx_overview =
         payload: '',
         senders: [
             {
-                address: 'GDI22L72RGWY3BEFK2VUBWMJMSZU5SQNCQLN5FCF467RFIYN5KMY3YJT',
+                address: 'boa1xrgq6607dulyra5r9dw0ha6883va0jghdzk67er49h3ysm7k222ruhh7400',
                 amount: 610000000000000,
                 utxo: '0xb0383981111438cf154c7725293009d53462c66d641f76506400f64f55f9cb2e253dafb37af9fafd8b0031e6b9789f96a3a4be06b3a15fa592828ec7f8c489cc'
             }
         ],
         receivers: [
             {
-                address: 'GDA225RGC4GOCVASSAMROSWJSGNOZX2IGPXZG52ESDSKQW2VN6UJFKWI',
+                address: 'boa1xrq66nug6wnen9sp5cm7xhfw03yea8e9x63ggay3v5dhe6d9jerqz50eld0',
                 amount: 610000000000000,
                 utxo: '0xefed6c1701d1195524d469a3bbb058492a7922ff98e7284a01f14c0a32c31814f4ed0d6666aaf7071ae0f1eb615920173f13a63c8774aa5955a3af77c51e55e9'
             }
@@ -352,14 +352,14 @@ let sample_txs_pending =
         {
             tx_hash: '0xcf8e55b51027342537ebbdfc503146033fcd8091054913e78d6a858125f892a24b0734afce7154fdde85688ab1700307b999b2e5a17a724990bb83d3785e89da',
             submission_time: 1613404086,
-            address: 'GCOMMONBGUXXP4RFCYGEF74JDJVPUW2GUENGTKKJECDNO6AGO32CUWGU',
+            address: 'boa1xrzwvvw6l6d9k84ansqgs9yrtsetpv44wfn8zm9a7lehuej3ssskxth867s',
             amount: '1663400000',
             fee: '0'
         },
         {
             tx_hash: '0xcf8e55b51027342537ebbdfc503146033fcd8091054913e78d6a858125f892a24b0734afce7154fdde85688ab1700307b999b2e5a17a724990bb83d3785e89da',
             submission_time: 1613404086,
-            address: 'GDID227ETHPOMLRLIHVDJSNSJVLDS4D4ANYOUHXPMG2WWEZN5JO473ZO',
+            address: 'boa1xrgr66gdm5je646x70l5ar6qkhun0hg3yy2eh7tf8xxlmlt9fgjd2q0uj8p',
             amount: '24398336600000',
             fee: '0'
         }
@@ -754,12 +754,12 @@ describe('BOA Client', () => {
         let stoa_uri = URI("http://localhost")
             .port(stoa_port)
             .directory("validator")
-            .filename("GBJABNUCDJCIL5YJQMB5OZ7VCFPKYLMTUXM2ZKQJACT7PXL7EVOMEKNZ")
+            .filename("boa1xrp66va5qe84kyfhywhxz9luy7glpxu99n30cuv3mu0vkhcswuzajgak3pw")
             .setSearch("height", "10");
 
         let response = await client.get (stoa_uri.toString());
         assert.strictEqual(response.data.length, 1);
-        assert.strictEqual(response.data[0].address, "GBJABNUCDJCIL5YJQMB5OZ7VCFPKYLMTUXM2ZKQJACT7PXL7EVOMEKNZ");
+        assert.strictEqual(response.data[0].address, "boa1xrp66va5qe84kyfhywhxz9luy7glpxu99n30cuv3mu0vkhcswuzajgak3pw");
         assert.strictEqual(response.data[0].preimage.distance, 10);
     });
 
@@ -775,7 +775,7 @@ describe('BOA Client', () => {
         // Query
         let validators = await boa_client.getAllValidators(10);
         assert.strictEqual(validators.length, 3);
-        assert.strictEqual(validators[0].address, "GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN");
+        assert.strictEqual(validators[0].address, "boa1xrq66nug6wnen9sp5cm7xhfw03yea8e9x63ggay3v5dhe6d9jerqz50eld0");
         assert.strictEqual(validators[0].preimage.distance, 10);
     });
 
@@ -789,9 +789,9 @@ describe('BOA Client', () => {
         let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
 
         // Query
-        let validators = await boa_client.getValidator("GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", 10);
+        let validators = await boa_client.getValidator("boa1xrq66nug6wnen9sp5cm7xhfw03yea8e9x63ggay3v5dhe6d9jerqz50eld0", 10);
         assert.strictEqual(validators.length, 1);
-        assert.strictEqual(validators[0].address, "GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN");
+        assert.strictEqual(validators[0].address, "boa1xrq66nug6wnen9sp5cm7xhfw03yea8e9x63ggay3v5dhe6d9jerqz50eld0");
         assert.strictEqual(validators[0].preimage.distance, 10);
     });
 
@@ -805,7 +805,7 @@ describe('BOA Client', () => {
         let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
 
         // Query
-        let public_key = new boasdk.PublicKey("GDA22T4I2OTZTFQBUY36GXJOPREZ5HZFG2RII5ERMUNXZ2NFSZDADLGE");
+        let public_key = new boasdk.PublicKey("boa1xrq66nug6wnen9sp5cm7xhfw03yea8e9x63ggay3v5dhe6d9jerqz50eld0");
         let utxos = await boa_client.getUTXOs(public_key);
         assert.strictEqual(utxos.length, sample_utxo.length);
         assert.deepStrictEqual(utxos[0].utxo, new boasdk.Hash(sample_utxo[0].utxo));
@@ -839,7 +839,7 @@ describe('BOA Client', () => {
         // Query
         let validators = await boa_client.getAllValidators(10);
         assert.strictEqual(validators.length, 3);
-        assert.strictEqual(validators[0].address, "GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN");
+        assert.strictEqual(validators[0].address, "boa1xrq66nug6wnen9sp5cm7xhfw03yea8e9x63ggay3v5dhe6d9jerqz50eld0");
         assert.strictEqual(validators[0].preimage.distance, 10);
     });
 
@@ -852,9 +852,9 @@ describe('BOA Client', () => {
         let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
 
         // Query
-        let validators = await boa_client.getValidator("GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", 10);
+        let validators = await boa_client.getValidator("boa1xrq66nug6wnen9sp5cm7xhfw03yea8e9x63ggay3v5dhe6d9jerqz50eld0", 10);
         assert.strictEqual(validators.length, 1);
-        assert.strictEqual(validators[0].address, "GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN");
+        assert.strictEqual(validators[0].address, "boa1xrq66nug6wnen9sp5cm7xhfw03yea8e9x63ggay3v5dhe6d9jerqz50eld0");
         assert.strictEqual(validators[0].preimage.distance, 10);
     });
 
@@ -868,7 +868,7 @@ describe('BOA Client', () => {
         let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
 
         // Query
-        let validators = await boa_client.getValidator("GX3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", 10);
+        let validators = await boa_client.getValidator("boa1xrr66q4rthn4qvhhsl4y5hptqm366pgarqpk26wfzh6d38wg076tsqqesgg", 10);
         assert.strictEqual(validators.length, 0);
     });
 
@@ -882,7 +882,7 @@ describe('BOA Client', () => {
         let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
 
         await assert.rejects(
-            boa_client.getValidator("GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", -10),
+            boa_client.getValidator("boa1xrq66nug6wnen9sp5cm7xhfw03yea8e9x63ggay3v5dhe6d9jerqz50eld0", -10),
             {
                 status: 400,
                 message: "Bad Request",
@@ -900,7 +900,7 @@ describe('BOA Client', () => {
         let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
 
         await assert.rejects(
-            boa_client.getValidator("GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235GN", 10),
+            boa_client.getValidator("boa1xrq66nug6wnen9sp5cm7xhfw03yea8e9x63ggay3v5dhe6d9jerqz50eld0", 10),
             {
                 message: "connect ECONNREFUSED 127.0.0.1:6000"
             });
@@ -1059,21 +1059,21 @@ describe('BOA Client', () => {
                 {
                     "utxo": "0x81a326afa790003c32517a2a2556613004e6147edac28d576cf7bcc2daadf4bb60be1f644c229b775e7894844ec66b2d70ddf407b8196b46bc1dfe42061c7497",
                     "unlock": {
-                        "bytes": "uefV85aW9nVp6Nyv4F7yri41Mp6Xer278npElumnXf7EUFM3CxaOuX1xYI3PxMuKYlGGB8C6hZ9LBpXCT+5CDQ=="
+                        "bytes": "9vSzHA03/64wlGV2zT8S6iMXFFkpwPlWWTVOHQc6D2AfexfD1RxS/VdFQ8qpTSsxxttV/EZVKtigZ7K2kRUIBg=="
                     },
                     "unlock_age": 0
                 },
                 {
                     "utxo": "0xb82cb96710af2e9804c59d1f1e1679f8b8b69f4c0f6cd79c8c12f365dd766c09aaa4febcc18b3665d33301cb248ac7afd343ac7b98b27beaf246ad12d3b3219a",
                     "unlock": {
-                        "bytes": "YZvabkT4c29FIBa/kH/VfYbUxIe1RY33Fy8DA1zb7n1LH3MDW2Bnu+NAZBwTTx5KKshoTL+lJTjq0SefDWosBA=="
+                        "bytes": "Kwz0wvnqqJX5zwvqpKnFF+76DiUVyNDYqDUm6LjhyIFJN8x1h4l5sBHns7aNX1NoH3A80xJ+xme77Mh31371CQ=="
                     },
                     "unlock_age": 0
                 },
                 {
                     "utxo": "0x4028965b7408566a66e4cf8c603a1cdebc7659a3e693d36d2fdcb39b196da967914f40ef4966d5b4b1f4b3aae00fbd68ffe8808b070464c2a101d44f4d7b0170",
                     "unlock": {
-                        "bytes": "KVk9MvR9vWDB5BMY8SKmb4WvNh3vm9Jh4NgRs0W8wWVoaAygGlz/gHE3kbnb6uuly2WZkXmj36j/BZtoVQY/Bg=="
+                        "bytes": "HYBT2ksTcfoWSyGGdmgqSy2ZkEsh7hBtbXQG7QdD0beYZHtQ0khm2nauZN916KkIspWl6v5mNZqg8zvhFJVyCw=="
                     },
                     "unlock_age": 0
                 }
@@ -1090,7 +1090,7 @@ describe('BOA Client', () => {
                     "value": "500000",
                     "lock": {
                         "type": 0,
-                        "bytes": "nMY5oTUvd/IlFgxC/4kaavpbRqEaaalJIIbXeAZ29Co="
+                        "bytes": "xOYx2v6aWx69nACIFINcMrCytXJmcWy99/N+ZlGEIWM="
                     }
                 }
             ],
@@ -1385,7 +1385,7 @@ describe('BOA Client', () => {
         // Create UTXOManager
         let utxo_manager = new boasdk.UTXOManager(utxos);
 
-        let output_address = "GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW";
+        let output_address = "boa1xrr66q4rthn4qvhhsl4y5hptqm366pgarqpk26wfzh6d38wg076tsqqesgg";
         let output_count = 2;
         let estimated_tx_fee = JSBI.BigInt(boasdk.Utils.FEE_FACTOR *
             boasdk.Transaction.getEstimatedNumberOfBytes(0, output_count, vote_data.data.length));
@@ -1460,35 +1460,35 @@ describe('BOA Client', () => {
                 {
                     "utxo": "0x3451d94322524e3923fd26f0597fb8a9cdbf3a9427c38ed1ca61104796d39c5b9b5ea33d576f17c2dc17bebc5d84a0559de8c8c521dfe725d4c352255fc71e85",
                     "unlock": {
-                        "bytes": "DNHSZrt2MV2iFPVZNBsEjmpUopyZYgM9xcrA6DMaQG2nMZSiAhp31xCfLjkG6SjAVbHtVkMAeBnIc0ywy0tYAQ=="
+                        "bytes": "4qgxRsfgLCaBKDVw9KJM/BfKb8tJX41s8WgxcNCAUq83APZtIxyVYs2Te//osUEAFhcpTSagF1zglG/myF4+Bg=="
                     },
                     "unlock_age": 0
                 },
                 {
                     "utxo": "0xfca92fe76629311c6208a49e89cb26f5260777278cd8b272e7bb3021adf429957fd6844eb3b8ff64a1f6074126163fd636877fa92a1f4329c5116873161fbaf8",
                     "unlock": {
-                        "bytes": "DNHSZrt2MV2iFPVZNBsEjmpUopyZYgM9xcrA6DMaQG2nMZSiAhp31xCfLjkG6SjAVbHtVkMAeBnIc0ywy0tYAQ=="
+                        "bytes": "mqMB1bLL0PXTEB80TuMh5mBPllHNW/EF1EkAyE8lQbIOFhr44s3wCpS5unUdDPeDgZoMOzuqFc7S7OTkG/hUDg=="
                     },
                     "unlock_age": 0
                 },
                 {
                     "utxo": "0x7e1958dbe6839d8520d65013bbc85d36d47a9f64cf608cc66c0d816f0b45f5c8a85a8990725ffbb1ab13c3c65b45fdc06f4745d455e00e1068c4c5c0b661d685",
                     "unlock": {
-                        "bytes": "DNHSZrt2MV2iFPVZNBsEjmpUopyZYgM9xcrA6DMaQG2nMZSiAhp31xCfLjkG6SjAVbHtVkMAeBnIc0ywy0tYAQ=="
+                        "bytes": "0hwN3QwAtBXXNrd6YwP5CNLZcKsr+1SkARXwqNCiHeBgRqzELLoVpOEVuTGfEh7fmnsb8zUc2qfSybH75T78Cg=="
                     },
                     "unlock_age": 0
                 },
                 {
                     "utxo": "0xd44608de8a5015b04f933098fd7f67f84ffbf00c678836d38c661ab6dc1f149606bdc96bad149375e16dc5722b077b14c0a4afdbe6d30932f783650f435bcb92",
                     "unlock": {
-                        "bytes": "DNHSZrt2MV2iFPVZNBsEjmpUopyZYgM9xcrA6DMaQG2nMZSiAhp31xCfLjkG6SjAVbHtVkMAeBnIc0ywy0tYAQ=="
+                        "bytes": "61WpwyBIJeYArr26pv2S1QhxTiraQwvt+Gn9xWFhge11uZ2tQYu3eiw8UZ4KRKmQGlymRqfpY+bKwIJDJKVQDQ=="
                     },
                     "unlock_age": 0
                 },
                 {
                     "utxo": "0xc3780f9907a97c20a2955945544e7732a60702c32d81e016bdf1ea172b7b7fb96e9a4164176663a146615307aaadfbbad77e615a7c792a89191e85471120d314",
                     "unlock": {
-                        "bytes": "DNHSZrt2MV2iFPVZNBsEjmpUopyZYgM9xcrA6DMaQG2nMZSiAhp31xCfLjkG6SjAVbHtVkMAeBnIc0ywy0tYAQ=="
+                        "bytes": "csSLViq4Dz7pc01erw3vkBHQObfJSiFtxSBgoAiitHy31NrZaeArFYEZle7oDDvH8J+RrRXgI4bKRSRap5axCQ=="
                     },
                     "unlock_age": 0
                 }
@@ -1505,7 +1505,7 @@ describe('BOA Client', () => {
                     "value": "200000",
                     "lock": {
                         "type": 0,
-                        "bytes": "x9iUwUUAUTrwBrnguo84lfyvTZHHT46ge180pVV6WNU="
+                        "bytes": "x60Co13nUDL3h+pKXCsG460FHRgDZWnJFfTYnch/tLg="
                     }
                 }
             ],
@@ -1532,7 +1532,7 @@ describe('BOA Client', () => {
         let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
 
         // Query
-        let public_key = new boasdk.PublicKey("GDML22LKP3N6S37CYIBFRANXVY7KMJMINH5VFADGDFLGIWNOR3YU7T6I");
+        let public_key = new boasdk.PublicKey("boa1xrx66ezhd6uzx2s0plpgtwwmwmv4tfzvgp5sswqcg8z6m79s05pactt2yc9");
         let data = await boa_client.getWalletTransactionsHistory(public_key, 10, 1, ["payment", "freeze"]);
         assert.deepStrictEqual(data, sample_txs_history);
     });
@@ -1562,7 +1562,7 @@ describe('BOA Client', () => {
         let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
 
         // Query
-        let public_key = new boasdk.PublicKey("GDML22LKP3N6S37CYIBFRANXVY7KMJMINH5VFADGDFLGIWNOR3YU7T6I");
+        let public_key = new boasdk.PublicKey("boa1xrzwvvw6l6d9k84ansqgs9yrtsetpv44wfn8zm9a7lehuej3ssskxth867s");
         let data = await boa_client.getWalletTransactionsPending(public_key);
         assert.deepStrictEqual(data, sample_txs_pending);
     });

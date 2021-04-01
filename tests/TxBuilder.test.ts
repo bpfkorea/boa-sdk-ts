@@ -42,7 +42,7 @@ describe ('TxBuilder', () =>
 
     it ('When trying to send the wrong amount', () =>
     {
-        let destination = new boasdk.PublicKey("GDNODE7J5EUK7T6HLEO2FDUBWZEXVXHJO7C4AF5VZAKZENGQ4WR3IX2U");
+        let destination = new boasdk.PublicKey("boa1xrdwryl0ajdd86c45w4zrjf8spmrt7u4l7s5jy64ac3dc78x2ucd7wkakac");
         let builder = new boasdk.TxBuilder(owner);
         let amount = JSBI.BigInt(0);
         builder.addInput(utxo_data1.utxo, utxo_data1.amount);
@@ -53,7 +53,7 @@ describe ('TxBuilder', () =>
 
     it ('When trying to send an amount greater than the amount of UTXO.', () =>
     {
-        let destination = new boasdk.PublicKey("GDNODE7J5EUK7T6HLEO2FDUBWZEXVXHJO7C4AF5VZAKZENGQ4WR3IX2U");
+        let destination = new boasdk.PublicKey("boa1xrdwryl0ajdd86c45w4zrjf8spmrt7u4l7s5jy64ac3dc78x2ucd7wkakac");
         let builder = new boasdk.TxBuilder(owner);
         let amount = utxo_data1.amount + BigInt(1);
         builder.addInput(utxo_data1.utxo, utxo_data1.amount);
@@ -64,7 +64,7 @@ describe ('TxBuilder', () =>
 
     it ('Test to create a transaction without data payload', () =>
     {
-        let destination = new boasdk.PublicKey("GDNODE7J5EUK7T6HLEO2FDUBWZEXVXHJO7C4AF5VZAKZENGQ4WR3IX2U");
+        let destination = new boasdk.PublicKey("boa1xrdwryl0ajdd86c45w4zrjf8spmrt7u4l7s5jy64ac3dc78x2ucd7wkakac");
         let builder = new boasdk.TxBuilder(owner);
         let tx: boasdk.Transaction;
         try {
@@ -85,14 +85,14 @@ describe ('TxBuilder', () =>
                 {
                     "utxo": "0xd9482016835acc6defdfd060216a5890e00cf8f0a79ab0b83d3385fc723cd45bfea66eb3587a684518ff1756951d38bf4f07abda96dcdea1c160a4f83e377c32",
                     "unlock": {
-                        "bytes": "6T6TFGKbFrd5RIJkLNRSU+dWv90lAi82SDNWLb55xT/9r8HMmhn/pyk3kmxgM6NS3xOo3+G+ZeaI41MStFTWAQ=="
+                        "bytes": "baLr3KhfUzr0WEYxYuQpthF8x+xIYihkWf+RnfXjldAGvnArN0hDVLcNZsHFCBaP2zKmRJm3sQUmKko7ZGlgDw=="
                     },
                     "unlock_age": 0
                 },
                 {
                     "utxo": "0x4dde806d2e09367f9d5bdaaf46deab01a336a64fdb088dbb94edb171560c63cf6a39377bf0c4d35118775681d989dee46531926299463256da303553f09be6ef",
                     "unlock": {
-                        "bytes": "6T6TFGKbFrd5RIJkLNRSU+dWv90lAi82SDNWLb55xT/9r8HMmhn/pyk3kmxgM6NS3xOo3+G+ZeaI41MStFTWAQ=="
+                        "bytes": "2zY7qq/EKWQpAePoOjT4eFd3soO71EAE9P/E6PaLfzN5e4ZcxR9zZvsqH76pFgENlwTozYVARS6HRzY/l+FnBA=="
                     },
                     "unlock_age": 0
                 }
@@ -109,7 +109,7 @@ describe ('TxBuilder', () =>
                     "value": "20000000",
                     "lock": {
                         "type": 0,
-                        "bytes": "2uGT6ekor8/HWR2ijoG2SXrc6XfFwBe1yBWSNNDlo7Q="
+                        "bytes": "2uGT7+ya0+sVo6ohySeAdjX7lf+hSRNV7iLceOZXMN8="
                     }
                 }
             ],

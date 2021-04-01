@@ -254,4 +254,43 @@ export class Utils
 
         return a.length - b.length;
     }
+
+    /**
+     * Convert from one power-of-2 number base to another
+     * @param out_values  The values that has converted
+     * @param in_values   The values to be converted
+     * @param from        A power-of-2 number base of `in_values`
+     * @param to          A power-of-2 number base of `out_values`
+     * @param pad         Check if the pads are added
+     * @returns true if the conversion succeeds
+     */
+    public static convertBits (out_values: Array<number>, in_values: Array<number>, from: number, to: number, pad: boolean): boolean
+    {
+        let acc: number = 0;
+        let bits: number = 0;
+        const max_v: number = (1 << to) - 1;
+        const max_acc: number = (1 << (from + to - 1)) - 1;
+
+        for (let i = 0; i < in_values.length; ++i)
+        {
+            let value = in_values[i];
+            acc = ((acc << from) | value) & max_acc;
+            bits += from;
+            while (bits >= to)
+            {
+                bits -= to;
+                out_values.push(((acc >> bits) & max_v) & 0xff);
+            }
+        }
+        if (pad)
+        {
+            if (bits !== 0)
+                out_values.push(((acc << (to - bits)) & max_v) & 0xff);
+        }
+        else if (bits >= from || ((acc << (to - bits)) & max_v))
+        {
+            return false;
+        }
+        return true;
+    }
 }

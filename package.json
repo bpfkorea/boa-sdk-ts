@@ -30,6 +30,7 @@
     "@ctrl/ts-base32": "^1.2.1",
     "ajv": "^6.12.6",
     "axios": "^0.21.1",
+    "bech32": "^2.0.0",
     "crc": "^3.8.0",
     "jsbi": "^3.1.4",
     "libsodium-wrappers-sumo": "^0.7.9",
@@ -38,6 +39,7 @@
     "urijs": "^1.19.2"
   },
   "devDependencies": {
+    "@types/bech32": "^1.1.2",
     "@types/chai": "^4.2.11",
     "@types/crc": "^3.4.0",
     "@types/express": "^4.17.6",

@@ -24,8 +24,8 @@ let sample_txs_history =
     [
         {
             display_tx_type: 'payload',
-            address: 'GDML22LKP3N6S37CYIBFRANXVY7KMJMINH5VFADGDFLGIWNOR3YU7T6I',
-            peer: 'GDO22PFYWMU3YFLKDYP2PVM4PLX2D4BLJ2IRQMIHWJHFS3TZ6ITJMGPU',
+            address: 'boa1xrw66w303s5x05ej9uu6djc54kue29j72kah22xqqcrtqj57ztwm5uh524e',
+            peer: 'boa1xrw66w303s5x05ej9uu6djc54kue29j72kah22xqqcrtqj57ztwm5uh524e',
             peer_count: 1,
             height: '100',
             time: 1600353600,
@@ -37,8 +37,8 @@ let sample_txs_history =
         },
         {
             display_tx_type: 'payload',
-            address: 'GDML22LKP3N6S37CYIBFRANXVY7KMJMINH5VFADGDFLGIWNOR3YU7T6I',
-            peer: 'GDO22PFYWMU3YFLKDYP2PVM4PLX2D4BLJ2IRQMIHWJHFS3TZ6ITJMGPU',
+            address: 'boa1xrw66w303s5x05ej9uu6djc54kue29j72kah22xqqcrtqj57ztwm5uh524e',
+            peer: 'boa1xrw66w303s5x05ej9uu6djc54kue29j72kah22xqqcrtqj57ztwm5uh524e',
             peer_count: 10,
             height: '8',
             time: 1600953600,
@@ -50,8 +50,8 @@ let sample_txs_history =
         },
         {
             display_tx_type: 'payload',
-            address: 'GDML22LKP3N6S37CYIBFRANXVY7KMJMINH5VFADGDFLGIWNOR3YU7T6I',
-            peer: 'GDO22PFYWMU3YFLKDYP2PVM4PLX2D4BLJ2IRQMIHWJHFS3TZ6ITJMGPU',
+            address: 'boa1xrw66w303s5x05ej9uu6djc54kue29j72kah22xqqcrtqj57ztwm5uh524e',
+            peer: 'boa1xrw66w303s5x05ej9uu6djc54kue29j72kah22xqqcrtqj57ztwm5uh524e',
             peer_count: 1,
             height: '9',
             time: 1601553600,
@@ -130,7 +130,7 @@ export class TestStoa {
                                 new boasdk.TxInput(new boasdk.Hash("0xc0abcbff07879bfdb1495b8fdb9a9e5d2b07a689c7b9b3c583459082259be35687c125a1ddd6bd28b4fe8533ff794d3dba466b5f91117bbf557c3f1b6ff50e5f"))
                             ],
                             [
-                                new boasdk.TxOutput("100000000000", boasdk.Lock.fromPublicKey(new boasdk.PublicKey("GCOMMONBGUXXP4RFCYGEF74JDJVPUW2GUENGTKKJECDNO6AGO32CUWGU")))
+                                new boasdk.TxOutput("100000000000", boasdk.Lock.fromPublicKey(new boasdk.PublicKey("boa1xrzwvvw6l6d9k84ansqgs9yrtsetpv44wfn8zm9a7lehuej3ssskxth867s")))
                             ],
                             new boasdk.DataPayload(Buffer.from("CFBST1AtRkVFDElEMTIzNDU2Nzg5MA==", "base64"))
                         );
@@ -144,17 +144,17 @@ export class TestStoa {
                                 new boasdk.TxInput(new boasdk.Hash("0xc0abcbff07879bfdb1495b8fdb9a9e5d2b07a689c7b9b3c583459082259be35687c125a1ddd6bd28b4fe8533ff794d3dba466b5f91117bbf557c3f1b6ff50e5f"))
                             ],
                             [
-                                new boasdk.TxOutput("3000000", boasdk.Lock.fromPublicKey(new boasdk.PublicKey("GDB22QJ4NHOHPOGWZG2Y5IFXKW6DCBEFX6QNBR6NSCT6E7CYU66IDGJJ"))),
-                                new boasdk.TxOutput("3000000", boasdk.Lock.fromPublicKey(new boasdk.PublicKey("GDD22H4TGRGS5ENN3DHBGMMCSZELKORKEZT4SZKTKHZESTVQMONREB2D"))),
-                                new boasdk.TxOutput("3000000", boasdk.Lock.fromPublicKey(new boasdk.PublicKey("GDG22B5FTPXE5THQMCTGDUC4LF2N4DFF44PGX2LIFG4WNUZZAT4L6ZGD"))),
-                                new boasdk.TxOutput("3000000", boasdk.Lock.fromPublicKey(new boasdk.PublicKey("GDF22EW2CZW2KVRSLFNGJQOTTDH5XWOK7MLINZPWO526WWXJMDXU3DPI"))),
-                                new boasdk.TxOutput("3000000", boasdk.Lock.fromPublicKey(new boasdk.PublicKey("GDA225RGC4GOCVASSAMROSWJSGNOZX2IGPXZG52ESDSKQW2VN6UJFKWI"))),
-                                new boasdk.TxOutput("3000000", boasdk.Lock.fromPublicKey(new boasdk.PublicKey("GDE22BZJPPMELAQUZBQR7GTILNHMSUHS5J2BVMKU36LPW3SSKQU737SP"))),
-                                new boasdk.TxOutput("3000000", boasdk.Lock.fromPublicKey(new boasdk.PublicKey("GDK223SKRC2QD3FFIXSZJRL6SKQI4MLJNVJB4FE356OEIVVGWGBAWLRM"))),
-                                new boasdk.TxOutput("3000000", boasdk.Lock.fromPublicKey(new boasdk.PublicKey("GDJ227UY64U4VLOW773KIT64RHHRZKRZFA7YS7MFMJK5WUDEQCEEEJUW"))),
-                                new boasdk.TxOutput("3000000", boasdk.Lock.fromPublicKey(new boasdk.PublicKey("GDP22NLZYRX2TBOBWTG46YCHB7WV76J56TMDZO5TDUQPIL7NCM4Q7TGU"))),
+                                new boasdk.TxOutput("3000000", boasdk.Lock.fromPublicKey(new boasdk.PublicKey("boa1xr8q66jvs4xye4yx80vv0rrv7gh0quue3jrntl7tkseagj3t07767tg808f"))),
+                                new boasdk.TxOutput("3000000", boasdk.Lock.fromPublicKey(new boasdk.PublicKey("boa1xr8p66enrg38qshzn6slnqe3fye6g6xa42kj8hm364yn238ks5ywc59nwyj"))),
+                                new boasdk.TxOutput("3000000", boasdk.Lock.fromPublicKey(new boasdk.PublicKey("boa1xr8z66s0dcagyd57ykfwm3yplgv4x6zasf42hxn5gkmx0lxjtceq7my0vqc"))),
+                                new boasdk.TxOutput("3000000", boasdk.Lock.fromPublicKey(new boasdk.PublicKey("boa1xr8r66fcuywd6kp7y9ywslwqlsf8rxtajt8pw53rj39wxfwvkxp2663dajh"))),
+                                new boasdk.TxOutput("3000000", boasdk.Lock.fromPublicKey(new boasdk.PublicKey("boa1xr8y66e3rjm0fpj9s59r44l8nplfnplhhj6pya0cg5ejsr3ues92jmdztnm"))),
+                                new boasdk.TxOutput("3000000", boasdk.Lock.fromPublicKey(new boasdk.PublicKey("boa1xr8966pz0jyxgxrjatp6tuplnhzmaulj9rsuahrxjcr5cu8jxh2hsapmc6y"))),
+                                new boasdk.TxOutput("3000000", boasdk.Lock.fromPublicKey(new boasdk.PublicKey("boa1xr8x66qtpp9fd6w8wtmwk9e9k3e7gur0vvjs9axd4gxm36avm8cxczdenyu"))),
+                                new boasdk.TxOutput("3000000", boasdk.Lock.fromPublicKey(new boasdk.PublicKey("boa1xr88665hn7nlz60230tc80ymq6r3mvzhvjzx9sg3lnkjmqy0w4ne22637v6"))),
+                                new boasdk.TxOutput("3000000", boasdk.Lock.fromPublicKey(new boasdk.PublicKey("boa1xr8g66r5xa9qj5dcpp322pnk9706k8rvlhsynx9qk8lpeasw85022lnxadw"))),
                             ],
-                            new boasdk.DataPayload(Buffer.from("CFBST1BPU0FMAQxJRDEyMzQ1Njc4OTAFVGl0bGX96AP90gsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/wCgck4YCQAA/wDodkgXAAAA/sD8mwEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAx9iUwUUAUTrwBrnguo84lfyvTZHHT46ge180pVV6WNWcxjmhNS938iUWDEL/iRpq+ltGoRppqUkghtd4Bnb0Kg==", "base64"))
+                            new boasdk.DataPayload(Buffer.from("CFBST1BPU0FMAQxJRDEyMzQ1Njc4OTAFVGl0bGX96AP90gsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/wCgck4YCQAA/wDodkgXAAAA/sD8mwEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA3a06L4woZ9MyLzmmyxStuZUWXlW7dSjABgawSp4S3brE5jHa/ppbHr2cAIgUg1wysLK1cmZxbL33835mUYQhYw==", "base64"))
                         );
                         res.status(200).send(JSON.stringify(tx));
                     }
@@ -166,7 +166,7 @@ export class TestStoa {
                                 new boasdk.TxInput(new boasdk.Hash("0xc0abcbff07879bfdb1495b8fdb9a9e5d2b07a689c7b9b3c583459082259be35687c125a1ddd6bd28b4fe8533ff794d3dba466b5f91117bbf557c3f1b6ff50e5f"))
                             ],
                             [
-                                new boasdk.TxOutput("3000000", boasdk.Lock.fromPublicKey(new boasdk.PublicKey("GDML22LKP3N6S37CYIBFRANXVY7KMJMINH5VFADGDFLGIWNOR3YU7T6I")))
+                                new boasdk.TxOutput("3000000", boasdk.Lock.fromPublicKey(new boasdk.PublicKey("boa1xrw66w303s5x05ej9uu6djc54kue29j72kah22xqqcrtqj57ztwm5uh524e")))
                             ],
                             new boasdk.DataPayload(Buffer.from("CEJBTExPVCAgDElEMTIzNDU2Nzg5MCnNDXqsIjf122wQG3k9SKb580hRF7MXqyls/Wjq7dxrztafXvbMlKQnLMWtIp2TBufIJIhInD6XvqjImZjxWdzHSZiNYVXVuKDmx60Co13nUDL3h+pKXCsG460FHRgDZWnJFfTYnch/tLj+gJaYAJGWUGjimvGZAq2HVp9kC3ClurMEA05RNDV484T/bh8I86ZoO4yFlkiLwOf+QOtUR0Qf65D2Rg2yq5V+YT05AAJkbTtR5m+izCVSoIcXz4+Nju9lq2K/FkcdJGrAsrYiRoPuerQHTl9HopfqdZDjFO4gcciSaI5x5mws87fLGSL9AQ==", "base64"))
                         );
@@ -328,21 +328,21 @@ describe('Checking the proposal and ballot data', () =>
             proposal_fee: boasdk.JSBI.BigInt(100000000000),
             vote_fee: boasdk.JSBI.BigInt(27000000),
             tx_hash_proposal_fee: new boasdk.Hash(Buffer.alloc(boasdk.Hash.Width)),
-            proposer_address: new boasdk.PublicKey("GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW"),
-            proposal_fee_address: new boasdk.PublicKey("GCOMMONBGUXXP4RFCYGEF74JDJVPUW2GUENGTKKJECDNO6AGO32CUWGU")
+            proposer_address: new boasdk.PublicKey("boa1xrw66w303s5x05ej9uu6djc54kue29j72kah22xqqcrtqj57ztwm5uh524e"),
+            proposal_fee_address: new boasdk.PublicKey("boa1xrzwvvw6l6d9k84ansqgs9yrtsetpv44wfn8zm9a7lehuej3ssskxth867s")
         }
 
         let validators =
             [
-                "GDB22QJ4NHOHPOGWZG2Y5IFXKW6DCBEFX6QNBR6NSCT6E7CYU66IDGJJ",
-                "GDD22H4TGRGS5ENN3DHBGMMCSZELKORKEZT4SZKTKHZESTVQMONREB2D",
-                "GDG22B5FTPXE5THQMCTGDUC4LF2N4DFF44PGX2LIFG4WNUZZAT4L6ZGD",
-                "GDF22EW2CZW2KVRSLFNGJQOTTDH5XWOK7MLINZPWO526WWXJMDXU3DPI",
-                "GDA225RGC4GOCVASSAMROSWJSGNOZX2IGPXZG52ESDSKQW2VN6UJFKWI",
-                "GDE22BZJPPMELAQUZBQR7GTILNHMSUHS5J2BVMKU36LPW3SSKQU737SP",
-                "GDK223SKRC2QD3FFIXSZJRL6SKQI4MLJNVJB4FE356OEIVVGWGBAWLRM",
-                "GDJ227UY64U4VLOW773KIT64RHHRZKRZFA7YS7MFMJK5WUDEQCEEEJUW",
-                "GDP22NLZYRX2TBOBWTG46YCHB7WV76J56TMDZO5TDUQPIL7NCM4Q7TGU"
+                "boa1xr8q66jvs4xye4yx80vv0rrv7gh0quue3jrntl7tkseagj3t07767tg808f",
+                "boa1xr8p66enrg38qshzn6slnqe3fye6g6xa42kj8hm364yn238ks5ywc59nwyj",
+                "boa1xr8z66s0dcagyd57ykfwm3yplgv4x6zasf42hxn5gkmx0lxjtceq7my0vqc",
+                "boa1xr8r66fcuywd6kp7y9ywslwqlsf8rxtajt8pw53rj39wxfwvkxp2663dajh",
+                "boa1xr8y66e3rjm0fpj9s59r44l8nplfnplhhj6pya0cg5ejsr3ues92jmdztnm",
+                "boa1xr8966pz0jyxgxrjatp6tuplnhzmaulj9rsuahrxjcr5cu8jxh2hsapmc6y",
+                "boa1xr8x66qtpp9fd6w8wtmwk9e9k3e7gur0vvjs9axd4gxm36avm8cxczdenyu",
+                "boa1xr88665hn7nlz60230tc80ymq6r3mvzhvjzx9sg3lnkjmqy0w4ne22637v6",
+                "boa1xr8g66r5xa9qj5dcpp322pnk9706k8rvlhsynx9qk8lpeasw85022lnxadw"
             ];
 
         // Set URL
@@ -353,7 +353,7 @@ describe('Checking the proposal and ballot data', () =>
         let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
 
         // It queries the last 10 transactions that have a data payload of a particular address.
-        let public_key = new boasdk.PublicKey("GDML22LKP3N6S37CYIBFRANXVY7KMJMINH5VFADGDFLGIWNOR3YU7T6I");
+        let public_key = new boasdk.PublicKey("boa1xrw66w303s5x05ej9uu6djc54kue29j72kah22xqqcrtqj57ztwm5uh524e");
         let history = await boa_client.getWalletTransactionsHistory(public_key, 10, 1, ["payload"]);
 
         for (let idx = 0; idx < history.length; idx++)

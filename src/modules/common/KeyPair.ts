@@ -18,8 +18,10 @@ import { Schnorr, Pair } from "./Schnorr";
 import { Signature } from './Signature';
 import { SodiumHelper } from '../utils/SodiumHelper';
 import { checksum, validate } from "../utils/CRC16";
+import { Utils } from "../utils/Utils";
 
 import { base32Encode, base32Decode } from '@ctrl/ts-base32';
+import { bech32m } from 'bech32';
 import { SmartBuffer } from 'smart-buffer';
 
 /**
@@ -91,6 +93,8 @@ export class KeyPair
  */
 export class PublicKey
 {
+    private static HumanReadablePart = "boa";
+
     /**
      * The instance of the Point
      */
@@ -113,20 +117,25 @@ export class PublicKey
     {
         if (typeof data === 'string')
         {
-            const decoded = Buffer.from(base32Decode(data));
+            let decoded = bech32m.decode(data);
+            if (decoded.prefix !== PublicKey.HumanReadablePart)
+                throw new Error('This is not the address of BOA');
 
-            if (decoded.length != 1 + SodiumHelper.sodium.crypto_core_ed25519_BYTES + 2)
+            let dec_data: Array<number> = [];
+            if (!Utils.convertBits(dec_data, decoded.words, 5, 8, false))
+                throw new Error("Bech32 conversion of base failed");
+
+            if (dec_data.length !== 1 + SodiumHelper.sodium.crypto_core_ed25519_BYTES)
                 throw new Error('Decoded data size is not normal');
 
-            if (decoded[0] != VersionByte.AccountID)
+            if (dec_data[0] != VersionByte.AccountID)
                 throw new Error('This is not a valid address type');
 
-            const body = decoded.slice(0, -2);
-            this.point = new Point(body.slice(1));
+            let key_data = Buffer.from(dec_data.slice(1));
+            if (!SodiumHelper.sodium.crypto_core_ed25519_is_valid_point(key_data))
+                throw new Error('This is not a valid Point');
 
-            const checksum = decoded.slice(-2);
-            if (!validate(body, checksum))
-                throw new Error('Checksum result do not match');
+            this.point = new Point(key_data);
         }
         else if (data instanceof Point)
         {
@@ -147,31 +156,48 @@ export class PublicKey
      */
     public static validate (address: string): string
     {
-        const decoded = Buffer.from(base32Decode(address));
+        let decoded;
+        try
+        {
+            decoded = bech32m.decode(address);
+        }
+        catch(error)
+        {
+            return error.message;
+        }
 
-        if (decoded.length != 1 + SodiumHelper.sodium.crypto_core_ed25519_BYTES + 2)
+        if (decoded.prefix !== PublicKey.HumanReadablePart)
+            return 'This is not the address of BOA';
+
+        let dec_data: Array<number> = [];
+        if (!Utils.convertBits(dec_data, decoded.words, 5, 8, false))
+            throw new Error("Bech32 conversion of base failed");
+
+        if (dec_data.length !== 1 + SodiumHelper.sodium.crypto_core_ed25519_BYTES)
             return 'Decoded data size is not normal';
 
-        if (decoded[0] != VersionByte.AccountID)
+        if (dec_data[0] != VersionByte.AccountID)
             return 'This is not a valid address type';
 
-        const body = decoded.slice(0, -2);
-        const checksum = decoded.slice(-2);
-        if (!validate(body, checksum))
-            return 'Checksum result do not match';
+        let key_data = Buffer.from(dec_data.slice(1));
+        if (!SodiumHelper.sodium.crypto_core_ed25519_is_valid_point(key_data))
+            return 'This is not a valid Point';
 
         return '';
     }
 
     /**
-     * Uses Stellar's representation instead of hex
+     * Uses Bech32
      */
     public toString (): string
     {
-        const body = Buffer.concat([Buffer.from([VersionByte.AccountID]), this.data]);
-        const cs = checksum(body);
-        const unencoded = Buffer.concat([body, cs]);
-        return base32Encode(unencoded);
+        let unencoded: Array<number> = [];
+        let conv_data: Array<number> = [];
+        unencoded.push(VersionByte.AccountID);
+        this.data.forEach(m => unencoded.push(m));
+        if (!Utils.convertBits(conv_data, unencoded, 8, 5, true))
+            throw new Error("Bech32 conversion of base failed");
+        return bech32m.encode(PublicKey.HumanReadablePart, conv_data);
     }
 
     /**
