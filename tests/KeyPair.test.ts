@@ -155,10 +155,10 @@ describe ('Public Key', () =>
 
     it ('Test of PublicKey.validate()', () =>
     {
-        assert.strictEqual(boasdk.PublicKey.validate("1xrv266cegdthdc87uche9zvj8842shz3sdyvw0qecpgeykyv4ynssuz4lg0"),
-            'Missing prefix for 1xrv266cegdthdc87uche9zvj8842shz3sdyvw0qecpgeykyv4ynssuz4lg0');
         assert.strictEqual(boasdk.PublicKey.validate("bob1xrv266cegdthdc87uche9zvj8842shz3sdyvw0qecpgeykyv4ynssuz4lg0"),
-            'Invalid checksum for bob1xrv266cegdthdc87uche9zvj8842shz3sdyvw0qecpgeykyv4ynssuz4lg0');
+            'Differ in the human-readable part');
+        assert.strictEqual(boasdk.PublicKey.validate("boa1xrv266cegdthdc87uche9zvj8842shz3sdyvw0qecpgeykyv4ynssu34lg0"),
+            'Invalid checksum for boa1xrv266cegdthdc87uche9zvj8842shz3sdyvw0qecpgeykyv4ynssu34lg0');
         assert.strictEqual(boasdk.PublicKey.validate("boa1xrv266cegdthdc87uche9zvj8842shz3sdyvw0qecpgeykyv4ynssuz4lg0"), '');
 
         let pk = new boasdk.PublicKey("boa1xrv266cegdthdc87uche9zvj8842shz3sdyvw0qecpgeykyv4ynssuz4lg0");

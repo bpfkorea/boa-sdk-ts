@@ -117,6 +117,9 @@ export class PublicKey
     {
         if (typeof data === 'string')
         {
+            if ((data.length < PublicKey.HumanReadablePart.length) || (data.slice(0, 3) !== PublicKey.HumanReadablePart))
+                throw new Error('Differ in the human-readable part');
+
             let decoded = bech32m.decode(data);
             if (decoded.prefix !== PublicKey.HumanReadablePart)
                 throw new Error('This is not the address of BOA');
@@ -156,6 +159,9 @@ export class PublicKey
      */
     public static validate (address: string): string
     {
+        if ((address.length < PublicKey.HumanReadablePart.length) || (address.slice(0, 3) !== PublicKey.HumanReadablePart))
+            return 'Differ in the human-readable part';
+
         let decoded;
         try
         {
