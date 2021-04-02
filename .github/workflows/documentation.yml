@@ -1,4 +1,4 @@
-# Github worflow to build and upload the documentation to Github pages.
+# Github workflow to build and upload the documentation to Github pages.
 
 name: Documentation
 
@@ -19,7 +19,7 @@ jobs:
         - name: Install Node.js
           uses: actions/setup-node@v1
 
-        - name: Build documetation
+        - name: Build documentation
           if: github.event_name == 'push'
           run: |
             npm run docs
