@@ -1611,6 +1611,6 @@ describe('BOA Client', () => {
         // Get Voting Fee
         let fee = await boa_client.getVotingFee();
 
-        assert.deepStrictEqual(fee, JSBI.BigInt(27910000,));
+        assert.deepStrictEqual(fee, JSBI.BigInt(29310000));
     });
 });

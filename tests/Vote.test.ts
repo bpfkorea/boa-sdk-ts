@@ -26,7 +26,7 @@ describe ('Vote Data', () =>
 
     it ('Test of ProposalFeeData', () =>
     {
-        let original_data = new boasdk.ProposalFeeData("ID1234567890");
+        let original_data = new boasdk.ProposalFeeData("Votera", "ID1234567890");
         let bytes = new SmartBuffer();
         original_data.serialize(bytes);
 
@@ -37,6 +37,7 @@ describe ('Vote Data', () =>
     it ('Test of ProposalData', () =>
     {
         let original_data = new boasdk.ProposalData(
+            "Votera",
             boasdk.ProposalType.Fund,
             "ID1234567890",
             "Title",
@@ -81,7 +82,7 @@ describe ('Vote Data', () =>
 
         //  This is sample
         let ballot = Buffer.from("Yes  ");
-        let ballot_data = new boasdk.BallotData("ID1234567890", ballot, voter_card, 100);
+        let ballot_data = new boasdk.BallotData("Votera", "ID1234567890", ballot, voter_card, 100);
         let ballot_data_hash = boasdk.hashFull(ballot_data);
         ballot_data.signature = temporary_key.secret.sign(ballot_data_hash.data);
 
@@ -139,7 +140,7 @@ describe ('Vote Data', () =>
         let key_agora_admin = boasdk.hashMulti(pre_image.data, Buffer.from(app_name));
         let key_encrypt = boasdk.Encrypt.createKey(key_agora_admin.data, proposal_id);
         let ballot = boasdk.Encrypt.encrypt(Buffer.from([boasdk.BallotData.BLANK]), key_encrypt);
-        let ballot_data = new boasdk.BallotData(proposal_id, ballot, voter_card, 100);
+        let ballot_data = new boasdk.BallotData(app_name, proposal_id, ballot, voter_card, 100);
         let ballot_data_hash = boasdk.hashFull(ballot_data);
         ballot_data.signature = temporary_key.secret.sign(ballot_data_hash.data);
 
@@ -151,7 +152,7 @@ describe ('Vote Data', () =>
 
     it ('Test link data of ProposalFeeData', () =>
     {
-        let data = new boasdk.ProposalFeeData("ID1234567890");
+        let data = new boasdk.ProposalFeeData("Votera", "ID1234567890");
         let proposal_address = new boasdk.PublicKey("boa1xrw66w303s5x05ej9uu6djc54kue29j72kah22xqqcrtqj57ztwm5uh524e");
         let destination = new boasdk.PublicKey("boa1xrgq6607dulyra5r9dw0ha6883va0jghdzk67er49h3ysm7k222ruhh7400");
         let amount = boasdk.JSBI.BigInt("10000000000000")
@@ -160,7 +161,7 @@ describe ('Vote Data', () =>
             proposer_address: 'boa1xrw66w303s5x05ej9uu6djc54kue29j72kah22xqqcrtqj57ztwm5uh524e',
             destination: 'boa1xrgq6607dulyra5r9dw0ha6883va0jghdzk67er49h3ysm7k222ruhh7400',
             amount: '10000000000000',
-            payload: 'CFBST1AtRkVFDElEMTIzNDU2Nzg5MA=='
+            payload: 'CFBST1AtRkVFBlZvdGVyYQxJRDEyMzQ1Njc4OTA='
         }
         assert.deepStrictEqual(link_data, expected);
     });
@@ -168,6 +169,7 @@ describe ('Vote Data', () =>
     it ('Test link data of ProposalData', () =>
     {
         let data = new boasdk.ProposalData(
+            "Votera",
             boasdk.ProposalType.Fund,
             "ID1234567890",
             "Title",
@@ -176,7 +178,7 @@ describe ('Vote Data', () =>
             new boasdk.Hash(Buffer.alloc(boasdk.Hash.Width)),
             boasdk.JSBI.BigInt(10000000000000),
             boasdk.JSBI.BigInt(100000000000),
-            boasdk.JSBI.BigInt(100000000),
+            boasdk.JSBI.BigInt(27000000),
             new boasdk.Hash(Buffer.alloc(boasdk.Hash.Width)),
             new boasdk.PublicKey("boa1xrw66w303s5x05ej9uu6djc54kue29j72kah22xqqcrtqj57ztwm5uh524e"),
             new boasdk.PublicKey("boa1xrzwvvw6l6d9k84ansqgs9yrtsetpv44wfn8zm9a7lehuej3ssskxth867s")
@@ -205,7 +207,7 @@ describe ('Vote Data', () =>
                 'boa1xrgr66gdm5je646x70l5ar6qkhun0hg3yy2eh7tf8xxlmlt9fgjd2q0uj8p'
             ],
             voting_fee: '12000000',
-            payload: 'CFBST1BPU0FMAQxJRDEyMzQ1Njc4OTAFVGl0bGX96AP90gsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/wCgck4YCQAA/wDodkgXAAAA/gDh9QUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA3a06L4woZ9MyLzmmyxStuZUWXlW7dSjABgawSp4S3brE5jHa/ppbHr2cAIgUg1wysLK1cmZxbL33835mUYQhYw=='
+            payload: 'CFBST1BPU0FMBlZvdGVyYQEMSUQxMjM0NTY3ODkwBVRpdGxl/egD/dILAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP8AoHJOGAkAAP8A6HZIFwAAAP7A/JsBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAN2tOi+MKGfTMi85pssUrbmVFl5Vu3UowAYGsEqeEt26xOYx2v6aWx69nACIFINcMrCytXJmcWy99/N+ZlGEIWM='
         };
         assert.deepStrictEqual(link_data, expected);
     });
@@ -228,13 +230,13 @@ describe ('Vote Data', () =>
         let key_agora_admin = boasdk.hashMulti(pre_image.data, Buffer.from(app_name));
         let key_encrypt = boasdk.Encrypt.createKey(key_agora_admin.data, proposal_id);
         let ballot = boasdk.Encrypt.encrypt(Buffer.from([boasdk.BallotData.YES]), key_encrypt);
-        let ballot_data = new boasdk.BallotData("ID1234567890", ballot, voter_card, 100);
+        let ballot_data = new boasdk.BallotData(app_name, "ID1234567890", ballot, voter_card, 100);
         let ballot_data_hash = boasdk.hashFull(ballot_data);
         ballot_data.signature = temporary_key.secret.sign(ballot_data_hash.data);
 
         let link_data = ballot_data.getLinkData();
         let expected = {
-            payload: 'CEJBTExPVCAgDElEMTIzNDU2Nzg5MCnNDXqsIjf122wQG3k9SKb580hRF7MXqyls/Wjq7dxrztafXvbMlKQnLMWtIp2TBufIJIhInD6XvqjImZjxWdzHSZiNYVXVuKDmx60Co13nUDL3h+pKXCsG460FHRgDZWnJFfTYnch/tLj+gJaYAJGWUGjimvGZAq2HVp9kC3ClurMEA05RNDV484T/bh8I86ZoO4yFlkiLwOf+QOtUR0Qf65D2Rg2yq5V+YT05AAJkbTtR5m+izCVSoIcXz4+Nju9lq2K/FkcdJGrAsrYiRoPuerQHTl9HopfqdZDjFO4gcciSaI5x5mws87fLGSL9AQ=='
+            payload: 'CEJBTExPVCAgBlZvdGVyYQxJRDEyMzQ1Njc4OTApLVKzYGJwEn71aHecOrjvqtUyeiz4R3m6hQlIQl4X/KE1KElZJ94ma0HFrSKdkwbnyCSISJw+l76oyJmY8Vncx0mYjWFV1big5setAqNd51Ay94fqSlwrBuOtBR0YA2VpyRX02J3If7S4/oCWmAD8mGm7It8kUDVBBRffnu5KbezebT0c/zWYdVVXfJkyMMs6ArU+Q9swwlygSP/B9t37z8BPiMnjQhRjrv4pvnICZIwqO10jyG3bEibpuXFEEQOxbo3Gv9iekgN23+PHfGVWJBmKjO/hJMplu1GZdqppUmigMalvIznjbC50nT/45Aw='
         };
 
         let deserialized_ballot_data = boasdk.BallotData.deserialize(SmartBuffer.fromBuffer(Buffer.from(link_data.payload, "base64")));

@@ -124,7 +124,12 @@ export class BallotData
 {
     public static HEADER = "BALLOT  "
 
-    public static WIDTH = 266;
+    public static WIDTH = 273;
+
+    /**
+     * The name of App
+     */
+    public app_name: string;
 
     /**
      * The id of the proposal
@@ -157,14 +162,16 @@ export class BallotData
 
     /**
      * Constructor
+     * @param app_name      The name of App
      * @param proposal_id   The id of the proposal
      * @param ballot        Encrypted voting information
      * @param card          The `Voter card`
      * @param sequence      A sequence number, starting from 0, if replacement is allowed
      * @param signature     The signature, made using temporary private key
      */
-    constructor (proposal_id: string, ballot: Buffer, card: VoterCard, sequence: number, signature?: Signature)
+    constructor (app_name: string, proposal_id: string, ballot: Buffer, card: VoterCard, sequence: number, signature?: Signature)
     {
+        this.app_name = app_name;
         this.proposal_id = proposal_id;
         this.ballot = ballot;
         this.card = card;
@@ -181,6 +188,7 @@ export class BallotData
      */
     public computeHash (buffer: SmartBuffer)
     {
+        buffer.writeBuffer(Buffer.from(this.app_name));
         buffer.writeBuffer(Buffer.from(this.proposal_id));
         buffer.writeBuffer(this.ballot);
         this.card.computeHash(buffer);
@@ -204,6 +212,10 @@ export class BallotData
     public serialize (buffer: SmartBuffer)
     {
         let temp = Buffer.from(BallotData.HEADER);
+        VarInt.fromNumber(temp.length, buffer);
+        buffer.writeBuffer(temp);
+
+        temp = Buffer.from(this.app_name);
         VarInt.fromNumber(temp.length, buffer);
         buffer.writeBuffer(temp);
 
@@ -232,6 +244,10 @@ export class BallotData
 
         length = VarInt.toNumber(buffer);
         let temp = Utils.readBuffer(buffer, length);
+        let app_name = temp.toString();
+
+        length = VarInt.toNumber(buffer);
+        temp = Utils.readBuffer(buffer, length);
         let proposal_id = temp.toString();
 
         length = VarInt.toNumber(buffer);
@@ -239,7 +255,7 @@ export class BallotData
         let card = VoterCard.deserialize(buffer);
         let sequence = VarInt.toNumber(buffer);
         let signature = new Signature(Utils.readBuffer(buffer, Signature.Width));
-        return new BallotData(proposal_id, ballot, card, sequence, signature);
+        return new BallotData(app_name, proposal_id, ballot, card, sequence, signature);
     }
 
     /**

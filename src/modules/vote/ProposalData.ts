@@ -37,6 +37,11 @@ export class ProposalData
     public static HEADER = "PROPOSAL"
 
     /**
+     * The name of App
+     */
+    public app_name: string;
+
+    /**
      * The type of the proposal, 0: System, 1: Funding
      */
     public proposal_type: ProposalType;
@@ -98,6 +103,7 @@ export class ProposalData
 
     /**
      * Constructor
+     * @param app_name              The name of App
      * @param proposal_type         The type of the proposal, 0: System, 1: Funding
      * @param proposal_id           The ID of the proposal
      * @param proposal_title        The title of the proposal
@@ -111,12 +117,13 @@ export class ProposalData
      * @param proposer_address      Proposer's own public address
      * @param proposal_fee_address  Public address to deposit the proposal fee
      */
-    constructor (proposal_type: ProposalType, proposal_id: string, proposal_title: string,
+    constructor (app_name: string, proposal_type: ProposalType, proposal_id: string, proposal_title: string,
                  vote_start_height: JSBI, vote_end_height: JSBI,
                  doc_hash: Hash, fund_amount: JSBI, proposal_fee: JSBI, vote_fee: JSBI,
                  tx_hash_proposal_fee: Hash,
                  proposer_address: PublicKey, proposal_fee_address: PublicKey)
     {
+        this.app_name = app_name;
         this.proposal_type = proposal_type;
         this.proposal_id = proposal_id;
         this.proposal_title = proposal_title;
@@ -138,6 +145,10 @@ export class ProposalData
     public serialize (buffer: SmartBuffer)
     {
         let temp = Buffer.from(ProposalData.HEADER);
+        VarInt.fromNumber(temp.length, buffer);
+        buffer.writeBuffer(temp);
+
+        temp = Buffer.from(this.app_name);
         VarInt.fromNumber(temp.length, buffer);
         buffer.writeBuffer(temp);
 
@@ -178,10 +189,14 @@ export class ProposalData
         if (header.toString() !== ProposalData.HEADER)
             throw new Error("This is not the expected data type.");
 
+        length = VarInt.toNumber(buffer);
+        let temp = Utils.readBuffer(buffer, length);
+        let app_name = temp.toString();
+
         let proposal_type = VarInt.toNumber(buffer);
 
         length = VarInt.toNumber(buffer);
-        let temp = Utils.readBuffer(buffer, length);
+        temp = Utils.readBuffer(buffer, length);
         let proposal_id = temp.toString();
 
         length = VarInt.toNumber(buffer);
@@ -199,7 +214,7 @@ export class ProposalData
         let proposer_address = new PublicKey(Utils.readBuffer(buffer, Utils.SIZE_OF_PUBLIC_KEY));
         let proposal_fee_address = new PublicKey(Utils.readBuffer(buffer, Utils.SIZE_OF_PUBLIC_KEY));
 
-        return new ProposalData(proposal_type, proposal_id, proposal_title,
+        return new ProposalData(app_name, proposal_type, proposal_id, proposal_title,
             vote_start_height, vote_end_height,
             doc_hash, fund_amount, proposal_fee, vote_fee, tx_hash_proposal_fee,
             proposer_address, proposal_fee_address);

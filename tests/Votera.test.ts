@@ -132,7 +132,7 @@ export class TestStoa {
                             [
                                 new boasdk.TxOutput("100000000000", boasdk.Lock.fromPublicKey(new boasdk.PublicKey("boa1xrzwvvw6l6d9k84ansqgs9yrtsetpv44wfn8zm9a7lehuej3ssskxth867s")))
                             ],
-                            new boasdk.DataPayload(Buffer.from("CFBST1AtRkVFDElEMTIzNDU2Nzg5MA==", "base64"))
+                            new boasdk.DataPayload(Buffer.from("CFBST1AtRkVFBlZvdGVyYQxJRDEyMzQ1Njc4OTA=", "base64"))
                         );
                         res.status(200).send(JSON.stringify(tx));
                     }
@@ -154,7 +154,7 @@ export class TestStoa {
                                 new boasdk.TxOutput("3000000", boasdk.Lock.fromPublicKey(new boasdk.PublicKey("boa1xr88665hn7nlz60230tc80ymq6r3mvzhvjzx9sg3lnkjmqy0w4ne22637v6"))),
                                 new boasdk.TxOutput("3000000", boasdk.Lock.fromPublicKey(new boasdk.PublicKey("boa1xr8g66r5xa9qj5dcpp322pnk9706k8rvlhsynx9qk8lpeasw85022lnxadw"))),
                             ],
-                            new boasdk.DataPayload(Buffer.from("CFBST1BPU0FMAQxJRDEyMzQ1Njc4OTAFVGl0bGX96AP90gsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/wCgck4YCQAA/wDodkgXAAAA/sD8mwEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA3a06L4woZ9MyLzmmyxStuZUWXlW7dSjABgawSp4S3brE5jHa/ppbHr2cAIgUg1wysLK1cmZxbL33835mUYQhYw==", "base64"))
+                            new boasdk.DataPayload(Buffer.from("'CFBST1BPU0FMBlZvdGVyYQEMSUQxMjM0NTY3ODkwBVRpdGxl/egD/dILAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP8AoHJOGAkAAP8A6HZIFwAAAP7A/JsBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAN2tOi+MKGfTMi85pssUrbmVFl5Vu3UowAYGsEqeEt26xOYx2v6aWx69nACIFINcMrCytXJmcWy99/N+ZlGEIWM=", "base64"))
                         );
                         res.status(200).send(JSON.stringify(tx));
                     }
@@ -168,7 +168,7 @@ export class TestStoa {
                             [
                                 new boasdk.TxOutput("3000000", boasdk.Lock.fromPublicKey(new boasdk.PublicKey("boa1xrw66w303s5x05ej9uu6djc54kue29j72kah22xqqcrtqj57ztwm5uh524e")))
                             ],
-                            new boasdk.DataPayload(Buffer.from("CEJBTExPVCAgDElEMTIzNDU2Nzg5MCnNDXqsIjf122wQG3k9SKb580hRF7MXqyls/Wjq7dxrztafXvbMlKQnLMWtIp2TBufIJIhInD6XvqjImZjxWdzHSZiNYVXVuKDmx60Co13nUDL3h+pKXCsG460FHRgDZWnJFfTYnch/tLj+gJaYAJGWUGjimvGZAq2HVp9kC3ClurMEA05RNDV484T/bh8I86ZoO4yFlkiLwOf+QOtUR0Qf65D2Rg2yq5V+YT05AAJkbTtR5m+izCVSoIcXz4+Nju9lq2K/FkcdJGrAsrYiRoPuerQHTl9HopfqdZDjFO4gcciSaI5x5mws87fLGSL9AQ==", "base64"))
+                            new boasdk.DataPayload(Buffer.from("CEJBTExPVCAgBlZvdGVyYQxJRDEyMzQ1Njc4OTApLVKzYGJwEn71aHecOrjvqtUyeiz4R3m6hQlIQl4X/KE1KElZJ94ma0HFrSKdkwbnyCSISJw+l76oyJmY8Vncx0mYjWFV1big5setAqNd51Ay94fqSlwrBuOtBR0YA2VpyRX02J3If7S4/oCWmAD8mGm7It8kUDVBBRffnu5KbezebT0c/zWYdVVXfJkyMMs6ArU+Q9swwlygSP/B9t37z8BPiMnjQhRjrv4pvnICZIwqO10jyG3bEibpuXFEEQOxbo3Gv9iekgN23+PHfGVWJBmKjO/hJMplu1GZdqppUmigMalvIznjbC50nT/45Aw=", "base64"))
                         );
                         res.status(200).send(JSON.stringify(tx));
                     }
@@ -318,6 +318,7 @@ describe('Checking the proposal and ballot data', () =>
     it ('Test data for proposals and votes', async () =>
     {
         let expected_data = {
+            app_name: "Votera",
             proposal_type: boasdk.ProposalType.Fund,
             proposal_id: "ID1234567890",
             proposal_title: "Title",
@@ -367,8 +368,9 @@ describe('Checking the proposal and ballot data', () =>
                     // Exceptions should be handled in actual use.
                     assert.doesNotThrow(() => {
                         let payload = boasdk.ProposalFeeData.deserialize(SmartBuffer.fromBuffer(tx.payload.data));
+                        assert.deepStrictEqual(payload.app_name, expected_data.app_name);
                         // This verifies that the proposed ID is the same.
-                        assert.strictEqual(payload.proposal_id, expected_data.proposal_id);
+                        assert.deepStrictEqual(payload.proposal_id, expected_data.proposal_id);
                         // This verifies that the deposit address and amount of the proposed fee are appropriate.
                         let find_idx = tx.outputs.findIndex((o) => (new boasdk.PublicKey(o.lock.bytes).toString() === expected_data.proposal_fee_address.toString()));
                         assert.ok(find_idx >= 0);
@@ -381,6 +383,7 @@ describe('Checking the proposal and ballot data', () =>
                     assert.doesNotThrow(() => {
                         // This verifies that the contents of the proposed data are the same.
                         let payload = boasdk.ProposalData.deserialize(SmartBuffer.fromBuffer(tx.payload.data));
+                        assert.deepStrictEqual(payload.app_name, expected_data.app_name);
                         assert.deepStrictEqual(payload.proposal_type, expected_data.proposal_type);
                         assert.deepStrictEqual(payload.proposal_id, expected_data.proposal_id);
                         assert.deepStrictEqual(payload.proposal_title, expected_data.proposal_title);
@@ -416,6 +419,9 @@ describe('Checking the proposal and ballot data', () =>
                         // This verifies the signature of the ballot.
                         assert.ok(payload.card.verify());
                         assert.ok(payload.verify());
+
+                        assert.deepStrictEqual(payload.app_name, expected_data.app_name);
+                        assert.deepStrictEqual(payload.proposal_id, expected_data.proposal_id);
 
                         let pre_image = new boasdk.Hash('0x0a8201f9f5096e1ce8e8de4147694940a57a188b78293a55144fc8777a774f2349b3a910fb1fb208514fb16deaf49eb05882cdb6796a81f913c6daac3eb74328');
                         let app_name = "Votera";

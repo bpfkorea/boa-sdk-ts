@@ -29,16 +29,23 @@ export class ProposalFeeData
     public static HEADER = "PROP-FEE"
 
     /**
+     * The name of App
+     */
+    public app_name: string;
+
+    /**
      * The id of the proposal
      */
     public proposal_id: string;
 
     /**
      * Constructor
+     * @param app_name    The name of App
      * @param proposal_id The id of the proposal
      */
-    constructor (proposal_id: string)
+    constructor (app_name: string, proposal_id: string)
     {
+        this.app_name = app_name;
         this.proposal_id = proposal_id;
     }
 
@@ -49,6 +56,10 @@ export class ProposalFeeData
     public serialize (buffer: SmartBuffer)
     {
         let temp = Buffer.from(ProposalFeeData.HEADER);
+        VarInt.fromNumber(temp.length, buffer);
+        buffer.writeBuffer(temp);
+
+        temp = Buffer.from(this.app_name);
         VarInt.fromNumber(temp.length, buffer);
         buffer.writeBuffer(temp);
 
@@ -71,8 +82,12 @@ export class ProposalFeeData
 
         length = VarInt.toNumber(buffer);
         let temp = Utils.readBuffer(buffer, length);
+        let app_name = temp.toString();
+
+        length = VarInt.toNumber(buffer);
+        temp = Utils.readBuffer(buffer, length);
         let proposal_id = temp.toString();
-        return new ProposalFeeData(proposal_id);
+        return new ProposalFeeData(app_name, proposal_id);
     }
 
     /**
