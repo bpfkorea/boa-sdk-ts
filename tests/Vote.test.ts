@@ -147,7 +147,7 @@ describe ('Vote Data', () =>
         let ballot_bytes = new SmartBuffer();
         ballot_data.serialize(ballot_bytes);
 
-        assert.strictEqual(ballot_bytes.length, boasdk.BallotData.WIDTH);
+        assert.strictEqual(ballot_bytes.length, 273);
     });
 
     it ('Test link data of ProposalFeeData', () =>

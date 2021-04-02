@@ -1609,7 +1609,7 @@ describe('BOA Client', () => {
         let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
 
         // Get Voting Fee
-        let fee = await boa_client.getVotingFee();
+        let fee = await boa_client.getVotingFee(273);
 
         assert.deepStrictEqual(fee, JSBI.BigInt(29310000));
     });

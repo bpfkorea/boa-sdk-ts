@@ -546,14 +546,14 @@ export class BOAClient
      * @returns Promise that resolves or
      * rejects with response from the Stoa
      */
-    public getVotingFee () : Promise<JSBI>
+    public getVotingFee (payload_size: number) : Promise<JSBI>
     {
         return new Promise<JSBI>(async (resolve, reject) =>
         {
             try
             {
-                let payload_fee = TxPayloadFee.getFee(BallotData.WIDTH);
-                let tx_size = Transaction.getEstimatedNumberOfBytes(1, 2, BallotData.WIDTH);
+                let payload_fee = TxPayloadFee.getFee(payload_size);
+                let tx_size = Transaction.getEstimatedNumberOfBytes(1, 2, payload_size);
                 let fees = await this.getTransactionFee(tx_size);
                 let tx_fee = JSBI.BigInt(fees.high);
                 resolve(JSBI.add(payload_fee, tx_fee));

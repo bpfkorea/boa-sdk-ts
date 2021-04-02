@@ -124,8 +124,6 @@ export class BallotData
 {
     public static HEADER = "BALLOT  "
 
-    public static WIDTH = 273;
-
     /**
      * The name of App
      */
