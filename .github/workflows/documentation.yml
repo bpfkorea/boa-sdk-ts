@@ -22,6 +22,7 @@ jobs:
         - name: Build documentation
           if: github.event_name == 'push'
           run: |
+            npm ci
             npm run docs
             # Remove gh-branch if it already exists, check it out
             git branch -D gh-pages || true
