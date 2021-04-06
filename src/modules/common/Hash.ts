@@ -218,12 +218,14 @@ export function hashPart (record: any, buffer: SmartBuffer)
 
     if (record instanceof Buffer)
     {
+        hashVarInt(JSBI.BigInt(record.length), buffer);
         buffer.writeBuffer(record);
         return;
     }
 
     if (Array.isArray(record))
     {
+        hashVarInt(JSBI.BigInt(record.length), buffer);
         for (let elem of record)
         {
             hashPart(elem, buffer);
@@ -238,5 +240,35 @@ export function hashPart (record: any, buffer: SmartBuffer)
                 hashPart(record[key], buffer);
             }
         }
+    }
+}
+
+/**
+ * Serializes array length information into buffers.
+ * @param value The length of the Array
+ * @param buffer The storage of serialized data for creating the hash
+ */
+export function hashVarInt (value: JSBI, buffer: SmartBuffer)
+{
+    if (JSBI.lessThanOrEqual(value, JSBI.BigInt(0xFC)))
+    {
+        buffer.writeUInt8(JSBI.toNumber(value));
+    }
+    else if (JSBI.lessThanOrEqual(value, JSBI.BigInt(0xFFFF)))
+    {
+        buffer.writeUInt8(0xFD);
+        buffer.writeUInt16LE(JSBI.toNumber(value));
+    }
+    else if (JSBI.lessThanOrEqual(value, JSBI.BigInt(0xFFFFFFFF)))
+    {
+        buffer.writeUInt8(0xFE);
+        buffer.writeUInt32LE(JSBI.toNumber(value));
+    }
+    else
+    {
+        buffer.writeUInt8(0xFF);
+        let buf = Buffer.allocUnsafe(8);
+        Utils.writeJSBigIntLE(buf, value);
+        buffer.writeBuffer(buf);
     }
 }

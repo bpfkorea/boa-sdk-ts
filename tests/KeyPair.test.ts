@@ -218,22 +218,22 @@ describe ('KeyPair', () =>
         let kp = boasdk.KeyPair.fromSeed(new boasdk.SecretKey(seed));
         assert.strictEqual(kp.address.toString(), address);
 
-        let signature = kp.secret.sign(Buffer.from('Hello World'));
-        assert.ok(kp.address.verify(signature, Buffer.from('Hello World')));
+        let signature = kp.secret.sign<Buffer>(Buffer.from('Hello World'));
+        assert.ok(kp.address.verify<Buffer>(signature, Buffer.from('Hello World')));
     });
 
     it ('Test of KeyPair.random, sign, verify, reproduce', () =>
     {
         let random_kp = boasdk.KeyPair.random();
 
-        let random_kp_signature = random_kp.secret.sign(Buffer.from('Hello World'));
-        assert.ok(random_kp.address.verify(random_kp_signature, Buffer.from('Hello World')));
+        let random_kp_signature = random_kp.secret.sign<Buffer>(Buffer.from('Hello World'));
+        assert.ok(random_kp.address.verify<Buffer>(random_kp_signature, Buffer.from('Hello World')));
 
         // Test whether randomly generated key-pair are reproducible.
         let reproduced_kp = boasdk.KeyPair.fromSeed(random_kp.secret);
 
-        let reproduced_kp_signature = reproduced_kp.secret.sign(Buffer.from('Hello World'));
-        assert.ok(reproduced_kp.address.verify(reproduced_kp_signature, Buffer.from('Hello World')));
+        let reproduced_kp_signature = reproduced_kp.secret.sign<Buffer>(Buffer.from('Hello World'));
+        assert.ok(reproduced_kp.address.verify<Buffer>(reproduced_kp_signature, Buffer.from('Hello World')));
 
         assert.deepStrictEqual(random_kp.secret, reproduced_kp.secret);
         assert.deepStrictEqual(random_kp.address, reproduced_kp.address);

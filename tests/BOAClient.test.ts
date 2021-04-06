@@ -1111,8 +1111,8 @@ describe('BOA Client', () => {
 
         // Verify the signature
         for (let idx = 0; idx < vote_tx.inputs.length; idx++)
-            assert.ok(keys[idx].address.verify(new boasdk.Signature(vote_tx.inputs[idx].unlock.bytes),
-                boasdk.hashFull(vote_tx).data));
+            assert.ok(keys[idx].address.verify<boasdk.Transaction>(new boasdk.Signature(vote_tx.inputs[idx].unlock.bytes),
+                vote_tx));
     });
 
     it ('Test saving a vote data', async () =>

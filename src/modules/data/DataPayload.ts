@@ -11,6 +11,7 @@
 
 *******************************************************************************/
 
+import { hashPart } from '../common/Hash';
 import { JSONValidator } from "../utils/JSONValidator";
 import { Utils, Endian } from '../utils/Utils';
 
@@ -113,7 +114,7 @@ export class DataPayload
      */
     public computeHash (buffer: SmartBuffer)
     {
-        buffer.writeBuffer(this.data);
+        hashPart(this.data, buffer);
     }
 
     /**

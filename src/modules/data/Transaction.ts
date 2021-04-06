@@ -11,6 +11,7 @@
 
 *******************************************************************************/
 
+import { hashPart } from '../common/Hash';
 import { DataPayload } from './DataPayload';
 import { Height } from '../common/Height';
 import { JSONValidator } from '../utils/JSONValidator';
@@ -113,10 +114,8 @@ export class Transaction
     public computeHash (buffer: SmartBuffer)
     {
         buffer.writeUInt8(this.type);
-        for (let elem of this.inputs)
-            elem.computeHash(buffer);
-        for (let elem of this.outputs)
-            elem.computeHash(buffer);
+        hashPart(this.inputs, buffer);
+        hashPart(this.outputs, buffer);
         this.payload.computeHash(buffer);
 
         const buf = Buffer.allocUnsafe(8);

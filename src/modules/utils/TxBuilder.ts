@@ -211,7 +211,7 @@ export class TxBuilder
      */
     private keyUnlocker (tx: Transaction, raw_input: RawInput, idx: number): Unlock
     {
-        return Unlock.fromSignature(raw_input.key.sign(hashFull(tx).data));
+        return Unlock.fromSignature(raw_input.key.sign<Transaction>(tx));
     }
 }
 

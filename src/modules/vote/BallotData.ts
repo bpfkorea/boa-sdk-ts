@@ -72,8 +72,7 @@ export class VoterCard
      */
     public verify (): boolean
     {
-        let voter_card_hash = hashFull(this);
-        return this.validator_address.verify(this.signature, voter_card_hash.data);
+        return this.validator_address.verify<VoterCard>(this.signature, this);
     }
 
     /**
@@ -199,8 +198,7 @@ export class BallotData
      */
     public verify (): boolean
     {
-        let ballot_data_hash = hashFull(this);
-        return this.card.address.verify(this.signature, ballot_data_hash.data);
+        return this.card.address.verify<BallotData>(this.signature, this);
     }
 
     /**

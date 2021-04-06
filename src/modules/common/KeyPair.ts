@@ -82,9 +82,9 @@ export class KeyPair
      * @returns The signature of `msg` using `this`
      * See_Also: https://github.com/bosagora/agora/blob/bcd14f2c6a3616d7f05ef850dc95fae3eb386760/source/agora/crypto/Key.d#L91-L95
      */
-    public sign (msg: Buffer): Signature
+    public sign <T> (msg: T): Signature
     {
-        return Schnorr.signPair<Buffer>(new Pair(this.secret.scalar, this.address.point), msg);
+        return Schnorr.signPair<T>(new Pair(this.secret.scalar, this.address.point), msg);
     }
 }
 
@@ -213,9 +213,9 @@ export class PublicKey
      * @returns `true` if the signature is valid
      * See_Also: https://github.com/bosagora/agora/blob/bcd14f2c6a3616d7f05ef850dc95fae3eb386760/source/agora/crypto/Key.d#L242-L246
      */
-    public verify (signature: Signature, msg: Buffer): boolean
+    public verify <T> (signature: Signature, msg: T): boolean
     {
-        return Schnorr.verify<Buffer>(this.point, signature, msg);
+        return Schnorr.verify<T>(this.point, signature, msg);
     }
 
     /**
@@ -316,9 +316,9 @@ export class SecretKey
      * @param msg The message to sign.
      * @returns The signature of `msg` using `this`
      */
-    public sign (msg: Buffer): Signature
+    public sign <T> (msg: T): Signature
     {
-        return Schnorr.signPair<Buffer>(Pair.fromScalar(this.scalar), msg);
+        return Schnorr.signPair<T>(Pair.fromScalar(this.scalar), msg);
     }
 
     /**
