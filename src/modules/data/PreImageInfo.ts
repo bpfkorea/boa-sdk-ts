@@ -68,6 +68,6 @@ export class PreImageInfo
         JSONValidator.isValidOtherwiseThrow('PreImageInfo', value);
 
         return new PreImageInfo(
-            new Hash(value.enroll_key), new Hash(value.hash), Number(value.distance));
+            new Hash(value.utxo), new Hash(value.hash), Number(value.distance));
     }
 }

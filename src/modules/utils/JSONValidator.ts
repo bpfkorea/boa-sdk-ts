@@ -171,7 +171,7 @@ export class JSONValidator
                     }
                 },
                 "additionalProperties": false,
-                "required": ["enroll_key", "hash", "distance"]
+                "required": ["utxo", "hash", "distance"]
             }
 
         ],
