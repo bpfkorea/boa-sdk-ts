@@ -22,6 +22,15 @@ describe ('Test of Schnorr', () =>
         return sdk.SodiumHelper.init();
     });
 
+    it ('Create Signature', () =>
+    {
+        const signature = (new sdk.Sig(
+            new sdk.Point("0x921405afbfa97813293770efd55865c01055f39ad2a70f2b7a04ac043766a693"),
+            new sdk.Scalar("0x074360d5eab8e888df07d862c4fc845ebd10b6a6c530919d66221219bba50216")
+            )).toSignature();
+        assert.deepStrictEqual(signature.toString(), "0x921405afbfa97813293770efd55865c01055f39ad2a70f2b7a04ac043766a693074360d5eab8e888df07d862c4fc845ebd10b6a6c530919d66221219bba50216");
+    });
+
     it ('Single signature', () =>
     {
         let kp: sdk.Pair  = sdk.Pair.random();

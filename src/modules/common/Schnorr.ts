@@ -61,12 +61,12 @@ export class Sig
     /**
      * Construct a new instance of this class
      *
-     * @param r The instance of Point
+     * @param R The instance of Point
      * @param s The instance of Scalar
      */
-    constructor (r: Point, s: Scalar)
+    constructor (R: Point, s: Scalar)
     {
-        this.R = r;
+        this.R = R;
         this.s = s;
     }
 
@@ -75,7 +75,7 @@ export class Sig
      */
     public toSignature (): Signature
     {
-        return new Signature(Buffer.concat([this.R.data, this.s.data]));
+        return new Signature(Buffer.concat([this.s.data, this.R.data]));
     }
 
     /**
@@ -83,7 +83,7 @@ export class Sig
      */
     public static fromSignature (s: Signature): Sig
     {
-        return new Sig(new Point(s.data.slice(0, Point.Width)), new Scalar(s.data.slice(Point.Width)));
+        return new Sig(new Point(s.data.slice(Scalar.Width)), new Scalar(s.data.slice(0, Scalar.Width)));
     }
 
     /**

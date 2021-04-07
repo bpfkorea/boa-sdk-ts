@@ -230,7 +230,7 @@ describe ('Vote Data', () =>
 
         let link_data = ballot_data.getLinkData();
         let expected = {
-            payload: 'CEJBTExPVCAgBlZvdGVyYQxJRDEyMzQ1Njc4OTApNKyF4y6nf51jl+3MDB9uvh1VX1dC5DNQVMD/tXWuqtPa2SgawEDsGH3FrSKdkwbnyCSISJw+l76oyJmY8Vncx0mYjWFV1big5setAqNd51Ay94fqSlwrBuOtBR0YA2VpyRX02J3If7S4/oCWmAAZEvcLHuXQHthAhJ9SfoFUz/klhcwHayy8FsL9nEmi1qtIerd3TUeN9UC4k8NlbP4mfACsUCiKkiEdkNxkzHwGZAfZFkfjqb2ceXB55FKB7oqwlonngH/RVojPpFZWv0pQpIk6BfFVjKhjYU/sxJrT/1MNbYHm+CmSc2xWDDAipQM='
+            payload: 'CEJBTExPVCAgBlZvdGVyYQxJRDEyMzQ1Njc4OTApmapMXuWYfDz6vBZlmCuUM6zby7i5F5cnZcgKGdWHDcQ5RVvGl6/kxbTFrSKdkwbnyCSISJw+l76oyJmY8Vncx0mYjWFV1big5setAqNd51Ay94fqSlwrBuOtBR0YA2VpyRX02J3If7S4/oCWmACYgDrsUNlQtYTrndUiTdejjcy998j5jTp0i3CIrH0dC2CeqzRrR4+UOedDv4I4ssC6Xg0p6ROTFg80fpamJbEDZDsi9IwtpwPpq9gRXxjZf7YTozv7JM9N69i4BhSa304GzQAP6uDBx9Tks3+kdFYEUG74lJ69wPJbF1edqb72bUc='
         };
 
         let deserialized_ballot_data = boasdk.BallotData.deserialize(SmartBuffer.fromBuffer(Buffer.from(link_data.payload, "base64")));
