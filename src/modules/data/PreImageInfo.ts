@@ -24,7 +24,7 @@ export class PreImageInfo
     /**
      * UTXO used to enroll
      */
-    public enroll_key: Hash;
+    public utxo: Hash;
 
     /**
      * Value of the pre-image
@@ -39,13 +39,13 @@ export class PreImageInfo
     /**
      * Construct a new instance of this object
      *
-     * @param enroll_key The UTXO used to enroll
+     * @param utxo       The UTXO used to enroll
      * @param hash       The value of the pre-image
      * @param distance   The distance from the Enrollment
      */
-    constructor (enroll_key: Hash, hash: Hash, distance: number)
+    constructor (utxo: Hash, hash: Hash, distance: number)
     {
-        this.enroll_key = enroll_key;
+        this.utxo = utxo;
         this.hash = hash;
         this.distance = distance;
     }
