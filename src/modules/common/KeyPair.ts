@@ -77,6 +77,23 @@ export class KeyPair
     }
 
     /**
+     * Checks whether a valid scalar can be created with a given random bytes
+     * @param r The random bytes
+     * @return Returns true if a valid scalar can be created with a given random bytes,
+     * otherwise false.
+     */
+    public static isValidRandomBytes (r: Buffer): boolean
+    {
+        if (r.length !== SodiumHelper.sodium.crypto_core_ed25519_SCALARBYTES)
+            return false;
+
+        let t = Buffer.from(r);
+        t[SodiumHelper.sodium.crypto_core_ed25519_SCALARBYTES - 1] &= 0x1f;
+
+        return (Utils.compareBuffer(t, Scalar.ZERO) > 0) && (Utils.compareBuffer(t, Scalar.ED25519_L) < 0);
+    }
+
+    /**
      * Signs a message with this keypair's private key
      * @param msg The message to sign.
      * @returns The signature of `msg` using `this`

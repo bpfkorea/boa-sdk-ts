@@ -238,4 +238,14 @@ describe ('KeyPair', () =>
         assert.deepStrictEqual(random_kp.secret, reproduced_kp.secret);
         assert.deepStrictEqual(random_kp.address, reproduced_kp.address);
     });
+
+
+    it ('Test of KeyPair.isValidRandomBytes()', () =>
+    {
+        let random_bytes = Buffer.from("1000000000000000000000000000000014def9dea2f79cd65812631a5cf5d3ed", "hex").reverse();
+        assert.ok(!boasdk.KeyPair.isValidRandomBytes(random_bytes));
+
+        random_bytes = Buffer.from("1000000000000000000000000000000014def9dea2f79cd65812631a5cf5d3ec", "hex").reverse();
+        assert.ok(boasdk.KeyPair.isValidRandomBytes(random_bytes));
+    })
 });

@@ -163,8 +163,8 @@ export class Scalar
         return new Scalar(Buffer.from(SodiumHelper.sodium.crypto_core_ed25519_scalar_random()));
     }
 
-    private static ED25519_L = Buffer.from("1000000000000000000000000000000014def9dea2f79cd65812631a5cf5d3ed", "hex").reverse();
-    private static ZERO =      Buffer.from("0000000000000000000000000000000000000000000000000000000000000000", "hex");
+    public static ED25519_L = Buffer.from("1000000000000000000000000000000014def9dea2f79cd65812631a5cf5d3ed", "hex").reverse();
+    public static ZERO =      Buffer.from("0000000000000000000000000000000000000000000000000000000000000000", "hex");
 
     /**
      * Scalar should be greater than zero and less than L:2^252 + 27742317777372353535851937790883648493
