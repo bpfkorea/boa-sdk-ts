@@ -150,6 +150,9 @@ export class PublicKey
                 throw new Error("The size of the input data is abnormal.");
             this.point = new Point(data);
         }
+
+        if (!this.point.isValid())
+            throw new Error("This is not a valid Point!");
     }
 
     /**
@@ -286,6 +289,9 @@ export class SecretKey
         {
             this.scalar = new Scalar(data);
         }
+
+        if (!this.scalar.isValid())
+            throw new Error("SecretKey should always be valid Scalar!");
     }
 
     /**

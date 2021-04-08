@@ -182,16 +182,16 @@ describe ('Secret Key', () =>
 
     it ('Extract the seed from a string then convert it back into a string and compare it.', () =>
     {
-        let secret_str = 'SBBUWIMSX5VL4KVFKY44GF6Q6R5LS2Z5B7CTAZBNCNPLS4UKFVDXC7TQ';
+        let secret_str = 'SDV3GLVZ6W7R7UFB2EMMY4BBFJWNCQB5FTCXUMD5ZCFTDEVZZ3RQ2BZI';
         let secret_key = new boasdk.SecretKey(secret_str);
         assert.strictEqual(secret_key.toString(false), secret_str);
     });
 
     it ('Test of Seed.validate()', () =>
     {
-        assert.strictEqual(boasdk.SecretKey.validate("SBBUWIMSX5VL4KVFKY44GF6Q6R5LS2Z5B7CTAZBNCNPLS4UKFVDXC7T"), 'Decoded data size is not normal');
+        assert.strictEqual(boasdk.SecretKey.validate("SDV3GLVZ6W7R7UFB2EMMY4BBFJWNCQB5FTCXUMD5ZCFTDEVZZ3RQ2BZ"), 'Decoded data size is not normal');
         assert.strictEqual(boasdk.SecretKey.validate("GDD5RFGBIUAFCOXQA246BOUPHCK7ZL2NSHDU7DVAPNPTJJKVPJMNLQFW"), 'This is not a valid seed type');
-        assert.strictEqual(boasdk.SecretKey.validate("SBBUWIMSX5VL4KVFKY44GF6Q6R5LS2Z5B7CTAZBNCNPLS4UKFVDXC7TQ"), '');
+        assert.strictEqual(boasdk.SecretKey.validate("SDV3GLVZ6W7R7UFB2EMMY4BBFJWNCQB5FTCXUMD5ZCFTDEVZZ3RQ2BZI"), '');
 
         const decoded = Buffer.from(base32Decode("SBBUWIMSX5VL4KVFKY44GF6Q6R5LS2Z5B7CTAZBNCNPLS4UKFVDXC7TQ"));
         const body = decoded.slice(0, -2);
