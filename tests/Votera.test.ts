@@ -281,17 +281,14 @@ class TestAgora {
     }
 }
 
-describe('Checking the proposal and ballot data', () =>
+describe('Checking the proposal and ballot data', function ()
 {
+    this.timeout(10000);
+
     let stoa_server: TestStoa;
     let agora_server: TestAgora;
-    let stoa_port: string = '5000';
-    let agora_port: string = '2826';
-
-    before('Wait for the package libsodium to finish loading', async () =>
-    {
-        await boasdk.SodiumHelper.init();
-    });
+    let stoa_port: string = '3837';
+    let agora_port: string = '2827';
 
     before('Start TestStoa', async () =>
     {

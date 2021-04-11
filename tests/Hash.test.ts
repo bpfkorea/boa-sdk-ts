@@ -18,11 +18,6 @@ import JSBI from "jsbi";
 
 describe('Hash', () =>
 {
-    before('Wait for the package libsodium to finish loading', () =>
-    {
-        return boasdk.SodiumHelper.init();
-    });
-
     // Buffer has the same content. However, when printed with hex strings,
     // the order of output is different.
     // This was treated to be the same as D language.

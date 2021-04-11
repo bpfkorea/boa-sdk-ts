@@ -16,10 +16,10 @@
 import { Scalar, Point } from "./ECC";
 import { Schnorr, Pair } from "./Schnorr";
 import { Signature } from './Signature';
-import { SodiumHelper } from '../utils/SodiumHelper';
 import { checksum, validate } from "../utils/CRC16";
 import { Utils } from "../utils/Utils";
 
+import * as BCrypto from 'boa-crypto-ts';
 import { base32Encode, base32Decode } from '@ctrl/ts-base32';
 import { bech32m } from 'bech32';
 import { SmartBuffer } from 'smart-buffer';
@@ -84,11 +84,11 @@ export class KeyPair
      */
     public static isValidRandomBytes (r: Buffer): boolean
     {
-        if (r.length !== SodiumHelper.sodium.crypto_core_ed25519_SCALARBYTES)
+        if (r.length !== BCrypto.crypto_core_ed25519_SCALARBYTES)
             return false;
 
         let t = Buffer.from(r);
-        t[SodiumHelper.sodium.crypto_core_ed25519_SCALARBYTES - 1] &= 0x1f;
+        t[BCrypto.crypto_core_ed25519_SCALARBYTES - 1] &= 0x1f;
 
         return (Utils.compareBuffer(t, Scalar.ZERO) > 0) && (Utils.compareBuffer(t, Scalar.ED25519_L) < 0);
     }
@@ -145,14 +145,14 @@ export class PublicKey
             if (!Utils.convertBits(dec_data, decoded.words, 5, 8, false))
                 throw new Error("Bech32 conversion of base failed");
 
-            if (dec_data.length !== 1 + SodiumHelper.sodium.crypto_core_ed25519_BYTES)
+            if (dec_data.length !== 1 + BCrypto.crypto_core_ed25519_BYTES)
                 throw new Error('Decoded data size is not normal');
 
             if (dec_data[0] != VersionByte.AccountID)
                 throw new Error('This is not a valid address type');
 
             let key_data = Buffer.from(dec_data.slice(1));
-            if (!SodiumHelper.sodium.crypto_core_ed25519_is_valid_point(key_data))
+            if (!BCrypto.crypto_core_ed25519_is_valid_point(key_data))
                 throw new Error('This is not a valid Point');
 
             this.point = new Point(key_data);
@@ -163,7 +163,7 @@ export class PublicKey
         }
         else
         {
-            if (data.length !== SodiumHelper.sodium.crypto_core_ed25519_BYTES)
+            if (data.length !== BCrypto.crypto_core_ed25519_BYTES)
                 throw new Error("The size of the input data is abnormal.");
             this.point = new Point(data);
         }
@@ -199,14 +199,14 @@ export class PublicKey
         if (!Utils.convertBits(dec_data, decoded.words, 5, 8, false))
             throw new Error("Bech32 conversion of base failed");
 
-        if (dec_data.length !== 1 + SodiumHelper.sodium.crypto_core_ed25519_BYTES)
+        if (dec_data.length !== 1 + BCrypto.crypto_core_ed25519_BYTES)
             return 'Decoded data size is not normal';
 
         if (dec_data[0] != VersionByte.AccountID)
             return 'This is not a valid address type';
 
         let key_data = Buffer.from(dec_data.slice(1));
-        if (!SodiumHelper.sodium.crypto_core_ed25519_is_valid_point(key_data))
+        if (!BCrypto.crypto_core_ed25519_is_valid_point(key_data))
             return 'This is not a valid Point';
 
         return '';
@@ -284,7 +284,7 @@ export class SecretKey
         if (typeof data === 'string')
         {
             const decoded = Buffer.from(base32Decode(data));
-            if (decoded.length != 1 + SodiumHelper.sodium.crypto_core_ed25519_SCALARBYTES + 2)
+            if (decoded.length != 1 + BCrypto.crypto_core_ed25519_SCALARBYTES + 2)
                 throw new Error('Decoded data size is not normal');
 
             if (decoded[0] != VersionByte.Seed)
@@ -320,7 +320,7 @@ export class SecretKey
     {
         const decoded = Buffer.from(base32Decode(seed));
 
-        if (decoded.length != 1 + SodiumHelper.sodium.crypto_core_ed25519_SCALARBYTES + 2)
+        if (decoded.length != 1 + BCrypto.crypto_core_ed25519_SCALARBYTES + 2)
             return 'Decoded data size is not normal';
 
         if (decoded[0] != VersionByte.Seed)

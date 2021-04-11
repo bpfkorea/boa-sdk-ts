@@ -17,11 +17,6 @@ import * as assert from 'assert';
 
 describe ('Test OPCode', () =>
 {
-    before ('Wait for the package libsodium to finish loading', () =>
-    {
-        return sdk.SodiumHelper.init();
-    });
-
     it ('enum Opcode', () =>
     {
         assert.ok(sdk.isOpcode(0x00) && 0x00 == sdk.OP.FALSE);

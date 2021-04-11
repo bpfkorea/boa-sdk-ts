@@ -12,8 +12,8 @@
 *******************************************************************************/
 
 import { Utils, Endian } from '../utils/Utils';
-import { SodiumHelper } from '../utils/SodiumHelper';
 
+import * as nacl from 'tweetnacl-ts';
 import JSBI from 'jsbi';
 import { SmartBuffer } from 'smart-buffer';
 
@@ -129,7 +129,7 @@ export class Hash
  */
 export function hash (source: Buffer): Hash
 {
-    return new Hash(Buffer.from(SodiumHelper.sodium.crypto_generichash(Hash.Width, source)));
+    return new Hash(Buffer.from(nacl.blake2b(source, undefined, Hash.Width)));
 }
 
 /**
@@ -139,13 +139,12 @@ export function hash (source: Buffer): Hash
  * @returns The instance of Hash
  * See_Also https://github.com/bosagora/agora/blob/93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/common/Hash.d#L239-L255
  */
-export function hashMulti (source1: Buffer, source2: Buffer): Hash
+export function hashMulti (...sources: Buffer[]): Hash
 {
-    let merge = Buffer.alloc(source1.length + source2.length);
-    source1.copy(merge);
-    source2.copy(merge, source1.length);
-
-    return new Hash(Buffer.from(SodiumHelper.sodium.crypto_generichash(Hash.Width, merge)));
+    let ctx = nacl.blake2b_init(Hash.Width);
+    for (let elem of sources)
+        nacl.blake2b_update(ctx, elem);
+    return new Hash(Buffer.from(nacl.blake2b_final(ctx)));
 }
 
 /**

@@ -13,6 +13,7 @@
 
 import * as boasdk from '../lib';
 
+import * as nacl from 'tweetnacl-ts';
 import * as assert from 'assert';
 import axios from 'axios';
 import bodyParser from 'body-parser';
@@ -717,13 +718,8 @@ class TestAgora {
 describe('BOA Client', () => {
     let stoa_server: TestStoa;
     let agora_server: TestAgora;
-    let stoa_port: string = '5000';
-    let agora_port: string = '2826';
-
-    before('Wait for the package libsodium to finish loading', async () =>
-    {
-        await boasdk.SodiumHelper.init();
-    });
+    let stoa_port: string = '3837';
+    let agora_port: string = '2827';
 
     before('Start TestStoa', async () =>
     {
@@ -919,7 +915,7 @@ describe('BOA Client', () => {
 
         let pre_images: boasdk.Hash[] = [];
 
-        pre_images.push(boasdk.hash(boasdk.SodiumHelper.sodium.randombytes_buf(boasdk.Hash.Width)));
+        pre_images.push(boasdk.hash(Buffer.from(nacl.randomBytes(boasdk.Hash.Width))));
         for (let idx = 0; idx < 20; idx++) {
             pre_images.push(boasdk.hash(pre_images[idx].data))
         }

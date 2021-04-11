@@ -28,14 +28,16 @@
   "homepage": "https://bosagora.github.io/boa-sdk-ts/",
   "dependencies": {
     "@ctrl/ts-base32": "^1.2.1",
+    "@stablelib/xchacha20poly1305": "^1.0.0",
     "ajv": "^6.12.6",
     "axios": "^0.21.1",
     "bech32": "^2.0.0",
+    "boa-crypto-ts": "0.0.1",
     "crc": "^3.8.0",
     "jsbi": "^3.1.4",
-    "libsodium-wrappers-sumo": "^0.7.9",
     "lodash": "^4.17.19",
     "smart-buffer": "^4.1.0",
+    "tweetnacl-ts": "^1.0.3",
     "urijs": "^1.19.2"
   },
   "devDependencies": {
@@ -43,7 +45,6 @@
     "@types/chai": "^4.2.11",
     "@types/crc": "^3.4.0",
     "@types/express": "^4.17.6",
-    "@types/libsodium-wrappers-sumo": "^0.7.5",
     "@types/mocha": "^7.0.2",
     "@types/node": "^14.0.14",
     "@types/urijs": "^1.19.9",

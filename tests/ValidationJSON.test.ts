@@ -156,11 +156,6 @@ describe ('Test that validation with JSON schema', () =>
 
 describe ('Test that JSON.stringify of Transaction', () =>
 {
-    before('Wait for the package libsodium to finish loading', () =>
-    {
-        return boasdk.SodiumHelper.init();
-    });
-
     it ('Test that JSON of Transaction', () =>
     {
         let tx = new boasdk.Transaction(

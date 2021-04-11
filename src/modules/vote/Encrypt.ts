@@ -11,8 +11,9 @@
 
 *******************************************************************************/
 
-import { hashMulti } from '../common/Hash';
-import { SodiumHelper } from '../utils/SodiumHelper';
+import { Hash, hashMulti } from '../common/Hash';
+import * as nacl from 'tweetnacl-ts';
+import * as xchacha from '@stablelib/xchacha20poly1305';
 
 /**
  * Classes that encrypt and decrypt a ballot
@@ -32,10 +33,10 @@ export class Encrypt
     public static createKey (first_key: Buffer, proposal_id: string): Buffer
     {
         let key_proposal = hashMulti(first_key, Buffer.from(proposal_id));
-        let key_size = SodiumHelper.sodium.crypto_aead_xchacha20poly1305_ietf_KEYBYTES;
-        let state = SodiumHelper.sodium.crypto_generichash_init(null, key_size);
-        SodiumHelper.sodium.crypto_generichash_update(state, key_proposal.data);
-        return SodiumHelper.sodium.crypto_generichash_final(state, key_size);
+        let key_size = xchacha.KEY_LENGTH;
+        let ctx = nacl.blake2b_init(key_size);
+        nacl.blake2b_update(ctx, key_proposal.data);
+        return Buffer.from(nacl.blake2b_final(ctx));
     }
 
     /**
@@ -45,15 +46,11 @@ export class Encrypt
      */
     public static encrypt (message: Buffer, key: Buffer): Buffer
     {
-        let public_nonce_size = SodiumHelper.sodium.crypto_aead_xchacha20poly1305_ietf_NPUBBYTES;
-        let public_nonce = SodiumHelper.sodium.randombytes_buf(public_nonce_size)
+        let public_nonce_size = xchacha.NONCE_LENGTH;
+        let public_nonce = Buffer.from(nacl.randomBytes(public_nonce_size));
 
-        let cipher = Buffer.from(SodiumHelper.sodium.crypto_aead_xchacha20poly1305_ietf_encrypt(
-            message,
-            Encrypt.additional_data,
-            null,
-            public_nonce,
-            key));
+        const aead = new xchacha.XChaCha20Poly1305(key);
+        const cipher = aead.seal(public_nonce, message, Encrypt.additional_data);
 
         return Buffer.concat([public_nonce, cipher]);
     }
@@ -65,15 +62,15 @@ export class Encrypt
      */
     static decrypt (cipher_message: Buffer, key: Buffer): Buffer
     {
-        let public_nonce_size = SodiumHelper.sodium.crypto_aead_xchacha20poly1305_ietf_NPUBBYTES;
+        let public_nonce_size = xchacha.NONCE_LENGTH;
         let public_nonce = cipher_message.slice(0, public_nonce_size);
         let cipher = cipher_message.slice(public_nonce_size);
 
-        return Buffer.from(SodiumHelper.sodium.crypto_aead_xchacha20poly1305_ietf_decrypt(
-            null,
-            cipher,
-            Encrypt.additional_data,
-            public_nonce,
-            key));
+        const aead = new xchacha.XChaCha20Poly1305(key);
+        let opened = aead.open(public_nonce, cipher, Encrypt.additional_data);
+        if (opened !== null)
+            return Buffer.from(opened);
+        else
+            return Buffer.alloc(0);
     }
 }

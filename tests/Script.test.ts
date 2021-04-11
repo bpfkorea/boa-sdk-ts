@@ -17,11 +17,6 @@ import * as assert from 'assert';
 
 describe ('Test Script', () =>
 {
-    before ('Wait for the package libsodium to finish loading', () =>
-    {
-        return sdk.SodiumHelper.init();
-    });
-
     it ('Script.createOpcodes', () =>
     {
         let OneByte = (value: number): Buffer =>

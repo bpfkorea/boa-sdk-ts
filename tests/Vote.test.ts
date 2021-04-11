@@ -19,11 +19,6 @@ import { SmartBuffer } from 'smart-buffer';
 
 describe ('Vote Data', () =>
 {
-    before ('Wait for the package libsodium to finish loading', () =>
-    {
-        return boasdk.SodiumHelper.init();
-    });
-
     it ('Test of ProposalFeeData', () =>
     {
         let original_data = new boasdk.ProposalFeeData("Votera", "ID1234567890");

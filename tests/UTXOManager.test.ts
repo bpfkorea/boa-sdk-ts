@@ -21,11 +21,6 @@ describe ('Test for UTXOManager', () =>
     let manager: boasdk.UTXOManager;
     let utxos: Array<boasdk.UnspentTxOutput>;
 
-    before('Wait for the package libsodium to finish loading', () =>
-    {
-        return boasdk.SodiumHelper.init();
-    });
-
     before('Prepare variables', () =>
     {
         utxos = [

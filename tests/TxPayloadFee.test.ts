@@ -18,11 +18,6 @@ import JSBI from 'jsbi';
 
 describe ('TxPayloadFee', () =>
 {
-    before('Wait for the package libsodium to finish loading', () =>
-    {
-        return boasdk.SodiumHelper.init();
-    });
-
     it ('When a negative number is entered for the size of the data.', () =>
     {
         assert.throws(() => {

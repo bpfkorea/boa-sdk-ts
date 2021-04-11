@@ -17,11 +17,6 @@ import * as assert from 'assert';
 
 describe ('Transaction', () =>
 {
-    before ('Wait for the package libsodium to finish loading', () =>
-    {
-        return boasdk.SodiumHelper.init();
-    });
-
     it ('Test of estimated size', () =>
     {
         assert.strictEqual(boasdk.TxInput.getEstimatedNumberOfBytes(), 132);

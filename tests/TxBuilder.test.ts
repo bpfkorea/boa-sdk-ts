@@ -22,11 +22,6 @@ describe ('TxBuilder', () =>
     let utxo_data2: any;
     let owner: boasdk.KeyPair;
 
-    before('Wait for the package libsodium to finish loading', () =>
-    {
-        return boasdk.SodiumHelper.init();
-    });
-
     before('Prepare variables', () =>
     {
         utxo_data1 = {

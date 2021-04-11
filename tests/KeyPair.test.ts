@@ -19,11 +19,6 @@ import { bech32, bech32m } from 'bech32';
 
 describe ('Public Key', () =>
 {
-    before('Wait for the package libsodium to finish loading', () =>
-    {
-        return boasdk.SodiumHelper.init();
-    });
-
     it ('Test Bech32', () =>
     {
         let addresses_bech32 = [
@@ -175,11 +170,6 @@ describe ('Public Key', () =>
 
 describe ('Secret Key', () =>
 {
-    before('Wait for the package libsodium to finish loading', () =>
-    {
-        return boasdk.SodiumHelper.init();
-    });
-
     it ('Extract the seed from a string then convert it back into a string and compare it.', () =>
     {
         let secret_str = 'SDV3GLVZ6W7R7UFB2EMMY4BBFJWNCQB5FTCXUMD5ZCFTDEVZZ3RQ2BZI';
@@ -204,11 +194,6 @@ describe ('Secret Key', () =>
 
 describe ('KeyPair', () =>
 {
-    before('Wait for the package libsodium to finish loading', () =>
-    {
-        return boasdk.SodiumHelper.init();
-    });
-
     // See: https://github.com/bosagora/agora/blob/bcd14f2c6a3616d7f05ef850dc95fae3eb386760/source/agora/crypto/Key.d#L391-L404
     it ('Test of KeyPair.fromSeed, sign, verify', () =>
     {

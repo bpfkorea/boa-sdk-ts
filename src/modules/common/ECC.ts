@@ -16,9 +16,9 @@
 *******************************************************************************/
 
 import { Endian, Utils } from '../utils/Utils';
-import { SodiumHelper } from '../utils/SodiumHelper';
 import { Hash } from './Hash';
 
+import * as BCrypto from 'boa-crypto-ts';
 import { SmartBuffer } from 'smart-buffer';
 
 /**
@@ -45,10 +45,10 @@ export class Scalar
             this.data = Utils.readFromString(data);
         else
         {
-            this.data = Buffer.alloc(SodiumHelper.sodium.crypto_core_ed25519_SCALARBYTES);
+            this.data = Buffer.alloc(BCrypto.crypto_core_ed25519_SCALARBYTES);
             this.fromBinary(data, endian);
         }
-        if (this.data.length !== SodiumHelper.sodium.crypto_core_ed25519_SCALARBYTES)
+        if (this.data.length !== BCrypto.crypto_core_ed25519_SCALARBYTES)
             throw new Error("The size of the data is abnormal.");
     }
 
@@ -57,7 +57,7 @@ export class Scalar
      */
     public static get Width (): number
     {
-        return SodiumHelper.sodium.crypto_core_ed25519_SCALARBYTES;
+        return BCrypto.crypto_core_ed25519_SCALARBYTES;
     }
 
     /**
@@ -94,7 +94,7 @@ export class Scalar
      */
     public fromBinary (bin: Buffer, endian: Endian = Endian.Big): Scalar
     {
-        if (bin.length !== SodiumHelper.sodium.crypto_core_ed25519_SCALARBYTES)
+        if (bin.length !== BCrypto.crypto_core_ed25519_SCALARBYTES)
             throw new Error("The size of the input data is abnormal.");
 
         this.data.set(bin);
@@ -141,7 +141,7 @@ export class Scalar
      */
     public static fromHash (hash: Hash): Scalar
     {
-        return new Scalar(Buffer.from(SodiumHelper.sodium.crypto_core_ed25519_scalar_reduce(hash.data)));
+        return new Scalar(Buffer.from(BCrypto.crypto_core_ed25519_scalar_reduce(hash.data)));
     }
 
     /**
@@ -151,7 +151,7 @@ export class Scalar
      */
     public invert (): Scalar
     {
-        return new Scalar(Buffer.from(SodiumHelper.sodium.crypto_core_ed25519_scalar_invert(this.data)));
+        return new Scalar(Buffer.from(BCrypto.crypto_core_ed25519_scalar_invert(this.data)));
     }
 
     /**
@@ -160,7 +160,7 @@ export class Scalar
      */
     public static random (): Scalar
     {
-        return new Scalar(Buffer.from(SodiumHelper.sodium.crypto_core_ed25519_scalar_random()));
+        return new Scalar(Buffer.from(BCrypto.crypto_core_ed25519_scalar_random()));
     }
 
     public static ED25519_L = Buffer.from("1000000000000000000000000000000014def9dea2f79cd65812631a5cf5d3ed", "hex").reverse();
@@ -191,7 +191,7 @@ export class Scalar
      */
     public toPoint (): Point
     {
-        let ret = new Point(Buffer.from(SodiumHelper.sodium.crypto_scalarmult_ed25519_base_noclamp(this.data)));
+        let ret = new Point(Buffer.from(BCrypto.crypto_scalarmult_ed25519_base_noclamp(this.data)));
         if (!ret.isValid)
             throw new Error("libsodium generated invalid Point from valid Scalar!");
         return ret;
@@ -209,7 +209,7 @@ export class Scalar
             return new Scalar(y.data);
         if (y.isNull())
             return new Scalar(x.data);
-        return new Scalar(Buffer.from(SodiumHelper.sodium.crypto_core_ed25519_scalar_add(x.data, y.data)));
+        return new Scalar(Buffer.from(BCrypto.crypto_core_ed25519_scalar_add(x.data, y.data)));
     }
 
     /**
@@ -224,7 +224,7 @@ export class Scalar
             return new Scalar(y.data);
         if (y.isNull())
             return new Scalar(x.data);
-        return new Scalar(Buffer.from(SodiumHelper.sodium.crypto_core_ed25519_scalar_sub(x.data, y.data)));
+        return new Scalar(Buffer.from(BCrypto.crypto_core_ed25519_scalar_sub(x.data, y.data)));
     }
 
     /**
@@ -239,7 +239,7 @@ export class Scalar
             return new Scalar(y.data);
         if (y.isNull())
             return new Scalar(x.data);
-        return new Scalar(Buffer.from(SodiumHelper.sodium.crypto_core_ed25519_scalar_mul(x.data, y.data)));
+        return new Scalar(Buffer.from(BCrypto.crypto_core_ed25519_scalar_mul(x.data, y.data)));
     }
 
     /**
@@ -248,7 +248,7 @@ export class Scalar
      */
     public negate (): Scalar
     {
-        return new Scalar(Buffer.from(SodiumHelper.sodium.crypto_core_ed25519_scalar_negate(this.data)));
+        return new Scalar(Buffer.from(BCrypto.crypto_core_ed25519_scalar_negate(this.data)));
     }
 
     /**
@@ -257,7 +257,7 @@ export class Scalar
      */
     public complement (): Scalar
     {
-        return new Scalar(Buffer.from(SodiumHelper.sodium.crypto_core_ed25519_scalar_complement(this.data)));
+        return new Scalar(Buffer.from(BCrypto.crypto_core_ed25519_scalar_complement(this.data)));
     }
 
     /**
@@ -304,10 +304,10 @@ export class Point
             this.data = Utils.readFromString(data);
         else
         {
-            this.data = Buffer.alloc(SodiumHelper.sodium.crypto_core_ed25519_BYTES);
+            this.data = Buffer.alloc(BCrypto.crypto_core_ed25519_BYTES);
             this.fromBinary(data, endian);
         }
-        if (this.data.length !== SodiumHelper.sodium.crypto_core_ed25519_BYTES)
+        if (this.data.length !== BCrypto.crypto_core_ed25519_BYTES)
             throw new Error("The size of the data is abnormal.");
     }
 
@@ -316,7 +316,7 @@ export class Point
      */
     public static get Width (): number
     {
-        return SodiumHelper.sodium.crypto_core_ed25519_BYTES;
+        return BCrypto.crypto_core_ed25519_BYTES;
     }
 
     /**
@@ -348,7 +348,7 @@ export class Point
      */
     public fromBinary (bin: Buffer, endian: Endian = Endian.Big): Point
     {
-        if (bin.length !== SodiumHelper.sodium.crypto_core_ed25519_BYTES)
+        if (bin.length !== BCrypto.crypto_core_ed25519_BYTES)
             throw new Error("The size of the input data is abnormal.");
 
         this.data.set(bin);
@@ -393,7 +393,7 @@ export class Point
      */
     public isValid (): boolean
     {
-        return SodiumHelper.sodium.crypto_core_ed25519_is_valid_point(this.data);
+        return BCrypto.crypto_core_ed25519_is_valid_point(this.data);
     }
 
     /**
@@ -402,7 +402,7 @@ export class Point
      */
     public static random (): Point
     {
-        return new Point(Buffer.from(SodiumHelper.sodium.crypto_core_ed25519_random()));
+        return new Point(Buffer.from(BCrypto.crypto_core_ed25519_random()));
     }
 
     /**
@@ -417,7 +417,7 @@ export class Point
             return new Point(q.data);
         if (q.isNull())
             return new Point(p.data);
-        return new Point(Buffer.from(SodiumHelper.sodium.crypto_core_ed25519_add(p.data, q.data)));
+        return new Point(Buffer.from(BCrypto.crypto_core_ed25519_add(p.data, q.data)));
     }
 
     /**
@@ -432,7 +432,7 @@ export class Point
             return new Point(q.data);
         if (q.isNull())
             return new Point(p.data);
-        return new Point(Buffer.from(SodiumHelper.sodium.crypto_core_ed25519_sub(p.data, q.data)));
+        return new Point(Buffer.from(BCrypto.crypto_core_ed25519_sub(p.data, q.data)));
     }
 
     /**
@@ -443,7 +443,7 @@ export class Point
      */
     public static scalarMul (s: Scalar, n: Point): Point
     {
-        return new Point(Buffer.from(SodiumHelper.sodium.crypto_scalarmult_ed25519_noclamp(s.data, n.data)));
+        return new Point(Buffer.from(BCrypto.crypto_scalarmult_ed25519_noclamp(s.data, n.data)));
     }
 
     /**
@@ -462,7 +462,7 @@ export class Point
      */
     public isNull (): boolean
     {
-        return (Buffer.compare(this.data, Buffer.alloc(SodiumHelper.sodium.crypto_core_ed25519_BYTES)) == 0);
+        return (Buffer.compare(this.data, Buffer.alloc(BCrypto.crypto_core_ed25519_BYTES)) == 0);
     }
 
     /**
@@ -471,6 +471,6 @@ export class Point
      */
     public static get Null (): Point
     {
-        return new Point(Buffer.alloc(SodiumHelper.sodium.crypto_core_ed25519_BYTES));
+        return new Point(Buffer.alloc(BCrypto.crypto_core_ed25519_BYTES));
     }
 }

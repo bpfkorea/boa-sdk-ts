@@ -15,12 +15,9 @@ import * as sdk from '../lib';
 
 import * as assert from 'assert';
 
-describe ('Test of ECC', () =>
+describe ('Test of ECC', function ()
 {
-    before('Wait for the package libsodium to finish loading', () =>
-    {
-        return sdk.SodiumHelper.init();
-    });
+    this.timeout(5000);
 
     it ('Test Scalar fromString / toString functions', () =>
     {

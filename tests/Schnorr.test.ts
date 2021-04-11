@@ -15,12 +15,9 @@ import * as sdk from "../lib";
 
 import * as assert from 'assert';
 
-describe ('Test of Schnorr', () =>
+describe ('Test of Schnorr', function ()
 {
-    before('Wait for the package libsodium to finish loading', () =>
-    {
-        return sdk.SodiumHelper.init();
-    });
+    this.timeout(5000);
 
     it ('Create Signature', () =>
     {

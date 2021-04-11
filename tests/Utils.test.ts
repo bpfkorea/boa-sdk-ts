@@ -14,6 +14,7 @@
 import * as boasdk from '../lib';
 
 import * as assert from 'assert';
+import * as BCrypto from 'boa-crypto-ts';
 import { SmartBuffer } from 'smart-buffer';
 
 describe ('Test of isInteger, isPositiveInteger, isNegativeInteger', () =>
@@ -62,11 +63,6 @@ describe ('Test for JSON serialization', () =>
 
 describe ('Test of Utils', () =>
 {
-    before('Wait for the package libsodium to finish loading', async () =>
-    {
-        await boasdk.SodiumHelper.init();
-    });
-
     it('Test of Utils.compareBuffer', () =>
     {
         let a = Buffer.from([6, 3, 2, 1]);
@@ -91,8 +87,8 @@ describe ('Test of Utils', () =>
 
     it ('Test of sizeof keys', () =>
     {
-        assert.strictEqual(boasdk.Utils.SIZE_OF_PUBLIC_KEY, boasdk.SodiumHelper.sodium.crypto_core_ed25519_BYTES);
-        assert.strictEqual(boasdk.Utils.SIZE_OF_SECRET_KEY, boasdk.SodiumHelper.sodium.crypto_core_ed25519_SCALARBYTES);
+        assert.strictEqual(boasdk.Utils.SIZE_OF_PUBLIC_KEY, BCrypto.crypto_core_ed25519_BYTES);
+        assert.strictEqual(boasdk.Utils.SIZE_OF_SECRET_KEY, BCrypto.crypto_core_ed25519_SCALARBYTES);
     });
 
     it ('Test of BitField JSON serialization', () =>
