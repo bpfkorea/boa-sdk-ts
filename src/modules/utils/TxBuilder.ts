@@ -11,7 +11,7 @@
 
 *******************************************************************************/
 
-import { Hash, hashFull } from "../common/Hash";
+import { Hash, hashFull } from "../crypto/Hash";
 import { Height } from "../common/Height";
 import { KeyPair, SecretKey, PublicKey } from "../common/KeyPair";
 import { Lock, Unlock } from "../script/Lock";

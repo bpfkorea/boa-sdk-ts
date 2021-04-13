@@ -11,7 +11,7 @@
 
 *******************************************************************************/
 
-import { Hash }  from '../../common/Hash';
+import { Hash }  from '../../crypto/Hash';
 import { PreImage, JSONPreImage } from './PreImage';
 import { Utils } from '../../utils/Utils';
 

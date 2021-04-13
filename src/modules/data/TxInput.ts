@@ -12,8 +12,8 @@
 *******************************************************************************/
 
 import { JSONValidator } from '../utils/JSONValidator';
-import { Hash, makeUTXOKey } from '../common/Hash';
-import { Signature } from '../common/Signature';
+import { Hash, makeUTXOKey } from '../crypto/Hash';
+import { Signature } from '../crypto/Signature';
 import { Unlock } from '../script/Lock';
 import { Utils } from '../utils/Utils';
 

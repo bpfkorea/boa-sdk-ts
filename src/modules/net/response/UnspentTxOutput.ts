@@ -11,7 +11,7 @@
 
 *******************************************************************************/
 
-import { Hash }  from '../../common/Hash';
+import { Hash }  from '../../crypto/Hash';
 import { TxType } from '../../data/Transaction';
 import { Utils } from '../../utils/Utils';
 

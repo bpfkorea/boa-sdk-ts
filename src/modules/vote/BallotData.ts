@@ -12,10 +12,10 @@
 *******************************************************************************/
 
 import { PublicKey } from '../common/KeyPair';
-import { Signature } from '../common/Signature';
+import { Signature } from '../crypto/Signature';
 import { VarInt } from '../utils/VarInt';
 import { Utils } from '../utils/Utils';
-import { hashFull } from '../common/Hash';
+import { hashFull } from '../crypto/Hash';
 import { LinkDataWithVoteData } from '../wallet/LinkData';
 
 import JSBI from 'jsbi';

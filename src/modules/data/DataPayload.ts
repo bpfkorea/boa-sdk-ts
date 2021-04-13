@@ -11,7 +11,7 @@
 
 *******************************************************************************/
 
-import { hashPart } from '../common/Hash';
+import { hashPart } from '../crypto/Hash';
 import { JSONValidator } from "../utils/JSONValidator";
 import { Utils, Endian } from '../utils/Utils';
 

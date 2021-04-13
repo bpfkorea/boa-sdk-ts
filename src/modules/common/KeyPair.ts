@@ -13,9 +13,9 @@
 
 *******************************************************************************/
 
-import { Scalar, Point } from "./ECC";
-import { Schnorr, Pair } from "./Schnorr";
-import { Signature } from './Signature';
+import { Scalar, Point } from "../crypto/ECC";
+import { Schnorr, Pair } from "../crypto/Schnorr";
+import { Signature } from '../crypto/Signature';
 import { checksum, validate } from "../utils/CRC16";
 import { Utils } from "../utils/Utils";
 

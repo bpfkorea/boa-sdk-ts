@@ -12,12 +12,12 @@
 
 *******************************************************************************/
 
-export { Hash, hash, hashMulti, makeUTXOKey, hashFull, hashPart } from './modules/common/Hash';
+export { Hash, hash, hashMulti, makeUTXOKey, hashFull, hashPart } from './modules/crypto/Hash';
 export { Height } from './modules/common/Height';
 export { KeyPair, PublicKey, SecretKey } from './modules/common/KeyPair';
-export { Signature } from './modules/common/Signature';
-export { Scalar, Point } from './modules/common/ECC';
-export { Sig, Pair, Schnorr, Message } from './modules/common/Schnorr';
+export { Signature } from './modules/crypto/Signature';
+export { Scalar, Point } from './modules/crypto/ECC';
+export { Sig, Pair, Schnorr, Message } from './modules/crypto/Schnorr';
 
 export { BitField } from './modules/data/BitField';
 export { Block } from './modules/data/Block';
@@ -32,7 +32,7 @@ export { PreImageInfo } from './modules/data/PreImageInfo';
 export { ProposalFeeData } from './modules/vote/ProposalFeeData';
 export { ProposalType, ProposalData } from './modules/vote/ProposalData';
 export { VoterCard, BallotData } from './modules/vote/BallotData';
-export { Encrypt } from './modules/vote/Encrypt';
+export { Encrypt } from './modules/crypto/Encrypt';
 
 export { LockType, Lock, Unlock } from './modules/script/Lock';
 export { OP, isOpcode, isConditional, isPayload } from './modules/script/Opcodes';

@@ -18,7 +18,7 @@
 
 import { UnspentTxOutput } from "../net/response/UnspentTxOutput";
 import { TxType } from "../data/Transaction";
-import { Hash } from "../common/Hash";
+import { Hash } from "../crypto/Hash";
 
 import JSBI from 'jsbi';
 

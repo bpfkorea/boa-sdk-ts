@@ -12,7 +12,7 @@
 *******************************************************************************/
 
 import { JSONValidator } from '../utils/JSONValidator';
-import { Hash } from '../common/Hash';
+import { Hash } from '../crypto/Hash';
 
 /**
  * The class that defines the preImageInfo.

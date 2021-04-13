@@ -12,8 +12,8 @@
 *******************************************************************************/
 
 import { JSONValidator } from '../utils/JSONValidator';
-import { Hash } from '../common/Hash';
-import { Signature } from '../common/Signature';
+import { Hash } from '../crypto/Hash';
+import { Signature } from '../crypto/Signature';
 
 import { SmartBuffer } from 'smart-buffer';
 

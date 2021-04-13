@@ -35,9 +35,9 @@
 
 *******************************************************************************/
 
-import { hashPart } from '../common/Hash';
+import { hashPart } from '../crypto/Hash';
 import { PublicKey } from '../common/KeyPair';
-import { Signature } from '../common/Signature';
+import { Signature } from '../crypto/Signature';
 import { JSONValidator } from '../..';
 import { Utils } from "../utils/Utils";
 

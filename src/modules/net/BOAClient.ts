@@ -14,7 +14,7 @@
 
 *******************************************************************************/
 
-import { Hash, hash } from '../common/Hash';
+import { Hash, hash } from '../crypto/Hash';
 import { PublicKey } from '../common/KeyPair';
 import { Request } from './Request';
 import { UnspentTxOutput } from './response/UnspentTxOutput';

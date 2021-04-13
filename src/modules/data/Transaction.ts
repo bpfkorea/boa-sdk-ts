@@ -11,7 +11,7 @@
 
 *******************************************************************************/
 
-import { hashPart } from '../common/Hash';
+import { hashPart } from '../crypto/Hash';
 import { DataPayload } from './DataPayload';
 import { Height } from '../common/Height';
 import { JSONValidator } from '../utils/JSONValidator';

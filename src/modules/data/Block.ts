@@ -13,7 +13,7 @@
 
 import { BlockHeader } from './BlockHeader';
 import { JSONValidator } from '../utils/JSONValidator';
-import { Hash } from '../common/Hash';
+import { Hash } from '../crypto/Hash';
 import { Transaction } from './Transaction';
 
 /**

@@ -11,7 +11,7 @@
 
 *******************************************************************************/
 
-import { Hash } from '../common/Hash';
+import { Hash } from '../crypto/Hash';
 import { PublicKey } from '../common/KeyPair';
 import { Utils } from '../utils/Utils';
 import { VarInt } from '../utils/VarInt';

@@ -14,9 +14,9 @@
 import { BitField } from './BitField';
 import { Enrollment } from './Enrollment';
 import { JSONValidator } from '../utils/JSONValidator';
-import { Hash } from "../common/Hash";
+import { Hash } from "../crypto/Hash";
 import { Height } from '../common/Height';
-import { Signature } from '../common/Signature';
+import { Signature } from '../crypto/Signature';
 import { Utils } from "../utils/Utils";
 
 import JSBI from 'jsbi';

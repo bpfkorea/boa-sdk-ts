@@ -11,7 +11,7 @@
 
 *******************************************************************************/
 
-import { Hash, hashMulti } from '../common/Hash';
+import { Hash, hashMulti } from './Hash';
 import * as nacl from 'tweetnacl-ts';
 import * as xchacha from '@stablelib/xchacha20poly1305';
 
