@@ -27,7 +27,8 @@ import { SmartBuffer } from 'smart-buffer';
 export enum TxType
 {
     Payment = 0,
-    Freeze = 1
+    Freeze = 1,
+    Coinbase = 2
 }
 
 /**
