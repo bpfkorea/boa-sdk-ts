@@ -168,7 +168,7 @@ export class TestStoa {
                             [
                                 new boasdk.TxOutput("3000000", boasdk.Lock.fromPublicKey(new boasdk.PublicKey("boa1xrw66w303s5x05ej9uu6djc54kue29j72kah22xqqcrtqj57ztwm5uh524e")))
                             ],
-                            new boasdk.DataPayload(Buffer.from("CEJBTExPVCAgBlZvdGVyYQxJRDEyMzQ1Njc4OTApmapMXuWYfDz6vBZlmCuUM6zby7i5F5cnZcgKGdWHDcQ5RVvGl6/kxbTFrSKdkwbnyCSISJw+l76oyJmY8Vncx0mYjWFV1big5setAqNd51Ay94fqSlwrBuOtBR0YA2VpyRX02J3If7S4/oCWmACYgDrsUNlQtYTrndUiTdejjcy998j5jTp0i3CIrH0dC2CeqzRrR4+UOedDv4I4ssC6Xg0p6ROTFg80fpamJbEDZDsi9IwtpwPpq9gRXxjZf7YTozv7JM9N69i4BhSa304GzQAP6uDBx9Tks3+kdFYEUG74lJ69wPJbF1edqb72bUc=", "base64"))
+                            new boasdk.DataPayload(Buffer.from("CEJBTExPVCAgBlZvdGVyYQxJRDEyMzQ1Njc4OTApLiJ5n0+MzlHg5Uqz+nRlD7pzNaXdURBJy7SEcNxc3WtEOqLsJ2ReXOnFrSKdkwbnyCSISJw+l76oyJmY8Vncx0mYjWFV1big5setAqNd51Ay94fqSlwrBuOtBR0YA2VpyRX02J3If7S4FDIwMjEtMDQtMTVUMDA6MDA6MDBaAoR3zMbQrdFDVCZVO91GE/lmyK7DqeSD+kCM+KGdHQNlieKjkzQvqQxWBbPUoVTm20AfjYom48ZT4LqFJGxvbmQ0gWQYAaLEO0FR0kfGZtRyKDhNf0po8wNtC3mN9VroDEj4iyyhkk9bWg6Q9t53KWxwNehXQ0LpQrlwBSfcHs+q", "base64"))
                         );
                         res.status(200).send(JSON.stringify(tx));
                     }

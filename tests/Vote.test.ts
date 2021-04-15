@@ -58,6 +58,16 @@ describe ('Vote Data', () =>
         assert.deepStrictEqual(original_data, deserialized_data);
     });
 
+    it ('Test of VoteCard', () => {
+        let voter_card = new boasdk.VoterCard(
+            new boasdk.PublicKey("boa1xrdwry6fpk7a57k4gwyj3mwnf59w808nygtuxsgdrpmv4p7ua2hqx78z5en"),
+            new boasdk.PublicKey("boa1xzp770sxuswddged6rskm8y5cvk0g9an9mkfkqjeake0mmg2pfypxw2ch2x"),
+            "2021-07-14T00:21:50Z");
+        assert.deepStrictEqual(boasdk.hashFull(voter_card).toString(),
+            "0x4c06291fc7384fd760c562a35f637c87f6333153416ef6da4e0b547dcabedc4" +
+            "11350b5281286780b95d9dcb6496ea90622283508ea3e7b06a13ea2d909c09e91");
+    });
+
     it ('Test of Vote', () =>
     {
         // The seed key of the validator
@@ -69,7 +79,7 @@ describe ('Vote Data', () =>
         // The temporary KeyPair
         let temporary_key = boasdk.KeyPair.random();
 
-        let voter_card = new boasdk.VoterCard(validator_key.address, temporary_key.address, JSBI.BigInt(Date.now().valueOf()));
+        let voter_card = new boasdk.VoterCard(validator_key.address, temporary_key.address, "2021-04-15T00:00:00Z");
         voter_card.signature = validator_key.secret.sign<boasdk.VoterCard>(voter_card);
 
         assert.ok(voter_card.verify());
@@ -127,7 +137,7 @@ describe ('Vote Data', () =>
         let validator_key = boasdk.KeyPair.fromSeed(new boasdk.SecretKey(seed));
         // The temporary KeyPair
         let temporary_key = boasdk.KeyPair.random();
-        let voter_card = new boasdk.VoterCard(validator_key.address, temporary_key.address, JSBI.BigInt(Date.now().valueOf()));
+        let voter_card = new boasdk.VoterCard(validator_key.address, temporary_key.address, "2021-04-15T00:00:00Z");
         voter_card.signature = validator_key.secret.sign<boasdk.VoterCard>(voter_card);
 
         //  This is sample
@@ -143,7 +153,7 @@ describe ('Vote Data', () =>
         let ballot_bytes = new SmartBuffer();
         ballot_data.serialize(ballot_bytes);
 
-        assert.strictEqual(ballot_bytes.length, 273);
+        assert.strictEqual(ballot_bytes.length, 285);
     });
 
     it ('Test link data of ProposalFeeData', () =>
@@ -216,7 +226,7 @@ describe ('Vote Data', () =>
         // The temporary KeyPair
         let temporary_key = boasdk.KeyPair.fromSeed(new boasdk.SecretKey("SANGEY2BIMFZ3K3T3NWSVYBS65N55SZE7WBEVVXQFLLZI6GLZBKACO6G"));
 
-        let voter_card = new boasdk.VoterCard(validator_key.address, temporary_key.address, boasdk.JSBI.BigInt(10000000));
+        let voter_card = new boasdk.VoterCard(validator_key.address, temporary_key.address, "2021-04-15T00:00:00Z");
         voter_card.signature = validator_key.secret.sign<boasdk.VoterCard>(voter_card);
 
         let pre_image = new boasdk.Hash('0x0a8201f9f5096e1ce8e8de4147694940a57a188b78293a55144fc8777a774f2349b3a910fb1fb208514fb16deaf49eb05882cdb6796a81f913c6daac3eb74328');
@@ -230,7 +240,7 @@ describe ('Vote Data', () =>
 
         let link_data = ballot_data.getLinkData();
         let expected = {
-            payload: 'CEJBTExPVCAgBlZvdGVyYQxJRDEyMzQ1Njc4OTApmapMXuWYfDz6vBZlmCuUM6zby7i5F5cnZcgKGdWHDcQ5RVvGl6/kxbTFrSKdkwbnyCSISJw+l76oyJmY8Vncx0mYjWFV1big5setAqNd51Ay94fqSlwrBuOtBR0YA2VpyRX02J3If7S4/oCWmACYgDrsUNlQtYTrndUiTdejjcy998j5jTp0i3CIrH0dC2CeqzRrR4+UOedDv4I4ssC6Xg0p6ROTFg80fpamJbEDZDsi9IwtpwPpq9gRXxjZf7YTozv7JM9N69i4BhSa304GzQAP6uDBx9Tks3+kdFYEUG74lJ69wPJbF1edqb72bUc='
+            payload: 'CEJBTExPVCAgBlZvdGVyYQxJRDEyMzQ1Njc4OTApLiJ5n0+MzlHg5Uqz+nRlD7pzNaXdURBJy7SEcNxc3WtEOqLsJ2ReXOnFrSKdkwbnyCSISJw+l76oyJmY8Vncx0mYjWFV1big5setAqNd51Ay94fqSlwrBuOtBR0YA2VpyRX02J3If7S4FDIwMjEtMDQtMTVUMDA6MDA6MDBaAoR3zMbQrdFDVCZVO91GE/lmyK7DqeSD+kCM+KGdHQNlieKjkzQvqQxWBbPUoVTm20AfjYom48ZT4LqFJGxvbmQ0gWQYAaLEO0FR0kfGZtRyKDhNf0po8wNtC3mN9VroDEj4iyyhkk9bWg6Q9t53KWxwNehXQ0LpQrlwBSfcHs+q'
         };
 
         let deserialized_ballot_data = boasdk.BallotData.deserialize(SmartBuffer.fromBuffer(Buffer.from(link_data.payload, "base64")));
@@ -241,7 +251,6 @@ describe ('Vote Data', () =>
         assert.deepStrictEqual(boasdk.Encrypt.decrypt(ballot_data.ballot, key_encrypt), boasdk.Encrypt.decrypt(expected_ballot_data.ballot, key_encrypt));
         assert.deepStrictEqual(ballot_data.card.validator_address, expected_ballot_data.card.validator_address);
         assert.deepStrictEqual(ballot_data.card.address, expected_ballot_data.card.address);
-        assert.deepStrictEqual(ballot_data.card.expires, expected_ballot_data.card.expires);
         assert.deepStrictEqual(ballot_data.card.expires, expected_ballot_data.card.expires);
         assert.deepStrictEqual(ballot_data.sequence, expected_ballot_data.sequence);
     });

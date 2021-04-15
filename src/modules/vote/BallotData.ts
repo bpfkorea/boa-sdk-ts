@@ -15,10 +15,9 @@ import { PublicKey } from '../common/KeyPair';
 import { Signature } from '../common/Signature';
 import { VarInt } from '../utils/VarInt';
 import { Utils } from '../utils/Utils';
-import { hashFull } from '../common/Hash';
+import { hashPart } from '../common/Hash';
 import { LinkDataWithVoteData } from '../wallet/LinkData';
 
-import JSBI from 'jsbi';
 import { SmartBuffer } from 'smart-buffer';
 
 /**
@@ -41,7 +40,7 @@ export class VoterCard
     /**
      * timestamp unix epoch time
      */
-    public expires: JSBI;
+    public expires: string;
 
     /**
      * The signature, made using `validator_address`' private key
@@ -55,7 +54,7 @@ export class VoterCard
      * @param expires           timestamp unix epoch time
      * @param signature         The signature, made using `validator_address`' private key
      */
-    constructor (validator_address: PublicKey, address: PublicKey, expires: JSBI, signature?: Signature)
+    constructor (validator_address: PublicKey, address: PublicKey, expires: string, signature?: Signature)
     {
         this.validator_address = validator_address;
         this.address = address;
@@ -83,9 +82,7 @@ export class VoterCard
     {
         this.validator_address.computeHash(buffer);
         this.address.computeHash(buffer);
-        const buf = Buffer.allocUnsafe(8);
-        Utils.writeJSBigIntLE(buf, this.expires);
-        buffer.writeBuffer(buf);
+        hashPart(this.expires, buffer);
     }
 
     /**
@@ -96,7 +93,9 @@ export class VoterCard
     {
         buffer.writeBuffer(this.validator_address.data);
         buffer.writeBuffer(this.address.data);
-        VarInt.fromJSBI(this.expires, buffer);
+        let temp = Buffer.from(this.expires);
+        VarInt.fromNumber(temp.length, buffer);
+        buffer.writeBuffer(temp);
         buffer.writeBuffer(this.signature.data);
     }
 
@@ -109,7 +108,9 @@ export class VoterCard
     {
         let validator_address = new PublicKey(Utils.readBuffer(buffer, Utils.SIZE_OF_PUBLIC_KEY));
         let address = new PublicKey(Utils.readBuffer(buffer, Utils.SIZE_OF_PUBLIC_KEY));
-        let expires = VarInt.toJSBI(buffer);
+        let length = VarInt.toNumber(buffer);
+        let temp = Utils.readBuffer(buffer, length);
+        let expires = temp.toString();
         let signature = new Signature(Utils.readBuffer(buffer, Signature.Width));
 
         return new VoterCard(validator_address, address, expires, signature);
