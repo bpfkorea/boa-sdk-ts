@@ -12,6 +12,7 @@
 *******************************************************************************/
 
 import * as boasdk from '../lib';
+import { BOASodium } from "boa-sodium-ts";
 
 import * as assert from 'assert';
 import { SmartBuffer } from 'smart-buffer';
@@ -64,6 +65,7 @@ describe ('Test of Utils', () =>
 {
     before('Wait for the package libsodium to finish loading', async () =>
     {
+        boasdk.SodiumHelper.assign(new BOASodium());
         await boasdk.SodiumHelper.init();
     });
 

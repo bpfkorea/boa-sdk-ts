@@ -14,7 +14,6 @@
 import { JSONValidator } from '../utils/JSONValidator';
 import { PublicKey } from '../common/KeyPair';
 import { Utils } from "../utils/Utils";
-import { SodiumHelper } from '../utils/SodiumHelper';
 import { Lock } from '../script/Lock';
 
 import JSBI from 'jsbi';

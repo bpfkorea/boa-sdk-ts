@@ -12,6 +12,7 @@
 
 *******************************************************************************/
 
+export { IBOASodium } from 'boa-sodium-base-ts';
 export { Hash, hash, hashMulti, makeUTXOKey, hashFull, hashPart } from './modules/common/Hash';
 export { Height } from './modules/common/Height';
 export { KeyPair, PublicKey, SecretKey } from './modules/common/KeyPair';

@@ -12,6 +12,7 @@
 *******************************************************************************/
 
 import * as boasdk from '../lib';
+import { BOASodium } from "boa-sodium-ts";
 
 import * as assert from 'assert';
 
@@ -158,6 +159,7 @@ describe ('Test that JSON.stringify of Transaction', () =>
 {
     before('Wait for the package libsodium to finish loading', () =>
     {
+        boasdk.SodiumHelper.assign(new BOASodium());
         return boasdk.SodiumHelper.init();
     });
 

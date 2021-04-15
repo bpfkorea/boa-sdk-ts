@@ -12,6 +12,7 @@
 *******************************************************************************/
 
 import * as sdk from '../lib';
+import { BOASodium } from "boa-sodium-ts";
 
 import * as assert from 'assert';
 
@@ -19,6 +20,7 @@ describe ('Test of ECC', () =>
 {
     before('Wait for the package libsodium to finish loading', () =>
     {
+        sdk.SodiumHelper.assign(new BOASodium());
         return sdk.SodiumHelper.init();
     });
 

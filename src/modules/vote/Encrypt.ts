@@ -33,9 +33,8 @@ export class Encrypt
     {
         let key_proposal = hashMulti(first_key, Buffer.from(proposal_id));
         let key_size = SodiumHelper.sodium.crypto_aead_xchacha20poly1305_ietf_KEYBYTES;
-        let state = SodiumHelper.sodium.crypto_generichash_init(null, key_size);
-        SodiumHelper.sodium.crypto_generichash_update(state, key_proposal.data);
-        return SodiumHelper.sodium.crypto_generichash_final(state, key_size);
+
+        return Buffer.from(SodiumHelper.sodium.crypto_generichash(key_size, key_proposal.data));
     }
 
     /**

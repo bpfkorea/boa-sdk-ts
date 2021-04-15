@@ -12,6 +12,7 @@
 *******************************************************************************/
 
 import * as boasdk from '../lib';
+import { BOASodium } from "boa-sodium-ts";
 
 import * as assert from 'assert';
 import { base32Encode, base32Decode } from '@ctrl/ts-base32';
@@ -21,6 +22,7 @@ describe ('Public Key', () =>
 {
     before('Wait for the package libsodium to finish loading', () =>
     {
+        boasdk.SodiumHelper.assign(new BOASodium());
         return boasdk.SodiumHelper.init();
     });
 
@@ -177,6 +179,7 @@ describe ('Secret Key', () =>
 {
     before('Wait for the package libsodium to finish loading', () =>
     {
+        boasdk.SodiumHelper.assign(new BOASodium());
         return boasdk.SodiumHelper.init();
     });
 
@@ -206,6 +209,7 @@ describe ('KeyPair', () =>
 {
     before('Wait for the package libsodium to finish loading', () =>
     {
+        boasdk.SodiumHelper.assign(new BOASodium());
         return boasdk.SodiumHelper.init();
     });
 

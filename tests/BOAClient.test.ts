@@ -12,6 +12,7 @@
 *******************************************************************************/
 
 import * as boasdk from '../lib';
+import { BOASodium } from 'boa-sodium-ts';
 
 import * as assert from 'assert';
 import axios from 'axios';
@@ -722,6 +723,7 @@ describe('BOA Client', () => {
 
     before('Wait for the package libsodium to finish loading', async () =>
     {
+        boasdk.SodiumHelper.assign(new BOASodium());
         await boasdk.SodiumHelper.init();
     });
 
@@ -919,7 +921,7 @@ describe('BOA Client', () => {
 
         let pre_images: boasdk.Hash[] = [];
 
-        pre_images.push(boasdk.hash(boasdk.SodiumHelper.sodium.randombytes_buf(boasdk.Hash.Width)));
+        pre_images.push(boasdk.hash(Buffer.from(boasdk.SodiumHelper.sodium.randombytes_buf(boasdk.Hash.Width))));
         for (let idx = 0; idx < 20; idx++) {
             pre_images.push(boasdk.hash(pre_images[idx].data))
         }
