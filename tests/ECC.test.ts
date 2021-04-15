@@ -48,7 +48,7 @@ describe ('Test of ECC', () =>
     {
         let message = "BOSAGORA for the win";
         let c = sdk.Scalar.fromHash(sdk.hashFull(message));  // challenge
-        assert.strictEqual(c.toString(false), "0x076f92828116e289bb7889b38d6acfa23f04291024c03dfb5265c23894613b18");
+        assert.strictEqual(c.toString(false), "0x07c51164f99d03f143cfafdfb8638826b87f86c73b82180c33cfb11dbaba1df3");
     });
 
     it ('Test of Scalar function', () =>

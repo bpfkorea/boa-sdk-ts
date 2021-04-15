@@ -198,7 +198,9 @@ export function hashPart (record: any, buffer: SmartBuffer)
 
     if (typeof record === "string")
     {
-        buffer.writeBuffer(Buffer.from(record));
+        let buf = Buffer.from(record);
+        hashVarInt(JSBI.BigInt(buf.length), buffer);
+        buffer.writeBuffer(buf);
         return;
     }
 
