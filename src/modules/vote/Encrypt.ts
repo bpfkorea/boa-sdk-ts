@@ -45,7 +45,7 @@ export class Encrypt
     public static encrypt (message: Buffer, key: Buffer): Buffer
     {
         let public_nonce_size = SodiumHelper.sodium.crypto_aead_xchacha20poly1305_ietf_NPUBBYTES;
-        let public_nonce = SodiumHelper.sodium.randombytes_buf(public_nonce_size)
+        let public_nonce = Buffer.from(SodiumHelper.sodium.randombytes_buf(public_nonce_size));
 
         let cipher = Buffer.from(SodiumHelper.sodium.crypto_aead_xchacha20poly1305_ietf_encrypt(
             message,
