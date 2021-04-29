@@ -24,7 +24,6 @@ import { ITxHistoryElement, ITxOverview, IPendingTxs } from './response/Types';
 import { Transaction } from '../data/Transaction';
 import { handleNetworkError } from './error/ErrorTypes';
 import { TxPayloadFee } from '../utils/TxPayloadFee';
-import { BallotData } from '../vote/BallotData';
 
 import { AxiosResponse } from 'axios';
 import uri from 'urijs';

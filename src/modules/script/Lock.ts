@@ -38,7 +38,7 @@
 import { hashPart } from '../common/Hash';
 import { PublicKey } from '../common/KeyPair';
 import { Signature } from '../common/Signature';
-import { JSONValidator } from '../..';
+import { JSONValidator } from '../utils/JSONValidator';
 import { Utils } from "../utils/Utils";
 
 import { SmartBuffer } from 'smart-buffer';
