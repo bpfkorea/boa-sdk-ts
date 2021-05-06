@@ -124,11 +124,15 @@ export class JSONValidator
             "DataPayload",
             {
                 "title": "DataPayload",
-                "type": "string",
+                "type": "object",
+                "properties": {
+                    "bytes": {
+                        "type": "string"
+                    }
+                },
                 "additionalProperties": false,
-                "required": []
+                "required": ["bytes"]
             }
-
         ],
         [
             "Enrollment",
@@ -197,7 +201,7 @@ export class JSONValidator
                         "type": "array"
                     },
                     "payload": {
-                        "type": "string"
+                        "type": "object"
                     },
                     "lock_height": {
                         "type": "string"

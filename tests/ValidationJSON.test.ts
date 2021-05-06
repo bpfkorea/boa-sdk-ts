@@ -27,7 +27,7 @@ describe ('Test that validation with JSON schema', () =>
             ("Transaction", {
                 "inputs": [],
                 "outputs": [],
-                "payload": "",
+                "payload": {"bytes": ""},
                 "lock_height": "0"
             });
         }, new Error("Validation failed: Transaction" +
@@ -41,7 +41,7 @@ describe ('Test that validation with JSON schema', () =>
                 "type": 1,
                 "inputs": {},
                 "outputs": [],
-                "payload": "",
+                "payload": {"bytes": ""},
                 "lock_height": "0"
             });
         }, new Error("Validation failed: Transaction - should be array"));
@@ -51,7 +51,7 @@ describe ('Test that validation with JSON schema', () =>
         ("Transaction", {
             "inputs": [],
             "outputs": [],
-            "payload": "",
+            "payload": {"bytes": ""},
             "lock_height": "0"
         }));
 
@@ -61,7 +61,7 @@ describe ('Test that validation with JSON schema', () =>
             "type": 1,
             "inputs": {},
             "outputs": [],
-            "payload": "",
+            "payload": {"bytes": ""},
             "lock_height": "0"
         }));
 
@@ -77,7 +77,7 @@ describe ('Test that validation with JSON schema', () =>
                     "lock": {"type": 0, "bytes": "KkpengSTntVIh037afPquSSwuq/KlbhEr/ydUPM4no4="}
                 }
             ],
-            "payload": "",
+            "payload": {"bytes": ""},
             "lock_height": "0"
         }));
 
@@ -102,7 +102,7 @@ describe ('Test that validation with JSON schema', () =>
                     }
                 }
             ],
-            "payload": "",
+            "payload": {"bytes": ""},
             "lock_height": "0"
         }));
 
@@ -182,9 +182,9 @@ describe ('Test that JSON.stringify of Transaction', () =>
                     new boasdk.PublicKey("boa1xrgr66gdm5je646x70l5ar6qkhun0hg3yy2eh7tf8xxlmlt9fgjd2q0uj8p")
                 )
             ],
-            new boasdk.DataPayload("0x0001")
+            new boasdk.DataPayload("YXRhZCBldG92")
         )
         assert.strictEqual(JSON.stringify(tx),
-            `{"type":0,"inputs":[{"utxo":"0xd9482016835acc6defdfd060216a5890e00cf8f0a79ab0b83d3385fc723cd45bfea66eb3587a684518ff1756951d38bf4f07abda96dcdea1c160a4f83e377c32","unlock":{"bytes":"vaX+wxScBr2KIsPgKzku9kkGrfuQI8ar1eXWn9LoHxfWrLOmnliHjkGOGWk+QJ7urnpz9lRENrCMv9gsQZ4DCQ=="},"unlock_age":0}],"outputs":[{"value":"1663400000","lock":{"type":0,"bytes":"xOYx2v6aWx69nACIFINcMrCytXJmcWy99/N+ZlGEIWM="}},{"value":"24398336600000","lock":{"type":0,"bytes":"0D1pDd0lnVdG8/9Oj0C1+TfdESEVm/lpOY39/WVKJNU="}}],"payload":"0x0001","lock_height":"0"}`);
+            `{"type":0,"inputs":[{"utxo":"0xd9482016835acc6defdfd060216a5890e00cf8f0a79ab0b83d3385fc723cd45bfea66eb3587a684518ff1756951d38bf4f07abda96dcdea1c160a4f83e377c32","unlock":{"bytes":"vaX+wxScBr2KIsPgKzku9kkGrfuQI8ar1eXWn9LoHxfWrLOmnliHjkGOGWk+QJ7urnpz9lRENrCMv9gsQZ4DCQ=="},"unlock_age":0}],"outputs":[{"value":"1663400000","lock":{"type":0,"bytes":"xOYx2v6aWx69nACIFINcMrCytXJmcWy99/N+ZlGEIWM="}},{"value":"24398336600000","lock":{"type":0,"bytes":"0D1pDd0lnVdG8/9Oj0C1+TfdESEVm/lpOY39/WVKJNU="}}],"payload":{"bytes":"YXRhZCBldG92"},"lock_height":"0"}`);
     });
 });

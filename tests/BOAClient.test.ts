@@ -197,7 +197,7 @@ let sample_tx = {
             }
         }
     ],
-    "payload": "",
+    "payload": {"bytes": ""},
     "lock_height": "0"
 };
 
@@ -1068,7 +1068,7 @@ describe('BOA Client', () => {
         let builder = new boasdk.TxBuilder(
             boasdk.KeyPair.fromSeed(new boasdk.SecretKey("SD4IEXJ6GWZ226ALTDDM72SYMHBTTJ6CHDPUNNTVZK4XSDHAM4BAQIC4")));
 
-        let vote_data = new boasdk.DataPayload("0x617461642065746f76");
+        let vote_data = new boasdk.DataPayload("YXRhZCBldG92");
         let fee = boasdk.TxPayloadFee.getFee(vote_data.data.length);
 
         let vote_tx =
@@ -1121,7 +1121,7 @@ describe('BOA Client', () => {
                     }
                 }
             ],
-            "payload": "0x617461642065746f76",
+            "payload": {"bytes": "YXRhZCBldG92"},
             "lock_height": "0"
         };
 
@@ -1157,7 +1157,7 @@ describe('BOA Client', () => {
                 "4ec66b2d70ddf407b8196b46bc1dfe42061c7497"),
             amount : JSBI.BigInt(100000000)
         };
-        let vote_data = new boasdk.DataPayload("0x617461642065746f76");
+        let vote_data = new boasdk.DataPayload("YXRhZCBldG92");
         let fee = boasdk.TxPayloadFee.getFee(vote_data.data.length);
 
         let builder = new boasdk.TxBuilder(
@@ -1185,7 +1185,7 @@ describe('BOA Client', () => {
         let block_height = await boa_client.getBlockHeight();
         let utxos = await boa_client.getUTXOs(key_pair.address);
 
-        let vote_data = new boasdk.DataPayload("0x617461642065746f76");
+        let vote_data = new boasdk.DataPayload("YXRhZCBldG92");
         let payload_fee = boasdk.TxPayloadFee.getFee(vote_data.data.length);
         let tx_fee = JSBI.BigInt(0);
 
@@ -1232,7 +1232,7 @@ describe('BOA Client', () => {
                         }
                     }
                 ],
-                "payload": "0x617461642065746f76",
+                "payload": {"bytes": "YXRhZCBldG92"},
                 "lock_height": "0"
             };
 
@@ -1266,7 +1266,7 @@ describe('BOA Client', () => {
         let block_height = await boa_client.getBlockHeight();
         let utxos = await boa_client.getUTXOs(key_pair.address);
 
-        let vote_data = new boasdk.DataPayload("0x617461642065746f76");
+        let vote_data = new boasdk.DataPayload("YXRhZCBldG92");
         let payload_fee = JSBI.BigInt(200000);
         let tx_fee = JSBI.BigInt(0);
 
@@ -1300,7 +1300,7 @@ describe('BOA Client', () => {
         let block_height = await boa_client.getBlockHeight();
         let utxos = await boa_client.getUTXOs(key_pair.address);
 
-        let vote_data = new boasdk.DataPayload("0x617461642065746f76");
+        let vote_data = new boasdk.DataPayload("YXRhZCBldG92");
         let payload_fee = JSBI.BigInt(200000);
         let tx_fee = JSBI.BigInt(0);
 
@@ -1345,7 +1345,7 @@ describe('BOA Client', () => {
                         }
                     }
                 ],
-                "payload": "0x617461642065746f76",
+                "payload": {"bytes": "YXRhZCBldG92"},
                 "lock_height": "0"
             };
 
@@ -1404,7 +1404,7 @@ describe('BOA Client', () => {
         let block_height = await boa_client.getBlockHeight();
         let utxos = await boa_client.getUTXOs(key_pair.address);
 
-        let vote_data = new boasdk.DataPayload("0x617461642065746f76");
+        let vote_data = new boasdk.DataPayload("YXRhZCBldG92");
         let payload_fee = boasdk.TxPayloadFee.getFee(vote_data.data.length);
 
         let builder = new boasdk.TxBuilder(key_pair);
@@ -1487,35 +1487,35 @@ describe('BOA Client', () => {
                 {
                     "utxo": "0x3451d94322524e3923fd26f0597fb8a9cdbf3a9427c38ed1ca61104796d39c5b9b5ea33d576f17c2dc17bebc5d84a0559de8c8c521dfe725d4c352255fc71e85",
                     "unlock": {
-                        "bytes": "4qgxRsfgLCaBKDVw9KJM/BfKb8tJX41s8WgxcNCAUq83APZtIxyVYs2Te//osUEAFhcpTSagF1zglG/myF4+Bg=="
+                        "bytes": "jKVq2VTBXnfyyEuLT7cvYdGM2NAyNC+zlmIh0UFdrwvAie7Ij343BgsC+86wWOZlc3QqUegTYkjRg4NkjiV5og=="
                     },
                     "unlock_age": 0
                 },
                 {
                     "utxo": "0xfca92fe76629311c6208a49e89cb26f5260777278cd8b272e7bb3021adf429957fd6844eb3b8ff64a1f6074126163fd636877fa92a1f4329c5116873161fbaf8",
                     "unlock": {
-                        "bytes": "mqMB1bLL0PXTEB80TuMh5mBPllHNW/EF1EkAyE8lQbIOFhr44s3wCpS5unUdDPeDgZoMOzuqFc7S7OTkG/hUDg=="
+                        "bytes": "sriR4UDqSQJhiYz1ar8qpdX3WJ2dRzxJ9m3MY+7NuwH9bF2SGGpvF+GhuwITXNuA9IKJ2ChzOFcEnCaHkuEcRw=="
                     },
                     "unlock_age": 0
                 },
                 {
                     "utxo": "0x7e1958dbe6839d8520d65013bbc85d36d47a9f64cf608cc66c0d816f0b45f5c8a85a8990725ffbb1ab13c3c65b45fdc06f4745d455e00e1068c4c5c0b661d685",
                     "unlock": {
-                        "bytes": "0hwN3QwAtBXXNrd6YwP5CNLZcKsr+1SkARXwqNCiHeBgRqzELLoVpOEVuTGfEh7fmnsb8zUc2qfSybH75T78Cg=="
+                        "bytes": "AT0s1ZkCPnuFRaoLK8mH303uO/23WbBwYo6jnhzRAgAqD15TOuVNYhwf/Ah8ulmQ3LimvKqPVfDZi3J6dqUvgA=="
                     },
                     "unlock_age": 0
                 },
                 {
                     "utxo": "0xd44608de8a5015b04f933098fd7f67f84ffbf00c678836d38c661ab6dc1f149606bdc96bad149375e16dc5722b077b14c0a4afdbe6d30932f783650f435bcb92",
                     "unlock": {
-                        "bytes": "61WpwyBIJeYArr26pv2S1QhxTiraQwvt+Gn9xWFhge11uZ2tQYu3eiw8UZ4KRKmQGlymRqfpY+bKwIJDJKVQDQ=="
+                        "bytes": "gfoyNGdkhlHuPLLNMS2ABrGeWmuItR83MsDCbCO35AAusghrY1xeu3/rLe0nDOi9Yaj8bsZ42uJONJPQgEJPtg=="
                     },
                     "unlock_age": 0
                 },
                 {
                     "utxo": "0xc3780f9907a97c20a2955945544e7732a60702c32d81e016bdf1ea172b7b7fb96e9a4164176663a146615307aaadfbbad77e615a7c792a89191e85471120d314",
                     "unlock": {
-                        "bytes": "csSLViq4Dz7pc01erw3vkBHQObfJSiFtxSBgoAiitHy31NrZaeArFYEZle7oDDvH8J+RrRXgI4bKRSRap5axCQ=="
+                        "bytes": "MqXWkwsgyOxtf/n6ZTp5Z0/Um8qhYZ4DV/hza03IIgLvqQEw7smrEK+oLEIE5OqOWhOrb53BkSQxfHpxZNoXZg=="
                     },
                     "unlock_age": 0
                 }
@@ -1536,7 +1536,7 @@ describe('BOA Client', () => {
                     }
                 }
             ],
-            "payload": "0x617461642065746f76",
+            "payload": {"bytes": "YXRhZCBldG92"},
             "lock_height": "0"
         };
 

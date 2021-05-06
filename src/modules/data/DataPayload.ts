@@ -35,7 +35,7 @@ export class DataPayload
     constructor (data: Buffer | string, endian: Endian = Endian.Big)
     {
         if (typeof data === 'string')
-            this.data = Utils.readFromString(data, undefined, endian);
+            this.data = Buffer.from(data, "base64");
         else
             this.data = this.fromBinary(data, endian).data;
     }
@@ -57,27 +57,27 @@ export class DataPayload
 
         JSONValidator.isValidOtherwiseThrow('DataPayload', value);
 
-        return new DataPayload(value);
+        return new DataPayload(value.bytes);
     }
 
     /**
-     * Reads from the hex string
-     * @param hex The hex string
+     * Reads from the base64 string
+     * @param data The base64 string
      * @returns The instance of DataPayload
      */
-    public fromString (hex: string): DataPayload
+    public fromString (data: string): DataPayload
     {
-        this.data = Utils.readFromString(hex);
+        this.data = Buffer.from(data, "base64");
         return this;
     }
 
     /**
-     * Writes to the hex string
-     * @returns The hex string
+     * Writes to the base64 string
+     * @returns The base64 string
      */
     public toString (): string
     {
-        return Utils.writeToString(this.data, Endian.Big);
+        return this.data.toString("base64");
     }
 
     /**
@@ -120,9 +120,11 @@ export class DataPayload
     /**
      * Converts this object to its JSON representation
      */
-    public toJSON (key?: string): string
+    public toJSON (key?: string): any
     {
-        return this.toString();
+        return {
+            bytes: this.data.toString("base64")
+        };
     }
 
     /**
