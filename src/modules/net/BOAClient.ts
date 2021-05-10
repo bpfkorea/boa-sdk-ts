@@ -20,7 +20,7 @@ import { Request } from './Request';
 import { UnspentTxOutput } from './response/UnspentTxOutput';
 import { Validator } from './response/Validator';
 import { TransactionFee } from './response/TrasactionFee';
-import { ITxHistoryElement, ITxOverview, IPendingTxs } from './response/Types';
+import { ITxHistoryElement, ITxOverview, IPendingTxs, ISPVStatus } from './response/Types';
 import { Transaction } from '../data/Transaction';
 import { handleNetworkError } from './error/ErrorTypes';
 import { TxPayloadFee } from '../utils/TxPayloadFee';
@@ -537,6 +537,34 @@ export class BOAClient
             {
                 reject(error);
             }
+        });
+    }
+
+    /**
+     * Simple verify payment
+     * Check if the transaction is stored in a block.
+     * And check if Merkle's proof is valid.
+     * @param tx_hash The hash of the transaction
+     * @returns Promise that resolves or
+     * rejects with response from the Stoa
+     */
+    public verifyPayment (tx_hash: Hash): Promise<ISPVStatus>
+    {
+        return new Promise<ISPVStatus>((resolve, reject) =>
+        {
+            let url = uri(this.server_url)
+                .directory("spv")
+                .filename(tx_hash.toString());
+
+            Request.get(url.toString())
+                .then((response: AxiosResponse) =>
+                {
+                    resolve(response.data);
+                })
+                .catch((reason: any) =>
+                {
+                    reject(handleNetworkError(reason));
+                });
         });
     }
 }

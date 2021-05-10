@@ -160,3 +160,19 @@ export interface IPendingTxs
     amount: string;
     fee: string;
 }
+
+/**
+ * The interface of the SPV status
+ */
+export interface ISPVStatus
+{
+    /**
+     * True or false
+     */
+    result: boolean;
+
+    /**
+     * The message
+     */
+    message: string;
+}

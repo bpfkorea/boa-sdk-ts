@@ -366,6 +366,12 @@ let sample_txs_pending =
         }
     ];
 
+let sample_spv =
+    {
+        result: true,
+        message: "Success"
+    }
+
 /**
  * This allows data transfer and reception testing with the server.
  * When this is executed, the local web server is run,
@@ -612,6 +618,25 @@ export class TestStoa {
                 {
                     res.status(200).send(JSON.stringify(sample_tx));
                 }
+            });
+
+        this.app.get("/spv/:hash",
+            (req: express.Request, res: express.Response) => {
+
+                let hash: string = String(req.params.hash);
+
+                let tx_hash: boasdk.Hash;
+                try
+                {
+                    tx_hash = new boasdk.Hash(hash);
+                }
+                catch (error)
+                {
+                    res.status(400).send(`Invalid value for parameter 'hash': ${hash}`);
+                    return;
+                }
+
+                res.status(200).send(JSON.stringify(sample_spv));
             });
 
         this.app.set('port', this.port);
@@ -1614,5 +1639,26 @@ describe('BOA Client', () => {
         let fee = await boa_client.getVotingFee(273);
 
         assert.deepStrictEqual(fee, JSBI.BigInt(29310000));
+    });
+
+    it ('Verify the payment', async () =>
+    {
+        // Set URL
+        let stoa_uri = URI("http://localhost").port(stoa_port);
+        let agora_uri = URI("http://localhost").port(agora_port);
+
+        // Create BOA Client
+        let boa_client = new boasdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
+
+        let tx_hash = new boasdk.Hash(
+            "0x4c1d71415c9ec7b182438e8bb669e324dde9be93b9c223a2ca831689d2e9598" +
+            "c628d07c84d3ee0941e9f6fb597faf4fe92518fa35e577ba12125919c0501d4bd");
+        let status = await boa_client.verifyPayment(tx_hash);
+
+        let expected = {
+            result: true,
+            message: "Success"
+        }
+        assert.deepStrictEqual(status, expected);
     });
 });
