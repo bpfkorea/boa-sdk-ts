@@ -276,21 +276,13 @@ export class BOAClient
             .then((response: AxiosResponse) =>
             {
                 let utxos: Array<UnspentTxOutput> = new Array<UnspentTxOutput>();
-                if (response.status == 200)
+                response.data.forEach((elem: any) =>
                 {
-                    response.data.forEach((elem: any) =>
-                    {
-                        let utxo = new UnspentTxOutput();
-                        utxo.fromJSON(elem);
-                        utxos.push(utxo);
-                    });
-                    resolve(utxos);
-                }
-                else
-                {
-                    // It is not yet defined in Stoa.
-                    reject(handleNetworkError({response: response}));
-                }
+                    let utxo = new UnspentTxOutput();
+                    utxo.fromJSON(elem);
+                    utxos.push(utxo);
+                });
+                resolve(utxos);
             })
             .catch((reason: any) =>
             {
@@ -389,15 +381,7 @@ export class BOAClient
             Request.get(url.toString())
                 .then((response: AxiosResponse) =>
                 {
-                    if (response.status == 200)
-                    {
-                        resolve(response.data);
-                    }
-                    else
-                    {
-                        // It is not yet defined in Stoa.
-                        reject(handleNetworkError({response: response}));
-                    }
+                    resolve(response.data);
                 })
                 .catch((reason: any) =>
                 {
@@ -453,15 +437,7 @@ export class BOAClient
             Request.get(url.toString())
                 .then((response: AxiosResponse) =>
                 {
-                    if (response.status == 200)
-                    {
-                        resolve(response.data);
-                    }
-                    else
-                    {
-                        // It is not yet defined in Stoa.
-                        reject(handleNetworkError({response: response}));
-                    }
+                    resolve(response.data);
                 })
                 .catch((reason: any) =>
                 {
