@@ -24,7 +24,7 @@ const samples: Array<any> =
     })();
 
 
-describe ('Test of Stoa API Server', () =>
+describe ('Test of Block', () =>
 {
     before ('Wait for the package libsodium to finish loading', async () =>
     {
@@ -46,5 +46,24 @@ describe ('Test of Stoa API Server', () =>
         // Test for block header hash
         for (let idx = 0; idx < blocks.length-1; idx++)
             assert.deepStrictEqual(sdk.hashFull(blocks[idx].header), blocks[idx+1].header.prev_block);
+    });
+});
+
+
+describe ('Test of PreImageInfo', () =>
+{
+    const sample_data =
+    {
+        "utxo": "0x2f8b231aa4fd35c6a5c68a97fed32120da48cf6d40ccffc93d8dc41a3016eb56434b2c44144a38efe459f98ddc2660b168f1c92a48fe65711173385fb4a269e1",
+        "hash": "0x790ab7c8f8ddbf012561e70c944c1835fd1a873ca55c973c828164906f8b35b924df7bddcafade688ad92cfb4414b2cf69a02d115dc214bbd00d82167f645e7e",
+        "distance": 6
+    };
+
+    it ('Test sample pre_image', () =>
+    {
+        let pre_image = sdk.PreImageInfo.reviver("", sample_data);
+
+        // Test for JSON serialization
+        assert.deepStrictEqual(JSON.stringify(pre_image), JSON.stringify(sample_data));
     });
 });
