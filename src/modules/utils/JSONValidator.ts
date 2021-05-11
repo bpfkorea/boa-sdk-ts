@@ -166,12 +166,12 @@ export class JSONValidator
                     "hash": {
                         "type": "string"
                     },
-                    "distance": {
-                        "type": "integer"
+                    "height": {
+                        "type": "string"
                     }
                 },
                 "additionalProperties": false,
-                "required": ["utxo", "hash", "distance"]
+                "required": ["utxo", "hash", "height"]
             }
 
         ],

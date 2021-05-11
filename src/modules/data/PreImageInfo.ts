@@ -13,6 +13,7 @@
 
 import { JSONValidator } from '../utils/JSONValidator';
 import { Hash } from '../common/Hash';
+import { Height } from '../common/Height';
 
 /**
  * The class that defines the preImageInfo.
@@ -32,22 +33,22 @@ export class PreImageInfo
     public hash: Hash;
 
     /**
-     * Distance from the enrollment, 0 based
+     * The Height of the block that this pre-image is for
      */
-    public distance: number;
+    public height: Height;
 
     /**
      * Construct a new instance of this object
      *
      * @param utxo       The UTXO used to enroll
      * @param hash       The value of the pre-image
-     * @param distance   The distance from the Enrollment
+     * @param height     The Height of the block that this pre-image is for
      */
-    constructor (utxo: Hash, hash: Hash, distance: number)
+    constructor (utxo: Hash, hash: Hash, height: Height)
     {
         this.utxo = utxo;
         this.hash = hash;
-        this.distance = distance;
+        this.height = height;
     }
 
     /**
@@ -68,6 +69,6 @@ export class PreImageInfo
         JSONValidator.isValidOtherwiseThrow('PreImageInfo', value);
 
         return new PreImageInfo(
-            new Hash(value.utxo), new Hash(value.hash), Number(value.distance));
+            new Hash(value.utxo), new Hash(value.hash), new Height(value.height));
     }
 }

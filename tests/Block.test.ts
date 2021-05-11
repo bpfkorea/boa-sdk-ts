@@ -56,7 +56,7 @@ describe ('Test of PreImageInfo', () =>
     {
         "utxo": "0x2f8b231aa4fd35c6a5c68a97fed32120da48cf6d40ccffc93d8dc41a3016eb56434b2c44144a38efe459f98ddc2660b168f1c92a48fe65711173385fb4a269e1",
         "hash": "0x790ab7c8f8ddbf012561e70c944c1835fd1a873ca55c973c828164906f8b35b924df7bddcafade688ad92cfb4414b2cf69a02d115dc214bbd00d82167f645e7e",
-        "distance": 6
+        "height": "6"
     };
 
     it ('Test sample pre_image', () =>
