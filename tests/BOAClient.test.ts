@@ -33,7 +33,7 @@ let sample_validators =
             "stake": "0x210b66053c73e7bd7b27673706f0272617d09b8cda76605e91ab66ad1cc3bfc1f3f5fede91fd74bb2d2073de587c6ee495cfb0d981f03a83651b48ce0e576a1a",
             "preimage":
                 {
-                    "distance": 1,
+                    "height": "1",
                     "hash": "0"
                 }
         },
@@ -43,7 +43,7 @@ let sample_validators =
             "stake": "0x86f1a6dff3b1f2256d2417b71ecc5511293b224894da5fd75c192965aa1874824ca777ecac678c871e717ad38c295046f4f64130f31750aa967c30c35529944a",
             "preimage":
                 {
-                    "distance": 1,
+                    "height": "1",
                     "hash": "0"
                 }
         },
@@ -53,7 +53,7 @@ let sample_validators =
             "stake": "0xf21f606e96d6130b02a807655fda22c8888111f2045c0d45eda9c26d3c97741ca32fc68960ae68220809843d92671083e32395a848203380e5dfd46e4b0261f0",
             "preimage":
                 {
-                    "distance": 1,
+                    "height": "1",
                     "hash": "0"
                 }
         }
@@ -424,7 +424,7 @@ export class TestStoa {
                 if (Number.isNaN(height)) height = enrolled_height;
 
                 for (let elem of sample_validators) {
-                    elem.preimage.distance = height - enrolled_height;
+                    elem.preimage.height = (height - enrolled_height).toString();
                 }
 
                 res.status(200).send(JSON.stringify(sample_validators));
@@ -446,7 +446,7 @@ export class TestStoa {
 
                 for (let elem of sample_validators) {
                     if (elem.address == address) {
-                        elem.preimage.distance = height - enrolled_height;
+                        elem.preimage.height = (height - enrolled_height).toString();
                         res.status(200).send(JSON.stringify([elem]));
                         return;
                     }
@@ -787,7 +787,7 @@ describe('BOA Client', () => {
         let response = await client.get (stoa_uri.toString());
         assert.strictEqual(response.data.length, 1);
         assert.strictEqual(response.data[0].address, "boa1xrp66va5qe84kyfhywhxz9luy7glpxu99n30cuv3mu0vkhcswuzajgak3pw");
-        assert.strictEqual(response.data[0].preimage.distance, 10);
+        assert.strictEqual(response.data[0].preimage.height, "10");
     });
 
     it ('Test a function of the BOA Client - `getAllValidators`', async () =>
@@ -803,7 +803,7 @@ describe('BOA Client', () => {
         let validators = await boa_client.getAllValidators(10);
         assert.strictEqual(validators.length, 3);
         assert.strictEqual(validators[0].address, "boa1xrq66nug6wnen9sp5cm7xhfw03yea8e9x63ggay3v5dhe6d9jerqz50eld0");
-        assert.strictEqual(validators[0].preimage.distance, 10);
+        assert.strictEqual(validators[0].preimage.height, "10");
     });
 
     it ('Test a function of the BOA Client - `getAllValidator`', async () =>
@@ -819,7 +819,7 @@ describe('BOA Client', () => {
         let validators = await boa_client.getValidator("boa1xrq66nug6wnen9sp5cm7xhfw03yea8e9x63ggay3v5dhe6d9jerqz50eld0", 10);
         assert.strictEqual(validators.length, 1);
         assert.strictEqual(validators[0].address, "boa1xrq66nug6wnen9sp5cm7xhfw03yea8e9x63ggay3v5dhe6d9jerqz50eld0");
-        assert.strictEqual(validators[0].preimage.distance, 10);
+        assert.strictEqual(validators[0].preimage.height, "10");
     });
 
     it ('Test a function of the BOA Client - `getUtxo`', async () =>
@@ -867,7 +867,7 @@ describe('BOA Client', () => {
         let validators = await boa_client.getAllValidators(10);
         assert.strictEqual(validators.length, 3);
         assert.strictEqual(validators[0].address, "boa1xrq66nug6wnen9sp5cm7xhfw03yea8e9x63ggay3v5dhe6d9jerqz50eld0");
-        assert.strictEqual(validators[0].preimage.distance, 10);
+        assert.strictEqual(validators[0].preimage.height, "10");
     });
 
     it('Test a function of the BOA Client using async, await - `getAllValidator`', async () => {
@@ -882,7 +882,7 @@ describe('BOA Client', () => {
         let validators = await boa_client.getValidator("boa1xrq66nug6wnen9sp5cm7xhfw03yea8e9x63ggay3v5dhe6d9jerqz50eld0", 10);
         assert.strictEqual(validators.length, 1);
         assert.strictEqual(validators[0].address, "boa1xrq66nug6wnen9sp5cm7xhfw03yea8e9x63ggay3v5dhe6d9jerqz50eld0");
-        assert.strictEqual(validators[0].preimage.distance, 10);
+        assert.strictEqual(validators[0].preimage.height, "10");
     });
 
     it ('When none of the data exists as a result of the inquiry.', async () =>

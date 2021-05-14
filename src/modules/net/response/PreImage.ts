@@ -20,21 +20,21 @@ import { Utils } from '../../utils/Utils';
 export class PreImage
 {
     /**
-     * The value of the pre-image at the distance from the commitment
+     * The value of the pre-image at the height from Genesis
      */
     hash: Hash;
 
     /**
-     * The distance between this pre-image and the initial commitment
+     * The Height of the block that this pre-image is for
      */
-    distance: number;
+    height: string;
 
     /**
      * Constructor
-     * @param h The value of the pre-image at the distance from the commitment
-     * @param d The distance between this pre-image and the initial commitment
+     * @param h The value of the pre-image at the height from Genesis
+     * @param d The Height of the block that this pre-image is for
      */
-    constructor (h?: Hash, d?: number)
+    constructor (h?: Hash, d?: string)
     {
         if (h != undefined)
             this.hash = new Hash(h.data);
@@ -42,9 +42,9 @@ export class PreImage
             this.hash = new Hash(Buffer.alloc(Hash.Width));
 
         if (d != undefined)
-            this.distance = d;
+            this.height = d;
         else
-            this.distance = 0;
+            this.height = '0';
     }
 
     /**
@@ -55,7 +55,7 @@ export class PreImage
     {
         Utils.validateJSON(this, data);
 
-        this.distance = data.distance;
+        this.height = data.height;
         this.hash.fromString(data.hash);
     }
 }
@@ -67,5 +67,5 @@ export class PreImage
 export interface JSONPreImage
 {
     hash: string;
-    distance: number;
+    height: string;
 }
