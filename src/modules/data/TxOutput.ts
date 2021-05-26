@@ -111,4 +111,12 @@ export class TxOutput
     {
         return Utils.SIZE_OF_LONG + Utils.SIZE_OF_BYTE + Utils.SIZE_OF_PUBLIC_KEY;
     }
+
+    /**
+     * The compare function of TxOutput
+     */
+    public static compare(a: TxOutput, b: TxOutput): number
+    {
+        return Buffer.compare(a.lock.bytes, b.lock.bytes);
+    }
 }

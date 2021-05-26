@@ -81,6 +81,7 @@ export class Transaction
         this.outputs = outputs;
         this.payload = payload;
         this.lock_height = lock_height;
+        this.sort();
     }
 
     /**
@@ -114,6 +115,7 @@ export class Transaction
      */
     public computeHash (buffer: SmartBuffer)
     {
+        this.sort();
         buffer.writeUInt8(this.type);
         hashPart(this.inputs, buffer);
         hashPart(this.outputs, buffer);
@@ -152,5 +154,14 @@ export class Transaction
         return Utils.SIZE_OF_BYTE + Utils.SIZE_OF_LONG + num_bytes_payload +
             (num_input * TxInput.getEstimatedNumberOfBytes()) +
             (num_output * TxOutput.getEstimatedNumberOfBytes());
+    }
+
+    /**
+     * Sort the transaction inputs and outputs
+     */
+    public sort ()
+    {
+        this.inputs.sort(TxInput.compare);
+        this.outputs.sort(TxOutput.compare);
     }
 }

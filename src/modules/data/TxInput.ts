@@ -115,4 +115,12 @@ export class TxInput
     {
         return Hash.Width + Utils.SIZE_OF_INT + Signature.Width;
     }
+
+    /**
+     * The compare function of TxInput
+     */
+    public static compare(a: TxInput, b: TxInput): number
+    {
+        return Buffer.compare(a.utxo.data, b.utxo.data);
+    }
 }

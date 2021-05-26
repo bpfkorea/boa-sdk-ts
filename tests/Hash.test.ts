@@ -140,6 +140,74 @@ describe('Hash', () =>
             "da328a86330c228de06ef9c101d3294722675af08e576670e91533117f75b6976");
     });
 
+    it ('Test for hash value of transaction with multi inputs', () =>
+    {
+        let tx1 = new boasdk.Transaction(
+            boasdk.TxType.Payment,
+            [
+                new boasdk.TxInput(new boasdk.Hash("0x2cf1caaeff65a7e2b2f7edff1023881564f2f0cad30161cf42279826e6919d77347df68de6d8eb0da58ebdc6e4f28da7569113002044467fc5cbf599a7ea9037")),
+                new boasdk.TxInput(new boasdk.Hash("0x47a38b066ca55ef3e855b0c741ebd301b3fa38a86f9ed3507ab08794f24eddbd279eeb5bddde331cdaaf44401fcedb0f2f23d117607864c43bdb0cf587df13d7"))
+            ],
+            [
+                new boasdk.TxOutput("0", boasdk.Lock.Null)
+            ],
+            boasdk.DataPayload.init
+        );
+        assert.strictEqual(boasdk.hashFull(tx1).toString(),
+            "0x5b678bc41959d7b0f7c598a3e25682740b78199ae0df820bb40741918a89b3f" +
+            "402275767be1725fb7d36e9f4f3dfcf9bf6a123f8b67a5d229cac1033a9191004");
+
+
+        let tx2 = new boasdk.Transaction(
+            boasdk.TxType.Payment,
+            [
+                new boasdk.TxInput(new boasdk.Hash("0x2cf1caaeff65a7e2b2f7edff1023881564f2f0cad30161cf42279826e6919d77347df68de6d8eb0da58ebdc6e4f28da7569113002044467fc5cbf599a7ea9037")),
+                new boasdk.TxInput(new boasdk.Hash("0x47a38b066ca55ef3e855b0c741ebd301b3fa38a86f9ed3507ab08794f24eddbd279eeb5bddde331cdaaf44401fcedb0f2f23d117607864c43bdb0cf587df13d7"))
+            ],
+            [
+                new boasdk.TxOutput("0", boasdk.Lock.Null)
+            ],
+            boasdk.DataPayload.init
+        );
+        assert.strictEqual(boasdk.hashFull(tx2).toString(),
+            "0x5b678bc41959d7b0f7c598a3e25682740b78199ae0df820bb40741918a89b3f" +
+            "402275767be1725fb7d36e9f4f3dfcf9bf6a123f8b67a5d229cac1033a9191004");
+    });
+
+    it ('Test for hash value of transaction with multi outputs', () =>
+    {
+        let tx1 = new boasdk.Transaction(
+            boasdk.TxType.Payment,
+            [
+                boasdk.TxInput.fromTxHash(new boasdk.Hash(Buffer.alloc(boasdk.Hash.Width)), JSBI.BigInt(0))
+            ],
+            [
+                new boasdk.TxOutput("0", boasdk.Lock.fromPublicKey(new boasdk.PublicKey("boa1xrp66va5qe84kyfhywhxz9luy7glpxu99n30cuv3mu0vkhcswuzajgak3pw"))),
+                new boasdk.TxOutput("0", boasdk.Lock.fromPublicKey(new boasdk.PublicKey("boa1xrq66nug6wnen9sp5cm7xhfw03yea8e9x63ggay3v5dhe6d9jerqz50eld0")))
+            ],
+            boasdk.DataPayload.init
+        );
+        assert.strictEqual(boasdk.hashFull(tx1).toString(),
+            "0x505d701a4f4d1de3d0ee5e44f1f91d8ae40d916fc7d5fcc2625fdfbcdbeeac7" +
+            "1ab8c9b976d2f1c27a1b80811b7abc454cbaae8e9afd28168cf57237cb3c7fbeb");
+
+
+        let tx2 = new boasdk.Transaction(
+            boasdk.TxType.Payment,
+            [
+                boasdk.TxInput.fromTxHash(new boasdk.Hash(Buffer.alloc(boasdk.Hash.Width)), JSBI.BigInt(0))
+            ],
+            [
+                new boasdk.TxOutput("0", boasdk.Lock.fromPublicKey(new boasdk.PublicKey("boa1xrq66nug6wnen9sp5cm7xhfw03yea8e9x63ggay3v5dhe6d9jerqz50eld0"))),
+                new boasdk.TxOutput("0", boasdk.Lock.fromPublicKey(new boasdk.PublicKey("boa1xrp66va5qe84kyfhywhxz9luy7glpxu99n30cuv3mu0vkhcswuzajgak3pw")))
+            ],
+            boasdk.DataPayload.init
+        );
+        assert.strictEqual(boasdk.hashFull(tx2).toString(),
+            "0x505d701a4f4d1de3d0ee5e44f1f91d8ae40d916fc7d5fcc2625fdfbcdbeeac7" +
+            "1ab8c9b976d2f1c27a1b80811b7abc454cbaae8e9afd28168cf57237cb3c7fbeb");
+    });
+
     // The test codes below compare with the values calculated in Agora.
     it ('Test for hash value of BlockHeader', () =>
     {

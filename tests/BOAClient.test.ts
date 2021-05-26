@@ -1084,23 +1084,23 @@ describe('BOA Client', () => {
             "type": 0,
             "inputs": [
                 {
+                    "utxo": "0x4028965b7408566a66e4cf8c603a1cdebc7659a3e693d36d2fdcb39b196da967914f40ef4966d5b4b1f4b3aae00fbd68ffe8808b070464c2a101d44f4d7b0170",
+                    "unlock": {
+                        "bytes": "C5pmt6ooKs5dTJA15NtfnlKaBFfkDeoZqDVHWMxQHQyX/TkB5zb212U3TZDZ8WMc6XiFz/7/DJ9pJMQjw5JMkg=="
+                    },
+                    "unlock_age": 0
+                },
+                {
                     "utxo": "0x81a326afa790003c32517a2a2556613004e6147edac28d576cf7bcc2daadf4bb60be1f644c229b775e7894844ec66b2d70ddf407b8196b46bc1dfe42061c7497",
                     "unlock": {
-                        "bytes": "9vSzHA03/64wlGV2zT8S6iMXFFkpwPlWWTVOHQc6D2AfexfD1RxS/VdFQ8qpTSsxxttV/EZVKtigZ7K2kRUIBg=="
+                        "bytes": "+TOLZeBdzIC8zJl2uHcpp41/pmGl5KlQ0OfxNPqtlQmg7MrluTkyfg0pmjrbzws65YVGVNoBhFhQAeCxGbn2Aw=="
                     },
                     "unlock_age": 0
                 },
                 {
                     "utxo": "0xb82cb96710af2e9804c59d1f1e1679f8b8b69f4c0f6cd79c8c12f365dd766c09aaa4febcc18b3665d33301cb248ac7afd343ac7b98b27beaf246ad12d3b3219a",
                     "unlock": {
-                        "bytes": "Kwz0wvnqqJX5zwvqpKnFF+76DiUVyNDYqDUm6LjhyIFJN8x1h4l5sBHns7aNX1NoH3A80xJ+xme77Mh31371CQ=="
-                    },
-                    "unlock_age": 0
-                },
-                {
-                    "utxo": "0x4028965b7408566a66e4cf8c603a1cdebc7659a3e693d36d2fdcb39b196da967914f40ef4966d5b4b1f4b3aae00fbd68ffe8808b070464c2a101d44f4d7b0170",
-                    "unlock": {
-                        "bytes": "HYBT2ksTcfoWSyGGdmgqSy2ZkEsh7hBtbXQG7QdD0beYZHtQ0khm2nauZN916KkIspWl6v5mNZqg8zvhFJVyCw=="
+                        "bytes": "eAqHhK8YfRjPGlc/nWB+OvIi6B5bJiqL9sE0botT4wZFmZZrE3tveq8WmcE7ait/FA/T4/14HRF8PNzUXhLSCg=="
                     },
                     "unlock_age": 0
                 }
@@ -1121,7 +1121,9 @@ describe('BOA Client', () => {
                     }
                 }
             ],
-            "payload": {"bytes": "YXRhZCBldG92"},
+            "payload": {
+                "bytes": "YXRhZCBldG92"
+            },
             "lock_height": "0"
         };
 
@@ -1204,21 +1206,21 @@ describe('BOA Client', () => {
                     {
                         "utxo": "0x3451d94322524e3923fd26f0597fb8a9cdbf3a9427c38ed1ca61104796d39c5b9b5ea33d576f17c2dc17bebc5d84a0559de8c8c521dfe725d4c352255fc71e85",
                         "unlock": {
-                            "bytes": "ODMPbmbTEP1rLeAjCG1HBubfsWF2m7GzFpbUKuKJZDq+z5tb5m2QVkxUrEpihmUI8axkJUc11w6kaP34o4QqBg=="
-                        },
-                        "unlock_age": 0
-                    },
-                    {
-                        "utxo": "0xfca92fe76629311c6208a49e89cb26f5260777278cd8b272e7bb3021adf429957fd6844eb3b8ff64a1f6074126163fd636877fa92a1f4329c5116873161fbaf8",
-                        "unlock": {
-                            "bytes": "ODMPbmbTEP1rLeAjCG1HBubfsWF2m7GzFpbUKuKJZDq+z5tb5m2QVkxUrEpihmUI8axkJUc11w6kaP34o4QqBg=="
+                            "bytes": "xMEI8EVV9ifPBo3Cagv/ccXmeGOJOUz0vlhg+X6JMQnjMOKPxahrSRs0Ev6T6mO+G3MUho5/UWD1tQHjPArChQ=="
                         },
                         "unlock_age": 0
                     },
                     {
                         "utxo": "0x7e1958dbe6839d8520d65013bbc85d36d47a9f64cf608cc66c0d816f0b45f5c8a85a8990725ffbb1ab13c3c65b45fdc06f4745d455e00e1068c4c5c0b661d685",
                         "unlock": {
-                            "bytes": "ODMPbmbTEP1rLeAjCG1HBubfsWF2m7GzFpbUKuKJZDq+z5tb5m2QVkxUrEpihmUI8axkJUc11w6kaP34o4QqBg=="
+                            "bytes": "Sw0lTFbfvJ9e0qizvOkKTiOeEE7RJne7Xeaflrn4BgqS4Iw31M7w4dHUtOwyL741WTjZ1M1AlVu6r2I3FZI64g=="
+                        },
+                        "unlock_age": 0
+                    },
+                    {
+                        "utxo": "0xfca92fe76629311c6208a49e89cb26f5260777278cd8b272e7bb3021adf429957fd6844eb3b8ff64a1f6074126163fd636877fa92a1f4329c5116873161fbaf8",
+                        "unlock": {
+                            "bytes": "BVD/9FzrMMFoChXNHsX3WPVQ+/3cIgGro2lpFvOeKQb62XlJGyApLXhjARIy/sAZ6ohvJKZZIxLPWs3H0eYgfA=="
                         },
                         "unlock_age": 0
                     }
@@ -1232,7 +1234,9 @@ describe('BOA Client', () => {
                         }
                     }
                 ],
-                "payload": {"bytes": "YXRhZCBldG92"},
+                "payload": {
+                    "bytes": "YXRhZCBldG92"
+                },
                 "lock_height": "0"
             };
 
@@ -1485,37 +1489,37 @@ describe('BOA Client', () => {
             "type": 0,
             "inputs": [
                 {
-                    "utxo": "0x3451d94322524e3923fd26f0597fb8a9cdbf3a9427c38ed1ca61104796d39c5b9b5ea33d576f17c2dc17bebc5d84a0559de8c8c521dfe725d4c352255fc71e85",
+                    "utxo": "0xc3780f9907a97c20a2955945544e7732a60702c32d81e016bdf1ea172b7b7fb96e9a4164176663a146615307aaadfbbad77e615a7c792a89191e85471120d314",
                     "unlock": {
-                        "bytes": "jKVq2VTBXnfyyEuLT7cvYdGM2NAyNC+zlmIh0UFdrwvAie7Ij343BgsC+86wWOZlc3QqUegTYkjRg4NkjiV5og=="
+                        "bytes": "0fei4dS0rEXHm8PlQbUMqQE4oZTG10ZcRnp5mupQGgsz0aoXD+wVbjPIKc1ZfANmpjWD/A3894/w3DNBo23ojQ=="
                     },
                     "unlock_age": 0
                 },
                 {
-                    "utxo": "0xfca92fe76629311c6208a49e89cb26f5260777278cd8b272e7bb3021adf429957fd6844eb3b8ff64a1f6074126163fd636877fa92a1f4329c5116873161fbaf8",
+                    "utxo": "0x3451d94322524e3923fd26f0597fb8a9cdbf3a9427c38ed1ca61104796d39c5b9b5ea33d576f17c2dc17bebc5d84a0559de8c8c521dfe725d4c352255fc71e85",
                     "unlock": {
-                        "bytes": "sriR4UDqSQJhiYz1ar8qpdX3WJ2dRzxJ9m3MY+7NuwH9bF2SGGpvF+GhuwITXNuA9IKJ2ChzOFcEnCaHkuEcRw=="
+                        "bytes": "sjDI7R8Nml111aW4js2z9VCHIxbvO2jqHOyW766WmQRTUr8ueZAFqad48P/3qkksvopEs09AhpbLRoGdz+rKzA=="
                     },
                     "unlock_age": 0
                 },
                 {
                     "utxo": "0x7e1958dbe6839d8520d65013bbc85d36d47a9f64cf608cc66c0d816f0b45f5c8a85a8990725ffbb1ab13c3c65b45fdc06f4745d455e00e1068c4c5c0b661d685",
                     "unlock": {
-                        "bytes": "AT0s1ZkCPnuFRaoLK8mH303uO/23WbBwYo6jnhzRAgAqD15TOuVNYhwf/Ah8ulmQ3LimvKqPVfDZi3J6dqUvgA=="
+                        "bytes": "kiRSWOYb5Bsutwm2LEyspMYcPvUrKjB6JeE2sBf3XgGILxyt8o2OnmkYA9hSXIxR1aTlPJuWHQ2n0KmcJOUDqA=="
                     },
                     "unlock_age": 0
                 },
                 {
                     "utxo": "0xd44608de8a5015b04f933098fd7f67f84ffbf00c678836d38c661ab6dc1f149606bdc96bad149375e16dc5722b077b14c0a4afdbe6d30932f783650f435bcb92",
                     "unlock": {
-                        "bytes": "gfoyNGdkhlHuPLLNMS2ABrGeWmuItR83MsDCbCO35AAusghrY1xeu3/rLe0nDOi9Yaj8bsZ42uJONJPQgEJPtg=="
+                        "bytes": "LahB8gbf3RUgGF/jN5y9xALvTLIHtYArM5+22NLAnQnb0NXmm31i0TGfoTdIdndfrx/jAN4U9tyOf0r1rDPOBQ=="
                     },
                     "unlock_age": 0
                 },
                 {
-                    "utxo": "0xc3780f9907a97c20a2955945544e7732a60702c32d81e016bdf1ea172b7b7fb96e9a4164176663a146615307aaadfbbad77e615a7c792a89191e85471120d314",
+                    "utxo": "0xfca92fe76629311c6208a49e89cb26f5260777278cd8b272e7bb3021adf429957fd6844eb3b8ff64a1f6074126163fd636877fa92a1f4329c5116873161fbaf8",
                     "unlock": {
-                        "bytes": "MqXWkwsgyOxtf/n6ZTp5Z0/Um8qhYZ4DV/hza03IIgLvqQEw7smrEK+oLEIE5OqOWhOrb53BkSQxfHpxZNoXZg=="
+                        "bytes": "5D9/WKVnd+WNrairHmw3rDshuDVETVvS2Fag5ApUiAR4O70X3/b9U1G4FKHEjMbSLZpBnfc7vp0SPHQs/stlZw=="
                     },
                     "unlock_age": 0
                 }
@@ -1536,7 +1540,9 @@ describe('BOA Client', () => {
                     }
                 }
             ],
-            "payload": {"bytes": "YXRhZCBldG92"},
+            "payload": {
+                "bytes": "YXRhZCBldG92"
+            },
             "lock_height": "0"
         };
 
