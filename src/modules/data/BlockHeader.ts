@@ -17,7 +17,8 @@ import { JSONValidator } from '../utils/JSONValidator';
 import { Hash } from "../common/Hash";
 import { Height } from '../common/Height';
 import { Signature } from '../common/Signature';
-import { Utils } from "../utils/Utils";
+import { Utils } from '../utils/Utils';
+import { VarInt } from '../utils/VarInt';
 
 import JSBI from 'jsbi';
 import { SmartBuffer } from 'smart-buffer';
@@ -146,5 +147,60 @@ export class BlockHeader
         const buf = Buffer.allocUnsafe(8);
         Utils.writeJSBigIntLE(buf, JSBI.BigInt(this.time_offset));
         buffer.writeBuffer(buf);
+    }
+
+    /**
+     * Serialize as binary data.
+     * @param buffer - The buffer where serialized data is stored
+     */
+    public serialize (buffer: SmartBuffer)
+    {
+        this.prev_block.serialize(buffer);
+        this.merkle_root.serialize(buffer);
+        this.random_seed.serialize(buffer);
+        this.signature.serialize(buffer);
+        this.validators.serialize(buffer);
+        this.height.serialize(buffer);
+
+        VarInt.fromNumber(this.enrollments.length, buffer);
+        for (let elem of this.enrollments)
+            elem.serialize(buffer);
+
+        VarInt.fromNumber(this.missing_validators.length, buffer);
+        for (let elem of this.missing_validators)
+            VarInt.fromNumber(elem, buffer);
+
+        VarInt.fromNumber(this.time_offset, buffer);
+    }
+
+    /**
+     * Deserialize as binary data.
+     * @param buffer - The buffer to be deserialized
+     */
+    public static deserialize (buffer: SmartBuffer): BlockHeader
+    {
+        let prev_block = Hash.deserialize(buffer);
+        let merkle_root = Hash.deserialize(buffer);
+        let random_seed = Hash.deserialize(buffer);
+        let signature = Signature.deserialize(buffer);
+        let validators = BitField.deserialize(buffer);
+        let height = Height.deserialize(buffer);
+
+        let length = VarInt.toNumber(buffer);
+        let enrollments: Array<Enrollment> = [];
+        for (let idx = 0; idx < length; idx++)
+            enrollments.push(Enrollment.deserialize(buffer));
+
+
+        length = VarInt.toNumber(buffer);
+        let missing_validators: Array<number> = [];
+        for (let idx = 0; idx < length; idx++)
+            missing_validators.push(VarInt.toNumber(buffer));
+
+        let time_offset = VarInt.toNumber(buffer);
+
+        return new BlockHeader(
+            prev_block, height, merkle_root, validators, signature,
+            enrollments, random_seed, missing_validators, time_offset);
     }
 }

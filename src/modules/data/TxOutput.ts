@@ -13,8 +13,9 @@
 
 import { JSONValidator } from '../utils/JSONValidator';
 import { PublicKey } from '../common/KeyPair';
-import { Utils } from "../utils/Utils";
+import { Utils } from '../utils/Utils';
 import { Lock } from '../script/Lock';
+import { VarInt } from '../utils/VarInt';
 
 import JSBI from 'jsbi';
 import { SmartBuffer } from 'smart-buffer';
@@ -121,5 +122,26 @@ export class TxOutput
         if (comp !== 0)
             return comp;
         return JSBI.greaterThan(a.value, b.value) ? 1 : (JSBI.lessThan(a.value, b.value) ? -1 : 0);
+    }
+
+    /**
+     * Serialize as binary data.
+     * @param buffer - The buffer where serialized data is stored
+     */
+    public serialize (buffer: SmartBuffer)
+    {
+        VarInt.fromJSBI(this.value, buffer);
+        this.lock.serialize(buffer);
+    }
+
+    /**
+     * Deserialize as binary data.
+     * @param buffer - The buffer to be deserialized
+     */
+    public static deserialize (buffer: SmartBuffer): TxOutput
+    {
+        let value = VarInt.toJSBI(buffer);
+        let lock = Lock.deserialize(buffer);
+        return new TxOutput(value, lock);
     }
 }

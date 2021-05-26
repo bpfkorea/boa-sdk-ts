@@ -14,7 +14,7 @@
 
 import { PublicKey } from '../common/KeyPair';
 import { VarInt } from '../utils/VarInt';
-import { Utils } from "../utils/Utils";
+import { Utils } from '../utils/Utils';
 import { LinkDataWithProposalFee } from '../wallet/LinkData';
 
 import JSBI from 'jsbi';

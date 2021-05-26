@@ -13,6 +13,7 @@
 
 import { SmartBuffer } from 'smart-buffer';
 import { Utils } from '../utils/Utils';
+import { VarInt } from '../utils/VarInt';
 
 import JSBI from 'jsbi';
 /**
@@ -71,5 +72,23 @@ export class Height
     public toJSON (key?: string): string
     {
         return this.toString();
+    }
+
+    /**
+     * Serialize as binary data.
+     * @param buffer - The buffer where serialized data is stored
+     */
+    public serialize (buffer: SmartBuffer)
+    {
+        VarInt.fromJSBI(this.value, buffer);
+    }
+
+    /**
+     * Deserialize as binary data.
+     * @param buffer - The buffer to be deserialized
+     */
+    public static deserialize (buffer: SmartBuffer): Height
+    {
+        return new Height(VarInt.toJSBI(buffer));
     }
 }

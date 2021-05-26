@@ -18,6 +18,7 @@ import { JSONValidator } from '../utils/JSONValidator';
 import { TxInput } from './TxInput';
 import { TxOutput } from './TxOutput';
 import { Utils } from '../utils/Utils';
+import { VarInt } from '../utils/VarInt';
 
 import { SmartBuffer } from 'smart-buffer';
 
@@ -81,7 +82,6 @@ export class Transaction
         this.outputs = outputs;
         this.payload = payload;
         this.lock_height = lock_height;
-        this.sort();
     }
 
     /**
@@ -163,5 +163,49 @@ export class Transaction
     {
         this.inputs.sort(TxInput.compare);
         this.outputs.sort(TxOutput.compare);
+    }
+
+    /**
+     * Serialize as binary data.
+     * @param buffer The buffer where serialized data is stored
+     */
+    public serialize (buffer: SmartBuffer)
+    {
+        VarInt.fromNumber(this.type, buffer);
+
+        VarInt.fromNumber(this.inputs.length, buffer);
+        for (let elem of this.inputs)
+            elem.serialize(buffer);
+
+        VarInt.fromNumber(this.outputs.length, buffer);
+        for (let elem of this.outputs)
+            elem.serialize(buffer);
+
+        this.payload.serialize(buffer);
+        this.lock_height.serialize(buffer);
+    }
+
+    /**
+     * Deserialize as binary data.
+     * An exception occurs when the size of the remaining data is less than the required.
+     * @param buffer The buffer to be deserialized
+     */
+    public static deserialize (buffer: SmartBuffer): Transaction
+    {
+        let type = VarInt.toNumber(buffer);
+        let length = VarInt.toNumber(buffer);
+        let inputs: Array<TxInput> = [];
+        for (let idx = 0; idx < length; idx++)
+            inputs.push(TxInput.deserialize(buffer));
+
+        length = VarInt.toNumber(buffer);
+        let outputs: Array<TxOutput> = [];
+        for (let idx = 0; idx < length; idx++)
+            outputs.push(TxOutput.deserialize(buffer));
+
+        let payload = DataPayload.deserialize(buffer);
+        let lock_height = Height.deserialize(buffer);
+
+        return new Transaction(type, inputs, outputs, payload, lock_height)
     }
 }

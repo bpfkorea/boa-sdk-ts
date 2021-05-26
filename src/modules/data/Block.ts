@@ -15,6 +15,9 @@ import { BlockHeader } from './BlockHeader';
 import { JSONValidator } from '../utils/JSONValidator';
 import { Hash } from '../common/Hash';
 import { Transaction } from './Transaction';
+import { VarInt } from '../utils/VarInt';
+
+import { SmartBuffer } from 'smart-buffer';
 
 /**
  * The class that defines the block.
@@ -78,5 +81,43 @@ export class Block
 
         return new Block(
             BlockHeader.reviver("", value.header), transactions, merkle_tree)
+    }
+
+    /**
+     * Serialize as binary data.
+     * @param buffer - The buffer where serialized data is stored
+     */
+    public serialize (buffer: SmartBuffer)
+    {
+        this.header.serialize(buffer);
+
+        VarInt.fromNumber(this.txs.length, buffer);
+        for (let tx of this.txs)
+            tx.serialize(buffer);
+
+        VarInt.fromNumber(this.merkle_tree.length, buffer);
+        for (let h of this.merkle_tree)
+            h.serialize(buffer);
+    }
+
+    /**
+     * Deserialize as binary data.
+     * @param buffer - The buffer to be deserialized
+     */
+    public static deserialize (buffer: SmartBuffer): Block
+    {
+        let header = BlockHeader.deserialize(buffer);
+
+        let length = VarInt.toNumber(buffer);
+        let txs: Array<Transaction> = [];
+        for (let idx = 0; idx < length; idx++)
+            txs.push(Transaction.deserialize(buffer));
+
+        length = VarInt.toNumber(buffer);
+        let merkle_tree: Array<Hash> = [];
+        for (let idx = 0; idx < length; idx++)
+            merkle_tree.push(Hash.deserialize(buffer));
+
+        return new Block(header, txs, merkle_tree);
     }
 }

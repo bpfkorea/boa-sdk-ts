@@ -16,6 +16,7 @@ import { Hash, makeUTXOKey } from '../common/Hash';
 import { Signature } from '../common/Signature';
 import { Unlock } from '../script/Lock';
 import { Utils } from '../utils/Utils';
+import { VarInt } from '../utils/VarInt';
 
 import JSBI from 'jsbi';
 import { SmartBuffer } from 'smart-buffer';
@@ -122,5 +123,28 @@ export class TxInput
     public static compare(a: TxInput, b: TxInput): number
     {
         return Buffer.compare(a.utxo.data, b.utxo.data);
+    }
+
+    /**
+     * Serialize as binary data.
+     * @param buffer - The buffer where serialized data is stored
+     */
+    public serialize (buffer: SmartBuffer)
+    {
+        this.utxo.serialize(buffer);
+        this.unlock.serialize(buffer);
+        VarInt.fromNumber(this.unlock_age, buffer);
+    }
+
+    /**
+     * Deserialize as binary data.
+     * @param buffer - The buffer to be deserialized
+     */
+    public static deserialize (buffer: SmartBuffer): TxInput
+    {
+        let utxo = Hash.deserialize(buffer);
+        let unlock = Unlock.deserialize(buffer);
+        let unlock_age = VarInt.toNumber(buffer);
+        return new TxInput(utxo, unlock, unlock_age);
     }
 }

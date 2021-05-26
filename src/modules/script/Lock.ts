@@ -39,7 +39,8 @@ import { hashPart } from '../common/Hash';
 import { PublicKey } from '../common/KeyPair';
 import { Signature } from '../common/Signature';
 import { JSONValidator } from '../utils/JSONValidator';
-import { Utils } from "../utils/Utils";
+import { Utils } from '../utils/Utils';
+import { VarInt } from '../utils/VarInt';
 
 import { SmartBuffer } from 'smart-buffer';
 
@@ -154,6 +155,28 @@ export class Lock
         return Utils.SIZE_OF_BYTE + // Lock.type
             this.bytes.length;      // Lock.bytes
     }
+
+    /**
+     * Serialize as binary data.
+     * @param buffer - The buffer where serialized data is stored
+     */
+    public serialize (buffer: SmartBuffer)
+    {
+        VarInt.fromNumber(this.type, buffer);
+        VarInt.fromNumber(this.bytes.length, buffer);
+        buffer.writeBuffer(this.bytes);
+    }
+
+    /**
+     * Deserialize as binary data.
+     * @param buffer - The buffer to be deserialized
+     */
+    public static deserialize (buffer: SmartBuffer): Lock
+    {
+        let type = VarInt.toNumber(buffer);
+        let length = VarInt.toNumber(buffer);
+        return new Lock(type, buffer.readBuffer(length));
+    }
 }
 
 /**
@@ -237,5 +260,25 @@ export class Unlock
     public getNumberOfBytes (): number
     {
         return this.bytes.length;   // Unlock.bytes
+    }
+
+    /**
+     * Serialize as binary data.
+     * @param buffer - The buffer where serialized data is stored
+     */
+    public serialize (buffer: SmartBuffer)
+    {
+        VarInt.fromNumber(this.bytes.length, buffer);
+        buffer.writeBuffer(this.bytes);
+    }
+
+    /**
+     * Deserialize as binary data.
+     * @param buffer - The buffer to be deserialized
+     */
+    public static deserialize (buffer: SmartBuffer): Unlock
+    {
+        let length = VarInt.toNumber(buffer);
+        return new Unlock(buffer.readBuffer(length));
     }
 }

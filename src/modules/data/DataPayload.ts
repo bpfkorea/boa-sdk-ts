@@ -14,6 +14,7 @@
 import { hashPart } from '../common/Hash';
 import { JSONValidator } from "../utils/JSONValidator";
 import { Utils, Endian } from '../utils/Utils';
+import { VarInt } from '../utils/VarInt';
 
 import { SmartBuffer } from 'smart-buffer';
 
@@ -134,5 +135,25 @@ export class DataPayload
     static get init(): DataPayload
     {
         return new DataPayload(Buffer.alloc(0));
+    }
+
+    /**
+     * Serialize as binary data.
+     * @param buffer - The buffer where serialized data is stored
+     */
+    public serialize (buffer: SmartBuffer)
+    {
+        VarInt.fromNumber(this.data.length, buffer);
+        buffer.writeBuffer(this.data);
+    }
+
+    /**
+     * Deserialize as binary data.
+     * @param buffer - The buffer to be deserialized
+     */
+    public static deserialize (buffer: SmartBuffer): DataPayload
+    {
+        let length = VarInt.toNumber(buffer);
+        return new DataPayload(buffer.readBuffer(length));
     }
 }

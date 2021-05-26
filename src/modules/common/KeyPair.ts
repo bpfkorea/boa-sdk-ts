@@ -18,7 +18,7 @@ import { Schnorr, Pair } from "./Schnorr";
 import { Signature } from './Signature';
 import { SodiumHelper } from '../utils/SodiumHelper';
 import { checksum, validate } from "../utils/CRC16";
-import { Utils } from "../utils/Utils";
+import { Utils } from '../utils/Utils';
 
 import { base32Encode, base32Decode } from '@ctrl/ts-base32';
 import { bech32m } from 'bech32';

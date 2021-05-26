@@ -12,6 +12,7 @@
 *******************************************************************************/
 
 import { Utils, Endian } from '../utils/Utils';
+import { SmartBuffer } from "smart-buffer";
 
 /**
  * Define the signature
@@ -106,5 +107,23 @@ export class Signature
     public toJSON (key?: string): string
     {
         return this.toString();
+    }
+
+    /**
+     * Serialize as binary data.
+     * @param buffer - The buffer where serialized data is stored
+     */
+    public serialize (buffer: SmartBuffer)
+    {
+        buffer.writeBuffer(this.data);
+    }
+
+    /**
+     * Deserialize as binary data.
+     * @param buffer - The buffer to be deserialized
+     */
+    public static deserialize (buffer: SmartBuffer): Signature
+    {
+        return new Signature(buffer.readBuffer(Signature.Width));
     }
 }

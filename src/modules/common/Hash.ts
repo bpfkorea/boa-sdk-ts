@@ -120,6 +120,24 @@ export class Hash
     {
         return this.toString();
     }
+
+    /**
+     * Serialize as binary data.
+     * @param buffer - The buffer where serialized data is stored
+     */
+    public serialize (buffer: SmartBuffer)
+    {
+        buffer.writeBuffer(this.data);
+    }
+
+    /**
+     * Deserialize as binary data.
+     * @param buffer - The buffer to be deserialized
+     */
+    public static deserialize (buffer: SmartBuffer): Hash
+    {
+        return new Hash(buffer.readBuffer(Hash.Width));
+    }
 }
 
 /**

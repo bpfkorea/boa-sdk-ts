@@ -93,4 +93,30 @@ export class Enrollment
         this.commitment.computeHash(buffer);
         buffer.writeUInt32LE(this.cycle_length);
     }
+
+    /**
+     * Serialize as binary data.
+     * @param buffer - The buffer where serialized data is stored
+     */
+    public serialize (buffer: SmartBuffer)
+    {
+        this.utxo_key.serialize(buffer);
+        this.commitment.serialize(buffer);
+        VarInt.fromNumber(this.cycle_length, buffer);
+        this.enroll_sig.serialize(buffer);
+    }
+
+    /**
+     * Deserialize as binary data.
+     * @param buffer - The buffer to be deserialized
+     */
+    public static deserialize (buffer: SmartBuffer): Enrollment
+    {
+        let utxo_key = Hash.deserialize(buffer);
+        let commitment = Hash.deserialize(buffer);
+        let cycle_length = VarInt.toNumber(buffer);
+        let enroll_sig = Sig.deserialize(buffer);
+
+        return new Enrollment(utxo_key, commitment, cycle_length, enroll_sig);
+    }
 }

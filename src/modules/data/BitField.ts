@@ -12,6 +12,9 @@
 *******************************************************************************/
 
 import { JSONValidator } from '../utils/JSONValidator';
+import { VarInt } from '../utils/VarInt';
+
+import { SmartBuffer } from 'smart-buffer';
 
 /**
  * The class that defines the BitField of a block.
@@ -61,5 +64,30 @@ export class BitField
     public toJSON (key?: string): string
     {
         return JSON.stringify(this.storage);
+    }
+
+    /**
+     * Serialize as binary data.
+     * @param buffer - The buffer where serialized data is stored
+     */
+    public serialize (buffer: SmartBuffer)
+    {
+        VarInt.fromNumber(this.storage.length, buffer);
+        for (let elem of this.storage)
+            VarInt.fromNumber(elem, buffer);
+    }
+
+    /**
+     * Deserialize as binary data.
+     * @param buffer - The buffer to be deserialized
+     */
+    public static deserialize (buffer: SmartBuffer): BitField
+    {
+        let length = VarInt.toNumber(buffer);
+        let storage: Array<number> = [];
+        for (let idx = 0; idx < length; idx++)
+            storage.push(VarInt.toNumber(buffer));
+
+        return new BitField(storage);
     }
 }
