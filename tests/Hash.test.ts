@@ -208,6 +208,39 @@ describe('Hash', () =>
             "1ab8c9b976d2f1c27a1b80811b7abc454cbaae8e9afd28168cf57237cb3c7fbeb");
     });
 
+    it ('Test for hash value of transaction with multi outputs same address', () =>
+    {
+        let tx1 = new boasdk.Transaction(
+            boasdk.TxType.Payment,
+            [
+                boasdk.TxInput.fromTxHash(new boasdk.Hash(Buffer.alloc(boasdk.Hash.Width)), JSBI.BigInt(0))
+            ],
+            [
+                new boasdk.TxOutput("200", boasdk.Lock.fromPublicKey(new boasdk.PublicKey("boa1xrp66va5qe84kyfhywhxz9luy7glpxu99n30cuv3mu0vkhcswuzajgak3pw"))),
+                new boasdk.TxOutput("100", boasdk.Lock.fromPublicKey(new boasdk.PublicKey("boa1xrp66va5qe84kyfhywhxz9luy7glpxu99n30cuv3mu0vkhcswuzajgak3pw")))
+            ],
+            boasdk.DataPayload.init
+        );
+        assert.strictEqual(boasdk.hashFull(tx1).toString(),
+            "0xcadbec8e9af858d26cc96bde51b3994d66072d2c64bfa6ab2c6c644cb6af9da" +
+            "2e2b9114041f2e215eb273f76a8214eb59d2469dde636d59c359f5feca317c5e3");
+
+        let tx2 = new boasdk.Transaction(
+            boasdk.TxType.Payment,
+            [
+                boasdk.TxInput.fromTxHash(new boasdk.Hash(Buffer.alloc(boasdk.Hash.Width)), JSBI.BigInt(0))
+            ],
+            [
+                new boasdk.TxOutput("100", boasdk.Lock.fromPublicKey(new boasdk.PublicKey("boa1xrp66va5qe84kyfhywhxz9luy7glpxu99n30cuv3mu0vkhcswuzajgak3pw"))),
+                new boasdk.TxOutput("200", boasdk.Lock.fromPublicKey(new boasdk.PublicKey("boa1xrp66va5qe84kyfhywhxz9luy7glpxu99n30cuv3mu0vkhcswuzajgak3pw")))
+            ],
+            boasdk.DataPayload.init
+        );
+        assert.strictEqual(boasdk.hashFull(tx2).toString(),
+            "0xcadbec8e9af858d26cc96bde51b3994d66072d2c64bfa6ab2c6c644cb6af9da" +
+            "2e2b9114041f2e215eb273f76a8214eb59d2469dde636d59c359f5feca317c5e3");
+    });
+
     // The test codes below compare with the values calculated in Agora.
     it ('Test for hash value of BlockHeader', () =>
     {
