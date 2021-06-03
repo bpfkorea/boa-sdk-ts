@@ -14,6 +14,8 @@
 import { JSONValidator } from '../utils/JSONValidator';
 import { Hash } from '../common/Hash';
 import { Signature } from '../common/Signature';
+import { Sig } from '../common/Schnorr';
+import { VarInt } from '../utils/VarInt';
 
 import { SmartBuffer } from 'smart-buffer';
 
@@ -42,7 +44,7 @@ export class Enrollment
     /**
      * S: A signature for the message H(K, X, n, R) and the key K, using R
      */
-    public enroll_sig: Signature;
+    public enroll_sig: Sig;
 
     /**
      * Constructor
@@ -51,7 +53,7 @@ export class Enrollment
      * @param cycle The number of rounds a validator will participate in
      * @param sig A signature for the message H(K, X, n, R) and the key K, using R
      */
-    constructor (key: Hash, seed: Hash, cycle: number, sig: Signature)
+    constructor (key: Hash, seed: Hash, cycle: number, sig: Sig)
     {
         this.utxo_key = key;
         this.commitment = seed;
@@ -78,7 +80,7 @@ export class Enrollment
 
         return new Enrollment(
             new Hash(value.utxo_key), new Hash(value.commitment),
-            Number(value.cycle_length), new Signature(value.enroll_sig));
+            Number(value.cycle_length), Sig.fromSignature(new Signature(value.enroll_sig)));
     }
 
     /**

@@ -95,6 +95,14 @@ export class Sig
         this.R.computeHash(buffer);
         this.s.computeHash(buffer);
     }
+
+    /**
+     * Converts this object to its JSON representation
+     */
+    public toJSON (key?: string): string
+    {
+        return this.toSignature().toJSON();
+    }
 }
 
 /**
