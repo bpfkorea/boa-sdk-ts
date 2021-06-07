@@ -104,6 +104,28 @@ describe ('Vote Data', () =>
         assert.deepStrictEqual(ballot_data, deserialized_ballot_data);
     });
 
+    it ('Test of encryption key', () =>
+    {
+        let keypair = boasdk.KeyPair.fromSeed(
+            new boasdk.SecretKey("SAFRBTFVAB37EEJDIUGCDK5R3KSL3QDBO3SPS6GX752IILWB4NGQY7KJ"));
+
+        let encryption_key = new boasdk.EncryptionKey(
+            "Votera",
+            new boasdk.Height("100"),
+            new boasdk.Hash(
+                "0x0a37c34865bcf1b70785f410486d099f5f7979eddd571be3987662ea14d9dc4" +
+                "671819700afe3552f76827653e741a443bfcf80382aa076bed1b62ad3fae4c65c"),
+            keypair.address);
+
+        encryption_key.signature = keypair.secret.sign<boasdk.EncryptionKey>(encryption_key);
+        assert.ok(keypair.address.verify<boasdk.EncryptionKey>(encryption_key.signature, encryption_key));
+
+        let signature_agora = new boasdk.Signature(
+            "0x5f3445d7788815ecabd181d6cea1f4ab501f196e5375e1359e12975c1081c88" +
+            "605012fdaa85754202b9bb83c8bc27ba1c1657dd0dc316b78ebe04aaed1dab7f3");
+        assert.ok(keypair.address.verify<boasdk.EncryptionKey>(signature_agora, encryption_key));
+    });
+
     it ('Test of encrypt and decrypt', () =>
     {
         let pre_image = new boasdk.Hash('0x0a8201f9f5096e1ce8e8de4147694940a57a188b78293a55144fc8777a774f2349b3a910fb1fb208514fb16deaf49eb05882cdb6796a81f913c6daac3eb74328');

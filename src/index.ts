@@ -33,6 +33,7 @@ export { ProposalFeeData } from './modules/vote/ProposalFeeData';
 export { ProposalType, ProposalData } from './modules/vote/ProposalData';
 export { VoterCard, BallotData } from './modules/vote/BallotData';
 export { Encrypt } from './modules/vote/Encrypt';
+export { EncryptionKey } from './modules/vote/EncryptionKey';
 export { LinkDataWithProposalFee, LinkDataWithProposalData, LinkDataWithVoteData } from './modules/wallet/LinkData';
 
 export { LockType, Lock, Unlock } from './modules/script/Lock';
