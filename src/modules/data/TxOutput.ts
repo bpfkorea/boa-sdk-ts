@@ -139,9 +139,16 @@ export class TxOutput
      */
     public static compare(a: TxOutput, b: TxOutput): number
     {
+        if (a.type !== b.type)
+            return (a.type < b.type) ? -1 : 1;
+
+        if (a.lock.type !== b.lock.type)
+            return (a.lock.type < b.lock.type) ? -1 : 1;
+
         let comp = Buffer.compare(a.lock.bytes, b.lock.bytes);
         if (comp !== 0)
             return comp;
+
         return JSBI.greaterThan(a.value, b.value) ? 1 : (JSBI.lessThan(a.value, b.value) ? -1 : 0);
     }
 
