@@ -104,10 +104,7 @@ export class Transaction
         hashPart(this.inputs, buffer);
         hashPart(this.outputs, buffer);
         hashPart(this.payload, buffer);
-
-        const buf = Buffer.allocUnsafe(8);
-        Utils.writeJSBigIntLE(buf, this.lock_height.value);
-        buffer.writeBuffer(buf);
+        this.lock_height.computeHash(buffer);
     }
 
     /**
