@@ -186,8 +186,8 @@ export class BallotData
      */
     public computeHash (buffer: SmartBuffer)
     {
-        buffer.writeBuffer(Buffer.from(this.app_name));
-        buffer.writeBuffer(Buffer.from(this.proposal_id));
+        hashPart(Buffer.from(this.app_name), buffer);
+        hashPart(Buffer.from(this.proposal_id), buffer);
         buffer.writeBuffer(this.ballot);
         this.card.computeHash(buffer);
         buffer.writeUInt32LE(this.sequence)
