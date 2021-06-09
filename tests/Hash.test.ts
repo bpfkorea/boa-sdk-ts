@@ -88,11 +88,11 @@ describe('Hash', () =>
             [
                 new boasdk.TxOutput(boasdk.OutputType.Payment, "0", boasdk.Lock.Null)
             ],
-            ""
+            Buffer.alloc(0)
         );
         assert.strictEqual(boasdk.hashFull(payment_tx).toString(),
-            "0xf35092a843a1ca6b00fc671f8913717564bc5ff51000fe515cdaace80e1a823" +
-            "809deaa83202eed9d0912ac998c7325174f143569a144e6bee9ee48c9080ff3e1");
+            "0xbf16b1bb63c50170ce0e2624e13bda540c268c74a677d2d8a0571eb79cd8a3b" +
+            "28c408793d43e3bbee0ffd39913903c77fbd1b0cbe36b6a0b503514bbbe84b492");
 
         assert.ok(payment_tx.isPayment());
         assert.ok(!payment_tx.isFreeze());
@@ -121,8 +121,8 @@ describe('Hash', () =>
         );
 
         assert.strictEqual(boasdk.hashFull(freeze_tx).toString(),
-            "0x5e2cb99aadb3338d1b31f06185034309ca7166373cfc9c73a1a5c4de8f34c79" +
-            "e4a3e01191516e05ad10f3c80329b13aa9cf336d192899681442e192c6837cdd6");
+            "0x415e67be1be0ae5d93c39198682e7202047e884542fbb1f88360895ad981950" +
+            "67f59f21a1bf8a57f364aaaed7ba8ce9196927a81262db5df0912ac0bf068307e");
 
         assert.ok(!freeze_tx.isPayment());
         assert.ok(freeze_tx.isFreeze());
@@ -141,8 +141,8 @@ describe('Hash', () =>
             Buffer.from([1,2,3])
         );
         assert.strictEqual(boasdk.hashFull(payload_tx).toString(),
-            "0x610cada756982f8d2c7d180f9e52a9b087dfb8ada939d7ae232aff65d6068aa" +
-            "09765b24f978ea5701d7bd1e5cfa6027216f86ddd5bed11eb7260a7c5c976d3a6");
+            "0x44590847e54f0e67c3365540115204df7730ddde5fdef306c5fd66af6a7d6f3" +
+            "11f65de5058ce3f297f8e665a6c2b6d75a39207075a45b364a5dfba74fecf7547");
     });
 
     it ('Test for hash value of transaction with multi inputs', () =>
@@ -158,8 +158,8 @@ describe('Hash', () =>
             Buffer.alloc(0)
         );
         assert.strictEqual(boasdk.hashFull(tx1).toString(),
-            "0x68d43a026b896469ca46fdfe266b8915a528da51eda4238d34a0bacfedc0225" +
-            "5c8cda96daa1ffc9bdac1cef5c04aca301f35e59dc612243b880710b8f8ef0efe");
+            "0x8ae9a3478433a8602e6f75aabbc2c7bcb3d17afb0ef7e5b5645cbadb68021d1" +
+            "947d2a57020d45b79c8834e92eb04976b972ef542a589790fa593e33dc341f07b");
 
 
         let tx2 = new boasdk.Transaction(
@@ -173,8 +173,8 @@ describe('Hash', () =>
             Buffer.alloc(0)
         );
         assert.strictEqual(boasdk.hashFull(tx2).toString(),
-            "0x68d43a026b896469ca46fdfe266b8915a528da51eda4238d34a0bacfedc0225" +
-            "5c8cda96daa1ffc9bdac1cef5c04aca301f35e59dc612243b880710b8f8ef0efe");
+            "0x8ae9a3478433a8602e6f75aabbc2c7bcb3d17afb0ef7e5b5645cbadb68021d1" +
+            "947d2a57020d45b79c8834e92eb04976b972ef542a589790fa593e33dc341f07b");
     });
 
     it ('Test for hash value of transaction with multi outputs', () =>
@@ -190,8 +190,8 @@ describe('Hash', () =>
             Buffer.alloc(0)
         );
         assert.strictEqual(boasdk.hashFull(tx1).toString(),
-            "0x213f69bbb8ba5b7f4aee877c78c7437ba97c46bdee076083467480d794ecbf7" +
-            "2f8eaa6755b8a8c43571a191e8f1dd0eef7aaa27662ec83a029bdc990cf0f4038");
+            "0x559613a7a8d5e15275312256ba3205333e038a23f07c4c2bd0ef193c16cac11" +
+            "4bd72f02183731c51132e9ee9471a1ae9495a84f86837d8917792fee9db713877");
 
 
         let tx2 = new boasdk.Transaction(
@@ -205,8 +205,8 @@ describe('Hash', () =>
             Buffer.alloc(0)
         );
         assert.strictEqual(boasdk.hashFull(tx2).toString(),
-            "0x213f69bbb8ba5b7f4aee877c78c7437ba97c46bdee076083467480d794ecbf7" +
-            "2f8eaa6755b8a8c43571a191e8f1dd0eef7aaa27662ec83a029bdc990cf0f4038");
+            "0x559613a7a8d5e15275312256ba3205333e038a23f07c4c2bd0ef193c16cac11" +
+            "4bd72f02183731c51132e9ee9471a1ae9495a84f86837d8917792fee9db713877");
     });
 
     it ('Test for hash value of transaction with multi outputs same address', () =>
@@ -222,8 +222,8 @@ describe('Hash', () =>
             Buffer.alloc(0)
         );
         assert.strictEqual(boasdk.hashFull(tx1).toString(),
-            "0xd9df094c12c59913436932cf43041c3f5472acb9983d6ae574339ccd2a20c87" +
-            "72c3f43b6dae43f8be7422455eb89ab36998b34497655ab43c26442a222029ca8");
+            "0xf7930aeb05490a1a3cf42bb87f1ef22685dde78bb3554c4f46da2c69f47d584" +
+            "cac620a3f4d482d605c7917918c18bf30b4b3a542efcaa16a22b5582022c6b2b7");
 
         let tx2 = new boasdk.Transaction(
             [
@@ -236,8 +236,8 @@ describe('Hash', () =>
             Buffer.alloc(0)
         );
         assert.strictEqual(boasdk.hashFull(tx2).toString(),
-            "0xd9df094c12c59913436932cf43041c3f5472acb9983d6ae574339ccd2a20c87" +
-            "72c3f43b6dae43f8be7422455eb89ab36998b34497655ab43c26442a222029ca8");
+            "0xf7930aeb05490a1a3cf42bb87f1ef22685dde78bb3554c4f46da2c69f47d584" +
+            "cac620a3f4d482d605c7917918c18bf30b4b3a542efcaa16a22b5582022c6b2b7");
     });
 
     // The test codes below compare with the values calculated in Agora.
@@ -263,8 +263,8 @@ describe('Hash', () =>
             0
         );
         assert.strictEqual(boasdk.hashFull(header).toString(),
-            "0xd28b9a8ce916bdcac57446b48250f8ef34f13c37b6d0247ffb16b51d4f714b4" +
-            "a81233a1a589bd3f025a80e0ac51e46e48f493884ab24bf7111e5df28723b9a23");
+            "0x3bda4067eef71774dd27557fb838ae5dfcd2198530e60b9c95ebf41f18bc414" +
+            "4040a5bd70cb83e63aefdf45222ec6f6006dfdf6387faf0df07d0da009d543e64");
     });
 
     // The test codes below compare with the values calculated in Agora.
@@ -290,8 +290,8 @@ describe('Hash', () =>
             0
         );
         assert.strictEqual(boasdk.hashFull(header).toString(),
-            "0xb76c8f9c01169fea26539d602e42282e0e5e620570c07dfd3839c0eb7a57162" +
-            "57939ef46dd7d6669a5c3bc4acb13f27eb61da944d103b9fc8a1f0aa06b410a22");
+            "0xeee57d6bc2833e87910e795a55adc544d883add68576d5144cc74f528eff6a8" +
+            "0fe6759c1071a39f30fb0bf201e5312f6d1f3de29a4c69fa480ab4e6092957399");
     });
 
     // The test codes below compare with the values calculated in Agora.

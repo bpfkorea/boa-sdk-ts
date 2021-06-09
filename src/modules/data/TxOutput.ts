@@ -43,14 +43,14 @@ export class TxOutput
     public type: OutputType;
 
     /**
-     * The monetary value of this output, in 1/10^7
-     */
-    public value: JSBI;
-
-    /**
      * The lock condition for this Output
      */
     public lock: Lock;
+
+    /**
+     * The monetary value of this output, in 1/10^7
+     */
+    public value: JSBI;
 
     /**
      * Constructor
@@ -61,12 +61,13 @@ export class TxOutput
     constructor (type: number, value: JSBI | string, lock: Lock | PublicKey)
     {
         this.type = type;
-        this.value = JSBI.BigInt(value);
 
         if (lock instanceof PublicKey)
             this.lock = Lock.fromPublicKey(lock);
         else
-            this.lock = lock
+            this.lock = lock;
+
+        this.value = JSBI.BigInt(value);
     }
 
     /**
@@ -97,11 +98,13 @@ export class TxOutput
      */
     public computeHash (buffer: SmartBuffer)
     {
-        buffer.writeUInt8(this.type);
+        buffer.writeUInt32LE(this.type);
+
+        this.lock.computeHash(buffer);
+
         const buf = Buffer.allocUnsafe(8);
         Utils.writeJSBigIntLE(buf, this.value);
         buffer.writeBuffer(buf);
-        this.lock.computeHash(buffer);
     }
 
     /**
@@ -159,8 +162,8 @@ export class TxOutput
     public serialize (buffer: SmartBuffer)
     {
         VarInt.fromNumber(this.type, buffer);
-        VarInt.fromJSBI(this.value, buffer);
         this.lock.serialize(buffer);
+        VarInt.fromJSBI(this.value, buffer);
     }
 
     /**
@@ -170,8 +173,8 @@ export class TxOutput
     public static deserialize (buffer: SmartBuffer): TxOutput
     {
         let type = VarInt.toNumber(buffer);
-        let value = VarInt.toJSBI(buffer);
         let lock = Lock.deserialize(buffer);
+        let value = VarInt.toJSBI(buffer);
         return new TxOutput(type, value, lock);
     }
 }

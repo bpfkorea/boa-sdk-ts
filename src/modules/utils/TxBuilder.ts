@@ -167,7 +167,7 @@ export class TxBuilder
             ),
             lock_height);
 
-        tx.inputs.sort(TxInput.compare);
+        tx.sort();
 
         let _unlocker = (unlocker !== undefined) ? unlocker : this.keyUnlocker;
         tx.inputs.forEach((value, idx) => {
