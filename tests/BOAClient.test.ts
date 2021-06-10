@@ -1491,35 +1491,35 @@ describe('BOA Client', () => {
                 {
                     "utxo": "0xc3780f9907a97c20a2955945544e7732a60702c32d81e016bdf1ea172b7b7fb96e9a4164176663a146615307aaadfbbad77e615a7c792a89191e85471120d314",
                     "unlock": {
-                        "bytes": "O0rgsZcBaSJltxBE3Z57rPRP1tACxtSM7ErfFiycZgqeLzVByMGk7ngZNIwKoRjFSyn1ETyZybDoa6pbZNS/TQ=="
+                        "bytes": "Ho2Lxmx4UJpzcivLgZOTeOsbtFwQ2QzpKMHLY07raQrEbM57DEHaR5v8vDxxkyh1NZn02+CI3M8CGDLFa1EQEQ=="
                     },
                     "unlock_age": 0
                 },
                 {
                     "utxo": "0x3451d94322524e3923fd26f0597fb8a9cdbf3a9427c38ed1ca61104796d39c5b9b5ea33d576f17c2dc17bebc5d84a0559de8c8c521dfe725d4c352255fc71e85",
                     "unlock": {
-                        "bytes": "CVneqbZyBo/698E62P0PgB3wqPvS+6McmId5/yk7jgo0ywsT43Fx1GqFJJAo1PqvTBi8lLXztxou8xBdYwd1pA=="
+                        "bytes": "XWndrI7QXgY1Tb3lrk4mpC2PJIvnHKv5pynXfla/JAADl6MnMAGMpRgtZeg/8Gmw9Wih0qgrbCBiTM+tUFCcdw=="
                     },
                     "unlock_age": 0
                 },
                 {
                     "utxo": "0x7e1958dbe6839d8520d65013bbc85d36d47a9f64cf608cc66c0d816f0b45f5c8a85a8990725ffbb1ab13c3c65b45fdc06f4745d455e00e1068c4c5c0b661d685",
                     "unlock": {
-                        "bytes": "yjtwtdNQyYIRtXcF4xJR2NpNUczQUlimi7t7YBfk9wXbMY7fHrgFiUGFEaP4mEYwG0jcUjXHJa9jLGCna0o77A=="
+                        "bytes": "PyQdYPHxgIaoGW3oSpknJSp/W9nEGuZIK7oL1o6b3QZZ2stIEoX/Q1aABZyKGAuX52Jj5pKU0/Jh8/pJ7o3jVA=="
                     },
                     "unlock_age": 0
                 },
                 {
                     "utxo": "0xd44608de8a5015b04f933098fd7f67f84ffbf00c678836d38c661ab6dc1f149606bdc96bad149375e16dc5722b077b14c0a4afdbe6d30932f783650f435bcb92",
                     "unlock": {
-                        "bytes": "aAMtVMszr1KvDsflyQ6Jpjhod60p55g/jCdJCMeMtwIhzf0l7Ue3TOMazRnpzQiQUuMOGftCdKXlfOCLN8VLUw=="
+                        "bytes": "SMFTDslZxDiVsf/A82CXWpjN+dnEw0ITyBmLWtP8qgTJNEIk2S5SsLo3x+RGVBNajVnSiB7CQvIWtDGgGxTmYg=="
                     },
                     "unlock_age": 0
                 },
                 {
                     "utxo": "0xfca92fe76629311c6208a49e89cb26f5260777278cd8b272e7bb3021adf429957fd6844eb3b8ff64a1f6074126163fd636877fa92a1f4329c5116873161fbaf8",
                     "unlock": {
-                        "bytes": "TjAyrxB5htxVizw6ZwAl8SIyo/LGwO5D4VhOZSFKtgZIlw4tYpUKIIo8B4S4ZEeTN/sbWoiNFsOC22MLBS9ArQ=="
+                        "bytes": "tnqSKuN/YfU1Fpm2QVZsqYv/+13e97w5l3mAvuTlFAioH34dQ6VMp7t9qTRNy2Tx7S4DQgRGkdByQ1n95D4wlg=="
                     },
                     "unlock_age": 0
                 }
@@ -1527,7 +1527,7 @@ describe('BOA Client', () => {
             "outputs": [
                 {
                     "type": 0,
-                    "value": "147800",
+                    "value": "146600",
                     "lock": {
                         "type": 0,
                         "bytes": "wa1PiNOnmZYBpjfjXS58SZ6fJTaihHSRZRt86aWWRgE="
@@ -1644,7 +1644,7 @@ describe('BOA Client', () => {
         // Get Voting Fee
         let fee = await boa_client.getVotingFee(273);
 
-        assert.deepStrictEqual(fee, JSBI.BigInt(29310000));
+        assert.deepStrictEqual(fee, JSBI.BigInt(29310660));
     });
 
     it ('Verify the payment', async () =>

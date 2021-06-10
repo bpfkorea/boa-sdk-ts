@@ -124,7 +124,7 @@ export class TxOutput
      */
     public getNumberOfBytes (): number
     {
-        return Utils.SIZE_OF_BYTE +         //  TxOutput.type
+        return Utils.SIZE_OF_INT +          //  TxOutput.type
             Utils.SIZE_OF_LONG +            //  TxOutput.value
             this.lock.getNumberOfBytes();   //  TxOutput.lock
     }
@@ -134,7 +134,7 @@ export class TxOutput
      */
     public static getEstimatedNumberOfBytes (): number
     {
-        return Utils.SIZE_OF_BYTE + Utils.SIZE_OF_LONG + Utils.SIZE_OF_BYTE + Utils.SIZE_OF_PUBLIC_KEY;
+        return Utils.SIZE_OF_INT + Utils.SIZE_OF_LONG + Utils.SIZE_OF_BYTE + Utils.SIZE_OF_PUBLIC_KEY;
     }
 
     /**

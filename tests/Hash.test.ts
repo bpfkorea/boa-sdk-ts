@@ -102,7 +102,7 @@ describe('Hash', () =>
             boasdk.Hash.Width +             //  TxInput.utxo
             0 +                             //  TxInput.unlock.bytes
             boasdk.Utils.SIZE_OF_INT +      //  TxInput.unlock_age
-            boasdk.Utils.SIZE_OF_BYTE +     //  TxOutput.type
+            boasdk.Utils.SIZE_OF_INT +      //  TxOutput.type
             boasdk.Utils.SIZE_OF_LONG +     //  TxOutput.value
             boasdk.Utils.SIZE_OF_BYTE  +    //  TxOutput.lock.type
             0 +                             //  TxOutput.lock.bytes
