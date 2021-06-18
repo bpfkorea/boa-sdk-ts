@@ -53,6 +53,16 @@ export class UnspentTxOutput
     time: number;
 
     /**
+     * The lock type
+     */
+    lock_type: number;
+
+    /**
+     * The lock bytes
+     */
+    lock_bytes: string;
+
+    /**
      * Constructor
      * @param utxo          The hash of the UTXO key
      * @param type          The type of the transaction output
@@ -60,9 +70,11 @@ export class UnspentTxOutput
      * @param amount        The amount value of this utxo, in 1/10^7
      * @param height        The height of the block on created
      * @param time          The time of the block on created
+     * @param lock_type     The lock type
+     * @param lock_bytes    The lock bytes
      */
     constructor (utxo?: Hash, type?: OutputType, unlock_height?: JSBI, amount?: JSBI,
-                 height?: JSBI, time?: number)
+                 height?: JSBI, time?: number, lock_type?: number, lock_bytes?: string)
     {
         if (utxo != undefined)
             this.utxo = new Hash(utxo.data);
@@ -93,6 +105,16 @@ export class UnspentTxOutput
             this.time = time;
         else
             this.time = 0;
+
+        if (lock_type != undefined)
+            this.lock_type = lock_type;
+        else
+            this.lock_type = 0;
+
+        if (lock_bytes != undefined)
+            this.lock_bytes = lock_bytes;
+        else
+            this.lock_bytes = "";
     }
 
     /**
@@ -109,6 +131,8 @@ export class UnspentTxOutput
         this.amount = JSBI.BigInt(data.amount);
         this.height = JSBI.BigInt(data.height);
         this.time = data.time;
+        this.lock_type = data.lock_type;
+        this.lock_bytes = data.lock_bytes;
     }
 }
 
@@ -124,4 +148,6 @@ export interface JSONUnspentTxOutput
     amount: string;
     height: string;
     time: number;
+    lock_type: number;
+    lock_bytes: string;
 }

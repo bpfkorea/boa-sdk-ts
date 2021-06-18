@@ -292,6 +292,39 @@ export class BOAClient
     }
 
     /**
+     * Request UTXO's information about the UTXO hash array.
+     * @param hashes The hash of UTXOs
+     * @returns Promise that resolves or
+     * rejects with response from the Stoa
+     */
+    public getUTXOInfo (hashes: Array<Hash>): Promise<Array<UnspentTxOutput>>
+    {
+        return new Promise<Array<UnspentTxOutput>>((resolve, reject) =>
+        {
+            let url = uri(this.server_url)
+                .directory("utxos");
+
+            let utxo_hashes = hashes.map(m => m.toString());
+            Request.post(url.toString(), {utxos: utxo_hashes})
+                .then((response: AxiosResponse) =>
+                {
+                    let utxos: Array<UnspentTxOutput> = new Array<UnspentTxOutput>();
+                    response.data.forEach((elem: any) =>
+                    {
+                        let utxo = new UnspentTxOutput();
+                        utxo.fromJSON(elem);
+                        utxos.push(utxo);
+                    });
+                    resolve(utxos);
+                })
+                .catch((reason: any) =>
+                {
+                    reject(handleNetworkError(reason));
+                });
+        });
+    }
+
+    /**
      * Request an Stoa's current block height.
      */
     public getBlockHeight (): Promise<JSBI>
