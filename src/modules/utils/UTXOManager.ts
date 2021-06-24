@@ -76,7 +76,7 @@ export class UTXOManager
      * @param height The height of the current block,
      * if this value is not specified, the total is calculated.
      * @returns Returns the sum of the amount.
-     * The first is the sum of UTXO, whose type of transaction is Payment,
+     * The first is the sum of UTXO, whose type of transaction is Payment or Coinbase,
      * and the second is the sum of Freeze,
      * and the third is the amount that was released from the freeze
      * but locked to `unlock_height`.
@@ -93,7 +93,20 @@ export class UTXOManager
                 if ((height !== undefined) && JSBI.greaterThan(JSBI.subtract(n.unlock_height, JSBI.BigInt(1)), height))
                     sum[2] = JSBI.add(sum[2], n.amount);
                 else
-                    sum[n.type] = JSBI.add(sum[n.type], n.amount);
+                {
+                    switch (n.type)
+                    {
+                        case OutputType.Payment :
+                            sum[0] = JSBI.add(sum[0], n.amount);
+                            break;
+                        case OutputType.Freeze :
+                            sum[1] = JSBI.add(sum[1], n.amount);
+                            break;
+                        case OutputType.Coinbase :
+                            sum[0] = JSBI.add(sum[0], n.amount);
+                            break;
+                    }
+                }
                 return sum;
             }, [JSBI.BigInt(0), JSBI.BigInt(0), JSBI.BigInt(0)]);
     }
@@ -116,13 +129,13 @@ export class UTXOManager
         if (JSBI.lessThan(height, JSBI.BigInt(0)))
             throw new Error(`The height must be greater than or equal to zero, not ${height.toString()}`);
 
-        if (JSBI.greaterThan(target_amount, this.getSum(height)[OutputType.Payment]))
+        if (JSBI.greaterThan(target_amount, this.getSum(height)[0]))
             return [];
 
         target_amount = JSBI.add(target_amount, estimated_input_fee);
         let sum = JSBI.BigInt(0);
         return this.items
-            .filter(n => (!n.used && (n.type == OutputType.Payment)
+            .filter(n => (!n.used && ((n.type === OutputType.Payment) || (n.type === OutputType.Coinbase))
                 && JSBI.lessThanOrEqual(JSBI.subtract(n.unlock_height, JSBI.BigInt(1)), height)))
             .filter((n) =>
             {

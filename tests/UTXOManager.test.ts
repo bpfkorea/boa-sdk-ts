@@ -78,7 +78,7 @@ describe ('Test for UTXOManager', () =>
                 JSBI.BigInt(10)),
             new boasdk.UnspentTxOutput(
                 new boasdk.Hash("0x37e17420b4bfd8be693475fbbe8b53bb80904dd3e45f3080c0d0b912b004324a27693559d884b943830f6a21b05c69061f453e8b9f03d56f3b6fd5b0c6fc2f8b"),
-                boasdk.OutputType.Payment,
+                boasdk.OutputType.Coinbase,
                 JSBI.BigInt(10),
                 JSBI.BigInt(10))
         ];
