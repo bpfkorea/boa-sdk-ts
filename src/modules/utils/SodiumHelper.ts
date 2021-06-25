@@ -1,6 +1,6 @@
 /*******************************************************************************
 
-    Includes class to help package libsodium-wrappers-sumo
+    Includes class to help package BOA Sodium
 
     This is designed to compensate for the slow loading of packages.
 
@@ -16,7 +16,7 @@
 import { IBOASodium } from "boa-sodium-base-ts";
 
 /**
- * The Class to help package libsodium-wrappers-sumo
+ * The Class to help package BOA Sodium
  */
 export class SodiumHelper {
     /**
@@ -24,8 +24,20 @@ export class SodiumHelper {
      */
     private static _sodium: IBOASodium;
 
+    /**
+     * Assign BOA Sodium Module
+     * @param sodium The interface of IBOASodium
+     */
     public static assign(sodium: IBOASodium) {
         SodiumHelper._sodium = sodium;
+    }
+
+    /**
+     * Verify that the module is assigned.
+     * @returns Returns true if the module is specified or false if not.
+     */
+    public static isAssigned(): boolean {
+        return SodiumHelper.sodium !== null;
     }
 
     /**
