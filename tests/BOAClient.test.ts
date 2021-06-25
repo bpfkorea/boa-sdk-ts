@@ -648,6 +648,15 @@ export class TestStoa {
             res.status(200).send(JSON.stringify(result));
         });
 
+        this.app.get("/block_height_at/:time", (req: express.Request, res: express.Response) => {
+            const time_stamp = Number(req.params.time);
+
+            const zero = 1609459200;
+            const height = Math.floor((time_stamp - zero) / (60 * 10));
+            if (height < 0) res.status(204).send("No Content");
+            else res.status(200).send(JSON.stringify(height.toString()));
+        });
+
         this.app.set("port", this.port);
 
         // Listen on provided this.port on this.address.
@@ -1000,25 +1009,25 @@ describe("BOA Client", () => {
 
         // Create BOA Client
         let boa_client = new sdk.BOAClient(stoa_uri.toString(), agora_uri.toString());
-        let date = new Date(Date.UTC(2020, 3, 29, 0, 0, 0));
+        let date = new Date(Date.UTC(2021, 3, 29, 0, 0, 0));
         let height = await boa_client.getHeightAt(date);
-        assert.strictEqual(height, 17136);
+        assert.strictEqual(height, 16992);
 
-        date = new Date(Date.UTC(2019, 3, 29, 0, 0, 0));
+        date = new Date(Date.UTC(2020, 11, 29, 0, 0, 0));
         await assert.rejects(
             boa_client.getHeightAt(date),
-            new Error("Dates prior to the chain Genesis date (January 1, 2020) are not valid")
+            new Error("The date before Genesis Block creation is invalid.")
         );
 
-        date = new Date(Date.UTC(2020, 0, 1, 0, 0, 0));
+        date = new Date(Date.UTC(2021, 0, 1, 0, 0, 0));
         height = await boa_client.getHeightAt(date);
         assert.strictEqual(height, 0);
 
-        date = new Date(Date.UTC(2020, 0, 1, 0, 9, 59));
+        date = new Date(Date.UTC(2021, 0, 1, 0, 9, 59));
         height = await boa_client.getHeightAt(date);
         assert.strictEqual(height, 0);
 
-        date = new Date(Date.UTC(2020, 0, 1, 0, 10, 0));
+        date = new Date(Date.UTC(2021, 0, 1, 0, 10, 0));
         height = await boa_client.getHeightAt(date);
         assert.strictEqual(height, 1);
     });

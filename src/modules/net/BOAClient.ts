@@ -181,21 +181,27 @@ export class BOAClient {
     }
 
     /**
-     * TODO As this might get influenced by future changes
-     * Shell function to convert from time to height
+     * Request the block height corresponding to to the block creation time
      * @param when Unix epoch time
-     * @returns height  (or expected height) of the designated time
+     * @returns height If it already exists in the block,
+     * it returns the height of the block,
+     * if the block has not yet been created,
+     * it returns the estimated height is returned.
      */
     public getHeightAt(when: Date): Promise<number> {
         return new Promise<number>((resolve, reject) => {
-            const baseDate: Date = new Date(Date.UTC(2020, 0, 1, 0, 0, 0));
-            if (when.getTime() < baseDate.getTime()) {
-                reject(new Error("Dates prior to the chain Genesis date (January 1, 2020) are not valid"));
-                return;
-            }
-            const milliseconds_per_block = 600000;
-            let height = Math.floor((when.getTime() - baseDate.getTime()) / milliseconds_per_block);
-            resolve(height);
+            let time = Math.ceil(when.getTime() / 1000);
+            let url = uri(this.server_url).directory("block_height_at").filename(time.toString());
+
+            Request.get(url.toString())
+                .then((response: AxiosResponse) => {
+                    if (response.status == 200) resolve(Number(response.data));
+                    else reject(new Error("The date before Genesis Block creation is invalid."));
+                    reject(handleNetworkError({ response: response }));
+                })
+                .catch((reason: any) => {
+                    reject(handleNetworkError(reason));
+                });
         });
     }
 
