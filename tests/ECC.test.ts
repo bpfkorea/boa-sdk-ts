@@ -11,50 +11,43 @@
 
 *******************************************************************************/
 
-import * as sdk from '../lib';
+import * as sdk from "../lib";
 import { BOASodium } from "boa-sodium-ts";
 
-import * as assert from 'assert';
+import * as assert from "assert";
 
-describe ('Test of ECC', () =>
-{
-    before('Wait for the package libsodium to finish loading', () =>
-    {
+describe("Test of ECC", () => {
+    before("Wait for the package libsodium to finish loading", () => {
         sdk.SodiumHelper.assign(new BOASodium());
         return sdk.SodiumHelper.init();
     });
 
-    it ('Test Scalar fromString / toString functions', () =>
-    {
+    it("Test Scalar fromString / toString functions", () => {
         const s = "0x1000000000000000000000000000000014def9dea2f79cd65812631a5cf5d3ec";
         let scalar = new sdk.Scalar(s);
         assert.strictEqual(scalar.toString(false), s);
     });
 
-    it ('Test of Scalar.isValid() - valid', () =>
-    {
+    it("Test of Scalar.isValid() - valid", () => {
         assert.ok(new sdk.Scalar("0x1000000000000000000000000000000014def9dea2f79cd65812631a5cf5d3ec").isValid());
         assert.ok(new sdk.Scalar("0x0eadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef").isValid());
         assert.ok(new sdk.Scalar("0x0000000000000000000000000000000000000000000000000000000000000001").isValid());
     });
 
-    it ('Test of Scalar.isValid() - invalid', () =>
-    {
-        assert.ok(!(new sdk.Scalar("0x0000000000000000000000000000000000000000000000000000000000000000")).isValid());
-        assert.ok(!(new sdk.Scalar("0x1000000000000000000000000000000014def9dea2f79cd65812631a5cf5d3ed")).isValid());
-        assert.ok(!(new sdk.Scalar("0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef")).isValid());
-        assert.ok(!(new sdk.Scalar("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff")).isValid());
+    it("Test of Scalar.isValid() - invalid", () => {
+        assert.ok(!new sdk.Scalar("0x0000000000000000000000000000000000000000000000000000000000000000").isValid());
+        assert.ok(!new sdk.Scalar("0x1000000000000000000000000000000014def9dea2f79cd65812631a5cf5d3ed").isValid());
+        assert.ok(!new sdk.Scalar("0xdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef").isValid());
+        assert.ok(!new sdk.Scalar("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff").isValid());
     });
 
-    it ('Test of Scalar.fromHash', () =>
-    {
+    it("Test of Scalar.fromHash", () => {
         let message = "BOSAGORA for the win";
-        let c = sdk.Scalar.fromHash(sdk.hashFull(message));  // challenge
+        let c = sdk.Scalar.fromHash(sdk.hashFull(message)); // challenge
         assert.strictEqual(c.toString(false), "0x07c51164f99d03f143cfafdfb8638826b87f86c73b82180c33cfb11dbaba1df3");
     });
 
-    it ('Test of Scalar function', () =>
-    {
+    it("Test of Scalar function", () => {
         let s1: sdk.Scalar = sdk.Scalar.random();
         let s2: sdk.Scalar = sdk.Scalar.random();
         let s3: sdk.Scalar = sdk.Scalar.add(s1, s2);
@@ -68,7 +61,7 @@ describe ('Test of ECC', () =>
         let Zero: sdk.Scalar = sdk.Scalar.add(s3, s3.negate());
         assert.ok(Zero.isNull());
 
-        let One: sdk.Scalar =  sdk.Scalar.add(s3, s3.complement());
+        let One: sdk.Scalar = sdk.Scalar.add(s3, s3.complement());
         assert.deepStrictEqual(sdk.Scalar.mul(One, One), One);
 
         assert.deepStrictEqual(sdk.Scalar.add(Zero, One), One);
@@ -86,19 +79,16 @@ describe ('Test of ECC', () =>
         assert.deepStrictEqual(sdk.Point.sub(p3, p2), p1);
 
         assert.deepStrictEqual(
-            sdk.Point.add(
-                sdk.Point.scalarMul(s1, p2),
-                sdk.Point.scalarMul(s2, p2)
-            ),
-            sdk.Point.scalarMul(s3, p2));
+            sdk.Point.add(sdk.Point.scalarMul(s1, p2), sdk.Point.scalarMul(s2, p2)),
+            sdk.Point.scalarMul(s3, p2)
+        );
 
         let pZero: sdk.Point = sdk.Point.Null;
         assert.deepStrictEqual(sdk.Point.add(pZero, G), G);
         assert.deepStrictEqual(sdk.Point.add(G, pZero), G);
     });
 
-    it ('Test of Point.isValid() - valid', () =>
-    {
+    it("Test of Point.isValid() - valid", () => {
         let valid = new sdk.Point("0xab4f6f6e85b8d0d38f5d5798a4bdc4dd444c8909c8a5389d3bb209a18610511b");
         assert.ok(valid.isValid());
 

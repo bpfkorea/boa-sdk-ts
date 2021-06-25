@@ -15,20 +15,19 @@
 
 import { Scalar, Point } from "./ECC";
 import { Schnorr, Pair } from "./Schnorr";
-import { Signature } from './Signature';
-import { SodiumHelper } from '../utils/SodiumHelper';
+import { Signature } from "./Signature";
+import { SodiumHelper } from "../utils/SodiumHelper";
 import { checksum, validate } from "../utils/CRC16";
-import { Utils } from '../utils/Utils';
+import { Utils } from "../utils/Utils";
 
-import { base32Encode, base32Decode } from '@ctrl/ts-base32';
-import { bech32m } from 'bech32';
-import { SmartBuffer } from 'smart-buffer';
+import { base32Encode, base32Decode } from "@ctrl/ts-base32";
+import { bech32m } from "bech32";
+import { SmartBuffer } from "smart-buffer";
 
 /**
  * The class to hold a secret key + public key + seed
  */
-export class KeyPair
-{
+export class KeyPair {
     /**
      * The public key
      */
@@ -44,8 +43,7 @@ export class KeyPair
      * @param address The instance of PublicKey
      * @param secret  The instance of SecretKey
      */
-    constructor (address: PublicKey, secret: SecretKey)
-    {
+    constructor(address: PublicKey, secret: SecretKey) {
         this.address = address;
         this.secret = secret;
     }
@@ -56,10 +54,8 @@ export class KeyPair
      * @returns The instance of KeyPair
      * See_Also: https://github.com/bosagora/agora/blob/bcd14f2c6a3616d7f05ef850dc95fae3eb386760/source/agora/crypto/Key.d#L64-L67
      */
-    public static fromSeed (secret: SecretKey): KeyPair
-    {
-        if (!secret.scalar.isValid())
-            throw new Error("SecretKey should always be valid Scalar!");
+    public static fromSeed(secret: SecretKey): KeyPair {
+        if (!secret.scalar.isValid()) throw new Error("SecretKey should always be valid Scalar!");
         return new KeyPair(new PublicKey(secret.scalar.toPoint()), new SecretKey(secret.scalar));
     }
 
@@ -68,11 +64,9 @@ export class KeyPair
      * @returns The instance of KeyPair
      * See_Also: https://github.com/bosagora/agora/blob/bcd14f2c6a3616d7f05ef850dc95fae3eb386760/source/agora/crypto/Key.d#L98-L102
      */
-    public static random (): KeyPair
-    {
+    public static random(): KeyPair {
         let scalar = Scalar.random();
-        if (!scalar.isValid())
-            throw new Error("SecretKey should always be valid Scalar!");
+        if (!scalar.isValid()) throw new Error("SecretKey should always be valid Scalar!");
         return new KeyPair(new PublicKey(scalar.toPoint()), new SecretKey(scalar));
     }
 
@@ -82,15 +76,13 @@ export class KeyPair
      * @return Returns true if a valid scalar can be created with a given random bytes,
      * otherwise false.
      */
-    public static isValidRandomBytes (r: Buffer): boolean
-    {
-        if (r.length !== SodiumHelper.sodium.crypto_core_ed25519_SCALARBYTES)
-            return false;
+    public static isValidRandomBytes(r: Buffer): boolean {
+        if (r.length !== SodiumHelper.sodium.crypto_core_ed25519_SCALARBYTES) return false;
 
         let t = Buffer.from(r);
         t[SodiumHelper.sodium.crypto_core_ed25519_SCALARBYTES - 1] &= 0x1f;
 
-        return (Utils.compareBuffer(t, Scalar.ZERO) > 0) && (Utils.compareBuffer(t, Scalar.ED25519_L) < 0);
+        return Utils.compareBuffer(t, Scalar.ZERO) > 0 && Utils.compareBuffer(t, Scalar.ED25519_L) < 0;
     }
 
     /**
@@ -99,8 +91,7 @@ export class KeyPair
      * @returns The signature of `msg` using `this`
      * See_Also: https://github.com/bosagora/agora/blob/bcd14f2c6a3616d7f05ef850dc95fae3eb386760/source/agora/crypto/Key.d#L91-L95
      */
-    public sign <T> (msg: T): Signature
-    {
+    public sign<T>(msg: T): Signature {
         return Schnorr.signPair<T>(new Pair(this.secret.scalar, this.address.point), msg);
     }
 }
@@ -108,8 +99,7 @@ export class KeyPair
 /**
  * Define the public key / address
  */
-export class PublicKey
-{
+export class PublicKey {
     private static HumanReadablePart = "boa";
 
     /**
@@ -120,8 +110,7 @@ export class PublicKey
     /**
      * Buffer containing raw point data
      */
-    public get data (): Buffer
-    {
+    public get data(): Buffer {
         return this.point.data;
     }
 
@@ -130,46 +119,37 @@ export class PublicKey
      * @param data The string or instance of Point or binary representation of the public key
      * @throws Will throw the error if the public key validation fails.
      */
-    constructor (data: Buffer | Point | string)
-    {
-        if (typeof data === 'string')
-        {
-            if ((data.length < PublicKey.HumanReadablePart.length) || (data.slice(0, 3) !== PublicKey.HumanReadablePart))
-                throw new Error('Differ in the human-readable part');
+    constructor(data: Buffer | Point | string) {
+        if (typeof data === "string") {
+            if (data.length < PublicKey.HumanReadablePart.length || data.slice(0, 3) !== PublicKey.HumanReadablePart)
+                throw new Error("Differ in the human-readable part");
 
             let decoded = bech32m.decode(data);
-            if (decoded.prefix !== PublicKey.HumanReadablePart)
-                throw new Error('This is not the address of BOA');
+            if (decoded.prefix !== PublicKey.HumanReadablePart) throw new Error("This is not the address of BOA");
 
             let dec_data: Array<number> = [];
             if (!Utils.convertBits(dec_data, decoded.words, 5, 8, false))
                 throw new Error("Bech32 conversion of base failed");
 
             if (dec_data.length !== 1 + SodiumHelper.sodium.crypto_core_ed25519_BYTES)
-                throw new Error('Decoded data size is not normal');
+                throw new Error("Decoded data size is not normal");
 
-            if (dec_data[0] != VersionByte.AccountID)
-                throw new Error('This is not a valid address type');
+            if (dec_data[0] != VersionByte.AccountID) throw new Error("This is not a valid address type");
 
             let key_data = Buffer.from(dec_data.slice(1));
             if (!SodiumHelper.sodium.crypto_core_ed25519_is_valid_point(key_data))
-                throw new Error('This is not a valid Point');
+                throw new Error("This is not a valid Point");
 
             this.point = new Point(key_data);
-        }
-        else if (data instanceof Point)
-        {
+        } else if (data instanceof Point) {
             this.point = new Point(data.data);
-        }
-        else
-        {
+        } else {
             if (data.length !== SodiumHelper.sodium.crypto_core_ed25519_BYTES)
                 throw new Error("The size of the input data is abnormal.");
             this.point = new Point(data);
         }
 
-        if (!this.point.isValid())
-            throw new Error("This is not a valid Point!");
+        if (!this.point.isValid()) throw new Error("This is not a valid Point!");
     }
 
     /**
@@ -177,52 +157,47 @@ export class PublicKey
      * @param address Representing the public key as a string
      * @returns If the address passes the validation, it returns an empty string or a message.
      */
-    public static validate (address: string): string
-    {
-        if ((address.length < PublicKey.HumanReadablePart.length) || (address.slice(0, 3) !== PublicKey.HumanReadablePart))
-            return 'Differ in the human-readable part';
+    public static validate(address: string): string {
+        if (address.length < PublicKey.HumanReadablePart.length || address.slice(0, 3) !== PublicKey.HumanReadablePart)
+            return "Differ in the human-readable part";
 
         let decoded;
-        try
-        {
+        try {
             decoded = bech32m.decode(address);
-        }
-        catch(error)
-        {
-            return error.message;
+        } catch (err) {
+            if (err instanceof Error) {
+                return err.message;
+            } else {
+                return "Unknown error";
+            }
         }
 
-        if (decoded.prefix !== PublicKey.HumanReadablePart)
-            return 'This is not the address of BOA';
+        if (decoded.prefix !== PublicKey.HumanReadablePart) return "This is not the address of BOA";
 
         let dec_data: Array<number> = [];
         if (!Utils.convertBits(dec_data, decoded.words, 5, 8, false))
             throw new Error("Bech32 conversion of base failed");
 
         if (dec_data.length !== 1 + SodiumHelper.sodium.crypto_core_ed25519_BYTES)
-            return 'Decoded data size is not normal';
+            return "Decoded data size is not normal";
 
-        if (dec_data[0] != VersionByte.AccountID)
-            return 'This is not a valid address type';
+        if (dec_data[0] != VersionByte.AccountID) return "This is not a valid address type";
 
         let key_data = Buffer.from(dec_data.slice(1));
-        if (!SodiumHelper.sodium.crypto_core_ed25519_is_valid_point(key_data))
-            return 'This is not a valid Point';
+        if (!SodiumHelper.sodium.crypto_core_ed25519_is_valid_point(key_data)) return "This is not a valid Point";
 
-        return '';
+        return "";
     }
 
     /**
      * Uses Bech32
      */
-    public toString (): string
-    {
+    public toString(): string {
         let unencoded: Array<number> = [];
         let conv_data: Array<number> = [];
         unencoded.push(VersionByte.AccountID);
-        this.data.forEach(m => unencoded.push(m));
-        if (!Utils.convertBits(conv_data, unencoded, 8, 5, true))
-            throw new Error("Bech32 conversion of base failed");
+        this.data.forEach((m) => unencoded.push(m));
+        if (!Utils.convertBits(conv_data, unencoded, 8, 5, true)) throw new Error("Bech32 conversion of base failed");
         return bech32m.encode(PublicKey.HumanReadablePart, conv_data);
     }
 
@@ -233,8 +208,7 @@ export class PublicKey
      * @returns `true` if the signature is valid
      * See_Also: https://github.com/bosagora/agora/blob/bcd14f2c6a3616d7f05ef850dc95fae3eb386760/source/agora/crypto/Key.d#L242-L246
      */
-    public verify <T> (signature: Signature, msg: T): boolean
-    {
+    public verify<T>(signature: Signature, msg: T): boolean {
         return Schnorr.verify<T>(this.point, signature, msg);
     }
 
@@ -242,16 +216,14 @@ export class PublicKey
      * Collects data to create a hash.
      * @param buffer The buffer where collected data is stored
      */
-    public computeHash (buffer: SmartBuffer)
-    {
+    public computeHash(buffer: SmartBuffer) {
         this.point.computeHash(buffer);
     }
 
     /**
      * Converts this object to its JSON representation
      */
-    public toJSON (key?: string): string
-    {
+    public toJSON(key?: string): string {
         return this.toString();
     }
 }
@@ -259,18 +231,16 @@ export class PublicKey
 /**
  * Define the secret key
  */
-export class SecretKey
-{
+export class SecretKey {
     /**
-    * The instance of the Scalar
-    */
+     * The instance of the Scalar
+     */
     public readonly scalar: Scalar;
 
     /**
      * Buffer containing raw scalar data
      */
-    public get data (): Buffer
-    {
+    public get data(): Buffer {
         return this.scalar.data;
     }
 
@@ -279,36 +249,27 @@ export class SecretKey
      * @param data The instance of Scalar or binary data of the secret key
      * @throws Will throw the error if the secret key validation fails.
      */
-    constructor (data: Buffer | Scalar | string)
-    {
-        if (typeof data === 'string')
-        {
+    constructor(data: Buffer | Scalar | string) {
+        if (typeof data === "string") {
             const decoded = Buffer.from(base32Decode(data));
             if (decoded.length != 1 + SodiumHelper.sodium.crypto_core_ed25519_SCALARBYTES + 2)
-                throw new Error('Decoded data size is not normal');
+                throw new Error("Decoded data size is not normal");
 
-            if (decoded[0] != VersionByte.Seed)
-                throw new Error('This is not a valid seed type');
+            if (decoded[0] != VersionByte.Seed) throw new Error("This is not a valid seed type");
 
             const body = decoded.slice(0, -2);
             const cs = decoded.slice(-2);
 
-            if (!validate(body, cs))
-                throw new Error('Checksum result do not match');
+            if (!validate(body, cs)) throw new Error("Checksum result do not match");
 
             this.scalar = new Scalar(body.slice(1));
-        }
-        else if (data instanceof Scalar)
-        {
+        } else if (data instanceof Scalar) {
             this.scalar = new Scalar(data.data);
-        }
-        else
-        {
+        } else {
             this.scalar = new Scalar(data);
         }
 
-        if (!this.scalar.isValid())
-            throw new Error("SecretKey should always be valid Scalar!");
+        if (!this.scalar.isValid()) throw new Error("SecretKey should always be valid Scalar!");
     }
 
     /**
@@ -316,22 +277,19 @@ export class SecretKey
      * @param seed Representing the seed as a string
      * @returns If the seed passes the validation, it returns an empty string or a message.
      */
-    public static validate (seed: string): string
-    {
+    public static validate(seed: string): string {
         const decoded = Buffer.from(base32Decode(seed));
 
         if (decoded.length != 1 + SodiumHelper.sodium.crypto_core_ed25519_SCALARBYTES + 2)
-            return 'Decoded data size is not normal';
+            return "Decoded data size is not normal";
 
-        if (decoded[0] != VersionByte.Seed)
-            return 'This is not a valid seed type';
+        if (decoded[0] != VersionByte.Seed) return "This is not a valid seed type";
 
         const body = decoded.slice(0, -2);
         const checksum = decoded.slice(-2);
-        if (!validate(body, checksum))
-            return 'Checksum result do not match';
+        if (!validate(body, checksum)) return "Checksum result do not match";
 
-        return '';
+        return "";
     }
 
     /**
@@ -339,8 +297,7 @@ export class SecretKey
      * @param msg The message to sign.
      * @returns The signature of `msg` using `this`
      */
-    public sign <T> (msg: T): Signature
-    {
+    public sign<T>(msg: T): Signature {
         return Schnorr.signPair<T>(Pair.fromScalar(this.scalar), msg);
     }
 
@@ -350,10 +307,8 @@ export class SecretKey
      * the actual value. Default is true.
      * @returns The secret key seed
      */
-    public toString (obfuscation: boolean = true): string
-    {
-        if (obfuscation)
-            return "**SCALAR**";
+    public toString(obfuscation: boolean = true): string {
+        if (obfuscation) return "**SCALAR**";
 
         const body = Buffer.concat([Buffer.from([VersionByte.Seed]), this.data]);
         const cs = checksum(body);
@@ -366,8 +321,7 @@ export class SecretKey
  * @ignore
  * Discriminant for Stellar binary-encoded user-facing data
  */
-enum VersionByte
-{
+enum VersionByte {
     /**
      * Used for encoded stellar addresses
      * Base32-encodes to 'G...'

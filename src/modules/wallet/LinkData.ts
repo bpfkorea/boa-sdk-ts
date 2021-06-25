@@ -15,8 +15,7 @@
  * Data structure transferred from Votera app to BOA Wallet app
  * when depositing the proposal fee
  */
-export interface LinkDataWithProposalFee
-{
+export interface LinkDataWithProposalFee {
     /**
      * The public address of proposer - Use as the address in the wallet
      */
@@ -25,7 +24,7 @@ export interface LinkDataWithProposalFee
     /**
      * The public address to deposit
      */
-    destination: string
+    destination: string;
 
     /**
      * Proposal fee (amount to be transferred)
@@ -42,8 +41,7 @@ export interface LinkDataWithProposalFee
  * Data structure that transfers voting costs from Votera app to BOA Wallet app
  * when sending them to validators.
  */
-export interface LinkDataWithProposalData
-{
+export interface LinkDataWithProposalData {
     /**
      * The public address of proposer- Use as the address in the wallet
      */
@@ -68,8 +66,7 @@ export interface LinkDataWithProposalData
 /**
  * When voting, the data structure delivered from the Votera app to BOA Wallet app
  */
-export interface LinkDataWithVoteData
-{
+export interface LinkDataWithVoteData {
     /**
      * The data of voting (encoded base64)
      */

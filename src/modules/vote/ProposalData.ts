@@ -11,30 +11,28 @@
 
 *******************************************************************************/
 
-import { Hash } from '../common/Hash';
-import { PublicKey } from '../common/KeyPair';
-import { Utils } from '../utils/Utils';
-import { VarInt } from '../utils/VarInt';
-import { LinkDataWithProposalData } from '../wallet/LinkData';
+import { Hash } from "../common/Hash";
+import { PublicKey } from "../common/KeyPair";
+import { Utils } from "../utils/Utils";
+import { VarInt } from "../utils/VarInt";
+import { LinkDataWithProposalData } from "../wallet/LinkData";
 
-import JSBI from 'jsbi';
-import { SmartBuffer } from 'smart-buffer';
+import JSBI from "jsbi";
+import { SmartBuffer } from "smart-buffer";
 
 /**
  * The type of the proposal
  */
-export enum ProposalType
-{
+export enum ProposalType {
     System = 0,
-    Fund = 1
+    Fund = 1,
 }
 
 /**
  * The class that define proposal data
  */
-export class ProposalData
-{
-    public static HEADER = "PROPOSAL"
+export class ProposalData {
+    public static HEADER = "PROPOSAL";
 
     /**
      * The name of App
@@ -117,12 +115,21 @@ export class ProposalData
      * @param proposer_address      Proposer's own public address
      * @param proposal_fee_address  Public address to deposit the proposal fee
      */
-    constructor (app_name: string, proposal_type: ProposalType, proposal_id: string, proposal_title: string,
-                 vote_start_height: JSBI, vote_end_height: JSBI,
-                 doc_hash: Hash, fund_amount: JSBI, proposal_fee: JSBI, vote_fee: JSBI,
-                 tx_hash_proposal_fee: Hash,
-                 proposer_address: PublicKey, proposal_fee_address: PublicKey)
-    {
+    constructor(
+        app_name: string,
+        proposal_type: ProposalType,
+        proposal_id: string,
+        proposal_title: string,
+        vote_start_height: JSBI,
+        vote_end_height: JSBI,
+        doc_hash: Hash,
+        fund_amount: JSBI,
+        proposal_fee: JSBI,
+        vote_fee: JSBI,
+        tx_hash_proposal_fee: Hash,
+        proposer_address: PublicKey,
+        proposal_fee_address: PublicKey
+    ) {
         this.app_name = app_name;
         this.proposal_type = proposal_type;
         this.proposal_id = proposal_id;
@@ -142,8 +149,7 @@ export class ProposalData
      * Serialize as binary data.
      * @param buffer The buffer where serialized data is stored
      */
-    public serialize (buffer: SmartBuffer)
-    {
+    public serialize(buffer: SmartBuffer) {
         let temp = Buffer.from(ProposalData.HEADER);
         VarInt.fromNumber(temp.length, buffer);
         buffer.writeBuffer(temp);
@@ -182,12 +188,10 @@ export class ProposalData
      * An exception occurs when the size of the remaining data is less than the required.
      * @param buffer The buffer to be deserialized
      */
-    public static deserialize (buffer: SmartBuffer): ProposalData
-    {
+    public static deserialize(buffer: SmartBuffer): ProposalData {
         let length = VarInt.toNumber(buffer);
         let header = Utils.readBuffer(buffer, length);
-        if (header.toString() !== ProposalData.HEADER)
-            throw new Error("This is not the expected data type.");
+        if (header.toString() !== ProposalData.HEADER) throw new Error("This is not the expected data type.");
 
         length = VarInt.toNumber(buffer);
         let temp = Utils.readBuffer(buffer, length);
@@ -214,10 +218,21 @@ export class ProposalData
         let proposer_address = new PublicKey(Utils.readBuffer(buffer, Utils.SIZE_OF_PUBLIC_KEY));
         let proposal_fee_address = new PublicKey(Utils.readBuffer(buffer, Utils.SIZE_OF_PUBLIC_KEY));
 
-        return new ProposalData(app_name, proposal_type, proposal_id, proposal_title,
-            vote_start_height, vote_end_height,
-            doc_hash, fund_amount, proposal_fee, vote_fee, tx_hash_proposal_fee,
-            proposer_address, proposal_fee_address);
+        return new ProposalData(
+            app_name,
+            proposal_type,
+            proposal_id,
+            proposal_title,
+            vote_start_height,
+            vote_end_height,
+            doc_hash,
+            fund_amount,
+            proposal_fee,
+            vote_fee,
+            tx_hash_proposal_fee,
+            proposer_address,
+            proposal_fee_address
+        );
     }
 
     /**
@@ -226,18 +241,18 @@ export class ProposalData
      * @param validators Array of all validators
      * @param voting_fee Voting fee per validator
      */
-    public getLinkData (
+    public getLinkData(
         proposer_address: PublicKey,
         validators: Array<PublicKey>,
-        voting_fee: JSBI): LinkDataWithProposalData
-    {
+        voting_fee: JSBI
+    ): LinkDataWithProposalData {
         let buffer = new SmartBuffer();
         this.serialize(buffer);
         return {
             proposer_address: proposer_address.toString(),
-            validators: validators.map(k => k.toString()),
+            validators: validators.map((k) => k.toString()),
             voting_fee: voting_fee.toString(),
-            payload: buffer.toBuffer().toString("base64")
-        }
+            payload: buffer.toBuffer().toString("base64"),
+        };
     }
 }

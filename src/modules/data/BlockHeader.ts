@@ -11,25 +11,24 @@
 
 *******************************************************************************/
 
-import { BitField } from './BitField';
-import { Enrollment } from './Enrollment';
-import { JSONValidator } from '../utils/JSONValidator';
+import { BitField } from "./BitField";
+import { Enrollment } from "./Enrollment";
+import { JSONValidator } from "../utils/JSONValidator";
 import { Hash } from "../common/Hash";
-import { Height } from '../common/Height';
-import { Signature } from '../common/Signature';
-import { Utils } from '../utils/Utils';
-import { VarInt } from '../utils/VarInt';
+import { Height } from "../common/Height";
+import { Signature } from "../common/Signature";
+import { Utils } from "../utils/Utils";
+import { VarInt } from "../utils/VarInt";
 
-import JSBI from 'jsbi';
-import { SmartBuffer } from 'smart-buffer';
+import JSBI from "jsbi";
+import { SmartBuffer } from "smart-buffer";
 
 /**
  * The class that defines the header of a block.
  * Convert JSON object to TypeScript's instance.
  * An exception occurs if the required property is not present.
  */
-export class BlockHeader
-{
+export class BlockHeader {
     /**
      * The hash of the previous block in the chain of blocks
      */
@@ -87,9 +86,17 @@ export class BlockHeader
      * @param missing_validators List of indices to the validator UTXO set which have not revealed the preimage
      * @param time_offset Block seconds offset from Genesis Timestamp in `ConsensusParams`
      */
-    constructor (prev_block: Hash, height: Height, merkle_root: Hash,
-        validators: BitField, signature: Signature, enrollments: Enrollment[], random_seed: Hash, missing_validators: Array<number>, time_offset: number)
-    {
+    constructor(
+        prev_block: Hash,
+        height: Height,
+        merkle_root: Hash,
+        validators: BitField,
+        signature: Signature,
+        enrollments: Enrollment[],
+        random_seed: Hash,
+        missing_validators: Array<number>,
+        time_offset: number
+    ) {
         this.prev_block = prev_block;
         this.height = height;
         this.merkle_root = merkle_root;
@@ -111,15 +118,14 @@ export class BlockHeader
      * @param value The value associated with `key`
      * @returns A new instance of `BlockHeader` if `key == ""`, `value` otherwise.
      */
-    public static reviver (key: string, value: any): any
-    {
-        if (key !== "")
-            return value;
+    public static reviver(key: string, value: any): any {
+        if (key !== "") return value;
 
-        JSONValidator.isValidOtherwiseThrow('BlockHeader', value);
+        JSONValidator.isValidOtherwiseThrow("BlockHeader", value);
 
         return new BlockHeader(
-            new Hash(value.prev_block), new Height(value.height),
+            new Hash(value.prev_block),
+            new Height(value.height),
             new Hash(value.merkle_root),
             BitField.reviver("", value.validators),
             new Signature(value.signature),
@@ -134,16 +140,13 @@ export class BlockHeader
      * Collects data to create a hash.
      * @param buffer The buffer where collected data is stored
      */
-    public computeHash (buffer: SmartBuffer)
-    {
+    public computeHash(buffer: SmartBuffer) {
         this.prev_block.computeHash(buffer);
         this.height.computeHash(buffer);
         this.merkle_root.computeHash(buffer);
-        for (let elem of this.enrollments)
-            elem.computeHash(buffer);
+        for (let elem of this.enrollments) elem.computeHash(buffer);
         this.random_seed.computeHash(buffer);
-        for (let elem of this.missing_validators)
-            buffer.writeUInt32LE(elem);
+        for (let elem of this.missing_validators) buffer.writeUInt32LE(elem);
         const buf = Buffer.allocUnsafe(8);
         Utils.writeJSBigIntLE(buf, JSBI.BigInt(this.time_offset));
         buffer.writeBuffer(buf);
@@ -153,8 +156,7 @@ export class BlockHeader
      * Serialize as binary data.
      * @param buffer - The buffer where serialized data is stored
      */
-    public serialize (buffer: SmartBuffer)
-    {
+    public serialize(buffer: SmartBuffer) {
         this.prev_block.serialize(buffer);
         this.merkle_root.serialize(buffer);
         this.random_seed.serialize(buffer);
@@ -163,12 +165,10 @@ export class BlockHeader
         this.height.serialize(buffer);
 
         VarInt.fromNumber(this.enrollments.length, buffer);
-        for (let elem of this.enrollments)
-            elem.serialize(buffer);
+        for (let elem of this.enrollments) elem.serialize(buffer);
 
         VarInt.fromNumber(this.missing_validators.length, buffer);
-        for (let elem of this.missing_validators)
-            VarInt.fromNumber(elem, buffer);
+        for (let elem of this.missing_validators) VarInt.fromNumber(elem, buffer);
 
         VarInt.fromNumber(this.time_offset, buffer);
     }
@@ -177,8 +177,7 @@ export class BlockHeader
      * Deserialize as binary data.
      * @param buffer - The buffer to be deserialized
      */
-    public static deserialize (buffer: SmartBuffer): BlockHeader
-    {
+    public static deserialize(buffer: SmartBuffer): BlockHeader {
         let prev_block = Hash.deserialize(buffer);
         let merkle_root = Hash.deserialize(buffer);
         let random_seed = Hash.deserialize(buffer);
@@ -188,19 +187,24 @@ export class BlockHeader
 
         let length = VarInt.toNumber(buffer);
         let enrollments: Array<Enrollment> = [];
-        for (let idx = 0; idx < length; idx++)
-            enrollments.push(Enrollment.deserialize(buffer));
-
+        for (let idx = 0; idx < length; idx++) enrollments.push(Enrollment.deserialize(buffer));
 
         length = VarInt.toNumber(buffer);
         let missing_validators: Array<number> = [];
-        for (let idx = 0; idx < length; idx++)
-            missing_validators.push(VarInt.toNumber(buffer));
+        for (let idx = 0; idx < length; idx++) missing_validators.push(VarInt.toNumber(buffer));
 
         let time_offset = VarInt.toNumber(buffer);
 
         return new BlockHeader(
-            prev_block, height, merkle_root, validators, signature,
-            enrollments, random_seed, missing_validators, time_offset);
+            prev_block,
+            height,
+            merkle_root,
+            validators,
+            signature,
+            enrollments,
+            random_seed,
+            missing_validators,
+            time_offset
+        );
     }
 }

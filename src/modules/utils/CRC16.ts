@@ -23,7 +23,7 @@
 
 *******************************************************************************/
 
-import crc from 'crc';
+import crc from "crc";
 
 /**
  * Checksum returns the 2-byte checksum for the provided data
@@ -32,8 +32,7 @@ import crc from 'crc';
  * @returns The result of checksum
  * See_Also: https://github.com/bosagora/agora/blob/93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/common/crypto/Crc16.d#L90-L100
  */
-export function checksum (data: Buffer): Buffer
-{
+export function checksum(data: Buffer): Buffer {
     const checksum = Buffer.alloc(2);
     checksum.writeUInt16LE(crc.crc16xmodem(data), 0);
     return checksum;
@@ -47,10 +46,8 @@ export function checksum (data: Buffer): Buffer
  * @returns The result of validation
  * See_Also: https://github.com/bosagora/agora/blob/93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/common/crypto/Crc16.d#L104-L109
  */
-export function validate (data: Buffer, expected: Buffer): boolean
-{
-    if (expected.length !== 2)
-        return false;
+export function validate(data: Buffer, expected: Buffer): boolean {
+    if (expected.length !== 2) return false;
     const actual = Buffer.alloc(2);
     actual.writeUInt16LE(crc.crc16xmodem(data), 0);
     return expected.equals(actual);

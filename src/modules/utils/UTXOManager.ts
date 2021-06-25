@@ -20,14 +20,13 @@ import { UnspentTxOutput } from "../net/response/UnspentTxOutput";
 import { OutputType } from "../data/TxOutput";
 import { Hash } from "../common/Hash";
 
-import JSBI from 'jsbi';
+import JSBI from "jsbi";
 
 /**
  * Class for managing UTXO
  * Manage what is used and not used in payment for UTXO
  */
-export class UTXOManager
-{
+export class UTXOManager {
     /**
      * Internal UTXO Array
      */
@@ -37,8 +36,7 @@ export class UTXOManager
      * Constructor
      * @param data The array containing UnspentTxOutput objects
      */
-    constructor (data: Array<UnspentTxOutput>)
-    {
+    constructor(data: Array<UnspentTxOutput>) {
         this.items = [];
         this.add(data);
     }
@@ -53,20 +51,18 @@ export class UTXOManager
      * It also allows small amounts to be used first.
      * @param data The array of `UnspentTxOutput`
      */
-    public add (data: Array<UnspentTxOutput>)
-    {
+    public add(data: Array<UnspentTxOutput>) {
         let old_length = this.items.length;
         this.items.push(
             ...data
-                .filter(n => this.items.find(m => (m.utxo.data.compare(n.utxo.data) === 0)) === undefined)
-                .map(n => new InternalUTXO(n.utxo, n.type, n.unlock_height, n.amount)));
+                .filter((n) => this.items.find((m) => m.utxo.data.compare(n.utxo.data) === 0) === undefined)
+                .map((n) => new InternalUTXO(n.utxo, n.type, n.unlock_height, n.amount))
+        );
 
         if (this.items.length > old_length)
-            this.items.sort((a, b) =>
-            {
-                let cmp = (a: JSBI, b: JSBI) => (JSBI.greaterThan(a, b) ? 1 : (JSBI.lessThan(a, b) ? -1 : 0));
-                if (JSBI.notEqual(a.unlock_height, b.unlock_height))
-                    return cmp(a.unlock_height, b.unlock_height);
+            this.items.sort((a, b) => {
+                let cmp = (a: JSBI, b: JSBI) => (JSBI.greaterThan(a, b) ? 1 : JSBI.lessThan(a, b) ? -1 : 0);
+                if (JSBI.notEqual(a.unlock_height, b.unlock_height)) return cmp(a.unlock_height, b.unlock_height);
                 return cmp(a.amount, b.amount);
             });
     }
@@ -81,34 +77,36 @@ export class UTXOManager
      * and the third is the amount that was released from the freeze
      * but locked to `unlock_height`.
      */
-    public getSum (height?: JSBI): [JSBI, JSBI, JSBI]
-    {
-        if ((height !== undefined) && JSBI.lessThan(height, JSBI.BigInt(0)))
+    public getSum(height?: JSBI): [JSBI, JSBI, JSBI] {
+        if (height !== undefined && JSBI.lessThan(height, JSBI.BigInt(0)))
             throw new Error(`The height must be greater than or equal to zero, not ${height.toString()}`);
 
         return this.items
-            .filter(n => !n.used)
-            .reduce<[JSBI, JSBI, JSBI]>((sum, n) =>
-            {
-                if ((height !== undefined) && JSBI.greaterThan(JSBI.subtract(n.unlock_height, JSBI.BigInt(1)), height))
-                    sum[2] = JSBI.add(sum[2], n.amount);
-                else
-                {
-                    switch (n.type)
-                    {
-                        case OutputType.Payment :
-                            sum[0] = JSBI.add(sum[0], n.amount);
-                            break;
-                        case OutputType.Freeze :
-                            sum[1] = JSBI.add(sum[1], n.amount);
-                            break;
-                        case OutputType.Coinbase :
-                            sum[0] = JSBI.add(sum[0], n.amount);
-                            break;
+            .filter((n) => !n.used)
+            .reduce<[JSBI, JSBI, JSBI]>(
+                (sum, n) => {
+                    if (
+                        height !== undefined &&
+                        JSBI.greaterThan(JSBI.subtract(n.unlock_height, JSBI.BigInt(1)), height)
+                    )
+                        sum[2] = JSBI.add(sum[2], n.amount);
+                    else {
+                        switch (n.type) {
+                            case OutputType.Payment:
+                                sum[0] = JSBI.add(sum[0], n.amount);
+                                break;
+                            case OutputType.Freeze:
+                                sum[1] = JSBI.add(sum[1], n.amount);
+                                break;
+                            case OutputType.Coinbase:
+                                sum[0] = JSBI.add(sum[0], n.amount);
+                                break;
+                        }
                     }
-                }
-                return sum;
-            }, [JSBI.BigInt(0), JSBI.BigInt(0), JSBI.BigInt(0)]);
+                    return sum;
+                },
+                [JSBI.BigInt(0), JSBI.BigInt(0), JSBI.BigInt(0)]
+            );
     }
 
     /**
@@ -120,8 +118,7 @@ export class UTXOManager
      * @returns Returns the available array of UTXO. If the available amount
      * is less than the requested amount, the empty array is returned.
      */
-    public getUTXO (amount: JSBI, height: JSBI, estimated_input_fee: JSBI = JSBI.BigInt(0)): Array<UnspentTxOutput>
-    {
+    public getUTXO(amount: JSBI, height: JSBI, estimated_input_fee: JSBI = JSBI.BigInt(0)): Array<UnspentTxOutput> {
         let target_amount = JSBI.BigInt(amount);
         if (JSBI.lessThanOrEqual(target_amount, JSBI.BigInt(0)))
             throw new Error(`Positive amount expected, not ${target_amount.toString()}`);
@@ -129,35 +126,33 @@ export class UTXOManager
         if (JSBI.lessThan(height, JSBI.BigInt(0)))
             throw new Error(`The height must be greater than or equal to zero, not ${height.toString()}`);
 
-        if (JSBI.greaterThan(target_amount, this.getSum(height)[0]))
-            return [];
+        if (JSBI.greaterThan(target_amount, this.getSum(height)[0])) return [];
 
         target_amount = JSBI.add(target_amount, estimated_input_fee);
         let sum = JSBI.BigInt(0);
         return this.items
-            .filter(n => (!n.used && ((n.type === OutputType.Payment) || (n.type === OutputType.Coinbase))
-                && JSBI.lessThanOrEqual(JSBI.subtract(n.unlock_height, JSBI.BigInt(1)), height)))
-            .filter((n) =>
-            {
-                if (JSBI.greaterThanOrEqual(sum, target_amount))
-                    return false;
+            .filter(
+                (n) =>
+                    !n.used &&
+                    (n.type === OutputType.Payment || n.type === OutputType.Coinbase) &&
+                    JSBI.lessThanOrEqual(JSBI.subtract(n.unlock_height, JSBI.BigInt(1)), height)
+            )
+            .filter((n) => {
+                if (JSBI.greaterThanOrEqual(sum, target_amount)) return false;
                 sum = JSBI.add(sum, n.amount);
                 n.used = true;
 
                 target_amount = JSBI.add(target_amount, estimated_input_fee);
-                return true
+                return true;
             })
-            .map(n => new UnspentTxOutput(
-                n.utxo, n.type,
-                n.unlock_height, n.amount));
+            .map((n) => new UnspentTxOutput(n.utxo, n.type, n.unlock_height, n.amount));
     }
 }
 
 /**
  * Define the internal UTXO
  */
-class InternalUTXO extends UnspentTxOutput
-{
+class InternalUTXO extends UnspentTxOutput {
     /**
      * Status variable indicating whether it is used or not
      */
@@ -170,8 +165,7 @@ class InternalUTXO extends UnspentTxOutput
      * @param unlock_height The height of the block that can be used
      * @param amount        The monetary value of UTXO
      */
-    constructor (utxo: Hash, type: OutputType, unlock_height: JSBI, amount: JSBI)
-    {
+    constructor(utxo: Hash, type: OutputType, unlock_height: JSBI, amount: JSBI) {
         super(utxo, type, unlock_height, amount);
 
         if (JSBI.lessThanOrEqual(this.unlock_height, JSBI.BigInt(0)))

@@ -11,26 +11,23 @@
 
 *******************************************************************************/
 
-import * as sdk from '../lib';
+import * as sdk from "../lib";
 import { BOASodium } from "boa-sodium-ts";
 
-import * as assert from 'assert';
+import * as assert from "assert";
 
-describe ('Test OPCode', () =>
-{
-    before ('Wait for the package libsodium to finish loading', () =>
-    {
+describe("Test OPCode", () => {
+    before("Wait for the package libsodium to finish loading", () => {
         sdk.SodiumHelper.assign(new BOASodium());
         return sdk.SodiumHelper.init();
     });
 
-    it ('enum Opcode', () =>
-    {
+    it("enum Opcode", () => {
         assert.ok(sdk.isOpcode(0x00) && 0x00 == sdk.OP.FALSE);
         assert.ok(sdk.isOpcode(0x59) && 0x59 == sdk.OP.HASH);
         assert.ok(!sdk.isOpcode(255));
         assert.ok(sdk.isOpcode(1) && 1 == sdk.OP.PUSH_BYTES_1);
-        assert.ok(sdk.isOpcode(32) && 32 == 32 as sdk.OP);
+        assert.ok(sdk.isOpcode(32) && 32 == 32);
         assert.ok(sdk.isOpcode(75) && 75 == sdk.OP.PUSH_BYTES_75);
 
         assert.ok(sdk.isConditional(sdk.OP.IF));

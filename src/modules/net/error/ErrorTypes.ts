@@ -14,8 +14,7 @@
 /**
  * The class used when a network error occurs
  */
-export class NetworkError extends Error
-{
+export class NetworkError extends Error {
     /**
      * The status code
      */
@@ -37,10 +36,9 @@ export class NetworkError extends Error
      * @param statusText    The status text
      * @param statusMessage The message of response
      */
-    constructor (status: number, statusText: string, statusMessage: string)
-    {
+    constructor(status: number, statusText: string, statusMessage: string) {
         super(statusText);
-        this.name = 'NetworkError';
+        this.name = "NetworkError";
         this.status = status;
         this.statusText = statusText;
         this.statusMessage = statusMessage;
@@ -50,36 +48,32 @@ export class NetworkError extends Error
 /**
  *  When status code is 404
  */
-export class NotFoundError extends NetworkError
-{
+export class NotFoundError extends NetworkError {
     /**
      * Constructor
      * @param status        The status code
      * @param statusText    The status text
      * @param statusMessage The message of response
      */
-    constructor (status: number, statusText: string, statusMessage: string)
-    {
+    constructor(status: number, statusText: string, statusMessage: string) {
         super(status, statusText, statusMessage);
-        this.name = 'NotFoundError';
+        this.name = "NotFoundError";
     }
 }
 
 /**
  *  When status code is 400
  */
-export class BadRequestError extends NetworkError
-{
+export class BadRequestError extends NetworkError {
     /**
      * Constructor
      * @param status        The status code
      * @param statusText    The status text
      * @param statusMessage The message of response
      */
-    constructor (status: number, statusText: string, statusMessage: string)
-    {
+    constructor(status: number, statusText: string, statusMessage: string) {
         super(status, statusText, statusMessage);
-        this.name = 'BadRequestError';
+        this.name = "BadRequestError";
     }
 }
 
@@ -89,31 +83,23 @@ export class BadRequestError extends NetworkError
  * @param error This is why the error occurred
  * @returns The instance of Error
  */
-export function handleNetworkError (error: any): Error
-{
+export function handleNetworkError(error: any): Error {
     if (
-            (error.response !== undefined) &&
-            (error.response.status !== undefined) &&
-            (error.response.statusText !== undefined)
-    )
-    {
+        error.response !== undefined &&
+        error.response.status !== undefined &&
+        error.response.statusText !== undefined
+    ) {
         let statusMessage: string;
-        if (error.response.data !== undefined)
-        {
-            if (typeof error.response.data === "string")
-                statusMessage = error.response.data;
-            else if ((typeof error.response.data === "object") && (error.response.data.statusMessage !== undefined))
+        if (error.response.data !== undefined) {
+            if (typeof error.response.data === "string") statusMessage = error.response.data;
+            else if (typeof error.response.data === "object" && error.response.data.statusMessage !== undefined)
                 statusMessage = error.response.data.statusMessage;
-            else if ((typeof error.response.data === "object") && (error.response.data.errorMessage !== undefined))
+            else if (typeof error.response.data === "object" && error.response.data.errorMessage !== undefined)
                 statusMessage = error.response.data.errorMessage;
-            else
-                statusMessage = error.response.data.toString();
-        }
-        else
-            statusMessage = '';
+            else statusMessage = error.response.data.toString();
+        } else statusMessage = "";
 
-        switch (error.response.status)
-        {
+        switch (error.response.status) {
             case 400:
                 return new BadRequestError(error.response.status, error.response.statusText, statusMessage);
             case 404:
@@ -121,12 +107,8 @@ export function handleNetworkError (error: any): Error
             default:
                 return new NetworkError(error.response.status, error.response.statusText, statusMessage);
         }
-    }
-    else
-    {
-        if (error.message !== undefined)
-            return new Error(error.message);
-        else
-            return new Error("An unknown error has occurred.");
+    } else {
+        if (error.message !== undefined) return new Error(error.message);
+        else return new Error("An unknown error has occurred.");
     }
 }

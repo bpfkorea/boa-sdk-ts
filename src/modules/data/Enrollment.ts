@@ -11,21 +11,20 @@
 
 *******************************************************************************/
 
-import { JSONValidator } from '../utils/JSONValidator';
-import { Hash } from '../common/Hash';
-import { Signature } from '../common/Signature';
-import { Sig } from '../common/Schnorr';
-import { VarInt } from '../utils/VarInt';
+import { JSONValidator } from "../utils/JSONValidator";
+import { Hash } from "../common/Hash";
+import { Signature } from "../common/Signature";
+import { Sig } from "../common/Schnorr";
+import { VarInt } from "../utils/VarInt";
 
-import { SmartBuffer } from 'smart-buffer';
+import { SmartBuffer } from "smart-buffer";
 
 /**
  * The class that defines the enrollment of a block.
  * Convert JSON object to TypeScript's instance.
  * An exception occurs if the required property is not present.
  */
-export class Enrollment
-{
+export class Enrollment {
     /**
      * K: A hash of a frozen UTXO
      */
@@ -53,8 +52,7 @@ export class Enrollment
      * @param cycle The number of rounds a validator will participate in
      * @param sig A signature for the message H(K, X, n, R) and the key K, using R
      */
-    constructor (key: Hash, seed: Hash, cycle: number, sig: Sig)
-    {
+    constructor(key: Hash, seed: Hash, cycle: number, sig: Sig) {
         this.utxo_key = key;
         this.commitment = seed;
         this.cycle_length = cycle;
@@ -71,24 +69,24 @@ export class Enrollment
      * @param value The value associated with `key`
      * @returns A new instance of `Enrollment` if `key == ""`, `value` otherwise.
      */
-    public static reviver (key: string, value: any): any
-    {
-        if (key !== "")
-            return value;
+    public static reviver(key: string, value: any): any {
+        if (key !== "") return value;
 
-        JSONValidator.isValidOtherwiseThrow('Enrollment', value);
+        JSONValidator.isValidOtherwiseThrow("Enrollment", value);
 
         return new Enrollment(
-            new Hash(value.utxo_key), new Hash(value.commitment),
-            Number(value.cycle_length), Sig.fromSignature(new Signature(value.enroll_sig)));
+            new Hash(value.utxo_key),
+            new Hash(value.commitment),
+            Number(value.cycle_length),
+            Sig.fromSignature(new Signature(value.enroll_sig))
+        );
     }
 
     /**
      * Collects data to create a hash.
      * @param buffer The buffer where collected data is stored
      */
-    public computeHash (buffer: SmartBuffer)
-    {
+    public computeHash(buffer: SmartBuffer) {
         this.utxo_key.computeHash(buffer);
         this.commitment.computeHash(buffer);
         buffer.writeUInt32LE(this.cycle_length);
@@ -98,8 +96,7 @@ export class Enrollment
      * Serialize as binary data.
      * @param buffer - The buffer where serialized data is stored
      */
-    public serialize (buffer: SmartBuffer)
-    {
+    public serialize(buffer: SmartBuffer) {
         this.utxo_key.serialize(buffer);
         this.commitment.serialize(buffer);
         VarInt.fromNumber(this.cycle_length, buffer);
@@ -110,8 +107,7 @@ export class Enrollment
      * Deserialize as binary data.
      * @param buffer - The buffer to be deserialized
      */
-    public static deserialize (buffer: SmartBuffer): Enrollment
-    {
+    public static deserialize(buffer: SmartBuffer): Enrollment {
         let utxo_key = Hash.deserialize(buffer);
         let commitment = Hash.deserialize(buffer);
         let cycle_length = VarInt.toNumber(buffer);

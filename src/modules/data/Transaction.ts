@@ -11,23 +11,22 @@
 
 *******************************************************************************/
 
-import { hashPart } from '../common/Hash';
-import { Height } from '../common/Height';
-import { JSONValidator } from '../utils/JSONValidator';
-import { TxInput } from './TxInput';
-import { TxOutput, OutputType } from './TxOutput';
-import { Utils } from '../utils/Utils';
-import { VarInt } from '../utils/VarInt';
+import { hashPart } from "../common/Hash";
+import { Height } from "../common/Height";
+import { JSONValidator } from "../utils/JSONValidator";
+import { TxInput } from "./TxInput";
+import { TxOutput, OutputType } from "./TxOutput";
+import { Utils } from "../utils/Utils";
+import { VarInt } from "../utils/VarInt";
 
-import { SmartBuffer } from 'smart-buffer';
+import { SmartBuffer } from "smart-buffer";
 
 /**
  * The class that defines the transaction of a block.
  * Convert JSON object to TypeScript's instance.
  * An exception occurs if the required property is not present.
  */
-export class Transaction
-{
+export class Transaction {
     /**
      * The array of references to the unspent output of the previous transaction
      */
@@ -57,15 +56,16 @@ export class Transaction
      * @param payload The data payload to store
      * @param lock_height The lock height
      */
-    constructor (inputs: TxInput[], outputs: TxOutput[], payload: Buffer | string,
-                 lock_height: Height = new Height("0"))
-    {
+    constructor(
+        inputs: TxInput[],
+        outputs: TxOutput[],
+        payload: Buffer | string,
+        lock_height: Height = new Height("0")
+    ) {
         this.inputs = inputs;
         this.outputs = outputs;
-        if (typeof payload === 'string')
-            this.payload = Buffer.from(payload, "base64");
-        else
-            this.payload = Buffer.from(payload);
+        if (typeof payload === "string") this.payload = Buffer.from(payload, "base64");
+        else this.payload = Buffer.from(payload);
         this.lock_height = lock_height;
         this.sort();
     }
@@ -80,26 +80,24 @@ export class Transaction
      * @param value The value associated with `key`
      * @returns A new instance of `Transaction` if `key == ""`, `value` otherwise.
      */
-    public static reviver (key: string, value: any): any
-    {
-        if (key !== "")
-            return value;
+    public static reviver(key: string, value: any): any {
+        if (key !== "") return value;
 
-        JSONValidator.isValidOtherwiseThrow('Transaction', value);
+        JSONValidator.isValidOtherwiseThrow("Transaction", value);
 
         return new Transaction(
             value.inputs.map((elem: any) => TxInput.reviver("", elem)),
             value.outputs.map((elem: any) => TxOutput.reviver("", elem)),
             value.payload,
-            new Height(value.lock_height));
+            new Height(value.lock_height)
+        );
     }
 
     /**
      * Collects data to create a hash.
      * @param buffer The buffer where collected data is stored
      */
-    public computeHash (buffer: SmartBuffer)
-    {
+    public computeHash(buffer: SmartBuffer) {
         this.sort();
         hashPart(this.inputs, buffer);
         hashPart(this.outputs, buffer);
@@ -110,29 +108,25 @@ export class Transaction
     /**
      * Converts this object to its JSON representation
      */
-    public toJSON (key?: string): any
-    {
+    public toJSON(key?: string): any {
         return {
             inputs: this.inputs,
             outputs: this.outputs,
             payload: this.payload.toString("base64"),
-            lock_height: this.lock_height
+            lock_height: this.lock_height,
         };
     }
 
     /**
      * Returns the transaction size.
      */
-    public getNumberOfBytes (): number
-    {
+    public getNumberOfBytes(): number {
         let bytes_length =
-            this.payload.length +          //  Transaction.payload
-            Utils.SIZE_OF_LONG;                 //  Transaction.lock_height
+            this.payload.length + //  Transaction.payload
+            Utils.SIZE_OF_LONG; //  Transaction.lock_height
 
-        for (let elem of this.inputs)
-            bytes_length += elem.getNumberOfBytes();
-        for (let elem of this.outputs)
-            bytes_length += elem.getNumberOfBytes();
+        for (let elem of this.inputs) bytes_length += elem.getNumberOfBytes();
+        for (let elem of this.outputs) bytes_length += elem.getNumberOfBytes();
 
         return bytes_length;
     }
@@ -143,18 +137,19 @@ export class Transaction
      * @param num_output The number of the outputs
      * @param num_bytes_payload The bytes of the payload
      */
-    public static getEstimatedNumberOfBytes (num_input: number, num_output: number, num_bytes_payload: number): number
-    {
-        return Utils.SIZE_OF_LONG + num_bytes_payload +
-            (num_input * TxInput.getEstimatedNumberOfBytes()) +
-            (num_output * TxOutput.getEstimatedNumberOfBytes());
+    public static getEstimatedNumberOfBytes(num_input: number, num_output: number, num_bytes_payload: number): number {
+        return (
+            Utils.SIZE_OF_LONG +
+            num_bytes_payload +
+            num_input * TxInput.getEstimatedNumberOfBytes() +
+            num_output * TxOutput.getEstimatedNumberOfBytes()
+        );
     }
 
     /**
      * Sort the transaction inputs and outputs
      */
-    public sort ()
-    {
+    public sort() {
         this.inputs.sort(TxInput.compare);
         this.outputs.sort(TxOutput.compare);
     }
@@ -164,41 +159,35 @@ export class Transaction
      * If there is more than one output then it is allowed to have a single
      * `Payment` output for a refund of any amount
      */
-    public isFreeze (): boolean
-    {
-        return this.outputs.find(m => m.type === OutputType.Freeze) !== undefined
+    public isFreeze(): boolean {
+        return this.outputs.find((m) => m.type === OutputType.Freeze) !== undefined;
     }
 
     /**
      * A `Coinbase` transaction is one that has one or more `Coinbase` outputs
      * However if all outputs are not `Coinbase` then it will fail validation
      */
-    public isCoinbase (): boolean
-    {
-        return this.outputs.find(m => m.type === OutputType.Coinbase) !== undefined
+    public isCoinbase(): boolean {
+        return this.outputs.find((m) => m.type === OutputType.Coinbase) !== undefined;
     }
 
     /**
      * A `Payment` transaction have all outputs of type "Payment".
      */
-    public isPayment (): boolean
-    {
-        return this.outputs.find(m => m.type !== OutputType.Payment) === undefined
+    public isPayment(): boolean {
+        return this.outputs.find((m) => m.type !== OutputType.Payment) === undefined;
     }
 
     /**
      * Serialize as binary data.
      * @param buffer The buffer where serialized data is stored
      */
-    public serialize (buffer: SmartBuffer)
-    {
+    public serialize(buffer: SmartBuffer) {
         VarInt.fromNumber(this.inputs.length, buffer);
-        for (let elem of this.inputs)
-            elem.serialize(buffer);
+        for (let elem of this.inputs) elem.serialize(buffer);
 
         VarInt.fromNumber(this.outputs.length, buffer);
-        for (let elem of this.outputs)
-            elem.serialize(buffer);
+        for (let elem of this.outputs) elem.serialize(buffer);
 
         VarInt.fromNumber(this.payload.length, buffer);
         buffer.writeBuffer(this.payload);
@@ -211,23 +200,20 @@ export class Transaction
      * An exception occurs when the size of the remaining data is less than the required.
      * @param buffer The buffer to be deserialized
      */
-    public static deserialize (buffer: SmartBuffer): Transaction
-    {
+    public static deserialize(buffer: SmartBuffer): Transaction {
         let length = VarInt.toNumber(buffer);
         let inputs: Array<TxInput> = [];
-        for (let idx = 0; idx < length; idx++)
-            inputs.push(TxInput.deserialize(buffer));
+        for (let idx = 0; idx < length; idx++) inputs.push(TxInput.deserialize(buffer));
 
         length = VarInt.toNumber(buffer);
         let outputs: Array<TxOutput> = [];
-        for (let idx = 0; idx < length; idx++)
-            outputs.push(TxOutput.deserialize(buffer));
+        for (let idx = 0; idx < length; idx++) outputs.push(TxOutput.deserialize(buffer));
 
         length = VarInt.toNumber(buffer);
         let payload = buffer.readBuffer(length);
 
         let lock_height = Height.deserialize(buffer);
 
-        return new Transaction(inputs, outputs, payload, lock_height)
+        return new Transaction(inputs, outputs, payload, lock_height);
     }
 }

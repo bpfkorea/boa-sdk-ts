@@ -1,19 +1,23 @@
 # boa-sdk-ts
+
 SDK to interface with the BOSAGORA blockchain
 boa-sdk-ts is a TypeScript/JavaScript library for communicating with the Stoa API server.
 It also has utility functions such as hashing and pre-image validation.
 
 ## Install
+
 ```bash
 $ npm install --save boa-sdk-ts
 ```
 
 ## Import the your library
-```import * as BoaSdk from "boa-sdk-ts";```
+
+`import * as BoaSdk from "boa-sdk-ts";`
 
 ## Usage
 
 TypeScript
+
 ```TypeScript
 // Create BOA Client
 let boa_client = new BoaSdk.BOAClient("http://localhost:3836");
@@ -31,6 +35,7 @@ boa_client.getValidator("GA3DMXTREDC4AIUTHRFIXCKWKF7BDIXRWM2KLV74OPK2OKDM2VJ235G
 ```
 
 In Browser
+
 ```JavaScript
 <script type="text/javascript" src="boa-sdk.js"></script>
 <script>
@@ -71,9 +76,11 @@ In Browser
 ```
 
 ## Documentation
+
 [BOA-SDK for TypeScript documentation](https://bosagora.github.io/boa-sdk-ts)
 
 ## Testing
+
 ```bash
 $ git clone https://github.com/bosagora/boa-sdk-ts.git
 $ npm install

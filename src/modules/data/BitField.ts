@@ -11,18 +11,17 @@
 
 *******************************************************************************/
 
-import { JSONValidator } from '../utils/JSONValidator';
-import { VarInt } from '../utils/VarInt';
+import { JSONValidator } from "../utils/JSONValidator";
+import { VarInt } from "../utils/VarInt";
 
-import { SmartBuffer } from 'smart-buffer';
+import { SmartBuffer } from "smart-buffer";
 
 /**
  * The class that defines the BitField of a block.
  * Convert JSON object to TypeScript's instance.
  * An exception occurs if the required property are not present.
  */
-export class BitField
-{
+export class BitField {
     /**
      * The storage with bit data
      */
@@ -32,8 +31,7 @@ export class BitField
      * Constructor
      * @param storage The source storage with bit data
      */
-    constructor (storage: number[])
-    {
+    constructor(storage: number[]) {
         this.storage = storage;
     }
 
@@ -47,13 +45,11 @@ export class BitField
      * @param value The value associated with `key`
      * @returns A new instance of `BitField` if `key == ""`, `value` otherwise.
      */
-    public static reviver (key: string, value: any): any
-    {
-        if (key != "")
-            return value;
+    public static reviver(key: string, value: any): any {
+        if (key != "") return value;
 
         let storage = JSON.parse(value);
-        JSONValidator.isValidOtherwiseThrow('BitField', storage);
+        JSONValidator.isValidOtherwiseThrow("BitField", storage);
 
         return new BitField(storage);
     }
@@ -61,8 +57,7 @@ export class BitField
     /**
      * Converts this object to its JSON representation
      */
-    public toJSON (key?: string): string
-    {
+    public toJSON(key?: string): string {
         return JSON.stringify(this.storage);
     }
 
@@ -70,23 +65,19 @@ export class BitField
      * Serialize as binary data.
      * @param buffer - The buffer where serialized data is stored
      */
-    public serialize (buffer: SmartBuffer)
-    {
+    public serialize(buffer: SmartBuffer) {
         VarInt.fromNumber(this.storage.length, buffer);
-        for (let elem of this.storage)
-            VarInt.fromNumber(elem, buffer);
+        for (let elem of this.storage) VarInt.fromNumber(elem, buffer);
     }
 
     /**
      * Deserialize as binary data.
      * @param buffer - The buffer to be deserialized
      */
-    public static deserialize (buffer: SmartBuffer): BitField
-    {
+    public static deserialize(buffer: SmartBuffer): BitField {
         let length = VarInt.toNumber(buffer);
         let storage: Array<number> = [];
-        for (let idx = 0; idx < length; idx++)
-            storage.push(VarInt.toNumber(buffer));
+        for (let idx = 0; idx < length; idx++) storage.push(VarInt.toNumber(buffer));
 
         return new BitField(storage);
     }

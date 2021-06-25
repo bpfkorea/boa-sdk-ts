@@ -11,23 +11,20 @@
 
  *******************************************************************************/
 
-import * as boasdk from '../lib';
+import * as sdk from "../lib";
 import { BOASodium } from "boa-sodium-ts";
 
-import * as assert from 'assert';
+import * as assert from "assert";
 
-describe ('Transaction', () =>
-{
-    before ('Wait for the package libsodium to finish loading', () =>
-    {
-        boasdk.SodiumHelper.assign(new BOASodium());
-        return boasdk.SodiumHelper.init();
+describe("Transaction", () => {
+    before("Wait for the package libsodium to finish loading", () => {
+        sdk.SodiumHelper.assign(new BOASodium());
+        return sdk.SodiumHelper.init();
     });
 
-    it ('Test of estimated size', () =>
-    {
-        assert.strictEqual(boasdk.TxInput.getEstimatedNumberOfBytes(), 132);
-        assert.strictEqual(boasdk.TxOutput.getEstimatedNumberOfBytes(), 45);
-        assert.strictEqual(boasdk.Transaction.getEstimatedNumberOfBytes(0, 0, 0), 8);
+    it("Test of estimated size", () => {
+        assert.strictEqual(sdk.TxInput.getEstimatedNumberOfBytes(), 132);
+        assert.strictEqual(sdk.TxOutput.getEstimatedNumberOfBytes(), 45);
+        assert.strictEqual(sdk.Transaction.getEstimatedNumberOfBytes(0, 0, 0), 8);
     });
 });

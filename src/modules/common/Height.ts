@@ -11,16 +11,15 @@
 
 *******************************************************************************/
 
-import { SmartBuffer } from 'smart-buffer';
-import { Utils } from '../utils/Utils';
-import { VarInt } from '../utils/VarInt';
+import { SmartBuffer } from "smart-buffer";
+import { Utils } from "../utils/Utils";
+import { VarInt } from "../utils/VarInt";
 
-import JSBI from 'jsbi';
+import JSBI from "jsbi";
 /**
  * The class that defines the Height.
  */
-export class Height
-{
+export class Height {
     /**
      * the block height
      */
@@ -30,8 +29,7 @@ export class Height
      * Construct
      * @param value The block height
      */
-    constructor (value: JSBI | string)
-    {
+    constructor(value: JSBI | string) {
         this.value = JSBI.BigInt(value);
     }
 
@@ -39,8 +37,7 @@ export class Height
      * Collects data to create a hash.
      * @param buffer The buffer where collected data is stored
      */
-    public computeHash (buffer: SmartBuffer)
-    {
+    public computeHash(buffer: SmartBuffer) {
         const buf = Buffer.allocUnsafe(8);
         Utils.writeJSBigIntLE(buf, this.value);
         buffer.writeBuffer(buf);
@@ -50,16 +47,14 @@ export class Height
      * Writes to the string
      * @param value The height of the block
      */
-    public fromString (value: string)
-    {
+    public fromString(value: string) {
         this.value = JSBI.BigInt(value);
     }
 
     /**
      * Writes to the string
      */
-    public toString ()
-    {
+    public toString() {
         return this.value.toString();
     }
 
@@ -69,8 +64,7 @@ export class Height
      * Use `string` as primitive types, as JS is only precise up to
      * `2 ** 53 - 1` but we can get numbers up to `2 ** 64 - 1`.
      */
-    public toJSON (key?: string): string
-    {
+    public toJSON(key?: string): string {
         return this.toString();
     }
 
@@ -78,8 +72,7 @@ export class Height
      * Serialize as binary data.
      * @param buffer - The buffer where serialized data is stored
      */
-    public serialize (buffer: SmartBuffer)
-    {
+    public serialize(buffer: SmartBuffer) {
         VarInt.fromJSBI(this.value, buffer);
     }
 
@@ -87,8 +80,7 @@ export class Height
      * Deserialize as binary data.
      * @param buffer - The buffer to be deserialized
      */
-    public static deserialize (buffer: SmartBuffer): Height
-    {
+    public static deserialize(buffer: SmartBuffer): Height {
         return new Height(VarInt.toJSBI(buffer));
     }
 }

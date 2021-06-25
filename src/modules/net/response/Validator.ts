@@ -11,15 +11,14 @@
 
 *******************************************************************************/
 
-import { Hash }  from '../../common/Hash';
-import { PreImage, JSONPreImage } from './PreImage';
-import { Utils } from '../../utils/Utils';
+import { Hash } from "../../common/Hash";
+import { PreImage, JSONPreImage } from "./PreImage";
+import { Utils } from "../../utils/Utils";
 
 /**
  * Define the validator
  */
-export class Validator
-{
+export class Validator {
     /**
      * The public key that is included in the frozen UTXO.
      */
@@ -47,35 +46,25 @@ export class Validator
      * @param stake   The hash of frozen UTXO
      * @param image   The pre-image
      */
-    constructor(address?: string, height?: number, stake?: Hash, image?: PreImage)
-    {
-        if (address != undefined)
-            this.address = address;
-        else
-            this.address = '';
+    constructor(address?: string, height?: number, stake?: Hash, image?: PreImage) {
+        if (address != undefined) this.address = address;
+        else this.address = "";
 
-        if (height != undefined)
-            this.enrolled_at = height;
-        else
-            this.enrolled_at = 0;
+        if (height != undefined) this.enrolled_at = height;
+        else this.enrolled_at = 0;
 
-        if (stake != undefined)
-            this.stake = stake;
-        else
-            this.stake = new Hash(Buffer.alloc(Hash.Width));
+        if (stake != undefined) this.stake = stake;
+        else this.stake = new Hash(Buffer.alloc(Hash.Width));
 
-        if (image != undefined)
-            this.preimage = image;
-        else
-            this.preimage = new PreImage();
+        if (image != undefined) this.preimage = image;
+        else this.preimage = new PreImage();
     }
 
     /**
      * This import from JSON
      * @param data The object of the JSON
      */
-    public fromJSON (data: JSONValidator)
-    {
+    public fromJSON(data: JSONValidator) {
         Utils.validateJSON(this, data);
 
         this.address = data.address;
@@ -89,8 +78,7 @@ export class Validator
  * @ignore
  * Define the validator in JSON
  */
-export interface JSONValidator
-{
+export interface JSONValidator {
     address: string;
     enrolled_at: number;
     stake: string;

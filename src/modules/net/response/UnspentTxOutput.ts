@@ -11,17 +11,16 @@
 
 *******************************************************************************/
 
-import { Hash }  from '../../common/Hash';
-import { OutputType } from '../../data/TxOutput';
-import { Utils } from '../../utils/Utils';
+import { Hash } from "../../common/Hash";
+import { OutputType } from "../../data/TxOutput";
+import { Utils } from "../../utils/Utils";
 
-import JSBI from 'jsbi';
+import JSBI from "jsbi";
 
 /**
  * Define the unspentTxOutput
  */
-export class UnspentTxOutput
-{
+export class UnspentTxOutput {
     /**
      * The hash of the UTXO key
      */
@@ -73,56 +72,46 @@ export class UnspentTxOutput
      * @param lock_type     The lock type
      * @param lock_bytes    The lock bytes
      */
-    constructor (utxo?: Hash, type?: OutputType, unlock_height?: JSBI, amount?: JSBI,
-                 height?: JSBI, time?: number, lock_type?: number, lock_bytes?: string)
-    {
-        if (utxo != undefined)
-            this.utxo = new Hash(utxo.data);
-        else
-            this.utxo = new Hash(Buffer.alloc(Hash.Width));
+    constructor(
+        utxo?: Hash,
+        type?: OutputType,
+        unlock_height?: JSBI,
+        amount?: JSBI,
+        height?: JSBI,
+        time?: number,
+        lock_type?: number,
+        lock_bytes?: string
+    ) {
+        if (utxo != undefined) this.utxo = new Hash(utxo.data);
+        else this.utxo = new Hash(Buffer.alloc(Hash.Width));
 
-        if (type != undefined)
-            this.type = type;
-        else
-            this.type = OutputType.Payment;
+        if (type != undefined) this.type = type;
+        else this.type = OutputType.Payment;
 
-        if (unlock_height != undefined)
-            this.unlock_height = JSBI.BigInt(unlock_height);
-        else
-            this.unlock_height = JSBI.BigInt(0);
+        if (unlock_height != undefined) this.unlock_height = JSBI.BigInt(unlock_height);
+        else this.unlock_height = JSBI.BigInt(0);
 
-        if (amount != undefined)
-            this.amount = JSBI.BigInt(amount);
-        else
-            this.amount = JSBI.BigInt(0);
+        if (amount != undefined) this.amount = JSBI.BigInt(amount);
+        else this.amount = JSBI.BigInt(0);
 
-        if (height != undefined)
-            this.height = JSBI.BigInt(height);
-        else
-            this.height = JSBI.BigInt(0);
+        if (height != undefined) this.height = JSBI.BigInt(height);
+        else this.height = JSBI.BigInt(0);
 
-        if (time != undefined)
-            this.time = time;
-        else
-            this.time = 0;
+        if (time != undefined) this.time = time;
+        else this.time = 0;
 
-        if (lock_type != undefined)
-            this.lock_type = lock_type;
-        else
-            this.lock_type = 0;
+        if (lock_type != undefined) this.lock_type = lock_type;
+        else this.lock_type = 0;
 
-        if (lock_bytes != undefined)
-            this.lock_bytes = lock_bytes;
-        else
-            this.lock_bytes = "";
+        if (lock_bytes != undefined) this.lock_bytes = lock_bytes;
+        else this.lock_bytes = "";
     }
 
     /**
      * This import from JSON
      * @param data The object of the JSON
      */
-    public fromJSON (data: JSONUnspentTxOutput)
-    {
+    public fromJSON(data: JSONUnspentTxOutput) {
         Utils.validateJSON(this, data);
 
         this.utxo.fromString(data.utxo);
@@ -140,8 +129,7 @@ export class UnspentTxOutput
  * @ignore
  * Define the unspentTxOutput in JSON
  */
-export interface JSONUnspentTxOutput
-{
+export interface JSONUnspentTxOutput {
     utxo: string;
     type: number;
     unlock_height: string;

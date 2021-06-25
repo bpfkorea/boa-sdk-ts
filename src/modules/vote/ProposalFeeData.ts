@@ -12,21 +12,20 @@
 
 *******************************************************************************/
 
-import { PublicKey } from '../common/KeyPair';
-import { VarInt } from '../utils/VarInt';
-import { Utils } from '../utils/Utils';
-import { LinkDataWithProposalFee } from '../wallet/LinkData';
+import { PublicKey } from "../common/KeyPair";
+import { VarInt } from "../utils/VarInt";
+import { Utils } from "../utils/Utils";
+import { LinkDataWithProposalFee } from "../wallet/LinkData";
 
-import JSBI from 'jsbi';
-import { SmartBuffer } from 'smart-buffer';
+import JSBI from "jsbi";
+import { SmartBuffer } from "smart-buffer";
 
 /**
  * The class that defines data stored in the transaction's payload
  * when the proposal's fee is deposited
  */
-export class ProposalFeeData
-{
-    public static HEADER = "PROP-FEE"
+export class ProposalFeeData {
+    public static HEADER = "PROP-FEE";
 
     /**
      * The name of App
@@ -43,8 +42,7 @@ export class ProposalFeeData
      * @param app_name    The name of App
      * @param proposal_id The id of the proposal
      */
-    constructor (app_name: string, proposal_id: string)
-    {
+    constructor(app_name: string, proposal_id: string) {
         this.app_name = app_name;
         this.proposal_id = proposal_id;
     }
@@ -53,8 +51,7 @@ export class ProposalFeeData
      * Serialize as binary data.
      * @param buffer The buffer where serialized data is stored
      */
-    public serialize (buffer: SmartBuffer)
-    {
+    public serialize(buffer: SmartBuffer) {
         let temp = Buffer.from(ProposalFeeData.HEADER);
         VarInt.fromNumber(temp.length, buffer);
         buffer.writeBuffer(temp);
@@ -73,12 +70,10 @@ export class ProposalFeeData
      * An exception occurs when the size of the remaining data is less than the required.
      * @param buffer The buffer to be deserialized
      */
-    public static deserialize (buffer: SmartBuffer): ProposalFeeData
-    {
+    public static deserialize(buffer: SmartBuffer): ProposalFeeData {
         let length = VarInt.toNumber(buffer);
         let header = Utils.readBuffer(buffer, length);
-        if (header.toString() !== ProposalFeeData.HEADER)
-            throw new Error("This is not the expected data type.");
+        if (header.toString() !== ProposalFeeData.HEADER) throw new Error("This is not the expected data type.");
 
         length = VarInt.toNumber(buffer);
         let temp = Utils.readBuffer(buffer, length);
@@ -96,18 +91,14 @@ export class ProposalFeeData
      * @param destination The public address to deposit
      * @param amount Proposal fee
      */
-    public getLinkData (
-        proposer_address: PublicKey,
-        destination: PublicKey,
-        amount: JSBI): LinkDataWithProposalFee
-    {
+    public getLinkData(proposer_address: PublicKey, destination: PublicKey, amount: JSBI): LinkDataWithProposalFee {
         let buffer = new SmartBuffer();
         this.serialize(buffer);
         return {
             proposer_address: proposer_address.toString(),
             destination: destination.toString(),
             amount: amount.toString(),
-            payload: buffer.toBuffer().toString("base64")
-        }
+            payload: buffer.toBuffer().toString("base64"),
+        };
     }
 }

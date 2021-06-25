@@ -14,8 +14,7 @@
 /**
  * The interface of the transactions history element
  */
-export interface ITxHistoryElement
-{
+export interface ITxHistoryElement {
     /**
      * The transaction type of wallet ('inbound', 'outbound', 'freeze', 'payload')
      */
@@ -75,8 +74,7 @@ export interface ITxHistoryElement
 /**
  * The interface of the transaction overview
  */
-export interface ITxOverview
-{
+export interface ITxOverview {
     /**
      * Block height
      */
@@ -131,8 +129,7 @@ export interface ITxOverview
 /**
  * The interface of the transaction overview element
  */
-export interface ITxOverviewElement
-{
+export interface ITxOverviewElement {
     /**
      * Address, Public key
      */
@@ -152,8 +149,7 @@ export interface ITxOverviewElement
 /**
  * The interface of the pending transactions
  */
-export interface IPendingTxs
-{
+export interface IPendingTxs {
     tx_hash: string;
     submission_time: number;
     address: string;
@@ -164,8 +160,7 @@ export interface IPendingTxs
 /**
  * The interface of the SPV status
  */
-export interface ISPVStatus
-{
+export interface ISPVStatus {
     /**
      * True or false
      */

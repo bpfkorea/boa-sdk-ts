@@ -11,23 +11,22 @@
 
 *******************************************************************************/
 
-import { JSONValidator } from '../utils/JSONValidator';
-import { Hash, makeUTXOKey } from '../common/Hash';
-import { Signature } from '../common/Signature';
-import { Unlock } from '../script/Lock';
-import { Utils } from '../utils/Utils';
-import { VarInt } from '../utils/VarInt';
+import { JSONValidator } from "../utils/JSONValidator";
+import { Hash, makeUTXOKey } from "../common/Hash";
+import { Signature } from "../common/Signature";
+import { Unlock } from "../script/Lock";
+import { Utils } from "../utils/Utils";
+import { VarInt } from "../utils/VarInt";
 
-import JSBI from 'jsbi';
-import { SmartBuffer } from 'smart-buffer';
+import JSBI from "jsbi";
+import { SmartBuffer } from "smart-buffer";
 
 /**
  * The class that defines the transaction's inputs of a block.
  * Convert JSON object to TypeScript's instance.
  * An exception occurs if the required property is not present.
  */
-export class TxInput
-{
+export class TxInput {
     /**
      * The hash of the UTXO to be spent
      */
@@ -55,15 +54,13 @@ export class TxInput
      * transaction wants to be  included in the block.
      * Use for implementing relative time locks.
      */
-    constructor (hash: Hash, unlock: Unlock = Unlock.Null, unlock_age: number = 0)
-    {
+    constructor(hash: Hash, unlock: Unlock = Unlock.Null, unlock_age: number = 0) {
         this.utxo = hash;
         this.unlock = unlock;
         this.unlock_age = unlock_age;
     }
 
-    public static fromTxHash (hash: Hash, index: JSBI, unlock: Unlock = Unlock.Null, unlock_age: number = 0)
-    {
+    public static fromTxHash(hash: Hash, index: JSBI, unlock: Unlock = Unlock.Null, unlock_age: number = 0) {
         return new TxInput(makeUTXOKey(hash, index), unlock, unlock_age);
     }
 
@@ -77,51 +74,44 @@ export class TxInput
      * @param value The value associated with `key`
      * @returns A new instance of `TxInputs` if `key == ""`, `value` otherwise.
      */
-    public static reviver (key: string, value: any): any
-    {
-        if (key !== "")
-            return value;
+    public static reviver(key: string, value: any): any {
+        if (key !== "") return value;
 
-        JSONValidator.isValidOtherwiseThrow('TxInput', value);
-        return new TxInput(
-            new Hash(value.utxo),
-            Unlock.reviver("", value.unlock),
-            value.unlock_age);
+        JSONValidator.isValidOtherwiseThrow("TxInput", value);
+        return new TxInput(new Hash(value.utxo), Unlock.reviver("", value.unlock), value.unlock_age);
     }
 
     /**
      * Collects data to create a hash.
      * @param buffer The buffer where collected data is stored
      */
-    public computeHash (buffer: SmartBuffer)
-    {
+    public computeHash(buffer: SmartBuffer) {
         this.utxo.computeHash(buffer);
-        buffer.writeUInt32LE(this.unlock_age)
+        buffer.writeUInt32LE(this.unlock_age);
     }
 
     /**
      * Returns the data size.
      */
-    public getNumberOfBytes (): number
-    {
-        return Hash.Width +                     // TxInput.utxo
-            this.unlock.getNumberOfBytes() +    // TxInput.unlock
-            Utils.SIZE_OF_INT;                  // TxInput.unlock_age
+    public getNumberOfBytes(): number {
+        return (
+            Hash.Width + // TxInput.utxo
+            this.unlock.getNumberOfBytes() + // TxInput.unlock
+            Utils.SIZE_OF_INT
+        ); // TxInput.unlock_age
     }
 
     /**
      * Returns the estimated data size.
      */
-    public static getEstimatedNumberOfBytes (): number
-    {
+    public static getEstimatedNumberOfBytes(): number {
         return Hash.Width + Utils.SIZE_OF_INT + Signature.Width;
     }
 
     /**
      * The compare function of TxInput
      */
-    public static compare(a: TxInput, b: TxInput): number
-    {
+    public static compare(a: TxInput, b: TxInput): number {
         return Buffer.compare(a.utxo.data, b.utxo.data);
     }
 
@@ -129,8 +119,7 @@ export class TxInput
      * Serialize as binary data.
      * @param buffer - The buffer where serialized data is stored
      */
-    public serialize (buffer: SmartBuffer)
-    {
+    public serialize(buffer: SmartBuffer) {
         this.utxo.serialize(buffer);
         this.unlock.serialize(buffer);
         VarInt.fromNumber(this.unlock_age, buffer);
@@ -140,8 +129,7 @@ export class TxInput
      * Deserialize as binary data.
      * @param buffer - The buffer to be deserialized
      */
-    public static deserialize (buffer: SmartBuffer): TxInput
-    {
+    public static deserialize(buffer: SmartBuffer): TxInput {
         let utxo = Hash.deserialize(buffer);
         let unlock = Unlock.deserialize(buffer);
         let unlock_age = VarInt.toNumber(buffer);

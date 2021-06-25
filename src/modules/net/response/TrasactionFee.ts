@@ -11,13 +11,12 @@
 
  *******************************************************************************/
 
-import { Utils } from '../../utils/Utils';
+import { Utils } from "../../utils/Utils";
 
 /**
  * Define the interface of the fee of the transaction
  */
-export class TransactionFee
-{
+export class TransactionFee {
     /**
      * The size of the transaction
      */
@@ -45,35 +44,25 @@ export class TransactionFee
      * @param high The transaction fee for a high speed
      * @param low The transaction fee for a low speed
      */
-    constructor (tx_size?: number, medium?: string, high?: string, low?: string)
-    {
-        if (tx_size !== undefined)
-            this.tx_size = tx_size;
-        else
-            this.tx_size = 0;
+    constructor(tx_size?: number, medium?: string, high?: string, low?: string) {
+        if (tx_size !== undefined) this.tx_size = tx_size;
+        else this.tx_size = 0;
 
-        if (medium !== undefined)
-            this.medium = medium;
-        else
-            this.medium = "0.01";
+        if (medium !== undefined) this.medium = medium;
+        else this.medium = "0.01";
 
-        if (high !== undefined)
-            this.high = high;
-        else
-            this.high = "0.01";
+        if (high !== undefined) this.high = high;
+        else this.high = "0.01";
 
-        if (low !== undefined)
-            this.low = low;
-        else
-            this.low = "0.01";
+        if (low !== undefined) this.low = low;
+        else this.low = "0.01";
     }
 
     /**
      * This import from JSON
      * @param data The object of the JSON
      */
-    public fromJSON (data: any)
-    {
+    public fromJSON(data: any) {
         Utils.validateJSON(this, data);
 
         this.tx_size = data.tx_size;

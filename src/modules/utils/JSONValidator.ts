@@ -11,7 +11,7 @@
 
 *******************************************************************************/
 
-import Ajv from 'ajv';
+import Ajv from "ajv";
 
 /**
  * @ignore
@@ -21,93 +21,91 @@ const ajv = new Ajv();
 /**
  * Class for validating JSON data
  */
-export class JSONValidator
-{
+export class JSONValidator {
     /**
      * @ignore
      */
-    private static schemas: Map<string, object> =
-    new Map([
+    private static schemas: Map<string, object> = new Map([
         [
             "BitField",
             {
-                "title": "BitField",
-                "type": "array",
-                "items": {
-                    "type": "number"
+                title: "BitField",
+                type: "array",
+                items: {
+                    type: "number",
                 },
-                "additionalProperties": false,
-                "required": []
-            }
+                additionalProperties: false,
+                required: [],
+            },
         ],
         [
             "Block",
             {
-                "title": "Block",
-                "type": "object",
-                "properties": {
-                    "header": {
-                        "type": "object"
+                title: "Block",
+                type: "object",
+                properties: {
+                    header: {
+                        type: "object",
                     },
-                    "txs": {
-                        "items": {
-                            "type": "object"
+                    txs: {
+                        items: {
+                            type: "object",
                         },
-                        "type": "array"
+                        type: "array",
                     },
-                    "merkle_tree": {
-                        "items": {
-                            "type": "string"
+                    merkle_tree: {
+                        items: {
+                            type: "string",
                         },
-                        "type": "array"
-                    }
+                        type: "array",
+                    },
                 },
-                "additionalProperties": false,
-                "required": ["header", "txs", "merkle_tree"]
-            }
+                additionalProperties: false,
+                required: ["header", "txs", "merkle_tree"],
+            },
         ],
         [
             "BlockHeader",
             {
-                "title": "BlockHeader",
-                "type": "object",
-                "properties": {
-                    "prev_block": {
-                        "type": "string"
+                title: "BlockHeader",
+                type: "object",
+                properties: {
+                    prev_block: {
+                        type: "string",
                     },
-                    "height": {
-                        "type": "string"
+                    height: {
+                        type: "string",
                     },
-                    "merkle_root": {
-                        "type": "string"
+                    merkle_root: {
+                        type: "string",
                     },
-                    "validators": {
-                        "type": "string"
+                    validators: {
+                        type: "string",
                     },
-                    "signature": {
-                        "type": "string"
+                    signature: {
+                        type: "string",
                     },
-                    "enrollments": {
-                        "items": {
-                            "type": "object"
+                    enrollments: {
+                        items: {
+                            type: "object",
                         },
-                        "type": "array"
+                        type: "array",
                     },
-                    "random_seed": {
-                        "type": "string"
+                    random_seed: {
+                        type: "string",
                     },
-                    "missing_validators": {
-                        "items": {
-                            "type": "number"
+                    missing_validators: {
+                        items: {
+                            type: "number",
                         },
-                        "type": "array"
+                        type: "array",
                     },
-                    "time_offset": {
-                        "type": "number"
-                    }
+                    time_offset: {
+                        type: "number",
+                    },
                 },
-                "additionalProperties": false,
-                "required": [
+                additionalProperties: false,
+                required: [
                     "prev_block",
                     "height",
                     "merkle_root",
@@ -116,155 +114,153 @@ export class JSONValidator
                     "enrollments",
                     "random_seed",
                     "missing_validators",
-                    "time_offset"
-                ]
-            }
+                    "time_offset",
+                ],
+            },
         ],
         [
             "Enrollment",
             {
-                "title": "Enrollment",
-                "type": "object",
-                "properties": {
-                    "utxo_key": {
-                        "type": "string"
+                title: "Enrollment",
+                type: "object",
+                properties: {
+                    utxo_key: {
+                        type: "string",
                     },
-                    "commitment": {
-                        "type": "string"
+                    commitment: {
+                        type: "string",
                     },
-                    "cycle_length": {
-                        "type": "number"
+                    cycle_length: {
+                        type: "number",
                     },
-                    "enroll_sig": {
-                        "type": "string"
-                    }
+                    enroll_sig: {
+                        type: "string",
+                    },
                 },
-                "additionalProperties": false,
-                "required": ["utxo_key", "commitment", "cycle_length", "enroll_sig"]
-            }
-
+                additionalProperties: false,
+                required: ["utxo_key", "commitment", "cycle_length", "enroll_sig"],
+            },
         ],
         [
             "PreImageInfo",
             {
-                "title": "PreImageInfo",
-                "type": "object",
-                "properties": {
-                    "utxo": {
-                        "type": "string"
+                title: "PreImageInfo",
+                type: "object",
+                properties: {
+                    utxo: {
+                        type: "string",
                     },
-                    "hash": {
-                        "type": "string"
+                    hash: {
+                        type: "string",
                     },
-                    "height": {
-                        "type": "string"
-                    }
+                    height: {
+                        type: "string",
+                    },
                 },
-                "additionalProperties": false,
-                "required": ["utxo", "hash", "height"]
-            }
-
+                additionalProperties: false,
+                required: ["utxo", "hash", "height"],
+            },
         ],
         [
             "Transaction",
             {
-                "title": "Transaction",
-                "type": "object",
-                "properties": {
-                    "inputs": {
-                        "items": {
-                            "type": "object"
+                title: "Transaction",
+                type: "object",
+                properties: {
+                    inputs: {
+                        items: {
+                            type: "object",
                         },
-                        "type": "array"
+                        type: "array",
                     },
-                    "outputs": {
-                        "items": {
-                            "type": "object"
+                    outputs: {
+                        items: {
+                            type: "object",
                         },
-                        "type": "array"
+                        type: "array",
                     },
-                    "payload": {
-                        "type": "string"
+                    payload: {
+                        type: "string",
                     },
-                    "lock_height": {
-                        "type": "string"
-                    }
+                    lock_height: {
+                        type: "string",
+                    },
                 },
-                "additionalProperties": false,
-                "required": ["inputs", "outputs", "payload", "lock_height"]
-            }
+                additionalProperties: false,
+                required: ["inputs", "outputs", "payload", "lock_height"],
+            },
         ],
         [
             "TxInput",
             {
-                "title": "TxInput",
-                "type": "object",
-                "properties": {
-                    "utxo": {
-                        "type": "string"
+                title: "TxInput",
+                type: "object",
+                properties: {
+                    utxo: {
+                        type: "string",
                     },
-                    "unlock": {
-                        "type": "object"
+                    unlock: {
+                        type: "object",
                     },
-                    "unlock_age": {
-                        "type": "integer"
-                    }
+                    unlock_age: {
+                        type: "integer",
+                    },
                 },
-                "additionalProperties": false,
-                "required": ["utxo", "unlock", "unlock_age"]
-            }
+                additionalProperties: false,
+                required: ["utxo", "unlock", "unlock_age"],
+            },
         ],
         [
             "TxOutput",
             {
-                "title": "TxOutput",
-                "type": "object",
-                "properties": {
-                    "type": {
-                        "type": "number"
+                title: "TxOutput",
+                type: "object",
+                properties: {
+                    type: {
+                        type: "number",
                     },
-                    "value": {
-                        "type": "string"
+                    value: {
+                        type: "string",
                     },
-                    "lock": {
-                        "type": "object"
-                    }
+                    lock: {
+                        type: "object",
+                    },
                 },
-                "additionalProperties": false,
-                "required": ["type", "value", "lock"]
-            }
+                additionalProperties: false,
+                required: ["type", "value", "lock"],
+            },
         ],
         [
             "Lock",
             {
-                "title": "Lock",
-                "type": "object",
-                "properties": {
-                    "type": {
-                        "type": "integer"
+                title: "Lock",
+                type: "object",
+                properties: {
+                    type: {
+                        type: "integer",
                     },
-                    "bytes": {
-                        "type": "string"
-                    }
+                    bytes: {
+                        type: "string",
+                    },
                 },
-                "additionalProperties": false,
-                "required": ["type", "bytes"]
-            }
+                additionalProperties: false,
+                required: ["type", "bytes"],
+            },
         ],
         [
             "Unlock",
             {
-                "title": "Lock",
-                "type": "object",
-                "properties": {
-                    "bytes": {
-                        "type": "string"
-                    }
+                title: "Lock",
+                type: "object",
+                properties: {
+                    bytes: {
+                        type: "string",
+                    },
                 },
-                "additionalProperties": false,
-                "required": ["bytes"]
-            }
-        ]
+                additionalProperties: false,
+                required: ["bytes"],
+            },
+        ],
     ]);
 
     /**
@@ -279,19 +275,14 @@ export class JSONValidator
      * @param name The JSON schema name
      * @returns The function of validation
      */
-    private static buildValidator (name: string): Ajv.ValidateFunction
-    {
+    private static buildValidator(name: string): Ajv.ValidateFunction {
         let validator = JSONValidator.validators.get(name);
-        if (validator === undefined)
-        {
+        if (validator === undefined) {
             let schema = JSONValidator.schemas.get(name);
-            if (schema !== undefined)
-            {
+            if (schema !== undefined) {
                 validator = ajv.compile(schema);
                 JSONValidator.validators.set(name, validator);
-            }
-            else
-                throw new Error(`Non-existent schema accessed: ${name}`);
+            } else throw new Error(`Non-existent schema accessed: ${name}`);
         }
         return validator as Ajv.ValidateFunction;
     }
@@ -302,9 +293,8 @@ export class JSONValidator
      * @param candidate The JSON data
      * @returns `true` if the JSON is valid, otherwise `false`
      */
-    private static isValid (validator: Ajv.ValidateFunction, candidate: any)
-    {
-        return (validator(candidate) === true);
+    private static isValid(validator: Ajv.ValidateFunction, candidate: any) {
+        return validator(candidate) === true;
     }
 
     /**
@@ -313,32 +303,19 @@ export class JSONValidator
      * @param candidate The JSON data
      * @returns `true` if the JSON is valid, otherwise throw an `Error`
      */
-    public static isValidOtherwiseThrow (schema_name: string, candidate: any)
-    {
+    public static isValidOtherwiseThrow(schema_name: string, candidate: any) {
         const validator = this.buildValidator(schema_name);
-        if (this.isValid(validator, candidate) === true)
-        {
+        if (this.isValid(validator, candidate) === true) {
             return true;
-        }
-        else if (
-            (validator.errors !== undefined) &&
-            (validator.errors !== null) &&
-            (validator.errors.length > 0))
-        {
-            if (validator.errors.length == 1)
-            {
+        } else if (validator.errors !== undefined && validator.errors !== null && validator.errors.length > 0) {
+            if (validator.errors.length == 1) {
                 throw new Error(`Validation failed: ${schema_name} - ` + validator.errors[0].message);
-            }
-            else
-            {
+            } else {
                 let messages = [];
-                for (let error of validator.errors)
-                    messages.push(error.message);
-                throw new Error(`Validation failed: ${schema_name} - ` + messages.join('\n'));
+                for (let error of validator.errors) messages.push(error.message);
+                throw new Error(`Validation failed: ${schema_name} - ` + messages.join("\n"));
             }
-        }
-        else
-        {
+        } else {
             throw new Error(`Validation failed: ${schema_name}`);
         }
     }
@@ -349,8 +326,7 @@ export class JSONValidator
      * @param candidate The JSON data
      * @returns `true` if the JSON is valid, otherwise `false`
      */
-    public static isValidOtherwiseNoThrow (schema_name: string, candidate: any)
-    {
+    public static isValidOtherwiseNoThrow(schema_name: string, candidate: any) {
         const validator = this.buildValidator(schema_name);
         return this.isValid(validator, candidate);
     }

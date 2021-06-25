@@ -11,22 +11,21 @@
 
 *******************************************************************************/
 
-import { PublicKey } from '../common/KeyPair';
-import { Signature } from '../common/Signature';
-import { VarInt } from '../utils/VarInt';
-import { Utils } from '../utils/Utils';
-import { hashPart } from '../common/Hash';
-import { LinkDataWithVoteData } from '../wallet/LinkData';
+import { PublicKey } from "../common/KeyPair";
+import { Signature } from "../common/Signature";
+import { VarInt } from "../utils/VarInt";
+import { Utils } from "../utils/Utils";
+import { hashPart } from "../common/Hash";
+import { LinkDataWithVoteData } from "../wallet/LinkData";
 
-import { SmartBuffer } from 'smart-buffer';
+import { SmartBuffer } from "smart-buffer";
 
 /**
  * Data to prove that the verifier is capable of exercising
  * its authority over the vote.
  * This is delivered from the admin screen of Agora.
  */
-export class VoterCard
-{
+export class VoterCard {
     /**
      * Validator that this voter card represents
      */
@@ -54,23 +53,19 @@ export class VoterCard
      * @param expires           timestamp unix epoch time
      * @param signature         The signature, made using `validator_address`' private key
      */
-    constructor (validator_address: PublicKey, address: PublicKey, expires: string, signature?: Signature)
-    {
+    constructor(validator_address: PublicKey, address: PublicKey, expires: string, signature?: Signature) {
         this.validator_address = validator_address;
         this.address = address;
         this.expires = expires;
-        if (signature !== undefined)
-            this.signature = signature;
-        else
-            this.signature = new Signature(Buffer.alloc(Signature.Width));
+        if (signature !== undefined) this.signature = signature;
+        else this.signature = new Signature(Buffer.alloc(Signature.Width));
     }
 
     /**
      * Verify that a signature with the validator address
      * @returns If OK, return true, otherwise return false.
      */
-    public verify (): boolean
-    {
+    public verify(): boolean {
         return this.validator_address.verify<VoterCard>(this.signature, this);
     }
 
@@ -78,8 +73,7 @@ export class VoterCard
      * Collects data to create a hash.
      * @param buffer The buffer where collected data is stored
      */
-    public computeHash (buffer: SmartBuffer)
-    {
+    public computeHash(buffer: SmartBuffer) {
         this.validator_address.computeHash(buffer);
         this.address.computeHash(buffer);
         hashPart(this.expires, buffer);
@@ -89,8 +83,7 @@ export class VoterCard
      * Serialize as binary data.
      * @param buffer The buffer where serialized data is stored
      */
-    public serialize (buffer: SmartBuffer)
-    {
+    public serialize(buffer: SmartBuffer) {
         buffer.writeBuffer(this.validator_address.data);
         buffer.writeBuffer(this.address.data);
         let temp = Buffer.from(this.expires);
@@ -104,8 +97,7 @@ export class VoterCard
      * An exception occurs when the size of the remaining data is less than the required.
      * @param buffer The buffer to be deserialized
      */
-    public static deserialize (buffer: SmartBuffer): VoterCard
-    {
+    public static deserialize(buffer: SmartBuffer): VoterCard {
         let validator_address = new PublicKey(Utils.readBuffer(buffer, Utils.SIZE_OF_PUBLIC_KEY));
         let address = new PublicKey(Utils.readBuffer(buffer, Utils.SIZE_OF_PUBLIC_KEY));
         let length = VarInt.toNumber(buffer);
@@ -120,9 +112,8 @@ export class VoterCard
 /**
  * voting data stored in transaction payloads
  */
-export class BallotData
-{
-    public static HEADER = "BALLOT  "
+export class BallotData {
+    public static HEADER = "BALLOT  ";
 
     /**
      * The name of App
@@ -154,8 +145,8 @@ export class BallotData
      */
     public signature: Signature;
 
-    public static YES: number   = 0;
-    public static NO: number    = 1;
+    public static YES: number = 0;
+    public static NO: number = 1;
     public static BLANK: number = 2;
 
     /**
@@ -167,38 +158,40 @@ export class BallotData
      * @param sequence      A sequence number, starting from 0, if replacement is allowed
      * @param signature     The signature, made using temporary private key
      */
-    constructor (app_name: string, proposal_id: string, ballot: Buffer, card: VoterCard, sequence: number, signature?: Signature)
-    {
+    constructor(
+        app_name: string,
+        proposal_id: string,
+        ballot: Buffer,
+        card: VoterCard,
+        sequence: number,
+        signature?: Signature
+    ) {
         this.app_name = app_name;
         this.proposal_id = proposal_id;
         this.ballot = ballot;
         this.card = card;
         this.sequence = sequence;
-        if (signature !== undefined)
-            this.signature = signature;
-        else
-            this.signature = new Signature(Buffer.alloc(Signature.Width));
+        if (signature !== undefined) this.signature = signature;
+        else this.signature = new Signature(Buffer.alloc(Signature.Width));
     }
 
     /**
      * Collects data to create a hash.
      * @param buffer The buffer where collected data is stored
      */
-    public computeHash (buffer: SmartBuffer)
-    {
+    public computeHash(buffer: SmartBuffer) {
         hashPart(Buffer.from(this.app_name), buffer);
         hashPart(Buffer.from(this.proposal_id), buffer);
         buffer.writeBuffer(this.ballot);
         this.card.computeHash(buffer);
-        buffer.writeUInt32LE(this.sequence)
+        buffer.writeUInt32LE(this.sequence);
     }
 
     /**
      * Verify that a signature with the temporary address
      * @returns If OK, return true, otherwise return false.
      */
-    public verify (): boolean
-    {
+    public verify(): boolean {
         return this.card.address.verify<BallotData>(this.signature, this);
     }
 
@@ -206,8 +199,7 @@ export class BallotData
      * Serialize to binary data.
      * @param buffer The buffer where serialized data is stored
      */
-    public serialize (buffer: SmartBuffer)
-    {
+    public serialize(buffer: SmartBuffer) {
         let temp = Buffer.from(BallotData.HEADER);
         VarInt.fromNumber(temp.length, buffer);
         buffer.writeBuffer(temp);
@@ -232,12 +224,10 @@ export class BallotData
      * An exception occurs when the size of the remaining data is less than the required.
      * @param buffer The buffer to be deserialized
      */
-    public static deserialize (buffer: SmartBuffer): BallotData
-    {
+    public static deserialize(buffer: SmartBuffer): BallotData {
         let length = VarInt.toNumber(buffer);
         let header = Utils.readBuffer(buffer, length);
-        if (header.toString() !== BallotData.HEADER)
-            throw new Error("This is not the expected data type.");
+        if (header.toString() !== BallotData.HEADER) throw new Error("This is not the expected data type.");
 
         length = VarInt.toNumber(buffer);
         let temp = Utils.readBuffer(buffer, length);
@@ -258,12 +248,11 @@ export class BallotData
     /**
      * Returns the data to be linked to the BOA wallet.
      */
-    public getLinkData (): LinkDataWithVoteData
-    {
+    public getLinkData(): LinkDataWithVoteData {
         let buffer = new SmartBuffer();
         this.serialize(buffer);
         return {
-            payload: buffer.toBuffer().toString("base64")
-        }
+            payload: buffer.toBuffer().toString("base64"),
+        };
     }
 }

@@ -37,18 +37,17 @@
 
 *******************************************************************************/
 
-import { hashFull, hashPart } from './Hash';
-import { Scalar, Point} from "./ECC";
-import { Signature } from './Signature';
-import { SodiumHelper } from '../utils/SodiumHelper';
+import { hashFull, hashPart } from "./Hash";
+import { Scalar, Point } from "./ECC";
+import { Signature } from "./Signature";
+import { SodiumHelper } from "../utils/SodiumHelper";
 
-import { SmartBuffer} from "smart-buffer";
+import { SmartBuffer } from "smart-buffer";
 
 /**
  * Represent a signature (R, s)
  */
-export class Sig
-{
+export class Sig {
     /**
      * Commitment
      */
@@ -65,8 +64,7 @@ export class Sig
      * @param R The instance of Point
      * @param s The instance of Scalar
      */
-    constructor (R: Point, s: Scalar)
-    {
+    constructor(R: Point, s: Scalar) {
         this.R = R;
         this.s = s;
     }
@@ -74,16 +72,14 @@ export class Sig
     /**
      * Converts this to a Signature
      */
-    public toSignature (): Signature
-    {
+    public toSignature(): Signature {
         return new Signature(Buffer.concat([this.s.data, this.R.data]));
     }
 
     /**
      * Converts a Signature to Sig
      */
-    public static fromSignature (s: Signature): Sig
-    {
+    public static fromSignature(s: Signature): Sig {
         return new Sig(new Point(s.data.slice(Scalar.Width)), new Scalar(s.data.slice(0, Scalar.Width)));
     }
 
@@ -91,8 +87,7 @@ export class Sig
      * Collects data to create a hash.
      * @param buffer The buffer where collected data is stored
      */
-    public computeHash (buffer: SmartBuffer)
-    {
+    public computeHash(buffer: SmartBuffer) {
         this.R.computeHash(buffer);
         this.s.computeHash(buffer);
     }
@@ -100,8 +95,7 @@ export class Sig
     /**
      * Converts this object to its JSON representation
      */
-    public toJSON (key?: string): string
-    {
+    public toJSON(key?: string): string {
         return this.toSignature().toJSON();
     }
 
@@ -109,8 +103,7 @@ export class Sig
      * Serialize as binary data.
      * @param buffer - The buffer where serialized data is stored
      */
-    public serialize (buffer: SmartBuffer)
-    {
+    public serialize(buffer: SmartBuffer) {
         buffer.writeBuffer(this.R.data);
         buffer.writeBuffer(this.s.data);
     }
@@ -119,10 +112,9 @@ export class Sig
      * Deserialize as binary data.
      * @param buffer - The buffer to be deserialized
      */
-    public static deserialize (buffer: SmartBuffer): Sig
-    {
-        let R = new Point(buffer.readBuffer(SodiumHelper.sodium.crypto_core_ed25519_BYTES))
-        let s = new Scalar(buffer.readBuffer(SodiumHelper.sodium.crypto_core_ed25519_SCALARBYTES))
+    public static deserialize(buffer: SmartBuffer): Sig {
+        let R = new Point(buffer.readBuffer(SodiumHelper.sodium.crypto_core_ed25519_BYTES));
+        let s = new Scalar(buffer.readBuffer(SodiumHelper.sodium.crypto_core_ed25519_SCALARBYTES));
         return new Sig(R, s);
     }
 }
@@ -130,8 +122,7 @@ export class Sig
 /**
  * Represent the message to hash (part of `c`)
  */
-export class Message <T>
-{
+export class Message<T> {
     /**
      * The public key
      */
@@ -154,8 +145,7 @@ export class Message <T>
      * @param R The cryptographically randomly generated number
      * @param message The data to be hash
      */
-    constructor (X: Point, R: Point, message: T)
-    {
+    constructor(X: Point, R: Point, message: T) {
         this.X = X;
         this.R = R;
         this.message = message;
@@ -165,8 +155,7 @@ export class Message <T>
      * Collects data to create a hash.
      * @param buffer The buffer where collected data is stored
      */
-    public computeHash (buffer: SmartBuffer)
-    {
+    public computeHash(buffer: SmartBuffer) {
         this.X.computeHash(buffer);
         this.R.computeHash(buffer);
         hashPart(this.message, buffer);
@@ -176,8 +165,7 @@ export class Message <T>
 /**
  * Contains a scalar and its projection on the elliptic curve (`v` and `v.G`)
  */
-export class Pair
-{
+export class Pair {
     /**
      * A PRN-Generated number
      */
@@ -193,8 +181,7 @@ export class Pair
      * @param v The instance of Scalar
      * @param V The instance of Point (v.G)
      */
-    constructor (v: Scalar, V: Point)
-    {
+    constructor(v: Scalar, V: Point) {
         this.v = v;
         this.V = V;
     }
@@ -204,16 +191,14 @@ export class Pair
      * @param v The instance of Scalar
      * @returns The instance of Pair
      */
-    public static fromScalar (v: Scalar): Pair
-    {
+    public static fromScalar(v: Scalar): Pair {
         return new Pair(v, v.toPoint());
     }
 
     /**
      * Generate a random value `v` and a point on the curve `V` where `V = v.G`
      */
-    public static random (): Pair
-    {
+    public static random(): Pair {
         return Pair.fromScalar(Scalar.random());
     }
 }
@@ -221,8 +206,7 @@ export class Pair
 /**
  * Contains Schnorr signatures and verification methods.
  */
-export class Schnorr
-{
+export class Schnorr {
     /**
      * Single-signer trivial API
      * @template T The type of the parameter data
@@ -244,8 +228,7 @@ export class Schnorr
      * `R` is referred to as the nonce and is a cryptographically randomly
      * generated number that should neither be reused nor leaked.
      */
-    public static signPair<T> (kp: Pair, data: T): Signature
-    {
+    public static signPair<T>(kp: Pair, data: T): Signature {
         const R = Pair.random();
         return Schnorr.sign<T>(kp.v, kp.V, R.v, R.V, data);
     }
@@ -271,8 +254,7 @@ export class Schnorr
      * `R` is referred to as the nonce and is a cryptographically randomly
      * generated number that should neither be reused nor leaked.
      */
-    public static signScalar<T> (privateKey: Scalar, data: T): Signature
-    {
+    public static signScalar<T>(privateKey: Scalar, data: T): Signature {
         const R = Pair.random();
         return Schnorr.sign(privateKey, privateKey.toPoint(), R.v, R.V, data);
     }
@@ -300,8 +282,7 @@ export class Schnorr
      * `R` is referred to as the nonce and is a cryptographically randomly
      * generated number that should neither be reused nor leaked.
      */
-    public static signPairs<T> (kp: Pair, r: Pair, data: T): Signature
-    {
+    public static signPairs<T>(kp: Pair, r: Pair, data: T): Signature {
         return Schnorr.sign<T>(kp.v, kp.V, r.v, r.V, data);
     }
 
@@ -330,14 +311,13 @@ export class Schnorr
      * `R` is referred to as the nonce and is a cryptographically randomly
      * generated number that should neither be reused nor leaked.
      */
-    public static sign<T> (x: Scalar, X: Point, r: Scalar, R: Point, data: T): Signature
-    {
+    public static sign<T>(x: Scalar, X: Point, r: Scalar, R: Point, data: T): Signature {
         // Compute the challenge and reduce the hash to a scalar
         let c = Scalar.fromHash(hashFull(new Message<T>(X, R, data)));
 
         // Compute `s` part of the proof
         let s: Scalar = Scalar.add(r, Scalar.mul(c, x));
-        return (new Sig(R, s)).toSignature()
+        return new Sig(R, s).toSignature();
     }
 
     /**
@@ -359,24 +339,20 @@ export class Schnorr
      * `R` is referred to as the nonce and is a cryptographically randomly
      * generated number that should neither be reused nor leaked.
      */
-    public static verify<T> (X: Point, sig: Signature, data: T): boolean
-    {
+    public static verify<T>(X: Point, sig: Signature, data: T): boolean {
         let s: Sig = Sig.fromSignature(sig);
 
         // First check if Scalar from signature is valid
-        if (!s.s.isValid())
-            return false;
+        if (!s.s.isValid()) return false;
 
         /// Compute `s.G`
         let S = s.s.toPoint();
 
         // Now check that provided Point X is valid
-        if (!X.isValid())
-            return false;
+        if (!X.isValid()) return false;
 
         // Also check the Point R from the Signature
-        if (!s.R.isValid())
-            return false;
+        if (!s.R.isValid()) return false;
 
         // Compute the challenge and reduce the hash to a scalar
         let c: Scalar = Scalar.fromHash(hashFull(new Message<T>(X, s.R, data)));

@@ -35,20 +35,19 @@
 
 *******************************************************************************/
 
-import { hashPart } from '../common/Hash';
-import { PublicKey } from '../common/KeyPair';
-import { Signature } from '../common/Signature';
-import { JSONValidator } from '../utils/JSONValidator';
-import { Utils } from '../utils/Utils';
-import { VarInt } from '../utils/VarInt';
+import { hashPart } from "../common/Hash";
+import { PublicKey } from "../common/KeyPair";
+import { Signature } from "../common/Signature";
+import { JSONValidator } from "../utils/JSONValidator";
+import { Utils } from "../utils/Utils";
+import { VarInt } from "../utils/VarInt";
 
-import { SmartBuffer } from 'smart-buffer';
+import { SmartBuffer } from "smart-buffer";
 
 /**
  * The input lock types.
  */
-export enum LockType
-{
+export enum LockType {
     /// lock is a 64-byte public key, unlock is the signature
     Key = 0x00,
 
@@ -60,14 +59,13 @@ export enum LockType
 
     /// lock is a 64-byte hash of a script, unlock is the script containing
     /// only stack pushes which will push the redeem script last
-    Redeem = 0x03
+    Redeem = 0x03,
 }
 
 /**
  * Contains a tag and either a Hash or set of opcodes
  */
-export class Lock
-{
+export class Lock {
     /**
      * Specifies the type of lock script
      */
@@ -83,13 +81,10 @@ export class Lock
      * @param type  Specifies the type of lock script
      * @param data May either be a Hash, or a sequence of opcodes
      */
-    constructor (type: LockType, data: Buffer | string)
-    {
+    constructor(type: LockType, data: Buffer | string) {
         this.type = type;
-        if (typeof data === 'string')
-            this.bytes = Buffer.from(data, "base64");
-        else
-            this.bytes = Buffer.from(data);
+        if (typeof data === "string") this.bytes = Buffer.from(data, "base64");
+        else this.bytes = Buffer.from(data);
     }
 
     /**
@@ -98,12 +93,10 @@ export class Lock
      * @param value The value associated with `key`
      * @returns A new instance of `Lock` if `key == ""`, `value` otherwise.
      */
-    public static reviver (key: string, value: any): any
-    {
-        if (key !== "")
-            return value;
+    public static reviver(key: string, value: any): any {
+        if (key !== "") return value;
 
-        JSONValidator.isValidOtherwiseThrow('Lock', value);
+        JSONValidator.isValidOtherwiseThrow("Lock", value);
         return new Lock(value.type, value.bytes);
     }
 
@@ -111,8 +104,7 @@ export class Lock
      * Collects data to create a hash.
      * @param buffer The buffer where collected data is stored
      */
-    public computeHash (buffer: SmartBuffer)
-    {
+    public computeHash(buffer: SmartBuffer) {
         buffer.writeUInt8(this.type);
         hashPart(this.bytes, buffer);
     }
@@ -122,8 +114,7 @@ export class Lock
      * @param key the public key which can unlock this lock script
      * @returns The lock script
      */
-    public static fromPublicKey (key: PublicKey): Lock
-    {
+    public static fromPublicKey(key: PublicKey): Lock {
         return new Lock(LockType.Key, key.data);
     }
 
@@ -131,37 +122,35 @@ export class Lock
      * The bytes consisting of null values for all bytes.
      * @returns The instance of Unlock
      */
-    public static get Null (): Lock
-    {
+    public static get Null(): Lock {
         return new Lock(LockType.Key, Buffer.alloc(0));
     }
 
     /**
      * Converts this object to its JSON representation
      */
-    public toJSON (key?: string): any
-    {
+    public toJSON(key?: string): any {
         return {
             type: this.type,
-            bytes: this.bytes.toString("base64")
-        }
+            bytes: this.bytes.toString("base64"),
+        };
     }
 
     /**
      * Returns the data size.
      */
-    public getNumberOfBytes (): number
-    {
-        return Utils.SIZE_OF_BYTE + // Lock.type
-            this.bytes.length;      // Lock.bytes
+    public getNumberOfBytes(): number {
+        return (
+            Utils.SIZE_OF_BYTE + // Lock.type
+            this.bytes.length
+        ); // Lock.bytes
     }
 
     /**
      * Serialize as binary data.
      * @param buffer - The buffer where serialized data is stored
      */
-    public serialize (buffer: SmartBuffer)
-    {
+    public serialize(buffer: SmartBuffer) {
         VarInt.fromNumber(this.type, buffer);
         VarInt.fromNumber(this.bytes.length, buffer);
         buffer.writeBuffer(this.bytes);
@@ -171,8 +160,7 @@ export class Lock
      * Deserialize as binary data.
      * @param buffer - The buffer to be deserialized
      */
-    public static deserialize (buffer: SmartBuffer): Lock
-    {
+    public static deserialize(buffer: SmartBuffer): Lock {
         let type = VarInt.toNumber(buffer);
         let length = VarInt.toNumber(buffer);
         return new Lock(type, buffer.readBuffer(length));
@@ -182,23 +170,19 @@ export class Lock
 /**
  * Contains a data tuple or a set of push opcodes
  */
-export class Unlock
-{
+export class Unlock {
     /**
      * May be: <signature>, <signature, key>, <key, push opcodes>
      */
-    public bytes : Buffer;
+    public bytes: Buffer;
 
     /**
      * Constructor
      * @param data May be: <signature>, <signature, key>, <key, push opcodes>
      */
-    constructor (data: Buffer | string)
-    {
-        if (typeof data === 'string')
-            this.bytes = Buffer.from(data, "base64");
-        else
-            this.bytes = Buffer.from(data);
+    constructor(data: Buffer | string) {
+        if (typeof data === "string") this.bytes = Buffer.from(data, "base64");
+        else this.bytes = Buffer.from(data);
     }
 
     /**
@@ -207,12 +191,10 @@ export class Unlock
      * @param value The value associated with `key`
      * @returns A new instance of `Unlock` if `key == ""`, `value` otherwise.
      */
-    public static reviver (key: string, value: any): any
-    {
-        if (key !== "")
-            return value;
+    public static reviver(key: string, value: any): any {
+        if (key !== "") return value;
 
-        JSONValidator.isValidOtherwiseThrow('Unlock', value);
+        JSONValidator.isValidOtherwiseThrow("Unlock", value);
         return new Unlock(value.bytes);
     }
 
@@ -220,8 +202,7 @@ export class Unlock
      * Collects data to create a hash.
      * @param buffer The buffer where collected data is stored
      */
-    public computeHash (buffer: SmartBuffer)
-    {
+    public computeHash(buffer: SmartBuffer) {
         buffer.writeBuffer(this.bytes);
     }
 
@@ -230,8 +211,7 @@ export class Unlock
      * @param sig The signature that will be embedded in the script
      * @returns The unlock script
      */
-    public static fromSignature (sig: Signature): Unlock
-    {
+    public static fromSignature(sig: Signature): Unlock {
         return new Unlock(sig.data);
     }
 
@@ -239,35 +219,31 @@ export class Unlock
      * The bytes consisting of null values for all bytes.
      * @returns The instance of Unlock
      */
-    public static get Null (): Unlock
-    {
+    public static get Null(): Unlock {
         return new Unlock(Buffer.alloc(0));
     }
 
     /**
      * Converts this object to its JSON representation
      */
-    public toJSON (key?: string): any
-    {
+    public toJSON(key?: string): any {
         return {
-            bytes: this.bytes.toString("base64")
-        }
+            bytes: this.bytes.toString("base64"),
+        };
     }
 
     /**
      * Returns the data size.
      */
-    public getNumberOfBytes (): number
-    {
-        return this.bytes.length;   // Unlock.bytes
+    public getNumberOfBytes(): number {
+        return this.bytes.length; // Unlock.bytes
     }
 
     /**
      * Serialize as binary data.
      * @param buffer - The buffer where serialized data is stored
      */
-    public serialize (buffer: SmartBuffer)
-    {
+    public serialize(buffer: SmartBuffer) {
         VarInt.fromNumber(this.bytes.length, buffer);
         buffer.writeBuffer(this.bytes);
     }
@@ -276,8 +252,7 @@ export class Unlock
      * Deserialize as binary data.
      * @param buffer - The buffer to be deserialized
      */
-    public static deserialize (buffer: SmartBuffer): Unlock
-    {
+    public static deserialize(buffer: SmartBuffer): Unlock {
         let length = VarInt.toNumber(buffer);
         return new Unlock(buffer.readBuffer(length));
     }

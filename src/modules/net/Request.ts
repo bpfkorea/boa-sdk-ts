@@ -11,16 +11,16 @@
 
 *******************************************************************************/
 
-import axios from 'axios';
+import axios from "axios";
 
 /**
  * @ignore
  */
-const version = require('../../../package.json').version;
+const version = require("../../../package.json").version;
 
 export const Request = axios.create({
     headers: {
         "X-Client-Name": "boa-sdk-ts",
         "X-Client-Version": version,
-    }
+    },
 });

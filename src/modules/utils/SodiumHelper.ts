@@ -13,29 +13,25 @@
 
 *******************************************************************************/
 
-import { IBOASodium } from 'boa-sodium-base-ts';
-
+import { IBOASodium } from "boa-sodium-base-ts";
 
 /**
  * The Class to help package libsodium-wrappers-sumo
  */
-export class SodiumHelper
-{
+export class SodiumHelper {
     /**
      * @ignore
      */
     private static _sodium: IBOASodium;
 
-    public static assign (sodium: IBOASodium)
-    {
+    public static assign(sodium: IBOASodium) {
         SodiumHelper._sodium = sodium;
     }
 
     /**
      * Wait until the package is loaded.
      */
-    public static init (): Promise<void>
-    {
+    public static init(): Promise<void> {
         return SodiumHelper._sodium.init();
     }
 
@@ -43,10 +39,8 @@ export class SodiumHelper
      * Returns the object of the package that has already been loaded.
      * If loading is not completed, throw an error.
      */
-    public static get sodium (): IBOASodium
-    {
-        if (SodiumHelper._sodium === null)
-            throw new Error("The package libsodium did not complete loading.");
+    public static get sodium(): IBOASodium {
+        if (SodiumHelper._sodium === null) throw new Error("The package libsodium did not complete loading.");
 
         return SodiumHelper._sodium;
     }

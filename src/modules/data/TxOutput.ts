@@ -11,23 +11,22 @@
 
 *******************************************************************************/
 
-import { JSONValidator } from '../utils/JSONValidator';
-import { PublicKey } from '../common/KeyPair';
-import { Utils } from '../utils/Utils';
-import { Lock } from '../script/Lock';
-import { VarInt } from '../utils/VarInt';
+import { JSONValidator } from "../utils/JSONValidator";
+import { PublicKey } from "../common/KeyPair";
+import { Utils } from "../utils/Utils";
+import { Lock } from "../script/Lock";
+import { VarInt } from "../utils/VarInt";
 
-import JSBI from 'jsbi';
-import { SmartBuffer } from 'smart-buffer';
+import JSBI from "jsbi";
+import { SmartBuffer } from "smart-buffer";
 
 /**
  * The transaction output type constant
  */
-export enum OutputType
-{
+export enum OutputType {
     Payment = 0,
     Freeze = 1,
-    Coinbase = 2
+    Coinbase = 2,
 }
 
 /**
@@ -35,8 +34,7 @@ export enum OutputType
  * Convert JSON object to TypeScript's instance.
  * An exception occurs if the required property is not present.
  */
-export class TxOutput
-{
+export class TxOutput {
     /**
      * The type of the transaction output
      */
@@ -58,14 +56,11 @@ export class TxOutput
      * @param value   The monetary value
      * @param lock    The public key or instance of Lock
      */
-    constructor (type: number, value: JSBI | string, lock: Lock | PublicKey)
-    {
+    constructor(type: number, value: JSBI | string, lock: Lock | PublicKey) {
         this.type = type;
 
-        if (lock instanceof PublicKey)
-            this.lock = Lock.fromPublicKey(lock);
-        else
-            this.lock = lock;
+        if (lock instanceof PublicKey) this.lock = Lock.fromPublicKey(lock);
+        else this.lock = lock;
 
         this.value = JSBI.BigInt(value);
     }
@@ -80,24 +75,18 @@ export class TxOutput
      * @param value The value associated with `key`
      * @returns A new instance of `TxOutputs` if `key == ""`, `value` otherwise.
      */
-    public static reviver (key: string, value: any): any
-    {
-        if (key !== "")
-            return value;
+    public static reviver(key: string, value: any): any {
+        if (key !== "") return value;
 
-        JSONValidator.isValidOtherwiseThrow('TxOutput', value);
-        return new TxOutput(
-            Number(value.type),
-            value.value,
-            Lock.reviver("", value.lock));
+        JSONValidator.isValidOtherwiseThrow("TxOutput", value);
+        return new TxOutput(Number(value.type), value.value, Lock.reviver("", value.lock));
     }
 
     /**
      * Collects data to create a hash.
      * @param buffer The buffer where collected data is stored
      */
-    public computeHash (buffer: SmartBuffer)
-    {
+    public computeHash(buffer: SmartBuffer) {
         buffer.writeUInt32LE(this.type);
 
         this.lock.computeHash(buffer);
@@ -110,57 +99,51 @@ export class TxOutput
     /**
      * Converts this object to its JSON representation
      */
-    public toJSON (key?: string): any
-    {
+    public toJSON(key?: string): any {
         return {
             type: this.type,
             value: this.value.toString(),
-            lock: this.lock.toJSON()
+            lock: this.lock.toJSON(),
         };
     }
 
     /**
      * Returns the data size.
      */
-    public getNumberOfBytes (): number
-    {
-        return Utils.SIZE_OF_INT +          //  TxOutput.type
-            Utils.SIZE_OF_LONG +            //  TxOutput.value
-            this.lock.getNumberOfBytes();   //  TxOutput.lock
+    public getNumberOfBytes(): number {
+        return (
+            Utils.SIZE_OF_INT + //  TxOutput.type
+            Utils.SIZE_OF_LONG + //  TxOutput.value
+            this.lock.getNumberOfBytes()
+        ); //  TxOutput.lock
     }
 
     /**
      * Returns the estimated data size.
      */
-    public static getEstimatedNumberOfBytes (): number
-    {
+    public static getEstimatedNumberOfBytes(): number {
         return Utils.SIZE_OF_INT + Utils.SIZE_OF_LONG + Utils.SIZE_OF_BYTE + Utils.SIZE_OF_PUBLIC_KEY;
     }
 
     /**
      * The compare function of TxOutput
      */
-    public static compare(a: TxOutput, b: TxOutput): number
-    {
-        if (a.type !== b.type)
-            return (a.type < b.type) ? -1 : 1;
+    public static compare(a: TxOutput, b: TxOutput): number {
+        if (a.type !== b.type) return a.type < b.type ? -1 : 1;
 
-        if (a.lock.type !== b.lock.type)
-            return (a.lock.type < b.lock.type) ? -1 : 1;
+        if (a.lock.type !== b.lock.type) return a.lock.type < b.lock.type ? -1 : 1;
 
         let comp = Buffer.compare(a.lock.bytes, b.lock.bytes);
-        if (comp !== 0)
-            return comp;
+        if (comp !== 0) return comp;
 
-        return JSBI.greaterThan(a.value, b.value) ? 1 : (JSBI.lessThan(a.value, b.value) ? -1 : 0);
+        return JSBI.greaterThan(a.value, b.value) ? 1 : JSBI.lessThan(a.value, b.value) ? -1 : 0;
     }
 
     /**
      * Serialize as binary data.
      * @param buffer - The buffer where serialized data is stored
      */
-    public serialize (buffer: SmartBuffer)
-    {
+    public serialize(buffer: SmartBuffer) {
         VarInt.fromNumber(this.type, buffer);
         this.lock.serialize(buffer);
         VarInt.fromJSBI(this.value, buffer);
@@ -170,8 +153,7 @@ export class TxOutput
      * Deserialize as binary data.
      * @param buffer - The buffer to be deserialized
      */
-    public static deserialize (buffer: SmartBuffer): TxOutput
-    {
+    public static deserialize(buffer: SmartBuffer): TxOutput {
         let type = VarInt.toNumber(buffer);
         let lock = Lock.deserialize(buffer);
         let value = VarInt.toJSBI(buffer);
