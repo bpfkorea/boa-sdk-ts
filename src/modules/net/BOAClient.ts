@@ -181,31 +181,6 @@ export class BOAClient {
     }
 
     /**
-     * Request the block height corresponding to to the block creation time
-     * @param when Unix epoch time
-     * @returns height If it already exists in the block,
-     * it returns the height of the block,
-     * if the block has not yet been created,
-     * it returns the estimated height is returned.
-     */
-    public getHeightAt(when: Date): Promise<number> {
-        return new Promise<number>((resolve, reject) => {
-            let time = Math.ceil(when.getTime() / 1000);
-            let url = uri(this.server_url).directory("block_height_at").filename(time.toString());
-
-            Request.get(url.toString())
-                .then((response: AxiosResponse) => {
-                    if (response.status == 200) resolve(Number(response.data));
-                    else reject(new Error("The date before Genesis Block creation is invalid."));
-                    reject(handleNetworkError({ response: response }));
-                })
-                .catch((reason: any) => {
-                    reject(handleNetworkError(reason));
-                });
-        });
-    }
-
-    /**
      * Saves the data to the blockchain
      * @param tx The instance of the Transaction
      * @returns Returns true if success, otherwise returns false
