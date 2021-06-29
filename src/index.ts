@@ -40,7 +40,7 @@ export { LockType, Lock, Unlock } from "./modules/script/Lock";
 export { OP, isOpcode, isConditional, isPayload } from "./modules/script/Opcodes";
 export { ScriptType, Script } from "./modules/script/Script";
 
-export { Utils, Endian } from "./modules/utils/Utils";
+export { Utils, Endian, ArrayRange, iota } from "./modules/utils/Utils";
 export { SodiumHelper } from "./modules/utils/SodiumHelper";
 export { checksum, validate } from "./modules/utils/CRC16";
 export { TxPayloadFee } from "./modules/utils/TxPayloadFee";

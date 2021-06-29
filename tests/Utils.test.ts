@@ -291,4 +291,46 @@ describe("Test of Utils", () => {
         buffer.writeBuffer(Buffer.from([0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff]));
         assert.deepStrictEqual(sdk.VarInt.toJSBI(buffer), unsigned_log_max);
     });
+
+    it("Test of iota", () => {
+        let array: number[] = [];
+        sdk.iota(5).forEach((value: number) => array.push(value));
+        assert.deepStrictEqual(array, [0, 1, 2, 3, 4]);
+
+        array.length = 0;
+        sdk.iota(2, 5).forEach((value: number) => array.push(value));
+        assert.deepStrictEqual(array, [2, 3, 4]);
+
+        array.length = 0;
+        sdk.iota(5, 2, -1).forEach((value: number) => array.push(value));
+        assert.deepStrictEqual(array, [5, 4, 3]);
+
+        array.length = 0;
+        sdk.iota(1, 5, 2).forEach((value: number) => array.push(value));
+        assert.deepStrictEqual(array, [1, 3]);
+
+        array.length = 0;
+        sdk.iota(5, 1, -2).forEach((value: number) => array.push(value));
+        assert.deepStrictEqual(array, [5, 3]);
+
+        array.length = 0;
+        sdk.iota(10).forEach((value: number) => array.push(value));
+        assert.deepStrictEqual(array, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+
+        array = sdk.iota(5).filter((value: number) => value % 2 === 1);
+        assert.deepStrictEqual(array, [1, 3]);
+
+        array = sdk.iota(5).map((value: number) => value * 2);
+        assert.deepStrictEqual(array, [0, 2, 4, 6, 8]);
+
+        let sum = sdk.iota(5).reduce<number>((sum: number, value: number) => {
+            return sum + value;
+        }, 0);
+        assert.deepStrictEqual(sum, 10);
+
+        let str = sdk.iota(5).reduce<string>((sum: string, value: number) => {
+            return sum + value.toString();
+        }, "");
+        assert.deepStrictEqual(str, "01234");
+    });
 });
