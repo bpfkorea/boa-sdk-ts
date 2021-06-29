@@ -20,6 +20,7 @@ export { Signature } from "./modules/common/Signature";
 export { Scalar, Point } from "./modules/common/ECC";
 export { Sig, Pair, Schnorr, Message } from "./modules/common/Schnorr";
 
+export { BitMask } from "./modules/data/BitMask";
 export { BitField } from "./modules/data/BitField";
 export { Block } from "./modules/data/Block";
 export { BlockHeader } from "./modules/data/BlockHeader";
