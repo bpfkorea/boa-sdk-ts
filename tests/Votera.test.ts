@@ -218,7 +218,7 @@ export class TestStoa {
                             ),
                         ],
                         Buffer.from(
-                            "'CFBST1BPU0FMBlZvdGVyYQEMSUQxMjM0NTY3ODkwBVRpdGxl/egD/dILAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP8AoHJOGAkAAP8A6HZIFwAAAP7A/JsBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAN2tOi+MKGfTMi85pssUrbmVFl5Vu3UowAYGsEqeEt26xOYx2v6aWx69nACIFINcMrCytXJmcWy99/N+ZlGEIWM=",
+                            "CFBST1BPU0FMBlZvdGVyYQEMSUQxMjM0NTY3ODkwBVRpdGxl/wCwy9h8AQAA/wBcvht9AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP8AoHJOGAkAAP8A6HZIFwAAAP7A/JsBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAN2tOi+MKGfTMi85pssUrbmVFl5Vu3UowAYGsEqeEt26xOYx2v6aWx69nACIFINcMrCytXJmcWy99/N+ZlGEIWM=",
                             "base64"
                         )
                     );
@@ -385,8 +385,8 @@ describe("Checking the proposal and ballot data", () => {
             proposal_type: sdk.ProposalType.Fund,
             proposal_id: "ID1234567890",
             proposal_title: "Title",
-            vote_start_height: sdk.JSBI.BigInt(1000),
-            vote_end_height: sdk.JSBI.BigInt(3026),
+            vote_start_time: sdk.TimeStamp.fromDateTime(new Date(Date.UTC(2021, 10, 1))),
+            vote_end_time: sdk.TimeStamp.fromDateTime(new Date(Date.UTC(2021, 10, 14))),
             doc_hash: new sdk.Hash(Buffer.alloc(sdk.Hash.Width)),
             fund_amount: sdk.JSBI.BigInt(10000000000000),
             proposal_fee: sdk.JSBI.BigInt(100000000000),
@@ -448,8 +448,8 @@ describe("Checking the proposal and ballot data", () => {
                         assert.deepStrictEqual(payload.proposal_type, expected_data.proposal_type);
                         assert.deepStrictEqual(payload.proposal_id, expected_data.proposal_id);
                         assert.deepStrictEqual(payload.proposal_title, expected_data.proposal_title);
-                        assert.deepStrictEqual(payload.vote_start_height, expected_data.vote_start_height);
-                        assert.deepStrictEqual(payload.vote_end_height, expected_data.vote_end_height);
+                        assert.deepStrictEqual(payload.vote_start_time, expected_data.vote_start_time);
+                        assert.deepStrictEqual(payload.vote_end_time, expected_data.vote_end_time);
                         assert.deepStrictEqual(payload.doc_hash, expected_data.doc_hash);
                         assert.deepStrictEqual(payload.fund_amount, expected_data.fund_amount);
                         assert.deepStrictEqual(payload.proposal_fee, expected_data.proposal_fee);

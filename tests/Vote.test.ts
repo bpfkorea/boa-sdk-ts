@@ -38,8 +38,8 @@ describe("Vote Data", () => {
             sdk.ProposalType.Fund,
             "ID1234567890",
             "Title",
-            sdk.JSBI.BigInt(1000),
-            sdk.JSBI.BigInt(3026),
+            sdk.TimeStamp.fromDateTime(new Date(Date.UTC(2021, 10, 1))),
+            sdk.TimeStamp.fromDateTime(new Date(Date.UTC(2021, 10, 14))),
             new sdk.Hash(Buffer.alloc(sdk.Hash.Width)),
             sdk.JSBI.BigInt(10000000000000),
             sdk.JSBI.BigInt(100000000000),
@@ -200,8 +200,8 @@ describe("Vote Data", () => {
             sdk.ProposalType.Fund,
             "ID1234567890",
             "Title",
-            sdk.JSBI.BigInt(1000),
-            sdk.JSBI.BigInt(3026),
+            sdk.TimeStamp.fromDateTime(new Date(Date.UTC(2021, 10, 1))),
+            sdk.TimeStamp.fromDateTime(new Date(Date.UTC(2021, 10, 14))),
             new sdk.Hash(Buffer.alloc(sdk.Hash.Width)),
             sdk.JSBI.BigInt(10000000000000),
             sdk.JSBI.BigInt(100000000000),
@@ -235,7 +235,7 @@ describe("Vote Data", () => {
             ],
             voting_fee: "12000000",
             payload:
-                "CFBST1BPU0FMBlZvdGVyYQEMSUQxMjM0NTY3ODkwBVRpdGxl/egD/dILAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP8AoHJOGAkAAP8A6HZIFwAAAP7A/JsBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAN2tOi+MKGfTMi85pssUrbmVFl5Vu3UowAYGsEqeEt26xOYx2v6aWx69nACIFINcMrCytXJmcWy99/N+ZlGEIWM=",
+                "CFBST1BPU0FMBlZvdGVyYQEMSUQxMjM0NTY3ODkwBVRpdGxl/wCwy9h8AQAA/wBcvht9AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP8AoHJOGAkAAP8A6HZIFwAAAP7A/JsBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAN2tOi+MKGfTMi85pssUrbmVFl5Vu3UowAYGsEqeEt26xOYx2v6aWx69nACIFINcMrCytXJmcWy99/N+ZlGEIWM=",
         };
         assert.deepStrictEqual(link_data, expected);
     });

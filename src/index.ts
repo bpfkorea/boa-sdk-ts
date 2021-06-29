@@ -15,6 +15,7 @@
 export { IBOASodium } from "boa-sodium-base-ts";
 export { Hash, hash, hashMulti, makeUTXOKey, hashFull, hashPart } from "./modules/common/Hash";
 export { Height } from "./modules/common/Height";
+export { TimeStamp } from "./modules/common/TimeStamp";
 export { KeyPair, PublicKey, SecretKey } from "./modules/common/KeyPair";
 export { Signature } from "./modules/common/Signature";
 export { Scalar, Point } from "./modules/common/ECC";

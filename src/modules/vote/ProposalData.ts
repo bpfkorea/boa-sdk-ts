@@ -12,6 +12,7 @@
 *******************************************************************************/
 
 import { Hash } from "../common/Hash";
+import { TimeStamp } from "../common/TimeStamp";
 import { PublicKey } from "../common/KeyPair";
 import { Utils } from "../utils/Utils";
 import { VarInt } from "../utils/VarInt";
@@ -55,14 +56,14 @@ export class ProposalData {
     public proposal_title: string;
 
     /**
-     * The block height of voting start
+     * The time of voting start
      */
-    public vote_start_height: JSBI;
+    public vote_start_time: TimeStamp;
 
     /**
-     * The block height of voting end
+     * The time of voting end
      */
-    public vote_end_height: JSBI;
+    public vote_end_time: TimeStamp;
 
     /**
      * The hash of the documentation
@@ -105,8 +106,8 @@ export class ProposalData {
      * @param proposal_type         The type of the proposal, 0: System, 1: Funding
      * @param proposal_id           The ID of the proposal
      * @param proposal_title        The title of the proposal
-     * @param vote_start_height     The block height of voting start
-     * @param vote_end_height       The block height of voting end
+     * @param vote_start_time       The time of voting start
+     * @param vote_end_time         The time of voting end
      * @param doc_hash              The hash of the documentation
      * @param fund_amount           The amount of the funding
      * @param proposal_fee          The proposal fee
@@ -120,8 +121,8 @@ export class ProposalData {
         proposal_type: ProposalType,
         proposal_id: string,
         proposal_title: string,
-        vote_start_height: JSBI,
-        vote_end_height: JSBI,
+        vote_start_time: TimeStamp,
+        vote_end_time: TimeStamp,
         doc_hash: Hash,
         fund_amount: JSBI,
         proposal_fee: JSBI,
@@ -134,8 +135,8 @@ export class ProposalData {
         this.proposal_type = proposal_type;
         this.proposal_id = proposal_id;
         this.proposal_title = proposal_title;
-        this.vote_start_height = vote_start_height;
-        this.vote_end_height = vote_end_height;
+        this.vote_start_time = vote_start_time;
+        this.vote_end_time = vote_end_time;
         this.doc_hash = doc_hash;
         this.fund_amount = fund_amount;
         this.proposal_fee = proposal_fee;
@@ -168,8 +169,8 @@ export class ProposalData {
         VarInt.fromNumber(temp.length, buffer);
         buffer.writeBuffer(temp);
 
-        VarInt.fromJSBI(this.vote_start_height, buffer);
-        VarInt.fromJSBI(this.vote_end_height, buffer);
+        this.vote_start_time.serialize(buffer);
+        this.vote_end_time.serialize(buffer);
 
         buffer.writeBuffer(this.doc_hash.data);
 
@@ -207,8 +208,8 @@ export class ProposalData {
         temp = Utils.readBuffer(buffer, length);
         let proposal_title = temp.toString();
 
-        let vote_start_height = VarInt.toJSBI(buffer);
-        let vote_end_height = VarInt.toJSBI(buffer);
+        let vote_start_time = TimeStamp.deserialize(buffer);
+        let vote_end_time = TimeStamp.deserialize(buffer);
 
         let doc_hash = new Hash(buffer.readBuffer(Hash.Width));
         let fund_amount = VarInt.toJSBI(buffer);
@@ -223,8 +224,8 @@ export class ProposalData {
             proposal_type,
             proposal_id,
             proposal_title,
-            vote_start_height,
-            vote_end_height,
+            vote_start_time,
+            vote_end_time,
             doc_hash,
             fund_amount,
             proposal_fee,
