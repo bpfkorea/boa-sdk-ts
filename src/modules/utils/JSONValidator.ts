@@ -27,18 +27,6 @@ export class JSONValidator {
      */
     private static schemas: Map<string, object> = new Map([
         [
-            "BitField",
-            {
-                title: "BitField",
-                type: "array",
-                items: {
-                    type: "number",
-                },
-                additionalProperties: false,
-                required: [],
-            },
-        ],
-        [
             "Block",
             {
                 title: "Block",
