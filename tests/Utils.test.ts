@@ -86,9 +86,9 @@ describe("Test of Utils", () => {
         assert.strictEqual(sdk.Utils.SIZE_OF_SECRET_KEY, sdk.SodiumHelper.sodium.crypto_core_ed25519_SCALARBYTES);
     });
 
-    it("Test of BitField JSON serialization", () => {
-        let validator = new sdk.BitField([45, 90, 150]);
-        assert.strictEqual(JSON.stringify(validator), `"[45,90,150]"`);
+    it("Test of BitMask JSON serialization", () => {
+        let validator = sdk.BitMask.fromString("01010101010101010");
+        assert.strictEqual(JSON.stringify(validator), `"01010101010101010"`);
     });
 
     it("Test of writeJSBigIntLE, readJSBigIntLE", () => {

@@ -11,7 +11,7 @@
 
 *******************************************************************************/
 
-import { BitField } from "./BitField";
+import { BitMask } from "./BitMask";
 import { Enrollment } from "./Enrollment";
 import { JSONValidator } from "../utils/JSONValidator";
 import { Hash } from "../common/Hash";
@@ -47,7 +47,7 @@ export class BlockHeader {
     /**
      * The bit-field containing the validators' key indices which signed the block
      */
-    public validators: BitField;
+    public validators: BitMask;
 
     /**
      * The Schnorr multisig of all validators which signed this block
@@ -90,7 +90,7 @@ export class BlockHeader {
         prev_block: Hash,
         height: Height,
         merkle_root: Hash,
-        validators: BitField,
+        validators: BitMask,
         signature: Signature,
         enrollments: Enrollment[],
         random_seed: Hash,
@@ -127,7 +127,7 @@ export class BlockHeader {
             new Hash(value.prev_block),
             new Height(value.height),
             new Hash(value.merkle_root),
-            BitField.reviver("", value.validators),
+            BitMask.fromString(value.validators),
             new Signature(value.signature),
             value.enrollments.map((elem: any) => Enrollment.reviver("", elem)),
             new Hash(value.random_seed),
@@ -182,7 +182,7 @@ export class BlockHeader {
         let merkle_root = Hash.deserialize(buffer);
         let random_seed = Hash.deserialize(buffer);
         let signature = Signature.deserialize(buffer);
-        let validators = BitField.deserialize(buffer);
+        let validators = BitMask.deserialize(buffer);
         let height = Height.deserialize(buffer);
 
         let length = VarInt.toNumber(buffer);
