@@ -11,8 +11,8 @@
 
 *******************************************************************************/
 
-import * as assert from "assert";
 import JSBI from "jsbi";
+import process from "process";
 import { SmartBuffer } from "smart-buffer";
 
 /**
@@ -58,7 +58,6 @@ export class Utils {
 
     /**
      *  Gets the path to where the execution command was entered for this process.
-     * This value must be set, otherwise the application will terminate.
      */
     public static getInitCWD(): string {
         // Get the working directory the user was in when the process was started,
@@ -67,8 +66,8 @@ export class Utils {
         // `PWD` otherwise.
         // See also: https://github.com/npm/cli/issues/2033
         if (process.env.INIT_CWD !== undefined) return process.env.INIT_CWD;
-        assert.ok(process.env.PWD !== undefined, "Neither `INIT_CWD` nor `PWD` are defined");
-        return process.env.PWD;
+        if (process.env.PWD !== undefined) return process.env.PWD;
+        return process.cwd();
     }
 
     /**
