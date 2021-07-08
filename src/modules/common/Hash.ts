@@ -134,17 +134,13 @@ export function hash(source: Buffer): Hash {
 
 /**
  * Creates a hash of the two buffer combined.
- * @param source1 The original for creating hash
- * @param source2 The original for creating hash
+ * @param args The array of Buffer for creating hash
  * @returns The instance of Hash
  * See_Also https://github.com/bosagora/agora/blob/93c31daa616e76011deee68a8645e1b86624ce3d/source/agora/common/Hash.d#L239-L255
  */
-export function hashMulti(source1: Buffer, source2: Buffer): Hash {
-    let merge = Buffer.alloc(source1.length + source2.length);
-    source1.copy(merge);
-    source2.copy(merge, source1.length);
-
-    return new Hash(Buffer.from(SodiumHelper.sodium.crypto_generichash(Hash.Width, merge)));
+export function hashMulti(...args: Buffer[]): Hash {
+    let buffer = args.reduce<Buffer>((sum, elem) => Buffer.concat([sum, elem]), Buffer.alloc(0));
+    return new Hash(Buffer.from(SodiumHelper.sodium.crypto_generichash(Hash.Width, buffer)));
 }
 
 /**

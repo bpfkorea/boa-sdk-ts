@@ -66,6 +66,15 @@ describe("Hash", () => {
             h.toString(),
             "0xe0343d063b14c52630563ec81b0f91a84ddb05f2cf05a2e4330ddc79bd3a06e57c2e756f276c112342ff1d6f1e74d05bdb9bf880abd74a2e512654e12d171a74"
         );
+
+        // Source 3 : "boa"
+        let boa = sdk.hash(Buffer.from("boa"));
+
+        let h2 = sdk.hash(Buffer.concat([foo.data, bar.data, boa.data]));
+        let h3 = sdk.hashMulti(foo.data, bar.data, boa.data);
+
+        // Check
+        assert.strictEqual(h3.toString(), h2.toString());
     });
 
     // The test codes below compare with the values calculated in Agora.
