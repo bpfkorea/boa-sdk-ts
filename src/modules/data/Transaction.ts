@@ -210,7 +210,7 @@ export class Transaction {
         for (let idx = 0; idx < length; idx++) outputs.push(TxOutput.deserialize(buffer));
 
         length = VarInt.toNumber(buffer);
-        let payload = buffer.readBuffer(length);
+        let payload = Utils.readBuffer(buffer, length);
 
         let lock_height = Height.deserialize(buffer);
 

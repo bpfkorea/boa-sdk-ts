@@ -41,6 +41,7 @@ import { hashFull, hashPart } from "./Hash";
 import { Scalar, Point } from "./ECC";
 import { Signature } from "./Signature";
 import { SodiumHelper } from "../utils/SodiumHelper";
+import { Utils } from "../utils/Utils";
 
 import { SmartBuffer } from "smart-buffer";
 
@@ -113,8 +114,8 @@ export class Sig {
      * @param buffer - The buffer to be deserialized
      */
     public static deserialize(buffer: SmartBuffer): Sig {
-        let R = new Point(buffer.readBuffer(SodiumHelper.sodium.crypto_core_ed25519_BYTES));
-        let s = new Scalar(buffer.readBuffer(SodiumHelper.sodium.crypto_core_ed25519_SCALARBYTES));
+        let R = new Point(Utils.readBuffer(buffer, SodiumHelper.sodium.crypto_core_ed25519_BYTES));
+        let s = new Scalar(Utils.readBuffer(buffer, SodiumHelper.sodium.crypto_core_ed25519_SCALARBYTES));
         return new Sig(R, s);
     }
 }

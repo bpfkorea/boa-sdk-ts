@@ -119,7 +119,7 @@ export class Hash {
      * @param buffer - The buffer to be deserialized
      */
     public static deserialize(buffer: SmartBuffer): Hash {
-        return new Hash(buffer.readBuffer(Hash.Width));
+        return new Hash(Utils.readBuffer(buffer, Hash.Width));
     }
 }
 

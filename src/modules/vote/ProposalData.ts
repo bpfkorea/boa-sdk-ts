@@ -210,7 +210,7 @@ export class ProposalData {
         let vote_start_height = VarInt.toJSBI(buffer);
         let vote_end_height = VarInt.toJSBI(buffer);
 
-        let doc_hash = new Hash(buffer.readBuffer(Hash.Width));
+        let doc_hash = new Hash(Utils.readBuffer(buffer, Hash.Width));
         let fund_amount = VarInt.toJSBI(buffer);
         let proposal_fee = VarInt.toJSBI(buffer);
         let vote_fee = VarInt.toJSBI(buffer);
