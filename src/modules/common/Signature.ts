@@ -108,6 +108,6 @@ export class Signature {
      * @param buffer - The buffer to be deserialized
      */
     public static deserialize(buffer: SmartBuffer): Signature {
-        return new Signature(buffer.readBuffer(Signature.Width));
+        return new Signature(Utils.readBuffer(buffer, Signature.Width));
     }
 }
