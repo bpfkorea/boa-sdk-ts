@@ -79,16 +79,16 @@ describe("TxBuilder", () => {
         let expected = {
             inputs: [
                 {
-                    utxo: "0xd9482016835acc6defdfd060216a5890e00cf8f0a79ab0b83d3385fc723cd45bfea66eb3587a684518ff1756951d38bf4f07abda96dcdea1c160a4f83e377c32",
+                    utxo: "0x4dde806d2e09367f9d5bdaaf46deab01a336a64fdb088dbb94edb171560c63cf6a39377bf0c4d35118775681d989dee46531926299463256da303553f09be6ef",
                     unlock: {
-                        bytes: "J4kiUyFzQP+2jToI7OFJSmQzWkklCdB5OD4uqxPhjwl8SVN9XT6THqDk1Z2zEKFBuCWIKmQDMFsPCxrungvAfQ==",
+                        bytes: "Q/xkI//GMoaGCA98vNLjTwul7MpQAb86EiFlRwBMugKmHn8XyYkHE/XIS+A0lsefsoSv+Y5RGu2+LYI3oP+bNQ==",
                     },
                     unlock_age: 0,
                 },
                 {
-                    utxo: "0x4dde806d2e09367f9d5bdaaf46deab01a336a64fdb088dbb94edb171560c63cf6a39377bf0c4d35118775681d989dee46531926299463256da303553f09be6ef",
+                    utxo: "0xd9482016835acc6defdfd060216a5890e00cf8f0a79ab0b83d3385fc723cd45bfea66eb3587a684518ff1756951d38bf4f07abda96dcdea1c160a4f83e377c32",
                     unlock: {
-                        bytes: "SwwNLYNgDP+trbErXKIKNjVfv2QiBxg0s0cxocKWFg86fiVIbX+wElOuDHf5UzJ+JCob3Fr1JAGx6oRPdevBQA==",
+                        bytes: "YDT5tr6Ifu8slttlTQ1ORuchgkw1tGjn1PqqT/4/3gPK2Bovxm4gIWhmEnkDv+0JaMSf+cl5jZiwaNK2Wv4SvA==",
                     },
                     unlock_age: 0,
                 },
@@ -97,24 +97,17 @@ describe("TxBuilder", () => {
                 {
                     type: 0,
                     value: "1980000000",
-                    lock: {
-                        type: 0,
-                        bytes: "wa1PiNOnmZYBpjfjXS58SZ6fJTaihHSRZRt86aWWRgE=",
-                    },
+                    lock: { type: 0, bytes: "wa1PiNOnmZYBpjfjXS58SZ6fJTaihHSRZRt86aWWRgE=" },
                 },
                 {
                     type: 0,
                     value: "20000000",
-                    lock: {
-                        type: 0,
-                        bytes: "2uGT7+ya0+sVo6ohySeAdjX7lf+hSRNV7iLceOZXMN8=",
-                    },
+                    lock: { type: 0, bytes: "2uGT7+ya0+sVo6ohySeAdjX7lf+hSRNV7iLceOZXMN8=" },
                 },
             ],
             payload: "",
             lock_height: "0",
         };
-
         // Because randomly generated values are used when signing,
         // different signatures are created even when signed using the same secret key.
         // Therefore, omit the signature comparison.
@@ -145,16 +138,16 @@ describe("TxBuilder", () => {
         let expected = {
             inputs: [
                 {
-                    utxo: "0xd9482016835acc6defdfd060216a5890e00cf8f0a79ab0b83d3385fc723cd45bfea66eb3587a684518ff1756951d38bf4f07abda96dcdea1c160a4f83e377c32",
+                    utxo: "0x4dde806d2e09367f9d5bdaaf46deab01a336a64fdb088dbb94edb171560c63cf6a39377bf0c4d35118775681d989dee46531926299463256da303553f09be6ef",
                     unlock: {
-                        bytes: "K5ZN24UQeR5vJcMDzOg9ODHiDvMHAbC9zhW2w3ugNgvZw/tU7vm3Ww9enFwHwC2B/Vnq5qK9YKhRjnNleMmOqQ==",
+                        bytes: "pIiLEwhXC59GIZL6Xw9IP2g5wu3HES+Md1Wm45F5nA64oVpt5L/1Yf+0Myd2uNQWyzUUacn8+1RIslXwlcSh/w==",
                     },
                     unlock_age: 0,
                 },
                 {
-                    utxo: "0x4dde806d2e09367f9d5bdaaf46deab01a336a64fdb088dbb94edb171560c63cf6a39377bf0c4d35118775681d989dee46531926299463256da303553f09be6ef",
+                    utxo: "0xd9482016835acc6defdfd060216a5890e00cf8f0a79ab0b83d3385fc723cd45bfea66eb3587a684518ff1756951d38bf4f07abda96dcdea1c160a4f83e377c32",
                     unlock: {
-                        bytes: "FZYYYwBu5U8JnBX7UUOTn1viN1sdzL5c/NoLxXVJsg7lvOY/4XaAe2zffF4Tb2PNi1RjBPVnmdY95sw5yoeiBQ==",
+                        bytes: "+JGa7Yhyat4L/91kfriWiTtfxvgzQ1mbHIzcL5JVGQgG7yiORpb5+HCC6IYf9sqGOhjyjOKrfgZMssDnYGAmuA==",
                     },
                     unlock_age: 0,
                 },
@@ -163,16 +156,12 @@ describe("TxBuilder", () => {
                 {
                     type: 0,
                     value: "1999500000",
-                    lock: {
-                        type: 0,
-                        bytes: "wa1PiNOnmZYBpjfjXS58SZ6fJTaihHSRZRt86aWWRgE=",
-                    },
+                    lock: { type: 0, bytes: "wa1PiNOnmZYBpjfjXS58SZ6fJTaihHSRZRt86aWWRgE=" },
                 },
             ],
             payload: "YXRhZCBldG92",
             lock_height: "0",
         };
-
         // Because randomly generated values are used when signing,
         // different signatures are created even when signed using the same secret key.
         // Therefore, omit the signature comparison.

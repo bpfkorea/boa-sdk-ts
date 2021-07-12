@@ -112,7 +112,7 @@ export class TxInput {
      * The compare function of TxInput
      */
     public static compare(a: TxInput, b: TxInput): number {
-        return Buffer.compare(a.utxo.data, b.utxo.data);
+        return Utils.compareBuffer(a.utxo.data, b.utxo.data);
     }
 
     /**

@@ -1046,19 +1046,19 @@ describe("BOA Client", () => {
         let utxos = [
             {
                 utxo: new sdk.Hash(
-                    "0x81a326afa790003c32517a2a2556613004e6147edac28d576cf7bcc2daadf4bb60be1f644c229b775e7894844ec66b2d70ddf407b8196b46bc1dfe42061c7497"
+                    "0x4028965b7408566a66e4cf8c603a1cdebc7659a3e693d36d2fdcb39b196da967914f40ef4966d5b4b1f4b3aae00fbd68ffe8808b070464c2a101d44f4d7b0170"
                 ),
                 amount: sdk.JSBI.BigInt(100000),
             },
             {
                 utxo: new sdk.Hash(
-                    "0xb82cb96710af2e9804c59d1f1e1679f8b8b69f4c0f6cd79c8c12f365dd766c09aaa4febcc18b3665d33301cb248ac7afd343ac7b98b27beaf246ad12d3b3219a"
+                    "0x81a326afa790003c32517a2a2556613004e6147edac28d576cf7bcc2daadf4bb60be1f644c229b775e7894844ec66b2d70ddf407b8196b46bc1dfe42061c7497"
                 ),
                 amount: sdk.JSBI.BigInt(200000),
             },
             {
                 utxo: new sdk.Hash(
-                    "0x4028965b7408566a66e4cf8c603a1cdebc7659a3e693d36d2fdcb39b196da967914f40ef4966d5b4b1f4b3aae00fbd68ffe8808b070464c2a101d44f4d7b0170"
+                    "0xb82cb96710af2e9804c59d1f1e1679f8b8b69f4c0f6cd79c8c12f365dd766c09aaa4febcc18b3665d33301cb248ac7afd343ac7b98b27beaf246ad12d3b3219a"
                 ),
                 amount: sdk.JSBI.BigInt(300000),
             },
@@ -1496,63 +1496,48 @@ describe("BOA Client", () => {
         let expected = {
             inputs: [
                 {
-                    utxo: "0xc3780f9907a97c20a2955945544e7732a60702c32d81e016bdf1ea172b7b7fb96e9a4164176663a146615307aaadfbbad77e615a7c792a89191e85471120d314",
-                    unlock: {
-                        bytes: "Ho2Lxmx4UJpzcivLgZOTeOsbtFwQ2QzpKMHLY07raQrEbM57DEHaR5v8vDxxkyh1NZn02+CI3M8CGDLFa1EQEQ==",
-                    },
-                    unlock_age: 0,
-                },
-                {
                     utxo: "0x3451d94322524e3923fd26f0597fb8a9cdbf3a9427c38ed1ca61104796d39c5b9b5ea33d576f17c2dc17bebc5d84a0559de8c8c521dfe725d4c352255fc71e85",
                     unlock: {
-                        bytes: "XWndrI7QXgY1Tb3lrk4mpC2PJIvnHKv5pynXfla/JAADl6MnMAGMpRgtZeg/8Gmw9Wih0qgrbCBiTM+tUFCcdw==",
+                        bytes: "+yvJHCCjvKMLOMtqJsdyNMtxpBRI18eouEC6xBGNJwehEXfREFnpkUkRxJIfgypBo1b+ZR9uH6VeqCK298FT1g==",
                     },
                     unlock_age: 0,
                 },
                 {
                     utxo: "0x7e1958dbe6839d8520d65013bbc85d36d47a9f64cf608cc66c0d816f0b45f5c8a85a8990725ffbb1ab13c3c65b45fdc06f4745d455e00e1068c4c5c0b661d685",
                     unlock: {
-                        bytes: "PyQdYPHxgIaoGW3oSpknJSp/W9nEGuZIK7oL1o6b3QZZ2stIEoX/Q1aABZyKGAuX52Jj5pKU0/Jh8/pJ7o3jVA==",
+                        bytes: "Bofplo7Y8ThhlHR2DQpvVRIoDopgRXM0nLzL16pj+Qwl7JVcgZbtdRqmf2hLmJk0TBhpHG4irf5qN54XMuz3XQ==",
+                    },
+                    unlock_age: 0,
+                },
+                {
+                    utxo: "0xc3780f9907a97c20a2955945544e7732a60702c32d81e016bdf1ea172b7b7fb96e9a4164176663a146615307aaadfbbad77e615a7c792a89191e85471120d314",
+                    unlock: {
+                        bytes: "vGjgJWw6WzI+YFWTPPeXOZRM0F631K1/y7lODyYpRQzK5RXwDSGJ0bme9WWeDf9aSDqhyodvnjYUaJY8/MGP4w==",
                     },
                     unlock_age: 0,
                 },
                 {
                     utxo: "0xd44608de8a5015b04f933098fd7f67f84ffbf00c678836d38c661ab6dc1f149606bdc96bad149375e16dc5722b077b14c0a4afdbe6d30932f783650f435bcb92",
                     unlock: {
-                        bytes: "SMFTDslZxDiVsf/A82CXWpjN+dnEw0ITyBmLWtP8qgTJNEIk2S5SsLo3x+RGVBNajVnSiB7CQvIWtDGgGxTmYg==",
+                        bytes: "7f4NX9NPDhDRa+3KhEjyFgnRqjXXfk2KoHX4XlNAgwCLgahelWE8pvMksxisHlYafU+oxI60AkpwEjLZ7ff8/A==",
                     },
                     unlock_age: 0,
                 },
                 {
                     utxo: "0xfca92fe76629311c6208a49e89cb26f5260777278cd8b272e7bb3021adf429957fd6844eb3b8ff64a1f6074126163fd636877fa92a1f4329c5116873161fbaf8",
                     unlock: {
-                        bytes: "tnqSKuN/YfU1Fpm2QVZsqYv/+13e97w5l3mAvuTlFAioH34dQ6VMp7t9qTRNy2Tx7S4DQgRGkdByQ1n95D4wlg==",
+                        bytes: "t54M0O4k7hKMTYxK/oCpgpU56I5M+n6CLOoCxLFP9Qh/0SSE4HQo7ws6g6oXGQa+Vxij4bEH67RsUb0f4SvuYQ==",
                     },
                     unlock_age: 0,
                 },
             ],
             outputs: [
-                {
-                    type: 0,
-                    value: "146600",
-                    lock: {
-                        type: 0,
-                        bytes: "wa1PiNOnmZYBpjfjXS58SZ6fJTaihHSRZRt86aWWRgE=",
-                    },
-                },
-                {
-                    type: 0,
-                    value: "200000",
-                    lock: {
-                        type: 0,
-                        bytes: "x60Co13nUDL3h+pKXCsG460FHRgDZWnJFfTYnch/tLg=",
-                    },
-                },
+                { type: 0, value: "146600", lock: { type: 0, bytes: "wa1PiNOnmZYBpjfjXS58SZ6fJTaihHSRZRt86aWWRgE=" } },
+                { type: 0, value: "200000", lock: { type: 0, bytes: "x60Co13nUDL3h+pKXCsG460FHRgDZWnJFfTYnch/tLg=" } },
             ],
             payload: "YXRhZCBldG92",
             lock_height: "0",
         };
-
         // Because randomly generated values are used when signing,
         // different signatures are created even when signed using the same secret key.
         // Therefore, omit the signature comparison.

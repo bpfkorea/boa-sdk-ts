@@ -157,7 +157,8 @@ export class TxBuilder {
 
         let _unlocker = unlocker !== undefined ? unlocker : this.keyUnlocker;
         tx.inputs.forEach((value, idx) => {
-            value.unlock = _unlocker(tx, this.inputs[idx], idx);
+            let raw = this.inputs.find((m) => Buffer.compare(m.utxo.data, value.utxo.data) === 0);
+            if (raw !== undefined) value.unlock = _unlocker(tx, raw, idx);
         });
 
         this.payload = undefined;
