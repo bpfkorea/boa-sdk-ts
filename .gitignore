@@ -85,9 +85,6 @@ dist
 # webpack build ouputs
 .dist
 
-# visual studio code
-.vscode
-
 # webstorm
 .idea
 
