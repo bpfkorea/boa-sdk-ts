@@ -17,7 +17,7 @@ import { JSONValidator } from "../utils/JSONValidator";
 import { Hash } from "../common/Hash";
 import { Height } from "../common/Height";
 import { Signature } from "../common/Signature";
-import { Utils } from "../utils/Utils";
+import { Utils, iota } from "../utils/Utils";
 import { VarInt } from "../utils/VarInt";
 
 import JSBI from "jsbi";
@@ -186,12 +186,10 @@ export class BlockHeader {
         let height = Height.deserialize(buffer);
 
         let length = VarInt.toNumber(buffer);
-        let enrollments: Array<Enrollment> = [];
-        for (let idx = 0; idx < length; idx++) enrollments.push(Enrollment.deserialize(buffer));
+        let enrollments = iota(length).map(() => Enrollment.deserialize(buffer));
 
         length = VarInt.toNumber(buffer);
-        let missing_validators: Array<number> = [];
-        for (let idx = 0; idx < length; idx++) missing_validators.push(VarInt.toNumber(buffer));
+        let missing_validators = iota(length).map(() => VarInt.toNumber(buffer));
 
         let time_offset = VarInt.toNumber(buffer);
 

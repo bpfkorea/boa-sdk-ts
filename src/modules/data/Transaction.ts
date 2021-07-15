@@ -16,7 +16,7 @@ import { Height } from "../common/Height";
 import { JSONValidator } from "../utils/JSONValidator";
 import { TxInput } from "./TxInput";
 import { TxOutput, OutputType } from "./TxOutput";
-import { Utils } from "../utils/Utils";
+import { Utils, iota } from "../utils/Utils";
 import { VarInt } from "../utils/VarInt";
 
 import { SmartBuffer } from "smart-buffer";
@@ -202,12 +202,10 @@ export class Transaction {
      */
     public static deserialize(buffer: SmartBuffer): Transaction {
         let length = VarInt.toNumber(buffer);
-        let inputs: Array<TxInput> = [];
-        for (let idx = 0; idx < length; idx++) inputs.push(TxInput.deserialize(buffer));
+        let inputs = iota(length).map(() => TxInput.deserialize(buffer));
 
         length = VarInt.toNumber(buffer);
-        let outputs: Array<TxOutput> = [];
-        for (let idx = 0; idx < length; idx++) outputs.push(TxOutput.deserialize(buffer));
+        let outputs = iota(length).map(() => TxOutput.deserialize(buffer));
 
         length = VarInt.toNumber(buffer);
         let payload = Utils.readBuffer(buffer, length);
