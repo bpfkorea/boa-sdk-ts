@@ -16,6 +16,7 @@ import { JSONValidator } from "../utils/JSONValidator";
 import { Hash } from "../common/Hash";
 import { Transaction } from "./Transaction";
 import { VarInt } from "../utils/VarInt";
+import { iota } from "../utils/Utils";
 
 import { SmartBuffer } from "smart-buffer";
 
@@ -98,12 +99,10 @@ export class Block {
         let header = BlockHeader.deserialize(buffer);
 
         let length = VarInt.toNumber(buffer);
-        let txs: Array<Transaction> = [];
-        for (let idx = 0; idx < length; idx++) txs.push(Transaction.deserialize(buffer));
+        let txs = iota(length).map(() => Transaction.deserialize(buffer));
 
         length = VarInt.toNumber(buffer);
-        let merkle_tree: Array<Hash> = [];
-        for (let idx = 0; idx < length; idx++) merkle_tree.push(Hash.deserialize(buffer));
+        let merkle_tree = iota(length).map(() => Hash.deserialize(buffer));
 
         return new Block(header, txs, merkle_tree);
     }
